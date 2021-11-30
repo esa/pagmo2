@@ -1,47 +1,23 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Self-adaptive constraints handling &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="NLopt solvers" href="nlopt.html" />
@@ -49,33 +25,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -83,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -144,78 +92,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Self-adaptive constraints handling</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/algorithms/cstrs_self_adaptive.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="self-adaptive-constraints-handling">
-<h1>Self-adaptive constraints handling<a class="headerlink" href="#self-adaptive-constraints-handling" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="self-adaptive-constraints-handling">
+<h1>Self-adaptive constraints handling<a class="headerlink" href="#self-adaptive-constraints-handling" title="Permalink to this headline"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19cstrs_self_adaptiveE">
-<span id="_CPPv3N5pagmo19cstrs_self_adaptiveE"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptiveE"></span><span id="pagmo::cstrs_self_adaptive"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">cstrs_self_adaptive</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptiveE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19cstrs_self_adaptiveE"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptiveE"></span><span id="pagmo::cstrs_self_adaptive"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">cstrs_self_adaptive</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptiveE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Self-adaptive constraints handling. </p>
 <p>This meta-algorithm implements a constraint handling technique that allows the use of any user-defined algorithm (UDA) able to deal with single-objective unconstrained problems, on single-objective constrained problems. The technique self-adapts its parameters during each successive call to the inner UDA basing its decisions on the entire underlying population. The resulting approach is an alternative to using the meta-problem <a class="reference internal" href="../problems/unconstrain.html#classpagmo_1_1unconstrain"><span class="std std-ref">pagmo::unconstrain</span></a> to transform the constrained fitness into an unconstrained fitness.</p>
 <p>The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it extends their use to any-algorithm, in particular to non generational population based evolutionary approaches where a steady-state reinsertion is used (i.e., as soon as an individual is found fit it is immediately reinserted into the pop and will influence the next offspring genetic material).</p>
@@ -266,13 +172,13 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19cstrs_self_adaptive13log_line_typeE">
-<span id="_CPPv3N5pagmo19cstrs_self_adaptive13log_line_typeE"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive13log_line_typeE"></span><span id="pagmo::cstrs_self_adaptive::log_line_type"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a3748642b5b884ea1a21ba464417e6baa"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19cstrs_self_adaptive13log_line_typeE"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive13log_line_typeE"></span><span id="pagmo::cstrs_self_adaptive::log_line_type"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a3748642b5b884ea1a21ba464417e6baa"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive13log_line_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Single entry of the log (iter, fevals, best_f, infeas, n. constraints violated, violation norm). </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19cstrs_self_adaptive8log_typeE">
-<span id="_CPPv3N5pagmo19cstrs_self_adaptive8log_typeE"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive8log_typeE"></span><span id="pagmo::cstrs_self_adaptive::log_type"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1ac80e99c9d15d28913175ef0405b2d302"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo19cstrs_self_adaptive13log_line_typeE" title="pagmo::cstrs_self_adaptive::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19cstrs_self_adaptive8log_typeE"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive8log_typeE"></span><span id="pagmo::cstrs_self_adaptive::log_type"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1ac80e99c9d15d28913175ef0405b2d302"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo19cstrs_self_adaptive13log_line_typeE" title="pagmo::cstrs_self_adaptive::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive8log_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -281,7 +187,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEj">
-<span id="_CPPv3N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEj"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEj"></span><span id="pagmo::cstrs_self_adaptive::cstrs_self_adaptive__unsigned"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a2dde158d62d38c3e76ffd2498bff1ebd"></span><span class="sig-name descname"><span class="n"><span class="pre">cstrs_self_adaptive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">iters</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEj"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEj"></span><span id="pagmo::cstrs_self_adaptive::cstrs_self_adaptive__unsigned"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a2dde158d62d38c3e76ffd2498bff1ebd"></span><span class="sig-name descname"><span class="n"><span class="pre">cstrs_self_adaptive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">iters</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Default constructor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -296,7 +202,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj">
-<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj" title="pagmo::cstrs_self_adaptive::cstrs_self_adaptive::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a2fc90595a22902993b856aed01d9901b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cstrs_self_adaptive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">iters</span></span>, <a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj" title="pagmo::cstrs_self_adaptive::cstrs_self_adaptive::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj" title="pagmo::cstrs_self_adaptive::cstrs_self_adaptive::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a2fc90595a22902993b856aed01d9901b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cstrs_self_adaptive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">iters</span></span>, <a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj" title="pagmo::cstrs_self_adaptive::cstrs_self_adaptive::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo19cstrs_self_adaptive19cstrs_self_adaptiveEjRR1Tj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -314,7 +220,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo19cstrs_self_adaptive6evolveE10population">
-<span id="_CPPv3NK5pagmo19cstrs_self_adaptive6evolveE10population"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive6evolveE10population"></span><span id="pagmo::cstrs_self_adaptive::evolve__populationC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1aca868ea79b81834656d89d052412cc03"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo19cstrs_self_adaptive6evolveE10population"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive6evolveE10population"></span><span id="pagmo::cstrs_self_adaptive::evolve__populationC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1aca868ea79b81834656d89d052412cc03"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive6evolveE10population" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Evolve method. </p>
 <p>This method will call evolve on the inner algorithm <code class="docutils literal notranslate"><span class="pre">iters</span></code> times updating the penalty to be applied to the objective after each call</p>
 <dl class="field-list simple">
@@ -332,7 +238,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19cstrs_self_adaptive8set_seedEj">
-<span id="_CPPv3N5pagmo19cstrs_self_adaptive8set_seedEj"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive8set_seedEj"></span><span id="pagmo::cstrs_self_adaptive::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1af9261400da3305d83e54be6059cf02d1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19cstrs_self_adaptive8set_seedEj"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive8set_seedEj"></span><span id="pagmo::cstrs_self_adaptive::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1af9261400da3305d83e54be6059cf02d1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive8set_seedEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -343,7 +249,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo19cstrs_self_adaptive8get_seedEv">
-<span id="_CPPv3NK5pagmo19cstrs_self_adaptive8get_seedEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive8get_seedEv"></span><span id="pagmo::cstrs_self_adaptive::get_seedC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a921963156db451d6ca3217ee7fd3ffcb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo19cstrs_self_adaptive8get_seedEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive8get_seedEv"></span><span id="pagmo::cstrs_self_adaptive::get_seedC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a921963156db451d6ca3217ee7fd3ffcb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive8get_seedEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -354,9 +260,9 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19cstrs_self_adaptive13set_verbosityEj">
-<span id="_CPPv3N5pagmo19cstrs_self_adaptive13set_verbosityEj"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive13set_verbosityEj"></span><span id="pagmo::cstrs_self_adaptive::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a5685f017b80317e56853b6533ba7ecea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19cstrs_self_adaptive13set_verbosityEj"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive13set_verbosityEj"></span><span id="pagmo::cstrs_self_adaptive::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a5685f017b80317e56853b6533ba7ecea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set the algorithm verbosity. </p>
-<p>This method will sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1cstrs__self__adaptive_1ae91e0e5cabd137ba07c44fa0b94a4060"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>This method will sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1cstrs__self__adaptive_1a0ce4d4da5bc680579e97c6d670f5a1d3"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity,</p></li>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> call to the inner algorithm.</p></li>
 </ul>
@@ -388,7 +294,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo19cstrs_self_adaptive13get_verbosityEv">
-<span id="_CPPv3NK5pagmo19cstrs_self_adaptive13get_verbosityEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive13get_verbosityEv"></span><span id="pagmo::cstrs_self_adaptive::get_verbosityC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a81f3d40c3ed8ed859200d92dba845e41"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo19cstrs_self_adaptive13get_verbosityEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive13get_verbosityEv"></span><span id="pagmo::cstrs_self_adaptive::get_verbosityC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a81f3d40c3ed8ed859200d92dba845e41"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive13get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -399,7 +305,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo19cstrs_self_adaptive7get_logEv">
-<span id="_CPPv3NK5pagmo19cstrs_self_adaptive7get_logEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive7get_logEv"></span><span id="pagmo::cstrs_self_adaptive::get_logC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1ae91e0e5cabd137ba07c44fa0b94a4060"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo19cstrs_self_adaptive8log_typeE" title="pagmo::cstrs_self_adaptive::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo19cstrs_self_adaptive7get_logEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive7get_logEv"></span><span id="pagmo::cstrs_self_adaptive::get_logC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a0ce4d4da5bc680579e97c6d670f5a1d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo19cstrs_self_adaptive8log_typeE" title="pagmo::cstrs_self_adaptive::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive7get_logEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to <a class="reference internal" href="#classpagmo_1_1cstrs__self__adaptive_1aca868ea79b81834656d89d052412cc03"><span class="std std-ref">cstrs_self_adaptive::evolve()</span></a>. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1cstrs__self__adaptive_1a3748642b5b884ea1a21ba464417e6baa"><span class="std std-ref">cstrs_self_adaptive::log_line_type</span></a> containing: <code class="docutils literal notranslate"><span class="pre">Iter</span></code>, <code class="docutils literal notranslate"><span class="pre">Fevals</span></code>, <code class="docutils literal notranslate"><span class="pre">Best</span></code>, <code class="docutils literal notranslate"><span class="pre">Infeasibility</span></code>, <code class="docutils literal notranslate"><span class="pre">Violated</span></code>, <code class="docutils literal notranslate"><span class="pre">Viol.</span> <span class="pre">Norm</span></code>, <code class="docutils literal notranslate"><span class="pre">N.</span> <span class="pre">Feasible</span></code> as described in <a class="reference internal" href="#classpagmo_1_1cstrs__self__adaptive_1a5685f017b80317e56853b6533ba7ecea"><span class="std std-ref">cstrs_self_adaptive::set_verbosity()</span></a>.</p>
 <dl class="field-list simple">
@@ -411,7 +317,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo19cstrs_self_adaptive8get_nameEv">
-<span id="_CPPv3NK5pagmo19cstrs_self_adaptive8get_nameEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive8get_nameEv"></span><span id="pagmo::cstrs_self_adaptive::get_nameC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a2b9301e9581b464d809017099be74d0b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo19cstrs_self_adaptive8get_nameEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive8get_nameEv"></span><span id="pagmo::cstrs_self_adaptive::get_nameC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a2b9301e9581b464d809017099be74d0b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -422,7 +328,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo19cstrs_self_adaptive14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo19cstrs_self_adaptive14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive14get_extra_infoEv"></span><span id="pagmo::cstrs_self_adaptive::get_extra_infoC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a943997239e0a67550bbc8b4d1c79668e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo19cstrs_self_adaptive14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive14get_extra_infoEv"></span><span id="pagmo::cstrs_self_adaptive::get_extra_infoC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a943997239e0a67550bbc8b4d1c79668e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -433,7 +339,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo19cstrs_self_adaptive17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo19cstrs_self_adaptive17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive17get_thread_safetyEv"></span><span id="pagmo::cstrs_self_adaptive::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a713636bc53609f4211de692d3b730ae7"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo19cstrs_self_adaptive17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive17get_thread_safetyEv"></span><span id="pagmo::cstrs_self_adaptive::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a713636bc53609f4211de692d3b730ae7"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive17get_thread_safetyEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm’s thread safety level. </p>
 <p>The thread safety of this meta-algorithm is the minimum between the thread safety of the internal <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and the basic thread safety level. I.e., this algorithm never provides more than the basic thread safety level.</p>
 <dl class="field-list simple">
@@ -445,7 +351,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo19cstrs_self_adaptive19get_inner_algorithmEv">
-<span id="_CPPv3NK5pagmo19cstrs_self_adaptive19get_inner_algorithmEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive19get_inner_algorithmEv"></span><span id="pagmo::cstrs_self_adaptive::get_inner_algorithmC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a78ec3b8ca22f7557a9efd76e7b578790"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive19get_inner_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo19cstrs_self_adaptive19get_inner_algorithmEv"></span><span id="_CPPv2NK5pagmo19cstrs_self_adaptive19get_inner_algorithmEv"></span><span id="pagmo::cstrs_self_adaptive::get_inner_algorithmC"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1aadefbd7c644669506ae7e85e4920dafd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo19cstrs_self_adaptive19get_inner_algorithmEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Getter for the inner algorithm. </p>
 <p>Returns a const reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
 <dl class="field-list simple">
@@ -457,7 +363,7 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19cstrs_self_adaptive19get_inner_algorithmEv">
-<span id="_CPPv3N5pagmo19cstrs_self_adaptive19get_inner_algorithmEv"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive19get_inner_algorithmEv"></span><span id="pagmo::cstrs_self_adaptive::get_inner_algorithm"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1a4b091f2430cc7ed9bbe00b292bc074e8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive19get_inner_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo19cstrs_self_adaptive19get_inner_algorithmEv"></span><span id="_CPPv2N5pagmo19cstrs_self_adaptive19get_inner_algorithmEv"></span><span id="pagmo::cstrs_self_adaptive::get_inner_algorithm"></span><span class="target" id="classpagmo_1_1cstrs__self__adaptive_1ae9eb9d060974654dc8e07f71514e2e04"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19cstrs_self_adaptive19get_inner_algorithmEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
 <div class="admonition note">
@@ -476,54 +382,37 @@ non-const methods on the internal <a class="reference internal" href="../algorit
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="nlopt.html" class="btn btn-neutral float-right" title="NLopt solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="mbh.html" class="btn btn-neutral float-left" title="Monotonic Basin Hopping (MBH) - Generalized" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nlopt.html" class="btn btn-neutral float-right" title="NLopt solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

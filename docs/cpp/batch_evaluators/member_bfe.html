@@ -1,46 +1,22 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Member function BFE &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Unconnected topology" href="../topologies/unconnected.html" />
@@ -48,33 +24,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +41,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -122,89 +70,47 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Member function BFE</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/batch_evaluators/member_bfe.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="member-function-bfe">
-<h1>Member function BFE<a class="headerlink" href="#member-function-bfe" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="member-function-bfe">
+<h1>Member function BFE<a class="headerlink" href="#member-function-bfe" title="Permalink to this headline"></a></h1>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p><em>#include &lt;pagmo/batch_evaluators/member_bfe.hpp&gt;</em></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10member_bfeE">
-<span id="_CPPv3N5pagmo10member_bfeE"></span><span id="_CPPv2N5pagmo10member_bfeE"></span><span id="pagmo::member_bfe"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">member_bfe</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10member_bfeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10member_bfeE"></span><span id="_CPPv2N5pagmo10member_bfeE"></span><span id="pagmo::member_bfe"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">member_bfe</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10member_bfeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>This class is a user-defined batch fitness evaluator (UDBFE) that can be used to
 construct a <a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>.
 <a class="reference internal" href="#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a> is a simple wrapper which delegates batch fitness evaluations
 to the input problem’s <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem13batch_fitnessERK13vector_double" title="pagmo::problem::batch_fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::batch_fitness()</span></code></a> member function.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10member_bfeclERK7problemRK13vector_double">
-<span id="_CPPv3NK5pagmo10member_bfeclERK7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo10member_bfeclERK7problemRK13vector_double"></span><span id="pagmo::member_bfe::call-operator__problemCR.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dvs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10member_bfeclERK7problemRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10member_bfeclERK7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo10member_bfeclERK7problemRK13vector_double"></span><span id="pagmo::member_bfe::call-operator__problemCR.vector_doubleCRC"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dvs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10member_bfeclERK7problemRK13vector_double" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Call operator.</p>
 <p>The call operator will pass <em>dvs</em> to the input problem <em>p</em>’s <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem13batch_fitnessERK13vector_double" title="pagmo::problem::batch_fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::batch_fitness()</span></code></a> member function,
 and return its output. If the UDP stored within <em>p</em> does not implement <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem13batch_fitnessERK13vector_double" title="pagmo::problem::batch_fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::batch_fitness()</span></code></a>,
@@ -227,7 +133,7 @@ an error will be raised.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10member_bfe8get_nameEv">
-<span id="_CPPv3NK5pagmo10member_bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo10member_bfe8get_nameEv"></span><span id="pagmo::member_bfe::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10member_bfe8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10member_bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo10member_bfe8get_nameEv"></span><span id="pagmo::member_bfe::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10member_bfe8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a human-readable name for this <a class="reference internal" href="#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a>.</p>
@@ -237,54 +143,37 @@ an error will be raised.</p>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../topologies/unconnected.html" class="btn btn-neutral float-right" title="Unconnected topology" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="thread_bfe.html" class="btn btn-neutral float-left" title="Multithreaded BFE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../topologies/unconnected.html" class="btn btn-neutral float-right" title="Unconnected topology" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

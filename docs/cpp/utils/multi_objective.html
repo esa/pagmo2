@@ -1,47 +1,23 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Multi-objective optimization utilities &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Constrained optimization utilities" href="constrained.html" />
@@ -49,33 +25,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -83,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -126,82 +74,40 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Multi-objective optimization utilities</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/utils/multi_objective.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="multi-objective-optimization-utilities">
-<span id="cpp-multi-objective-utils"></span><h1>Multi-objective optimization utilities<a class="headerlink" href="#multi-objective-optimization-utilities" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="multi-objective-optimization-utilities">
+<span id="cpp-multi-objective-utils"></span><h1>Multi-objective optimization utilities<a class="headerlink" href="#multi-objective-optimization-utilities" title="Permalink to this headline"></a></h1>
 <p>A number of utilities to compute quantities that are of relevance to
 the determination of non dominated fronts, Pareto dominance criterias and
 more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo16pareto_dominanceERK13vector_doubleRK13vector_double">
-<span id="_CPPv3N5pagmo16pareto_dominanceERK13vector_doubleRK13vector_double"></span><span id="_CPPv2N5pagmo16pareto_dominanceERK13vector_doubleRK13vector_double"></span><span id="pagmo::pareto_dominance__vector_doubleCR.vector_doubleCR"></span><span class="target" id="namespacepagmo_1ab72c593724e2370b7ee4f8a9828e5984"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">pareto_dominance</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo16pareto_dominanceERK13vector_doubleRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo16pareto_dominanceERK13vector_doubleRK13vector_double"></span><span id="_CPPv2N5pagmo16pareto_dominanceERK13vector_doubleRK13vector_double"></span><span id="pagmo::pareto_dominance__vector_doubleCR.vector_doubleCR"></span><span class="target" id="namespacepagmo_1ab72c593724e2370b7ee4f8a9828e5984"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">pareto_dominance</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">obj2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo16pareto_dominanceERK13vector_doubleRK13vector_double" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Pareto-dominance. </p>
 <p>Return true if <code class="docutils literal notranslate"><span class="pre">obj1</span></code> Pareto dominates <code class="docutils literal notranslate"><span class="pre">obj2</span></code>, false otherwise. Minimization is assumed.</p>
 <p>Each pair of corresponding elements in <code class="docutils literal notranslate"><span class="pre">obj1</span></code> and <code class="docutils literal notranslate"><span class="pre">obj2</span></code> is compared: if all elements in <code class="docutils literal notranslate"><span class="pre">obj1</span></code> are less or equal to the corresponding element in <code class="docutils literal notranslate"><span class="pre">obj2</span></code>, but at least one is different, <code class="docutils literal notranslate"><span class="pre">true</span></code> will be returned. Otherwise, <code class="docutils literal notranslate"><span class="pre">false</span></code> will be returned.</p>
@@ -224,7 +130,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE">
-<span id="_CPPv3N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::non_dominated_front_2d__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1ab69bfac9d266e39e07ad959f9d16eb2a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><span class="n"><span class="pre">pop_size_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">non_dominated_front_2d</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_objs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::non_dominated_front_2d__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1ab69bfac9d266e39e07ad959f9d16eb2a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><span class="n"><span class="pre">pop_size_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">non_dominated_front_2d</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_objs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo22non_dominated_front_2dERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Non dominated front 2D (Kung’s algorithm) </p>
 <p>Finds the non dominated front of a set of two dimensional objectives. Complexity is O(N logN) and is thus lower than the complexity of calling <a class="reference internal" href="#namespacepagmo_1a27aeb5efb01fca4422fc124eec221199"><span class="std std-ref">pagmo::fast_non_dominated_sorting</span></a></p>
 <p>See: Jensen, Mikkel T. “Reducing the run-time complexity of multiobjective EAs: The NSGA-II and other algorithms.” IEEE Transactions on Evolutionary Computation 7.5 (2003): 503-515.</p>
@@ -244,7 +150,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE">
-<span id="_CPPv3N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::crowding_distance__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1ad503682786287cfe57f565e335524633"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">crowding_distance</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">non_dom_front</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::crowding_distance__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1ad503682786287cfe57f565e335524633"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">crowding_distance</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">non_dom_front</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo17crowding_distanceERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Crowding distance. </p>
 <p>An implementation of the crowding distance. Complexity is <span class="math notranslate nohighlight">\( O(MNlog(N))\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of individuals. The function assumes the input is a non-dominated front. Failiure to this condition will result in undefined behaviour.</p>
 <p><p>See: Deb, Kalyanmoy, et al. “A fast elitist non-dominated sorting genetic algorithm</p>
@@ -270,7 +176,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE">
-<span id="_CPPv3N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::fast_non_dominated_sorting__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a27aeb5efb01fca4422fc124eec221199"></span><span class="n"><span class="pre">fnds_return_type</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">fast_non_dominated_sorting</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::fast_non_dominated_sorting__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a27aeb5efb01fca4422fc124eec221199"></span><span class="n"><span class="pre">fnds_return_type</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">fast_non_dominated_sorting</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo26fast_non_dominated_sortingERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Fast non dominated sorting. </p>
 <p>An implementation of the fast non dominated sorting algorithm. Complexity is <span class="math notranslate nohighlight">\( O(MN^2)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of individuals.</p>
 <p><p>See: Deb, Kalyanmoy, et al. “A fast elitist non-dominated sorting genetic algorithm</p>
@@ -298,7 +204,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE">
-<span id="_CPPv3N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::sort_population_mo__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a580b5f4b60c15b204d79240140f4190f"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><span class="n"><span class="pre">pop_size_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sort_population_mo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_f</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::sort_population_mo__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a580b5f4b60c15b204d79240140f4190f"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><span class="n"><span class="pre">pop_size_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sort_population_mo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_f</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo18sort_population_moERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sorts a population in multi-objective optimization. </p>
 <p>Sorts a population (intended here as an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;vector_double&gt;</span></code> containing the objective vectors) with respect to the following strict ordering:<ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if the non domination ranks are such that <span class="math notranslate nohighlight">\(i_1 &lt; i_2\)</span>. In case <span class="math notranslate nohighlight">\(i_1 = i_2\)</span>, then <span class="math notranslate nohighlight">\(f_1 \prec f_2\)</span> if the crowding distances are such that <span class="math notranslate nohighlight">\(d_1 &gt; d_2\)</span>.</p></li>
@@ -331,7 +237,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo16select_best_N_moERKNSt6vectorI13vector_doubleEE10pop_size_t">
-<span id="_CPPv3N5pagmo16select_best_N_moERKNSt6vectorI13vector_doubleEE10pop_size_t"></span><span id="_CPPv2N5pagmo16select_best_N_moERKNSt6vectorI13vector_doubleEE10pop_size_t"></span><span id="pagmo::select_best_N_mo__std::vector:vector_double:CR.pop_size_t"></span><span class="target" id="namespacepagmo_1a28e3bb8bec5b0c936d416383c417cf99"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><span class="n"><span class="pre">pop_size_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">select_best_N_mo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_f</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><span class="n"><span class="pre">pop_size_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">N</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo16select_best_N_moERKNSt6vectorI13vector_doubleEE10pop_size_t" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo16select_best_N_moERKNSt6vectorI13vector_doubleEE10pop_size_t"></span><span id="_CPPv2N5pagmo16select_best_N_moERKNSt6vectorI13vector_doubleEE10pop_size_t"></span><span id="pagmo::select_best_N_mo__std::vector:vector_double:CR.pop_size_t"></span><span class="target" id="namespacepagmo_1a28e3bb8bec5b0c936d416383c417cf99"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><span class="n"><span class="pre">pop_size_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">select_best_N_mo</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_f</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo10pop_size_tE" title="pagmo::pop_size_t"><span class="n"><span class="pre">pop_size_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">N</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo16select_best_N_moERKNSt6vectorI13vector_doubleEE10pop_size_t" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Selects the best N individuals in multi-objective optimization. </p>
 <p>Selects the best N individuals out of a population, (intended here as an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;vector_double&gt;</span></code> containing the objective vectors). The strict ordering used is the same as that defined in <a class="reference internal" href="#namespacepagmo_1a580b5f4b60c15b204d79240140f4190f"><span class="std std-ref">pagmo::sort_population_mo</span></a>.</p>
 <p>Complexity is <span class="math notranslate nohighlight">\( O(MN^2)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of individuals.</p>
@@ -361,7 +267,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5idealERKNSt6vectorI13vector_doubleEE">
-<span id="_CPPv3N5pagmo5idealERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo5idealERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::ideal__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a03f1dbeb382df95af4ac18c4db64c139"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ideal</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5idealERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5idealERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo5idealERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::ideal__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a03f1dbeb382df95af4ac18c4db64c139"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ideal</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5idealERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Ideal point. </p>
 <p>Computes the ideal point of an input population, (intended here as an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;vector_double&gt;</span></code> containing the objective vectors).</p>
 <p>Complexity is <span class="math notranslate nohighlight">\( O(MN)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of individuals.</p>
@@ -381,7 +287,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nadirERKNSt6vectorI13vector_doubleEE">
-<span id="_CPPv3N5pagmo5nadirERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo5nadirERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::nadir__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a88a611f76187a58dcdcfb813ef4ffcb9"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">nadir</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nadirERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5nadirERKNSt6vectorI13vector_doubleEE"></span><span id="_CPPv2N5pagmo5nadirERKNSt6vectorI13vector_doubleEE"></span><span id="pagmo::nadir__std::vector:vector_double:CR"></span><span class="target" id="namespacepagmo_1a88a611f76187a58dcdcfb813ef4ffcb9"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">nadir</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nadirERKNSt6vectorI13vector_doubleEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Nadir point. </p>
 <p>Computes the nadir point of an input population, (intended here as an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;vector_double&gt;</span></code> containing the objective vectors).</p>
 <p>Complexity is <span class="math notranslate nohighlight">\( O(MN^2)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of individuals.</p>
@@ -398,7 +304,7 @@ more in general, to multi-objective optimization tasks.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng">
-<span id="_CPPv3I0EN5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng"></span><span id="_CPPv2I0EN5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a894b3b3929be6f212b466e889035d2a2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">decomposition_weights</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_f</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_w</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">method</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng" title="pagmo::decomposition_weights::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng"></span><span id="_CPPv2I0EN5pagmo21decomposition_weightsEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a2f8eeac9c5629df001fd15fac34023a6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">decomposition_weights</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_f</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_w</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">method</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng" title="pagmo::decomposition_weights::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo21decomposition_weightsENSt6vectorI13vector_doubleEEN13vector_double9size_typeEN13vector_double9size_typeERKNSt6stringER3Rng" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Decomposition weights generation. </p>
 <p>Generates a requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:<ul class="simple">
 <li><p>”grid” generates weights on an uniform grid. This method may only be used when the number of requested weights to be genrated is such that a uniform grid is indeed possible. In two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases</p></li>
@@ -437,7 +343,7 @@ weight generation methods are guaranteed to generate the canonical weights [1,0,
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo20decompose_objectivesERK13vector_doubleRK13vector_doubleRK13vector_doubleRKNSt6stringE">
-<span id="_CPPv3N5pagmo20decompose_objectivesERK13vector_doubleRK13vector_doubleRK13vector_doubleRKNSt6stringE"></span><span id="_CPPv2N5pagmo20decompose_objectivesERK13vector_doubleRK13vector_doubleRK13vector_doubleRKNSt6stringE"></span><span id="pagmo::decompose_objectives__vector_doubleCR.vector_doubleCR.vector_doubleCR.ssCR"></span><span class="target" id="namespacepagmo_1ab619aca81b1ad186aab7f3b67418954b"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">decompose_objectives</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">weight</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ref_point</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">method</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20decompose_objectivesERK13vector_doubleRK13vector_doubleRK13vector_doubleRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo20decompose_objectivesERK13vector_doubleRK13vector_doubleRK13vector_doubleRKNSt6stringE"></span><span id="_CPPv2N5pagmo20decompose_objectivesERK13vector_doubleRK13vector_doubleRK13vector_doubleRKNSt6stringE"></span><span id="pagmo::decompose_objectives__vector_doubleCR.vector_doubleCR.vector_doubleCR.ssCR"></span><span class="target" id="namespacepagmo_1ab619aca81b1ad186aab7f3b67418954b"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">decompose_objectives</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">weight</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ref_point</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">method</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20decompose_objectivesERK13vector_doubleRK13vector_doubleRK13vector_doubleRKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Decomposes a vector of objectives. </p>
 <p>A vector of objectives is reduced to one only objective using a decomposition technique.</p>
 <p>Three different <em>decomposition methods</em> are here made available:</p>
@@ -477,54 +383,37 @@ weight generation methods are guaranteed to generate the canonical weights [1,0,
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="constrained.html" class="btn btn-neutral float-right" title="Constrained optimization utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../s_policies/select_best.html" class="btn btn-neutral float-left" title="Best selection policy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="constrained.html" class="btn btn-neutral float-right" title="Constrained optimization utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

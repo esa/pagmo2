@@ -1,47 +1,23 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Extended Ant Colony Optimization (gaco) &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Grey Wolf Optimizer (gwo)" href="gwo.html" />
@@ -49,33 +25,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -83,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -144,78 +92,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Extended Ant Colony Optimization (gaco)</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/algorithms/gaco.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="extended-ant-colony-optimization-gaco">
-<h1>Extended Ant Colony Optimization (gaco)<a class="headerlink" href="#extended-ant-colony-optimization-gaco" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="extended-ant-colony-optimization-gaco">
+<h1>Extended Ant Colony Optimization (gaco)<a class="headerlink" href="#extended-ant-colony-optimization-gaco" title="Permalink to this headline"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4gacoE">
-<span id="_CPPv3N5pagmo4gacoE"></span><span id="_CPPv2N5pagmo4gacoE"></span><span id="pagmo::gaco"></span><span class="target" id="classpagmo_1_1gaco"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">gaco</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4gacoE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gacoE"></span><span id="_CPPv2N5pagmo4gacoE"></span><span id="pagmo::gaco"></span><span class="target" id="classpagmo_1_1gaco"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">gaco</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4gacoE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extended Ant Colony Opitmization. </p>
 <p><img alt="../../../_images/gaco.png" src="../../../_images/gaco.png" /></p>
 <p>Ant colony optimization is a class of optimization algorithms modeled on the actions of an ant colony. Artificial ‘ants’ (e.g. simulation agents) locate optimal solutions by moving through a parameter space representing all possible solutions. Real ants lay down pheromones directing each other to resources while exploring their environment. The simulated ‘ants’ similarly record their positions and the quality of their solutions, so that in later simulation iterations more ants locate better solutions.</p>
@@ -239,13 +145,13 @@ how two of the three pheromone values are computed (in particular, the weights a
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4gaco13log_line_typeE">
-<span id="_CPPv3N5pagmo4gaco13log_line_typeE"></span><span id="_CPPv2N5pagmo4gaco13log_line_typeE"></span><span id="pagmo::gaco::log_line_type"></span><span class="target" id="classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco13log_line_typeE"></span><span id="_CPPv2N5pagmo4gaco13log_line_typeE"></span><span id="pagmo::gaco::log_line_type"></span><span class="target" id="classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Single entry of the log (gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp) </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4gaco8log_typeE">
-<span id="_CPPv3N5pagmo4gaco8log_typeE"></span><span id="_CPPv2N5pagmo4gaco8log_typeE"></span><span id="pagmo::gaco::log_type"></span><span class="target" id="classpagmo_1_1gaco_1a9c6ebb983637ac1c268b254cd538c83f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="pagmo::gaco::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4gaco8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco8log_typeE"></span><span id="_CPPv2N5pagmo4gaco8log_typeE"></span><span id="pagmo::gaco::log_type"></span><span class="target" id="classpagmo_1_1gaco_1a9c6ebb983637ac1c268b254cd538c83f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo4gaco13log_line_typeE" title="pagmo::gaco::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4gaco8log_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -254,7 +160,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4gaco4gacoEjjdddjjjjdbj">
-<span id="_CPPv3N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="_CPPv2N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="pagmo::gaco::gaco__unsigned.unsigned.double.double.double.unsigned.unsigned.unsigned.unsigned.double.b.unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a673d54f99eab2bae23ce31e5c41c095d"></span><span class="sig-name descname"><span class="n"><span class="pre">gaco</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ker</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">63u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">q</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1.0</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">oracle</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">acc</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.01</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">threshold</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_gen_mark</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">7u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">impstop</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">100000u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">evalstop</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">100000u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">focus</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">memory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco4gacoEjjdddjjjjdbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="_CPPv2N5pagmo4gaco4gacoEjjdddjjjjdbj"></span><span id="pagmo::gaco::gaco__unsigned.unsigned.double.double.double.unsigned.unsigned.unsigned.unsigned.double.b.unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a673d54f99eab2bae23ce31e5c41c095d"></span><span class="sig-name descname"><span class="n"><span class="pre">gaco</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ker</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">63u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">q</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1.0</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">oracle</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">acc</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.01</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">threshold</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_gen_mark</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">7u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">impstop</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">100000u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">evalstop</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">100000u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">focus</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">memory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco4gacoEjjdddjjjjdbj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructs the ACO user defined algorithm for single-objective optimization.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -281,7 +187,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4gaco6evolveE10population">
-<span id="_CPPv3NK5pagmo4gaco6evolveE10population"></span><span id="_CPPv2NK5pagmo4gaco6evolveE10population"></span><span id="pagmo::gaco::evolve__populationC"></span><span class="target" id="classpagmo_1_1gaco_1a5aa495b4690d6ea14ce7c9a62503a011"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco6evolveE10population"></span><span id="_CPPv2NK5pagmo4gaco6evolveE10population"></span><span id="pagmo::gaco::evolve__populationC"></span><span class="target" id="classpagmo_1_1gaco_1a5aa495b4690d6ea14ce7c9a62503a011"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco6evolveE10population" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for the requested number of generations.</p>
 <dl class="field-list simple">
@@ -299,7 +205,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4gaco8set_seedEj">
-<span id="_CPPv3N5pagmo4gaco8set_seedEj"></span><span id="_CPPv2N5pagmo4gaco8set_seedEj"></span><span id="pagmo::gaco::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a4ea0b86dc02f3c4a2e10a63cc1dd73f0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco8set_seedEj"></span><span id="_CPPv2N5pagmo4gaco8set_seedEj"></span><span id="pagmo::gaco::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a4ea0b86dc02f3c4a2e10a63cc1dd73f0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco8set_seedEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -310,7 +216,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4gaco8get_seedEv">
-<span id="_CPPv3NK5pagmo4gaco8get_seedEv"></span><span id="_CPPv2NK5pagmo4gaco8get_seedEv"></span><span id="pagmo::gaco::get_seedC"></span><span class="target" id="classpagmo_1_1gaco_1a448660cccce3b7af1154d2f6d7632c5d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco8get_seedEv"></span><span id="_CPPv2NK5pagmo4gaco8get_seedEv"></span><span id="pagmo::gaco::get_seedC"></span><span class="target" id="classpagmo_1_1gaco_1a448660cccce3b7af1154d2f6d7632c5d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_seedEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -321,9 +227,9 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4gaco13set_verbosityEj">
-<span id="_CPPv3N5pagmo4gaco13set_verbosityEj"></span><span id="_CPPv2N5pagmo4gaco13set_verbosityEj"></span><span id="pagmo::gaco::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco13set_verbosityEj"></span><span id="_CPPv2N5pagmo4gaco13set_verbosityEj"></span><span id="pagmo::gaco::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1gaco_1aefd8c1e4b3794cab12d8f2103445b3f8"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
@@ -351,7 +257,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4gaco13get_verbosityEv">
-<span id="_CPPv3NK5pagmo4gaco13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4gaco13get_verbosityEv"></span><span id="pagmo::gaco::get_verbosityC"></span><span class="target" id="classpagmo_1_1gaco_1abb6cade7b7e96320498c4d7633bf865a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4gaco13get_verbosityEv"></span><span id="pagmo::gaco::get_verbosityC"></span><span class="target" id="classpagmo_1_1gaco_1abb6cade7b7e96320498c4d7633bf865a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco13get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -362,7 +268,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4gaco7get_genEv">
-<span id="_CPPv3NK5pagmo4gaco7get_genEv"></span><span id="_CPPv2NK5pagmo4gaco7get_genEv"></span><span id="pagmo::gaco::get_genC"></span><span class="target" id="classpagmo_1_1gaco_1acb9c3c3d7a29943a3a6a39b266b5c4a8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco7get_genEv"></span><span id="_CPPv2NK5pagmo4gaco7get_genEv"></span><span id="pagmo::gaco::get_genC"></span><span class="target" id="classpagmo_1_1gaco_1acb9c3c3d7a29943a3a6a39b266b5c4a8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_genEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the generations. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -373,7 +279,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4gaco7set_bfeERK3bfe">
-<span id="_CPPv3N5pagmo4gaco7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo4gaco7set_bfeERK3bfe"></span><span id="pagmo::gaco::set_bfe__bfeCR"></span><span class="target" id="classpagmo_1_1gaco_1a6b06d99293444ca6776c2ce19dbfc40e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_bfe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco7set_bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4gaco7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo4gaco7set_bfeERK3bfe"></span><span id="pagmo::gaco::set_bfe__bfeCR"></span><span class="target" id="classpagmo_1_1gaco_1a6b06d99293444ca6776c2ce19dbfc40e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_bfe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4gaco7set_bfeERK3bfe" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the batch function evaluation scheme. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -384,7 +290,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4gaco8get_nameEv">
-<span id="_CPPv3NK5pagmo4gaco8get_nameEv"></span><span id="_CPPv2NK5pagmo4gaco8get_nameEv"></span><span id="pagmo::gaco::get_nameC"></span><span class="target" id="classpagmo_1_1gaco_1a89645ecde8e25dc44e713b43c121abeb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco8get_nameEv"></span><span id="_CPPv2NK5pagmo4gaco8get_nameEv"></span><span id="pagmo::gaco::get_nameC"></span><span class="target" id="classpagmo_1_1gaco_1a89645ecde8e25dc44e713b43c121abeb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>Returns the name of the algorithm.</p>
 <dl class="field-list simple">
@@ -396,7 +302,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4gaco14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo4gaco14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4gaco14get_extra_infoEv"></span><span id="pagmo::gaco::get_extra_infoC"></span><span class="target" id="classpagmo_1_1gaco_1a017cfa405ec96a736d64a0ad8dfdb734"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4gaco14get_extra_infoEv"></span><span id="pagmo::gaco::get_extra_infoC"></span><span class="target" id="classpagmo_1_1gaco_1a017cfa405ec96a736d64a0ad8dfdb734"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info. </p>
 <p>Returns extra information on the algorithm.</p>
 <dl class="field-list simple">
@@ -408,7 +314,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4gaco7get_logEv">
-<span id="_CPPv3NK5pagmo4gaco7get_logEv"></span><span id="_CPPv2NK5pagmo4gaco7get_logEv"></span><span id="pagmo::gaco::get_logC"></span><span class="target" id="classpagmo_1_1gaco_1a085921bd2d539e722901d5d5b7d9a9fc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo4gaco8log_typeE" title="pagmo::gaco::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4gaco7get_logEv"></span><span id="_CPPv2NK5pagmo4gaco7get_logEv"></span><span id="pagmo::gaco::get_logC"></span><span class="target" id="classpagmo_1_1gaco_1aefd8c1e4b3794cab12d8f2103445b3f8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo4gaco8log_typeE" title="pagmo::gaco::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4gaco7get_logEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1gaco_1ac1e24468dd6f4fd5a2d05ea9e03471fb"><span class="std std-ref">gaco::log_line_type</span></a> containing: gen, m_fevals, best_fit, m_ker, m_oracle, dx, dp as described in <a class="reference internal" href="#classpagmo_1_1gaco_1a13f507e94e68e35bc333f2a4eef99f38"><span class="std std-ref">gaco::set_verbosity</span></a> </p>
 <dl class="field-list simple">
@@ -421,54 +327,37 @@ how two of the three pheromone values are computed (in particular, the weights a
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="gwo.html" class="btn btn-neutral float-right" title="Grey Wolf Optimizer (gwo)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="de1220.html" class="btn btn-neutral float-left" title="Self-adaptive Differential Evolution (DE 1220 aka pDE)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gwo.html" class="btn btn-neutral float-right" title="Grey Wolf Optimizer (gwo)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,46 +1,22 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Simple Genetic Algorithm &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Simulated Annealing (Corana’s version)" href="simulated_annealing.html" />
@@ -48,33 +24,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +41,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -143,78 +91,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Simple Genetic Algorithm</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/algorithms/sga.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="simple-genetic-algorithm">
-<h1>Simple Genetic Algorithm<a class="headerlink" href="#simple-genetic-algorithm" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="simple-genetic-algorithm">
+<h1>Simple Genetic Algorithm<a class="headerlink" href="#simple-genetic-algorithm" title="Permalink to this headline"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sgaE">
-<span id="_CPPv3N5pagmo3sgaE"></span><span id="_CPPv2N5pagmo3sgaE"></span><span id="pagmo::sga"></span><span class="target" id="classpagmo_1_1sga"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sga</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sgaE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sgaE"></span><span id="_CPPv2N5pagmo3sgaE"></span><span id="pagmo::sga"></span><span class="target" id="classpagmo_1_1sga"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sga</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sgaE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>A Simple Genetic Algorithm. </p>
 <p><img alt="../../../_images/sga.jpg" src="../../../_images/sga.jpg" /></p>
 <p><p><div class="versionadded">
@@ -265,13 +171,13 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sga13log_line_typeE">
-<span id="_CPPv3N5pagmo3sga13log_line_typeE"></span><span id="_CPPv2N5pagmo3sga13log_line_typeE"></span><span id="pagmo::sga::log_line_type"></span><span class="target" id="classpagmo_1_1sga_1af196a655daf079c0097dc807d49f1d88"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sga13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sga13log_line_typeE"></span><span id="_CPPv2N5pagmo3sga13log_line_typeE"></span><span id="pagmo::sga::log_line_type"></span><span class="target" id="classpagmo_1_1sga_1af196a655daf079c0097dc807d49f1d88"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sga13log_line_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, improvement) </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sga8log_typeE">
-<span id="_CPPv3N5pagmo3sga8log_typeE"></span><span id="_CPPv2N5pagmo3sga8log_typeE"></span><span id="pagmo::sga::log_type"></span><span class="target" id="classpagmo_1_1sga_1a09fcc512df1d95b7a3bac7a7d0ac6ddb"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo3sga13log_line_typeE" title="pagmo::sga::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sga8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sga8log_typeE"></span><span id="_CPPv2N5pagmo3sga8log_typeE"></span><span id="pagmo::sga::log_type"></span><span class="target" id="classpagmo_1_1sga_1a09fcc512df1d95b7a3bac7a7d0ac6ddb"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo3sga13log_line_typeE" title="pagmo::sga::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sga8log_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -280,7 +186,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj">
-<span id="_CPPv3N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj"></span><span id="_CPPv2N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj"></span><span id="pagmo::sga::sga__unsigned.double.double.double.double.unsigned.ss.ss.ss.unsigned"></span><span class="target" id="classpagmo_1_1sga_1ae107652b141930ba22ea8767ba7b03c4"></span><span class="sig-name descname"><span class="n"><span class="pre">sga</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cr</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">.90</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eta_c</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1.</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.02</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">param_m</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1.</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">param_s</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">crossover</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;exponential&quot;</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mutation</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;polynomial&quot;</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">selection</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;tournament&quot;</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj"></span><span id="_CPPv2N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj"></span><span id="pagmo::sga::sga__unsigned.double.double.double.double.unsigned.ss.ss.ss.unsigned"></span><span class="target" id="classpagmo_1_1sga_1ae107652b141930ba22ea8767ba7b03c4"></span><span class="sig-name descname"><span class="n"><span class="pre">sga</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cr</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">.90</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eta_c</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1.</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">m</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.02</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">param_m</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1.</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">param_s</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">crossover</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><s><span class="pre">&quot;exponential&quot;</span></s>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mutation</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><s><span class="pre">&quot;polynomial&quot;</span></s>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">selection</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><s><span class="pre">&quot;tournament&quot;</span></s>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga3sgaEjddddjNSt6stringENSt6stringENSt6stringEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs a simple genetic algorithm.</p>
 <dl class="field-list simple">
@@ -306,7 +212,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sga6evolveE10population">
-<span id="_CPPv3NK5pagmo3sga6evolveE10population"></span><span id="_CPPv2NK5pagmo3sga6evolveE10population"></span><span id="pagmo::sga::evolve__populationC"></span><span class="target" id="classpagmo_1_1sga_1af71b2c4b9bc228573d24b6d2cfe790b7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sga6evolveE10population"></span><span id="_CPPv2NK5pagmo3sga6evolveE10population"></span><span id="pagmo::sga::evolve__populationC"></span><span class="target" id="classpagmo_1_1sga_1af71b2c4b9bc228573d24b6d2cfe790b7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga6evolveE10population" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations</p>
 <dl class="field-list simple">
@@ -324,7 +230,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sga8set_seedEj">
-<span id="_CPPv3N5pagmo3sga8set_seedEj"></span><span id="_CPPv2N5pagmo3sga8set_seedEj"></span><span id="pagmo::sga::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sga_1ab7ecb3eeb437aa5d706911c8265458d5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sga8set_seedEj"></span><span id="_CPPv2N5pagmo3sga8set_seedEj"></span><span id="pagmo::sga::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sga_1ab7ecb3eeb437aa5d706911c8265458d5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga8set_seedEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -335,7 +241,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sga8get_seedEv">
-<span id="_CPPv3NK5pagmo3sga8get_seedEv"></span><span id="_CPPv2NK5pagmo3sga8get_seedEv"></span><span id="pagmo::sga::get_seedC"></span><span class="target" id="classpagmo_1_1sga_1a1ebc365ae8858de8070a7638fa43e7dc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sga8get_seedEv"></span><span id="_CPPv2NK5pagmo3sga8get_seedEv"></span><span id="pagmo::sga::get_seedC"></span><span class="target" id="classpagmo_1_1sga_1a1ebc365ae8858de8070a7638fa43e7dc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga8get_seedEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -346,9 +252,9 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sga13set_verbosityEj">
-<span id="_CPPv3N5pagmo3sga13set_verbosityEj"></span><span id="_CPPv2N5pagmo3sga13set_verbosityEj"></span><span id="pagmo::sga::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1sga_1af08dadcfa3655105bca658135a9460f1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3sga13set_verbosityEj"></span><span id="_CPPv2N5pagmo3sga13set_verbosityEj"></span><span id="pagmo::sga::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1sga_1af08dadcfa3655105bca658135a9460f1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sga13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1sga_1a1e042772ef93956f1d6873e4d173a0e2"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1sga_1a85ac87e40a75a82e2ebf5b422f772f08"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
 <li><p>1: will only print and log when the population is improved</p></li>
 <li><p>&gt;1: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
@@ -384,7 +290,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sga13get_verbosityEv">
-<span id="_CPPv3NK5pagmo3sga13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3sga13get_verbosityEv"></span><span id="pagmo::sga::get_verbosityC"></span><span class="target" id="classpagmo_1_1sga_1a2b20e6f5d9da05a7f291c869c83c29e3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sga13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3sga13get_verbosityEv"></span><span id="pagmo::sga::get_verbosityC"></span><span class="target" id="classpagmo_1_1sga_1a2b20e6f5d9da05a7f291c869c83c29e3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga13get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -395,7 +301,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sga8get_nameEv">
-<span id="_CPPv3NK5pagmo3sga8get_nameEv"></span><span id="_CPPv2NK5pagmo3sga8get_nameEv"></span><span id="pagmo::sga::get_nameC"></span><span class="target" id="classpagmo_1_1sga_1aa042a6ab989ca4a0de7b69788a9f74e9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sga8get_nameEv"></span><span id="_CPPv2NK5pagmo3sga8get_nameEv"></span><span id="pagmo::sga::get_nameC"></span><span class="target" id="classpagmo_1_1sga_1aa042a6ab989ca4a0de7b69788a9f74e9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -406,7 +312,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sga14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo3sga14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3sga14get_extra_infoEv"></span><span id="pagmo::sga::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sga_1a64cd03149e55536c3605a44ec79a6efa"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sga14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3sga14get_extra_infoEv"></span><span id="pagmo::sga::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sga_1a64cd03149e55536c3605a44ec79a6efa"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -417,7 +323,7 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sga7get_logEv">
-<span id="_CPPv3NK5pagmo3sga7get_logEv"></span><span id="_CPPv2NK5pagmo3sga7get_logEv"></span><span id="pagmo::sga::get_logC"></span><span class="target" id="classpagmo_1_1sga_1a1e042772ef93956f1d6873e4d173a0e2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3sga8log_typeE" title="pagmo::sga::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3sga7get_logEv"></span><span id="_CPPv2NK5pagmo3sga7get_logEv"></span><span id="pagmo::sga::get_logC"></span><span class="target" id="classpagmo_1_1sga_1a85ac87e40a75a82e2ebf5b422f772f08"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3sga8log_typeE" title="pagmo::sga::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sga7get_logEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1sga_1af196a655daf079c0097dc807d49f1d88"><span class="std std-ref">sga::log_line_type</span></a> containing: Gen, Fevals, Current best, Best as described in <a class="reference internal" href="#classpagmo_1_1sga_1af08dadcfa3655105bca658135a9460f1"><span class="std std-ref">sga::set_verbosity()</span></a>.</p>
 <dl class="field-list simple">
@@ -430,54 +336,37 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="simulated_annealing.html" class="btn btn-neutral float-right" title="Simulated Annealing (Corana’s version)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="sea.html" class="btn btn-neutral float-left" title="(N+1)-ES Simple Evolutionary Algorithm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simulated_annealing.html" class="btn btn-neutral float-right" title="Simulated Annealing (Corana’s version)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,47 +1,23 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Batch fitness evaluator &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Topology" href="topology.html" />
@@ -49,33 +25,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -83,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
@@ -134,82 +82,40 @@
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Batch fitness evaluator</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../_sources/docs/cpp/bfe.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="batch-fitness-evaluator">
-<h1>Batch fitness evaluator<a class="headerlink" href="#batch-fitness-evaluator" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="batch-fitness-evaluator">
+<h1>Batch fitness evaluator<a class="headerlink" href="#batch-fitness-evaluator" title="Permalink to this headline"></a></h1>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p><em>#include &lt;pagmo/bfe.hpp&gt;</em></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3bfeE">
-<span id="_CPPv3N5pagmo3bfeE"></span><span id="_CPPv2N5pagmo3bfeE"></span><span id="pagmo::bfe"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3bfeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3bfeE"></span><span id="_CPPv2N5pagmo3bfeE"></span><span id="pagmo::bfe"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3bfeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>This class implements the evaluation of decision vectors in batch mode. That is,
 whereas a <a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> provides the means to evaluate a single decision
 vector via the <a class="reference internal" href="problem.html#_CPPv4NK5pagmo7problem7fitnessERK13vector_double" title="pagmo::problem::fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::fitness()</span></code></a> member function, a
@@ -232,7 +138,7 @@ a user-defined batch fitness evaluator (UDBFE for short) which actually
 implements the fitness evaluation in batch mode. Users are free to either
 use one of the evaluators provided with pagmo, or to write their own UDBFE.</p>
 <p>Every UDBFE must be a callable with a signature equivalent to</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="p">(</span><span class="k">const</span> <span class="n">problem</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 <p>UDBFEs receive in input a <a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">problem</span></code></a> and a batch of decision vectors
@@ -244,9 +150,9 @@ stored contiguously).</p>
 Note that pointers to plain C++ functions with an appropriate signature
 are UDBFEs, but lambda functions are not (as they currently are not default-constructible).</p>
 <p>UDBFEs can also implement the following (optional) member functions:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="nf">get_name</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="nf">get_extra_info</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="n">thread_safety</span> <span class="nf">get_thread_safety</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_name</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_extra_info</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="n">thread_safety</span><span class="w"> </span><span class="nf">get_thread_safety</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
 </pre></div>
 </div>
 <p>See the documentation of the corresponding member functions in this class for details on how the optional
@@ -259,7 +165,7 @@ Any other operation will result in undefined behaviour.</p>
 </div>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3bfe3bfeEv">
-<span id="_CPPv3N5pagmo3bfe3bfeEv"></span><span id="_CPPv2N5pagmo3bfe3bfeEv"></span><span id="pagmo::bfe::bfe"></span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfe3bfeEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3bfe3bfeEv"></span><span id="_CPPv2N5pagmo3bfe3bfeEv"></span><span id="pagmo::bfe::bfe"></span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfe3bfeEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Default constructor.</p>
 <p>The default constructor will initialize a <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> containing a <a class="reference internal" href="batch_evaluators/default_bfe.html#_CPPv4N5pagmo11default_bfeE" title="pagmo::default_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">default_bfe</span></code></a>.</p>
 <dl class="field-list simple">
@@ -271,22 +177,22 @@ Any other operation will result in undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3bfe3bfeERK3bfe">
-<span id="_CPPv3N5pagmo3bfe3bfeERK3bfe"></span><span id="_CPPv2N5pagmo3bfe3bfeERK3bfe"></span><span id="pagmo::bfe::bfe__bfeCR"></span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3bfe3bfeERK3bfe" title="pagmo::bfe::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfe3bfeERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3bfe3bfeERK3bfe"></span><span id="_CPPv2N5pagmo3bfe3bfeERK3bfe"></span><span id="pagmo::bfe::bfe__bfeCR"></span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3bfe3bfeERK3bfe" title="pagmo::bfe::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfe3bfeERK3bfe" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3bfe3bfeERR3bfe">
-<span id="_CPPv3N5pagmo3bfe3bfeERR3bfe"></span><span id="_CPPv2N5pagmo3bfe3bfeERR3bfe"></span><span id="pagmo::bfe::bfe__bfeRR"></span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo3bfe3bfeERR3bfe" title="pagmo::bfe::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo3bfe3bfeERR3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3bfe3bfeERR3bfe"></span><span id="_CPPv2N5pagmo3bfe3bfeERR3bfe"></span><span id="pagmo::bfe::bfe__bfeRR"></span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo3bfe3bfeERR3bfe" title="pagmo::bfe::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo3bfe3bfeERR3bfe" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3bfeaSERK3bfe">
-<span id="_CPPv3N5pagmo3bfeaSERK3bfe"></span><span id="_CPPv2N5pagmo3bfeaSERK3bfe"></span><span id="pagmo::bfe::assign-operator__bfeCR"></span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfeaSERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3bfeaSERK3bfe"></span><span id="_CPPv2N5pagmo3bfeaSERK3bfe"></span><span id="pagmo::bfe::assign-operator__bfeCR"></span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfeaSERK3bfe" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3bfeaSERR3bfe">
-<span id="_CPPv3N5pagmo3bfeaSERR3bfe"></span><span id="_CPPv2N5pagmo3bfeaSERR3bfe"></span><span id="pagmo::bfe::assign-operator__bfeRR"></span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo3bfeaSERR3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3bfeaSERR3bfe"></span><span id="_CPPv2N5pagmo3bfeaSERR3bfe"></span><span id="pagmo::bfe::assign-operator__bfeRR"></span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo3bfeaSERR3bfe" title="Permalink to this definition"></a><br /></dt>
 <dd><p><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> is copy/move constructible, and copy/move assignable.
 Copy construction/assignment will perform deep copies, move operations will leave the moved-from object in
 a state which is destructible and assignable.</p>
@@ -299,13 +205,13 @@ a state which is destructible and assignable.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo3bfe3bfeERR1T">
-<span id="_CPPv3I0EN5pagmo3bfe3bfeERR1T"></span><span id="_CPPv2I0EN5pagmo3bfe3bfeERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3bfe3bfeERR1T" title="pagmo::bfe::bfe::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3bfe3bfeERR1T" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo3bfe3bfeERR1T"></span><span id="_CPPv2I0EN5pagmo3bfe3bfeERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bfe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3bfe3bfeERR1T" title="pagmo::bfe::bfe::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3bfe3bfeERR1T" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Generic constructor from a UDBFE.</p>
 <p>This constructor participates in overload resolution only if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference
 and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> and if it satisfies <a class="reference internal" href="#_CPPv4I0EN5pagmo8is_udbfeE" title="pagmo::is_udbfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udbfe</span></code></a>.</p>
 <p>Additionally, the constructor will also be enabled if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference and cv qualifiers, is a function type with
 the following signature</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="p">(</span><span class="k">const</span> <span class="n">problem</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 <p>The input parameter <em>x</em> will be perfectly forwarded to construct the internal UDBFE instance.</p>
@@ -321,13 +227,13 @@ the following signature</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo3bfeaSER3bfeRR1T">
-<span id="_CPPv3I0EN5pagmo3bfeaSERR1T"></span><span id="_CPPv2I0EN5pagmo3bfeaSERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3bfeaSER3bfeRR1T" title="pagmo::bfe::operator=::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3bfeaSER3bfeRR1T" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo3bfeaSERR1T"></span><span id="_CPPv2I0EN5pagmo3bfeaSERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo3bfeaSER3bfeRR1T" title="pagmo::bfe::operator=::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo3bfeaSER3bfeRR1T" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Generic assignment operator from a UDBFE.</p>
 <p>This operator participates in overload resolution only if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference
 and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> and if it satisfies <a class="reference internal" href="#_CPPv4I0EN5pagmo8is_udbfeE" title="pagmo::is_udbfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udbfe</span></code></a>.</p>
 <p>Additionally, the operator will also be enabled if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference and cv qualifiers,
 is a function type with the following signature</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="p">(</span><span class="k">const</span> <span class="n">problem</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 <p>This operator will set the internal UDBFE to <em>x</em> by constructing a <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> from <em>x</em>,
@@ -347,12 +253,12 @@ and then move-assigning the result to <em>this</em>.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0ENK5pagmo3bfe7extractEPK1Tv">
-<span id="_CPPv3I0ENK5pagmo3bfe7extractEv"></span><span id="_CPPv2I0ENK5pagmo3bfe7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK5pagmo3bfe7extractEPK1Tv" title="pagmo::bfe::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo3bfe7extractEPK1Tv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0ENK5pagmo3bfe7extractEv"></span><span id="_CPPv2I0ENK5pagmo3bfe7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK5pagmo3bfe7extractEPK1Tv" title="pagmo::bfe::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo3bfe7extractEPK1Tv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo3bfe7extractEP1Tv">
-<span id="_CPPv3I0EN5pagmo3bfe7extractEv"></span><span id="_CPPv2I0EN5pagmo3bfe7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0EN5pagmo3bfe7extractEP1Tv" title="pagmo::bfe::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo3bfe7extractEP1Tv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo3bfe7extractEv"></span><span id="_CPPv2I0EN5pagmo3bfe7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0EN5pagmo3bfe7extractEP1Tv" title="pagmo::bfe::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo3bfe7extractEP1Tv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extract a (const) pointer to the internal UDBFE instance.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">T</span></code> is the type of the UDBFE currently stored within this object, then this function
 will return a (const) pointer to the internal UDBFE instance. Otherwise, <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> will be returned.</p>
@@ -373,7 +279,7 @@ through this function is undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0ENK5pagmo3bfe2isEbv">
-<span id="_CPPv3I0ENK5pagmo3bfe2isEv"></span><span id="_CPPv2I0ENK5pagmo3bfe2isEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo3bfe2isEbv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0ENK5pagmo3bfe2isEv"></span><span id="_CPPv2I0ENK5pagmo3bfe2isEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo3bfe2isEbv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Check the type of the UDBFE.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -384,7 +290,7 @@ through this function is undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3bfeclERK7problemRK13vector_double">
-<span id="_CPPv3NK5pagmo3bfeclERK7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo3bfeclERK7problemRK13vector_double"></span><span id="pagmo::bfe::call-operator__problemCR.vector_doubleCRC"></span><a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dvs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfeclERK7problemRK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3bfeclERK7problemRK13vector_double"></span><span id="_CPPv2NK5pagmo3bfeclERK7problemRK13vector_double"></span><span id="pagmo::bfe::call-operator__problemCR.vector_doubleCRC"></span><a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dvs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfeclERK7problemRK13vector_double" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Call operator.</p>
 <p>The call operator will invoke the internal UDBFE instance to perform the evaluation in batch mode
 of the decision vectors stored in <em>dvs</em> using the input problem <em>p</em>, and it will return the corresponding
@@ -418,7 +324,7 @@ It will also take care of increasing the fitness evaluation counter in <em>p</em
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3bfe8get_nameEv">
-<span id="_CPPv3NK5pagmo3bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo3bfe8get_nameEv"></span><span id="pagmo::bfe::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3bfe8get_nameEv"></span><span id="_CPPv2NK5pagmo3bfe8get_nameEv"></span><span id="pagmo::bfe::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get the name of this batch fitness evaluator.</p>
 <p>If the UDBFE satisfies <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4I0EN5pagmo8has_nameE" title="pagmo::has_name"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_name</span></code></a>, then this member function will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> member function.
 Otherwise, an implementation-defined name based on the type of the UDBFE will be returned.</p>
@@ -434,7 +340,7 @@ Otherwise, an implementation-defined name based on the type of the UDBFE will be
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3bfe14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo3bfe14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3bfe14get_extra_infoEv"></span><span id="pagmo::bfe::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3bfe14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3bfe14get_extra_infoEv"></span><span id="pagmo::bfe::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info for this batch fitness evaluator.</p>
 <p>If the UDBFE satisfies <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4I0EN5pagmo14has_extra_infoE" title="pagmo::has_extra_info"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_extra_info</span></code></a>, then this member function will return the output of its
 <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> member function. Otherwise, an empty string will be returned.</p>
@@ -450,7 +356,7 @@ Otherwise, an implementation-defined name based on the type of the UDBFE will be
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3bfe17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo3bfe17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo3bfe17get_thread_safetyEv"></span><span id="pagmo::bfe::get_thread_safetyC"></span><a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3bfe17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo3bfe17get_thread_safetyEv"></span><span id="pagmo::bfe::get_thread_safetyC"></span><a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe17get_thread_safetyEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Thread safety level of this batch fitness evaluator.</p>
 <p>If the UDBFE satisfies <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4I0EN5pagmo21has_get_thread_safetyE" title="pagmo::has_get_thread_safety"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_get_thread_safety</span></code></a>, then this member function will return the output of its
 <code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code> member function. Otherwise, <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safety5basicE" title="pagmo::thread_safety::basic"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">pagmo::thread_safety::basic</span></code></a> will be returned.
@@ -464,7 +370,7 @@ That is, pagmo assumes by default that is it safe to operate concurrently on dis
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3bfe8is_validEv">
-<span id="_CPPv3NK5pagmo3bfe8is_validEv"></span><span id="_CPPv2NK5pagmo3bfe8is_validEv"></span><span id="pagmo::bfe::is_validC"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe8is_validEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3bfe8is_validEv"></span><span id="_CPPv2NK5pagmo3bfe8is_validEv"></span><span id="pagmo::bfe::is_validC"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe8is_validEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Check if this bfe is in a valid state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -475,7 +381,7 @@ That is, pagmo assumes by default that is it safe to operate concurrently on dis
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3bfe14get_type_indexEv">
-<span id="_CPPv3NK5pagmo3bfe14get_type_indexEv"></span><span id="_CPPv2NK5pagmo3bfe14get_type_indexEv"></span><span id="pagmo::bfe::get_type_indexC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_type_index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe14get_type_indexEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3bfe14get_type_indexEv"></span><span id="_CPPv2NK5pagmo3bfe14get_type_indexEv"></span><span id="pagmo::bfe::get_type_indexC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_type_index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe14get_type_indexEv" title="Permalink to this definition"></a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>
@@ -492,12 +398,12 @@ instance.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3bfe7get_ptrEv">
-<span id="_CPPv3NK5pagmo3bfe7get_ptrEv"></span><span id="_CPPv2NK5pagmo3bfe7get_ptrEv"></span><span id="pagmo::bfe::get_ptrC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe7get_ptrEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3bfe7get_ptrEv"></span><span id="_CPPv2NK5pagmo3bfe7get_ptrEv"></span><span id="pagmo::bfe::get_ptrC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3bfe7get_ptrEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3bfe7get_ptrEv">
-<span id="_CPPv3N5pagmo3bfe7get_ptrEv"></span><span id="_CPPv2N5pagmo3bfe7get_ptrEv"></span><span id="pagmo::bfe::get_ptr"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfe7get_ptrEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3bfe7get_ptrEv"></span><span id="_CPPv2N5pagmo3bfe7get_ptrEv"></span><span id="pagmo::bfe::get_ptr"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3bfe7get_ptrEv" title="Permalink to this definition"></a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>
@@ -527,11 +433,11 @@ methods on the internal UDBFE instance. Assigning a new UDBFE via this pointer i
 
 </dd></dl>
 
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmolsERNSt7ostreamERK3bfe">
-<span id="_CPPv3N5pagmolsERNSt7ostreamERK3bfe"></span><span id="_CPPv2N5pagmolsERNSt7ostreamERK3bfe"></span><span id="pagmo::lshift-operator__osR.bfeCR"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmolsERNSt7ostreamERK3bfe" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmolsERNSt7ostreamERK3bfe"></span><span id="_CPPv2N5pagmolsERNSt7ostreamERK3bfe"></span><span id="pagmo::lshift-operator__osR.bfeCR"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmolsERNSt7ostreamERK3bfe" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Stream insertion operator.</p>
 <p>This function will direct to <em>os</em> a human-readable representation of the input
 <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> <em>b</em>.</p>
@@ -551,12 +457,12 @@ methods on the internal UDBFE instance. Assigning a new UDBFE via this pointer i
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="associated-type-traits">
-<h2>Associated type traits<a class="headerlink" href="#associated-type-traits" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="associated-type-traits">
+<h2>Associated type traits<a class="headerlink" href="#associated-type-traits" title="Permalink to this headline"></a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo21has_bfe_call_operatorE">
-<span id="_CPPv3I0EN5pagmo21has_bfe_call_operatorE"></span><span id="_CPPv2I0EN5pagmo21has_bfe_call_operatorE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_bfe_call_operator</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21has_bfe_call_operatorE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21has_bfe_call_operatorE"></span><span id="_CPPv2I0EN5pagmo21has_bfe_call_operatorE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_bfe_call_operator</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21has_bfe_call_operatorE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>This type trait detects if <code class="docutils literal notranslate"><span class="pre">T</span></code> is a callable whose signature is compatible with the one
 required by <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>.</p>
 <p>Specifically, the <a class="reference internal" href="#_CPPv4N5pagmo21has_bfe_call_operator5valueE" title="pagmo::has_bfe_call_operator::value"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">value</span></code></a> of this type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if the expression
@@ -569,7 +475,7 @@ required by <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagm
 <p>is well-formed and if it returns a <a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><code class="xref cpp cpp-type docutils literal notranslate"><span class="pre">vector_double</span></code></a>.</p>
 <dl class="cpp member">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo21has_bfe_call_operator5valueE">
-<span id="_CPPv3N5pagmo21has_bfe_call_operator5valueE"></span><span id="_CPPv2N5pagmo21has_bfe_call_operator5valueE"></span><span id="pagmo::has_bfe_call_operator::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo21has_bfe_call_operator5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo21has_bfe_call_operator5valueE"></span><span id="_CPPv2N5pagmo21has_bfe_call_operator5valueE"></span><span id="pagmo::has_bfe_call_operator::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo21has_bfe_call_operator5valueE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The value of the type trait.</p>
 </dd></dl>
 
@@ -577,7 +483,7 @@ required by <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagm
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo8is_udbfeE">
-<span id="_CPPv3I0EN5pagmo8is_udbfeE"></span><span id="_CPPv2I0EN5pagmo8is_udbfeE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_udbfe</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo8is_udbfeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo8is_udbfeE"></span><span id="_CPPv2I0EN5pagmo8is_udbfeE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_udbfe</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo8is_udbfeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>This type trait detects if <code class="docutils literal notranslate"><span class="pre">T</span></code> is a user-defined batch fitness evaluator (or UDBFE).</p>
 <p>Specifically, the <a class="reference internal" href="#_CPPv4N5pagmo8is_udbfe5valueE" title="pagmo::is_udbfe::value"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">value</span></code></a> of this type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if:</p>
 <ul class="simple">
@@ -587,61 +493,44 @@ required by <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagm
 </ul>
 <dl class="cpp member">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8is_udbfe5valueE">
-<span id="_CPPv3N5pagmo8is_udbfe5valueE"></span><span id="_CPPv2N5pagmo8is_udbfe5valueE"></span><span id="pagmo::is_udbfe::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo8is_udbfe5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo8is_udbfe5valueE"></span><span id="_CPPv2N5pagmo8is_udbfe5valueE"></span><span id="pagmo::is_udbfe::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo8is_udbfe5valueE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The value of the type trait.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="topology.html" class="btn btn-neutral float-right" title="Topology" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="archipelago.html" class="btn btn-neutral float-left" title="Archipelago" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="topology.html" class="btn btn-neutral float-right" title="Topology" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

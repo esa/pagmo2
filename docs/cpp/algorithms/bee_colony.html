@@ -1,46 +1,22 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Artificial Bee Colony &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)" href="cmaes.html" />
@@ -48,33 +24,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +41,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -143,78 +91,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Artificial Bee Colony</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/algorithms/bee_colony.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="artificial-bee-colony">
-<h1>Artificial Bee Colony<a class="headerlink" href="#artificial-bee-colony" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="artificial-bee-colony">
+<h1>Artificial Bee Colony<a class="headerlink" href="#artificial-bee-colony" title="Permalink to this headline"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10bee_colonyE">
-<span id="_CPPv3N5pagmo10bee_colonyE"></span><span id="_CPPv2N5pagmo10bee_colonyE"></span><span id="pagmo::bee_colony"></span><span class="target" id="classpagmo_1_1bee__colony"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">bee_colony</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colonyE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10bee_colonyE"></span><span id="_CPPv2N5pagmo10bee_colonyE"></span><span id="pagmo::bee_colony"></span><span class="target" id="classpagmo_1_1bee__colony"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">bee_colony</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colonyE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Artificial Bee Colony Algorithm. </p>
 <p><img alt="../../../_images/BeeColony.gif" src="../../../_images/BeeColony.gif" /></p>
 <p>Artificial Bee Colony is an optimization algorithm based on the intelligent foraging behaviour of honey bee swarm, proposed by Karaboga in 2005.</p>
@@ -226,13 +132,13 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10bee_colony13log_line_typeE">
-<span id="_CPPv3N5pagmo10bee_colony13log_line_typeE"></span><span id="_CPPv2N5pagmo10bee_colony13log_line_typeE"></span><span id="pagmo::bee_colony::log_line_type"></span><span class="target" id="classpagmo_1_1bee__colony_1a2b678cb586784b57262f50a3580e23ff"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10bee_colony13log_line_typeE"></span><span id="_CPPv2N5pagmo10bee_colony13log_line_typeE"></span><span id="pagmo::bee_colony::log_line_type"></span><span class="target" id="classpagmo_1_1bee__colony_1a2b678cb586784b57262f50a3580e23ff"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony13log_line_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, cur_best) </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10bee_colony8log_typeE">
-<span id="_CPPv3N5pagmo10bee_colony8log_typeE"></span><span id="_CPPv2N5pagmo10bee_colony8log_typeE"></span><span id="pagmo::bee_colony::log_type"></span><span class="target" id="classpagmo_1_1bee__colony_1a1c04a1e8efb4d87519a5f96eab39b9e3"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo10bee_colony13log_line_typeE" title="pagmo::bee_colony::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10bee_colony8log_typeE"></span><span id="_CPPv2N5pagmo10bee_colony8log_typeE"></span><span id="pagmo::bee_colony::log_type"></span><span class="target" id="classpagmo_1_1bee__colony_1a1c04a1e8efb4d87519a5f96eab39b9e3"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo10bee_colony13log_line_typeE" title="pagmo::bee_colony::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony8log_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -241,7 +147,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10bee_colony10bee_colonyEjjj">
-<span id="_CPPv3N5pagmo10bee_colony10bee_colonyEjjj"></span><span id="_CPPv2N5pagmo10bee_colony10bee_colonyEjjj"></span><span id="pagmo::bee_colony::bee_colony__unsigned.unsigned.unsigned"></span><span class="target" id="classpagmo_1_1bee__colony_1ab475f8e4d51a5053226c285759d8acf8"></span><span class="sig-name descname"><span class="n"><span class="pre">bee_colony</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">limit</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">20u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony10bee_colonyEjjj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10bee_colony10bee_colonyEjjj"></span><span id="_CPPv2N5pagmo10bee_colony10bee_colonyEjjj"></span><span id="pagmo::bee_colony::bee_colony__unsigned.unsigned.unsigned"></span><span class="target" id="classpagmo_1_1bee__colony_1ab475f8e4d51a5053226c285759d8acf8"></span><span class="sig-name descname"><span class="n"><span class="pre">bee_colony</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">limit</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">20u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony10bee_colonyEjjj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs a <a class="reference internal" href="#classpagmo_1_1bee__colony"><span class="std std-ref">bee_colony</span></a> algorithm</p>
 <dl class="field-list simple">
@@ -260,7 +166,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10bee_colony6evolveE10population">
-<span id="_CPPv3NK5pagmo10bee_colony6evolveE10population"></span><span id="_CPPv2NK5pagmo10bee_colony6evolveE10population"></span><span id="pagmo::bee_colony::evolve__populationC"></span><span class="target" id="classpagmo_1_1bee__colony_1aa5fcf3582d12077d71ad5dade0ad20a6"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10bee_colony6evolveE10population"></span><span id="_CPPv2NK5pagmo10bee_colony6evolveE10population"></span><span id="pagmo::bee_colony::evolve__populationC"></span><span class="target" id="classpagmo_1_1bee__colony_1aa5fcf3582d12077d71ad5dade0ad20a6"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony6evolveE10population" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations</p>
 <dl class="field-list simple">
@@ -281,7 +187,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10bee_colony8set_seedEj">
-<span id="_CPPv3N5pagmo10bee_colony8set_seedEj"></span><span id="_CPPv2N5pagmo10bee_colony8set_seedEj"></span><span id="pagmo::bee_colony::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1bee__colony_1a17dd73c17ca9da9817632e41d038edb6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10bee_colony8set_seedEj"></span><span id="_CPPv2N5pagmo10bee_colony8set_seedEj"></span><span id="pagmo::bee_colony::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1bee__colony_1a17dd73c17ca9da9817632e41d038edb6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony8set_seedEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -292,7 +198,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10bee_colony8get_seedEv">
-<span id="_CPPv3NK5pagmo10bee_colony8get_seedEv"></span><span id="_CPPv2NK5pagmo10bee_colony8get_seedEv"></span><span id="pagmo::bee_colony::get_seedC"></span><span class="target" id="classpagmo_1_1bee__colony_1a28a7f69a1f3bf55f22da8d9d584cb601"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10bee_colony8get_seedEv"></span><span id="_CPPv2NK5pagmo10bee_colony8get_seedEv"></span><span id="pagmo::bee_colony::get_seedC"></span><span class="target" id="classpagmo_1_1bee__colony_1a28a7f69a1f3bf55f22da8d9d584cb601"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony8get_seedEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -303,9 +209,9 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10bee_colony13set_verbosityEj">
-<span id="_CPPv3N5pagmo10bee_colony13set_verbosityEj"></span><span id="_CPPv2N5pagmo10bee_colony13set_verbosityEj"></span><span id="pagmo::bee_colony::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1bee__colony_1af133473d1c4e47b05cec3097f9a86deb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo10bee_colony13set_verbosityEj"></span><span id="_CPPv2N5pagmo10bee_colony13set_verbosityEj"></span><span id="pagmo::bee_colony::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1bee__colony_1af133473d1c4e47b05cec3097f9a86deb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo10bee_colony13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1bee__colony_1ae1494f8ff388c4f7febbf8df4b957070"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1bee__colony_1ad0d153bb9cc149f682e49e1a438a2831"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
@@ -328,7 +234,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10bee_colony13get_verbosityEv">
-<span id="_CPPv3NK5pagmo10bee_colony13get_verbosityEv"></span><span id="_CPPv2NK5pagmo10bee_colony13get_verbosityEv"></span><span id="pagmo::bee_colony::get_verbosityC"></span><span class="target" id="classpagmo_1_1bee__colony_1aff151a99da5af732409b0217e14521a1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10bee_colony13get_verbosityEv"></span><span id="_CPPv2NK5pagmo10bee_colony13get_verbosityEv"></span><span id="pagmo::bee_colony::get_verbosityC"></span><span class="target" id="classpagmo_1_1bee__colony_1aff151a99da5af732409b0217e14521a1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony13get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -339,7 +245,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10bee_colony7get_genEv">
-<span id="_CPPv3NK5pagmo10bee_colony7get_genEv"></span><span id="_CPPv2NK5pagmo10bee_colony7get_genEv"></span><span id="pagmo::bee_colony::get_genC"></span><span class="target" id="classpagmo_1_1bee__colony_1a6d66f74d04f027b8d13a3181ad46f8f9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10bee_colony7get_genEv"></span><span id="_CPPv2NK5pagmo10bee_colony7get_genEv"></span><span id="pagmo::bee_colony::get_genC"></span><span class="target" id="classpagmo_1_1bee__colony_1a6d66f74d04f027b8d13a3181ad46f8f9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony7get_genEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the number of generations. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -350,7 +256,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10bee_colony8get_nameEv">
-<span id="_CPPv3NK5pagmo10bee_colony8get_nameEv"></span><span id="_CPPv2NK5pagmo10bee_colony8get_nameEv"></span><span id="pagmo::bee_colony::get_nameC"></span><span class="target" id="classpagmo_1_1bee__colony_1a877770350db94275ecaccd2e239c0e05"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10bee_colony8get_nameEv"></span><span id="_CPPv2NK5pagmo10bee_colony8get_nameEv"></span><span id="pagmo::bee_colony::get_nameC"></span><span class="target" id="classpagmo_1_1bee__colony_1a877770350db94275ecaccd2e239c0e05"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -361,7 +267,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10bee_colony14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo10bee_colony14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo10bee_colony14get_extra_infoEv"></span><span id="pagmo::bee_colony::get_extra_infoC"></span><span class="target" id="classpagmo_1_1bee__colony_1ac17b1051d23d8283f9b0484a2dbbdac3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10bee_colony14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo10bee_colony14get_extra_infoEv"></span><span id="pagmo::bee_colony::get_extra_infoC"></span><span class="target" id="classpagmo_1_1bee__colony_1ac17b1051d23d8283f9b0484a2dbbdac3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -372,7 +278,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo10bee_colony7get_logEv">
-<span id="_CPPv3NK5pagmo10bee_colony7get_logEv"></span><span id="_CPPv2NK5pagmo10bee_colony7get_logEv"></span><span id="pagmo::bee_colony::get_logC"></span><span class="target" id="classpagmo_1_1bee__colony_1ae1494f8ff388c4f7febbf8df4b957070"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo10bee_colony8log_typeE" title="pagmo::bee_colony::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo10bee_colony7get_logEv"></span><span id="_CPPv2NK5pagmo10bee_colony7get_logEv"></span><span id="pagmo::bee_colony::get_logC"></span><span class="target" id="classpagmo_1_1bee__colony_1ad0d153bb9cc149f682e49e1a438a2831"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo10bee_colony8log_typeE" title="pagmo::bee_colony::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo10bee_colony7get_logEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1bee__colony_1a2b678cb586784b57262f50a3580e23ff"><span class="std std-ref">bee_colony::log_line_type</span></a> containing: Gen, Fevals, Current best, Best as described in <a class="reference internal" href="#classpagmo_1_1bee__colony_1af133473d1c4e47b05cec3097f9a86deb"><span class="std std-ref">bee_colony::set_verbosity()</span></a>.</p>
 <dl class="field-list simple">
@@ -385,54 +291,37 @@
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cmaes.html" class="btn btn-neutral float-right" title="Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="null.html" class="btn btn-neutral float-left" title="Null algorithm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cmaes.html" class="btn btn-neutral float-right" title="Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

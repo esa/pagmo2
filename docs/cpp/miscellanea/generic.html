@@ -1,47 +1,23 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Generic utilities &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Type traits and enums" href="type_traits.html" />
@@ -49,33 +25,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -83,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -124,80 +72,38 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Generic utilities</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/miscellanea/generic.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="generic-utilities">
-<span id="cpp-generic-utilities"></span><h1>Generic utilities<a class="headerlink" href="#generic-utilities" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="generic-utilities">
+<span id="cpp-generic-utilities"></span><h1>Generic utilities<a class="headerlink" href="#generic-utilities" title="Permalink to this headline"></a></h1>
 <p>A number of utilities to compute quantities that are of general relevance.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng">
-<span id="_CPPv3I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a7d1780bc1d772db23368fab974907041"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">uniform_real_from_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lb</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ub</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="pagmo::uniform_real_from_range::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a7d1780bc1d772db23368fab974907041"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">uniform_real_from_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lb</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ub</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="pagmo::uniform_real_from_range::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Generate a random real number within some lower and upper bounds. </p>
 <p>This function will create a random real number within a half-open range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math notranslate nohighlight">\( x \)</span> will be such that <span class="math notranslate nohighlight">\(lb \le x &lt; ub\)</span>. If <span class="math notranslate nohighlight">\(lb = ub\)</span>, then <span class="math notranslate nohighlight">\(lb\)</span> is returned.</p>
 <p>Example:</p>
@@ -232,7 +138,7 @@
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng">
-<span id="_CPPv3I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">uniform_integral_from_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lb</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ub</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="pagmo::uniform_integral_from_range::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">uniform_integral_from_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lb</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ub</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="pagmo::uniform_integral_from_range::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Generate a random integral number within some lower and upper bounds. </p>
 <p>This function will create a random integral number within a closed range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math notranslate nohighlight">\( x \)</span> will be such that <span class="math notranslate nohighlight">\(lb \le x \le ub\)</span>.</p>
 <p>Example:</p>
@@ -282,7 +188,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng">
-<span id="_CPPv3I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span id="_CPPv2I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a3144677b95721d3681fb691d11bd45ea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">random_decision_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prob</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="pagmo::random_decision_vector::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span id="_CPPv2I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a3144677b95721d3681fb691d11bd45ea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">random_decision_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prob</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="pagmo::random_decision_vector::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Generate a random decision vector compatible with a problem. </p>
 <p>This function will generate a decision vector whose values are randomly chosen with uniform probability within the input problem’s bounds.</p>
 <p>For the continuous part of the decision vector, the values will be generated via <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a>.</p>
@@ -306,7 +212,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng">
-<span id="_CPPv3I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span id="_CPPv2I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a68ddd098cb45b699ce96c45c957fb564"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">batch_random_decision_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prob</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="pagmo::batch_random_decision_vector::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span id="_CPPv2I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a68ddd098cb45b699ce96c45c957fb564"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">batch_random_decision_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prob</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="pagmo::batch_random_decision_vector::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Generate a batch of random decision vectors compatible with a problem. </p>
 <p>This function will generate <code class="docutils literal notranslate"><span class="pre">n</span></code> decision vectors whose values are randomly chosen with uniform probability within the input problem’s bounds. The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math notranslate nohighlight">\( d \)</span>, the first decision vector in the return value occupies the index range <span class="math notranslate nohighlight">\( \left[0, d\right) \)</span>, the second decision vector occupies the range <span class="math notranslate nohighlight">\( \left[d, 2d\right) \)</span>, and so on.</p>
 <p>For the continuous parts of the decision vectors, the values will be generated via <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a>.</p>
@@ -334,7 +240,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE">
-<span id="_CPPv3N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">binomial_coefficient</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">binomial_coefficient</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Binomial coefficient. </p>
 <p>An implementation of the binomial coefficient using gamma functions </p>
 <dl class="field-list simple">
@@ -353,7 +259,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE">
-<span id="_CPPv3N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="pagmo::kNN__std::vector:vector_double:CR.std::vector:vector_double:::size_type"></span><span class="target" id="namespacepagmo_1ad7e6b9ff576ce4db63c4a64397cc6895"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">kNN</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="pagmo::kNN__std::vector:vector_double:CR.std::vector:vector_double:::size_type"></span><span class="target" id="namespacepagmo_1ad7e6b9ff576ce4db63c4a64397cc6895"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">kNN</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>K-Nearest Neighbours. </p>
 <p>Computes the indexes of the k nearest neighbours (euclidean distance) to each of the input points. The algorithm complexity (naive implementation) is <span class="math notranslate nohighlight">\( O(MN^2)\)</span> where <span class="math notranslate nohighlight">\(N\)</span> is the number of points and <span class="math notranslate nohighlight">\(M\)</span> their dimensionality</p>
 <p>Example: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="n">res</span> <span class="o">=</span> <span class="n">kNN</span><span class="p">({{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mf">3.1</span><span class="p">,</span> <span class="mf">3.1</span><span class="p">},</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">}},</span> <span class="mi">2</span><span class="n">u</span><span class="p">);</span>
@@ -376,54 +282,37 @@ integral values as long as the absolute values of the bounds do not exceed <span
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="type_traits.html" class="btn btn-neutral float-right" title="Type traits and enums" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../utils/genetic_operators.html" class="btn btn-neutral float-left" title="Genetic Operators" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="type_traits.html" class="btn btn-neutral float-right" title="Type traits and enums" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

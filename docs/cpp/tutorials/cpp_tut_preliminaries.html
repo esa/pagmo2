@@ -1,46 +1,22 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Preliminaries &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Writing your first optimisation problem" href="cpp_tut_first_problem.html" />
@@ -48,33 +24,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +41,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -117,77 +65,35 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="cpp_tut.html">C++ tutorial</a> &raquo;</li>
-        
       <li>Preliminaries</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/tutorials/cpp_tut_preliminaries.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="preliminaries">
-<h1>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="organization-of-the-library">
-<h2>Organization of the library<a class="headerlink" href="#organization-of-the-library" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="preliminaries">
+<h1>Preliminaries<a class="headerlink" href="#preliminaries" title="Permalink to this headline"></a></h1>
+<section id="organization-of-the-library">
+<h2>Organization of the library<a class="headerlink" href="#organization-of-the-library" title="Permalink to this headline"></a></h2>
 <p>pagmo consists of a set of header files and a single
 compiled library. The headers are collected hierarchically
 in the <code class="docutils literal notranslate"><span class="pre">pagmo/</span></code> subdirectory. There is a global
@@ -202,15 +108,15 @@ needed in your code (e.g., <code class="docutils literal notranslate"><span clas
 <p>Do <strong>not</strong> include headers from the <code class="docutils literal notranslate"><span class="pre">pagmo/detail</span></code> subdirectory! They contain
 implementation details which may change from version to version in incompatible ways.</p>
 </div>
-</div>
-<div class="section" id="namespaces">
-<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline"></a></h2>
 <p>All of pagmo’s public classes and functions are located
 directly in the <code class="docutils literal notranslate"><span class="pre">pagmo::</span></code> namespace. There are no other
 namespaces in pagmo’s public API.</p>
-</div>
-<div class="section" id="api-and-abi-stability">
-<h2>API and ABI stability<a class="headerlink" href="#api-and-abi-stability" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="api-and-abi-stability">
+<h2>API and ABI stability<a class="headerlink" href="#api-and-abi-stability" title="Permalink to this headline"></a></h2>
 <p>Currently, pagmo guarantees API and ABI stability across
 patch versions. That is, version x.y.n of the pagmo library
 is both API and ABI compatible with version x.y.m.</p>
@@ -220,9 +126,9 @@ API changes between minor versions are less frequent,
 and they are always explicitly
 documented in the <a class="reference internal" href="../../../changelog.html#changelog"><span class="std std-ref">changelog</span></a> with
 the <strong>BREAKING</strong> tag.</p>
-</div>
-<div class="section" id="type-erasure">
-<span id="cpp-tut-type-erasure"></span><h2>Type erasure<a class="headerlink" href="#type-erasure" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="type-erasure">
+<span id="cpp-tut-type-erasure"></span><h2>Type erasure<a class="headerlink" href="#type-erasure" title="Permalink to this headline"></a></h2>
 <p>The current incarnation of pagmo eschews traditional
 object-oriented programming (OOP) techniques in favour of a
 more modern approach based on <a class="reference external" href="https://en.wikipedia.org/wiki/Type_erasure">type erasure</a>.
@@ -271,63 +177,46 @@ algorithm, or UDA, etc.).</p>
 one can use function pointers to emulate some aspects of OOP.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="compiling-the-tutorials">
-<h2>Compiling the tutorials<a class="headerlink" href="#compiling-the-tutorials" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="compiling-the-tutorials">
+<h2>Compiling the tutorials<a class="headerlink" href="#compiling-the-tutorials" title="Permalink to this headline"></a></h2>
 <p>The source code of the tutorials
 can be found in the <code class="docutils literal notranslate"><span class="pre">tutorials/</span></code> directory in the pagmo
 source tree. The tutorials can be compiled by enabling
 the <code class="docutils literal notranslate"><span class="pre">PAGMO_BUILD_TUTORIALS</span></code> CMake option (see the
 <a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cpp_tut_first_problem.html" class="btn btn-neutral float-right" title="Writing your first optimisation problem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="cpp_tut.html" class="btn btn-neutral float-left" title="C++ tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpp_tut_first_problem.html" class="btn btn-neutral float-right" title="Writing your first optimisation problem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

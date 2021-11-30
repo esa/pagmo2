@@ -1,47 +1,23 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Self-adaptive Differential Evolution (DE 1220 aka pDE) &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Extended Ant Colony Optimization (gaco)" href="gaco.html" />
@@ -49,33 +25,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -83,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -144,78 +92,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Self-adaptive Differential Evolution (DE 1220 aka pDE)</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/algorithms/de1220.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="self-adaptive-differential-evolution-de-1220-aka-pde">
-<h1>Self-adaptive Differential Evolution (DE 1220 aka pDE)<a class="headerlink" href="#self-adaptive-differential-evolution-de-1220-aka-pde" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="self-adaptive-differential-evolution-de-1220-aka-pde">
+<h1>Self-adaptive Differential Evolution (DE 1220 aka pDE)<a class="headerlink" href="#self-adaptive-differential-evolution-de-1220-aka-pde" title="Permalink to this headline"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6de1220E">
-<span id="_CPPv3N5pagmo6de1220E"></span><span id="_CPPv2N5pagmo6de1220E"></span><span id="pagmo::de1220"></span><span class="target" id="classpagmo_1_1de1220"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">de1220</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6de1220E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de1220E"></span><span id="_CPPv2N5pagmo6de1220E"></span><span id="pagmo::de1220"></span><span class="target" id="classpagmo_1_1de1220"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">de1220</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6de1220E" title="Permalink to this definition"></a><br /></dt>
 <dd><p>A Differential Evolution Algorithm (1220, or pDE: our own DE flavour!!) </p>
 <p>
 .<img alt="../../../_images/original.jpg" src="../../../_images/original.jpg" /></p>
@@ -245,13 +151,13 @@ will produce an error.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6de122013log_line_typeE">
-<span id="_CPPv3N5pagmo6de122013log_line_typeE"></span><span id="_CPPv2N5pagmo6de122013log_line_typeE"></span><span id="pagmo::de1220::log_line_type"></span><span class="target" id="classpagmo_1_1de1220_1a05f9fc6b2b28b0ddf33507f72b9d9390"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6de122013log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de122013log_line_typeE"></span><span id="_CPPv2N5pagmo6de122013log_line_typeE"></span><span id="pagmo::de1220::log_line_type"></span><span class="target" id="classpagmo_1_1de1220_1a05f9fc6b2b28b0ddf33507f72b9d9390"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6de122013log_line_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, F, CR, Variant, dx, df) </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6de12208log_typeE">
-<span id="_CPPv3N5pagmo6de12208log_typeE"></span><span id="_CPPv2N5pagmo6de12208log_typeE"></span><span id="pagmo::de1220::log_type"></span><span class="target" id="classpagmo_1_1de1220_1a8f728a62d26f5c51672762356b501625"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo6de122013log_line_typeE" title="pagmo::de1220::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6de12208log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de12208log_typeE"></span><span id="_CPPv2N5pagmo6de12208log_typeE"></span><span id="pagmo::de1220::log_type"></span><span class="target" id="classpagmo_1_1de1220_1a8f728a62d26f5c51672762356b501625"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo6de122013log_line_typeE" title="pagmo::de1220::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6de12208log_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -260,7 +166,7 @@ will produce an error.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj">
-<span id="_CPPv3N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj"></span><span id="_CPPv2N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj"></span><span id="pagmo::de1220::de1220__unsigned.std::vector:unsigned:.unsigned.double.double.b.unsigned"></span><span class="target" id="classpagmo_1_1de1220_1a278d3be0b2835d6225ebd00889c6be3e"></span><span class="sig-name descname"><span class="n"><span class="pre">de1220</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">allowed_variants</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5pagmo14de1220_staticsE" title="pagmo::de1220_statics"><span class="n"><span class="pre">de1220_statics</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">allowed_variants</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">variant_adptv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ftol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xtol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">memory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj"></span><span id="_CPPv2N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj"></span><span id="pagmo::de1220::de1220__unsigned.std::vector:unsigned:.unsigned.double.double.b.unsigned"></span><span class="target" id="classpagmo_1_1de1220_1a278d3be0b2835d6225ebd00889c6be3e"></span><span class="sig-name descname"><span class="n"><span class="pre">de1220</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">allowed_variants</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5pagmo14de1220_staticsE" title="pagmo::de1220_statics"><span class="n"><span class="pre">de1220_statics</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">allowed_variants</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">variant_adptv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ftol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xtol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">memory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de12206de1220EjNSt6vectorIjEEjddbj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs pDE (a.k.a. DE 1220)</p>
 <p>The same two self-adaptation variants used in <a class="reference internal" href="sade.html#classpagmo_1_1sade"><span class="std std-ref">pagmo::sade</span></a> are used to self-adapt the CR and F parameters:</p>
@@ -307,7 +213,7 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo6de12206evolveE10population">
-<span id="_CPPv3NK5pagmo6de12206evolveE10population"></span><span id="_CPPv2NK5pagmo6de12206evolveE10population"></span><span id="pagmo::de1220::evolve__populationC"></span><span class="target" id="classpagmo_1_1de1220_1ae4f9443ae56e5f36c4f819f16e3d23ca"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12206evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12206evolveE10population"></span><span id="_CPPv2NK5pagmo6de12206evolveE10population"></span><span id="pagmo::de1220::evolve__populationC"></span><span class="target" id="classpagmo_1_1de1220_1ae4f9443ae56e5f36c4f819f16e3d23ca"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12206evolveE10population" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <dl class="field-list simple">
@@ -328,7 +234,7 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6de12208set_seedEj">
-<span id="_CPPv3N5pagmo6de12208set_seedEj"></span><span id="_CPPv2N5pagmo6de12208set_seedEj"></span><span id="pagmo::de1220::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1de1220_1a3f504d6a2f731c34abb23689c341bc8d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de12208set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de12208set_seedEj"></span><span id="_CPPv2N5pagmo6de12208set_seedEj"></span><span id="pagmo::de1220::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1de1220_1a3f504d6a2f731c34abb23689c341bc8d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de12208set_seedEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -339,7 +245,7 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo6de12208get_seedEv">
-<span id="_CPPv3NK5pagmo6de12208get_seedEv"></span><span id="_CPPv2NK5pagmo6de12208get_seedEv"></span><span id="pagmo::de1220::get_seedC"></span><span class="target" id="classpagmo_1_1de1220_1a9daeb59d3e3f049f2c4ace1e368a1f2b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12208get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12208get_seedEv"></span><span id="_CPPv2NK5pagmo6de12208get_seedEv"></span><span id="pagmo::de1220::get_seedC"></span><span class="target" id="classpagmo_1_1de1220_1a9daeb59d3e3f049f2c4ace1e368a1f2b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12208get_seedEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -350,9 +256,9 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6de122013set_verbosityEj">
-<span id="_CPPv3N5pagmo6de122013set_verbosityEj"></span><span id="_CPPv2N5pagmo6de122013set_verbosityEj"></span><span id="pagmo::de1220::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1de1220_1ac5a773a4305f55a0b01b0c50e55894bd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de122013set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo6de122013set_verbosityEj"></span><span id="_CPPv2N5pagmo6de122013set_verbosityEj"></span><span id="pagmo::de1220::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1de1220_1ac5a773a4305f55a0b01b0c50e55894bd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6de122013set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1de1220_1abf19bc705a07fcb8843ee72d38f22eca"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1de1220_1ab0a03596d78d96437d1a95983653f8f3"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
@@ -381,7 +287,7 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo6de122013get_verbosityEv">
-<span id="_CPPv3NK5pagmo6de122013get_verbosityEv"></span><span id="_CPPv2NK5pagmo6de122013get_verbosityEv"></span><span id="pagmo::de1220::get_verbosityC"></span><span class="target" id="classpagmo_1_1de1220_1a7135ee783652f512bf2a0eee8a329cae"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de122013get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de122013get_verbosityEv"></span><span id="_CPPv2NK5pagmo6de122013get_verbosityEv"></span><span id="pagmo::de1220::get_verbosityC"></span><span class="target" id="classpagmo_1_1de1220_1a7135ee783652f512bf2a0eee8a329cae"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de122013get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -392,7 +298,7 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo6de12207get_genEv">
-<span id="_CPPv3NK5pagmo6de12207get_genEv"></span><span id="_CPPv2NK5pagmo6de12207get_genEv"></span><span id="pagmo::de1220::get_genC"></span><span class="target" id="classpagmo_1_1de1220_1a537f6abb5b9e98e2f00af2c45fcb84ed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12207get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12207get_genEv"></span><span id="_CPPv2NK5pagmo6de12207get_genEv"></span><span id="pagmo::de1220::get_genC"></span><span class="target" id="classpagmo_1_1de1220_1a537f6abb5b9e98e2f00af2c45fcb84ed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12207get_genEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the generations. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -403,7 +309,7 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo6de12208get_nameEv">
-<span id="_CPPv3NK5pagmo6de12208get_nameEv"></span><span id="_CPPv2NK5pagmo6de12208get_nameEv"></span><span id="pagmo::de1220::get_nameC"></span><span class="target" id="classpagmo_1_1de1220_1ab76e87d559762addeac62f29d8a27ee5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12208get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12208get_nameEv"></span><span id="_CPPv2NK5pagmo6de12208get_nameEv"></span><span id="pagmo::de1220::get_nameC"></span><span class="target" id="classpagmo_1_1de1220_1ab76e87d559762addeac62f29d8a27ee5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12208get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -415,7 +321,7 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo6de122014get_extra_infoEv">
-<span id="_CPPv3NK5pagmo6de122014get_extra_infoEv"></span><span id="_CPPv2NK5pagmo6de122014get_extra_infoEv"></span><span id="pagmo::de1220::get_extra_infoC"></span><span class="target" id="classpagmo_1_1de1220_1a653a7bd9a43c9774f5f3720d3166d216"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de122014get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de122014get_extra_infoEv"></span><span id="_CPPv2NK5pagmo6de122014get_extra_infoEv"></span><span id="pagmo::de1220::get_extra_infoC"></span><span class="target" id="classpagmo_1_1de1220_1a653a7bd9a43c9774f5f3720d3166d216"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de122014get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -427,7 +333,7 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo6de12207get_logEv">
-<span id="_CPPv3NK5pagmo6de12207get_logEv"></span><span id="_CPPv2NK5pagmo6de12207get_logEv"></span><span id="pagmo::de1220::get_logC"></span><span class="target" id="classpagmo_1_1de1220_1abf19bc705a07fcb8843ee72d38f22eca"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo6de12208log_typeE" title="pagmo::de1220::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12207get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo6de12207get_logEv"></span><span id="_CPPv2NK5pagmo6de12207get_logEv"></span><span id="pagmo::de1220::get_logC"></span><span class="target" id="classpagmo_1_1de1220_1ab0a03596d78d96437d1a95983653f8f3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo6de12208log_typeE" title="pagmo::de1220::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo6de12207get_logEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1de1220_1a05f9fc6b2b28b0ddf33507f72b9d9390"><span class="std std-ref">de1220::log_line_type</span></a> containing: Gen, Fevals, Best, F, CR, Variant, dx, df as described in <a class="reference internal" href="#classpagmo_1_1de1220_1ac5a773a4305f55a0b01b0c50e55894bd"><span class="std std-ref">de1220::set_verbosity</span></a> </p>
 <dl class="field-list simple">
@@ -442,67 +348,50 @@ See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V.
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo14de1220_staticsE">
-<span id="_CPPv3I0EN5pagmo14de1220_staticsE"></span><span id="_CPPv2I0EN5pagmo14de1220_staticsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structpagmo_1_1de1220__statics"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">de1220_statics</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo14de1220_staticsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo14de1220_staticsE"></span><span id="_CPPv2I0EN5pagmo14de1220_staticsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structpagmo_1_1de1220__statics"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">de1220_statics</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo14de1220_staticsE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Static variables used in <a class="reference internal" href="#classpagmo_1_1de1220"><span class="std std-ref">pagmo::de1220</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14de1220_statics16allowed_variantsE">
-<span id="_CPPv3N5pagmo14de1220_statics16allowed_variantsE"></span><span id="_CPPv2N5pagmo14de1220_statics16allowed_variantsE"></span><span id="pagmo::de1220_statics::allowed_variants__std::vector:unsigned:C"></span><span class="target" id="structpagmo_1_1de1220__statics_1a5cdc28c95d6be880f586ef4d9f9adcee"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">allowed_variants</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="m"><span class="pre">2u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">7u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">10u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">13u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">14u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">15u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">16u</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N5pagmo14de1220_statics16allowed_variantsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo14de1220_statics16allowed_variantsE"></span><span id="_CPPv2N5pagmo14de1220_statics16allowed_variantsE"></span><span id="pagmo::de1220_statics::allowed_variants__std::vector:unsigned:C"></span><span class="target" id="structpagmo_1_1de1220__statics_1a5cdc28c95d6be880f586ef4d9f9adcee"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">allowed_variants</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="m"><span class="pre">2u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">7u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">10u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">13u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">14u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">15u</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">16u</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N5pagmo14de1220_statics16allowed_variantsE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Allowed mutation variants considered by default: {2u ,3u ,7u ,10u ,13u ,14u ,15u ,16u}. </p>
 </dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="gaco.html" class="btn btn-neutral float-right" title="Extended Ant Colony Optimization (gaco)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="de.html" class="btn btn-neutral float-left" title="Differential Evolution" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gaco.html" class="btn btn-neutral float-right" title="Extended Ant Colony Optimization (gaco)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

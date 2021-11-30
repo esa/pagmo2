@@ -1,46 +1,22 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Thread island &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Fork island" href="fork_island.html" />
@@ -48,33 +24,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +41,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -121,79 +69,37 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Thread island</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/islands/thread_island.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="thread-island">
-<h1>Thread island<a class="headerlink" href="#thread-island" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="thread-island">
+<h1>Thread island<a class="headerlink" href="#thread-island" title="Permalink to this headline"></a></h1>
 <p><em>#include &lt;pagmo/islands/thread_island.hpp&gt;</em></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13thread_islandE">
-<span id="_CPPv3N5pagmo13thread_islandE"></span><span id="_CPPv2N5pagmo13thread_islandE"></span><span id="pagmo::thread_island"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thread_island</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_islandE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo13thread_islandE"></span><span id="_CPPv2N5pagmo13thread_islandE"></span><span id="pagmo::thread_island"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thread_island</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_islandE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Thread island.</p>
 <p>This class is a user-defined island (UDI) that will run evolutions in a separate
 thread of execution.</p>
@@ -203,7 +109,7 @@ on non-POSIX platforms or when both the island’s problem and algorithm provide
 <a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safety5basicE" title="pagmo::thread_safety::basic"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">basic</span></code></a> thread safety guarantee.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13thread_island13thread_islandEb">
-<span id="_CPPv3N5pagmo13thread_island13thread_islandEb"></span><span id="_CPPv2N5pagmo13thread_island13thread_islandEb"></span><span id="pagmo::thread_island::thread_island__b"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thread_island</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">use_pool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13thread_island13thread_islandEb" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo13thread_island13thread_islandEb"></span><span id="_CPPv2N5pagmo13thread_island13thread_islandEb"></span><span id="pagmo::thread_island::thread_island__b"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thread_island</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">use_pool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13thread_island13thread_islandEb" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <div class="versionadded">
@@ -235,14 +141,14 @@ used by the island.</p>
 </dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13thread_island13thread_islandEv">
-<span id="_CPPv3N5pagmo13thread_island13thread_islandEv"></span><span id="_CPPv2N5pagmo13thread_island13thread_islandEv"></span><span id="pagmo::thread_island::thread_island"></span><span class="sig-name descname"><span class="n"><span class="pre">thread_island</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13thread_island13thread_islandEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo13thread_island13thread_islandEv"></span><span id="_CPPv2N5pagmo13thread_island13thread_islandEv"></span><span id="pagmo::thread_island::thread_island"></span><span class="sig-name descname"><span class="n"><span class="pre">thread_island</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo13thread_island13thread_islandEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <p>Default constructor, equivalent to the previous constructor
 with <em>use_pool</em> set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo13thread_island8get_nameEv">
-<span id="_CPPv3NK5pagmo13thread_island8get_nameEv"></span><span id="_CPPv2NK5pagmo13thread_island8get_nameEv"></span><span id="pagmo::thread_island::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo13thread_island8get_nameEv"></span><span id="_CPPv2NK5pagmo13thread_island8get_nameEv"></span><span id="pagmo::thread_island::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <p>Island’s name.</p>
@@ -253,7 +159,7 @@ with <em>use_pool</em> set to <code class="docutils literal notranslate"><span c
 </dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo13thread_island14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo13thread_island14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo13thread_island14get_extra_infoEv"></span><span id="pagmo::thread_island::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo13thread_island14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo13thread_island14get_extra_infoEv"></span><span id="pagmo::thread_island::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <div class="versionadded">
@@ -267,7 +173,7 @@ with <em>use_pool</em> set to <code class="docutils literal notranslate"><span c
 </dl>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo13thread_island10run_evolveER6island">
-<span id="_CPPv3NK5pagmo13thread_island10run_evolveER6island"></span><span id="_CPPv2NK5pagmo13thread_island10run_evolveER6island"></span><span id="pagmo::thread_island::run_evolve__islandRC"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><span class="n"><span class="pre">island</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">isl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island10run_evolveER6island" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo13thread_island10run_evolveER6island"></span><span id="_CPPv2NK5pagmo13thread_island10run_evolveER6island"></span><span id="pagmo::thread_island::run_evolve__islandRC"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run_evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><span class="n"><span class="pre">island</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">isl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo13thread_island10run_evolveER6island" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <p>Run an evolution.</p>
@@ -297,54 +203,37 @@ at least the <a class="reference internal" href="../miscellanea/type_traits.html
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="fork_island.html" class="btn btn-neutral float-right" title="Fork island" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../problems/wfg.html" class="btn btn-neutral float-left" title="WFG problem test suite" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fork_island.html" class="btn btn-neutral float-right" title="Fork island" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

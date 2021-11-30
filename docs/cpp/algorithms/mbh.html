@@ -1,47 +1,23 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Monotonic Basin Hopping (MBH) - Generalized &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Self-adaptive constraints handling" href="cstrs_self_adaptive.html" />
@@ -49,33 +25,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -83,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -144,78 +92,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Monotonic Basin Hopping (MBH) - Generalized</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/algorithms/mbh.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="monotonic-basin-hopping-mbh-generalized">
-<h1>Monotonic Basin Hopping (MBH) - Generalized<a class="headerlink" href="#monotonic-basin-hopping-mbh-generalized" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="monotonic-basin-hopping-mbh-generalized">
+<h1>Monotonic Basin Hopping (MBH) - Generalized<a class="headerlink" href="#monotonic-basin-hopping-mbh-generalized" title="Permalink to this headline"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3mbhE">
-<span id="_CPPv3N5pagmo3mbhE"></span><span id="_CPPv2N5pagmo3mbhE"></span><span id="pagmo::mbh"></span><span class="target" id="classpagmo_1_1mbh"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">mbh</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3mbhE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3mbhE"></span><span id="_CPPv2N5pagmo3mbhE"></span><span id="pagmo::mbh"></span><span class="target" id="classpagmo_1_1mbh"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">mbh</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3mbhE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Monotonic Basin Hopping (generalized). </p>
 <p><img alt="../../../_images/mbh.png" src="../../../_images/mbh.png" /></p>
 <p>Monotonic basin hopping, or simply, basin hopping, is an algorithm rooted in the idea of mapping the objective function <span class="math notranslate nohighlight">\(f(\mathbf x_0)\)</span> into the local minima found starting from <span class="math notranslate nohighlight">\(\mathbf x_0\)</span>. This simple idea allows a substantial increase of efficiency in solving problems, such as the Lennard-Jones cluster or the MGA-1DSM interplanetary trajectory problem that are conjectured to have a so-called funnel structure.</p>
@@ -239,13 +145,13 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3mbh13log_line_typeE">
-<span id="_CPPv3N5pagmo3mbh13log_line_typeE"></span><span id="_CPPv2N5pagmo3mbh13log_line_typeE"></span><span id="pagmo::mbh::log_line_type"></span><span class="target" id="classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3mbh13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3mbh13log_line_typeE"></span><span id="_CPPv2N5pagmo3mbh13log_line_typeE"></span><span id="pagmo::mbh::log_line_type"></span><span class="target" id="classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3mbh13log_line_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Single entry of the log (feval, best fitness, n. constraints violated, violation norm, trial). </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3mbh8log_typeE">
-<span id="_CPPv3N5pagmo3mbh8log_typeE"></span><span id="_CPPv2N5pagmo3mbh8log_typeE"></span><span id="pagmo::mbh::log_type"></span><span class="target" id="classpagmo_1_1mbh_1a23f54ace28fdd689d6c8c2b156055085"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo3mbh13log_line_typeE" title="pagmo::mbh::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3mbh8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3mbh8log_typeE"></span><span id="_CPPv2N5pagmo3mbh8log_typeE"></span><span id="pagmo::mbh::log_type"></span><span class="target" id="classpagmo_1_1mbh_1a23f54ace28fdd689d6c8c2b156055085"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo3mbh13log_line_typeE" title="pagmo::mbh::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3mbh8log_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -254,7 +160,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3mbh3mbhEv">
-<span id="_CPPv3N5pagmo3mbh3mbhEv"></span><span id="_CPPv2N5pagmo3mbh3mbhEv"></span><span id="pagmo::mbh::mbh"></span><span class="target" id="classpagmo_1_1mbh_1a0a8b66ed93565dd4ac43a7af95435b8a"></span><span class="sig-name descname"><span class="n"><span class="pre">mbh</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh3mbhEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3mbh3mbhEv"></span><span id="_CPPv2N5pagmo3mbh3mbhEv"></span><span id="pagmo::mbh::mbh"></span><span class="target" id="classpagmo_1_1mbh_1a0a8b66ed93565dd4ac43a7af95435b8a"></span><span class="sig-name descname"><span class="n"><span class="pre">mbh</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh3mbhEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The default constructor will initialize the algorithm with the following parameters:<ul class="simple">
 <li><p>inner algorithm: <a class="reference internal" href="compass_search.html#classpagmo_1_1compass__search"><span class="std std-ref">pagmo::compass_search</span></a>;</p></li>
@@ -272,7 +178,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj">
-<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="pagmo::mbh::mbh::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1mbh_1a5227dda59c04e756e209206b557390ce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mbh</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="pagmo::mbh::mbh::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stop</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">perturb</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="pagmo::mbh::mbh::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1mbh_1a5227dda59c04e756e209206b557390ce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mbh</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="pagmo::mbh::mbh::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stop</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">perturb</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tjdj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor (scalar perturbation). </p>
 <p>This constructor will construct a monotonic basin hopping algorithm using a scalar perturbation.</p>
 <div class="admonition note">
@@ -299,7 +205,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej">
-<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej" title="pagmo::mbh::mbh::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1mbh_1aeb2658773a9d8dac44792eeb8097f29a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mbh</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej" title="pagmo::mbh::mbh::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stop</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">perturb</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej" title="pagmo::mbh::mbh::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1mbh_1aeb2658773a9d8dac44792eeb8097f29a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mbh</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej" title="pagmo::mbh::mbh::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stop</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">perturb</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo3mbh3mbhERR1Tj13vector_doublej" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor (vector perturbation). </p>
 <p>This constructor will construct a monotonic basin hopping algorithm using a vector perturbation.</p>
 <div class="admonition warning">
@@ -327,7 +233,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh6evolveE10population">
-<span id="_CPPv3NK5pagmo3mbh6evolveE10population"></span><span id="_CPPv2NK5pagmo3mbh6evolveE10population"></span><span id="pagmo::mbh::evolve__populationC"></span><span class="target" id="classpagmo_1_1mbh_1a5563ff2739d40d0bf84e71a27567675a"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh6evolveE10population"></span><span id="_CPPv2NK5pagmo3mbh6evolveE10population"></span><span id="pagmo::mbh::evolve__populationC"></span><span class="target" id="classpagmo_1_1mbh_1a5563ff2739d40d0bf84e71a27567675a"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh6evolveE10population" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Evolve method. </p>
 <p>This method will evolve the input population up to when <code class="docutils literal notranslate"><span class="pre">stop</span></code> consecutve runs of the internal algorithm do not improve the solution.</p>
 <dl class="field-list simple">
@@ -345,7 +251,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3mbh8set_seedEj">
-<span id="_CPPv3N5pagmo3mbh8set_seedEj"></span><span id="_CPPv2N5pagmo3mbh8set_seedEj"></span><span id="pagmo::mbh::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1mbh_1a7d4a951b87e7400682c6158349643f4e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3mbh8set_seedEj"></span><span id="_CPPv2N5pagmo3mbh8set_seedEj"></span><span id="pagmo::mbh::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1mbh_1a7d4a951b87e7400682c6158349643f4e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh8set_seedEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -356,7 +262,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh8get_seedEv">
-<span id="_CPPv3NK5pagmo3mbh8get_seedEv"></span><span id="_CPPv2NK5pagmo3mbh8get_seedEv"></span><span id="pagmo::mbh::get_seedC"></span><span class="target" id="classpagmo_1_1mbh_1ace711238e5814980421a05c7052300f4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh8get_seedEv"></span><span id="_CPPv2NK5pagmo3mbh8get_seedEv"></span><span id="pagmo::mbh::get_seedC"></span><span class="target" id="classpagmo_1_1mbh_1ace711238e5814980421a05c7052300f4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh8get_seedEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -367,9 +273,9 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3mbh13set_verbosityEj">
-<span id="_CPPv3N5pagmo3mbh13set_verbosityEj"></span><span id="_CPPv2N5pagmo3mbh13set_verbosityEj"></span><span id="pagmo::mbh::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1mbh_1aa871b21e820828c1ff3e0843177aee5a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3mbh13set_verbosityEj"></span><span id="_CPPv2N5pagmo3mbh13set_verbosityEj"></span><span id="pagmo::mbh::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1mbh_1aa871b21e820828c1ff3e0843177aee5a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set the algorithm verbosity. </p>
-<p>This method will sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1mbh_1a3c3c6a719660aea4990413aa04675e7f"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>This method will sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1mbh_1a24573ef1d958ba9faf5519b0cf8664c4"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity,</p></li>
 <li><p>&gt;0: will print and log one line at the end of each call to the inner algorithm.</p></li>
 </ul>
@@ -397,7 +303,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh13get_verbosityEv">
-<span id="_CPPv3NK5pagmo3mbh13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3mbh13get_verbosityEv"></span><span id="pagmo::mbh::get_verbosityC"></span><span class="target" id="classpagmo_1_1mbh_1a1b7a1982c5b3e657d92aa6be59cafe15"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3mbh13get_verbosityEv"></span><span id="pagmo::mbh::get_verbosityC"></span><span class="target" id="classpagmo_1_1mbh_1a1b7a1982c5b3e657d92aa6be59cafe15"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh13get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -408,7 +314,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh11get_perturbEv">
-<span id="_CPPv3NK5pagmo3mbh11get_perturbEv"></span><span id="_CPPv2NK5pagmo3mbh11get_perturbEv"></span><span id="pagmo::mbh::get_perturbC"></span><span class="target" id="classpagmo_1_1mbh_1a55e96fa2c541b35ca6515c752dbc0819"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_perturb</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh11get_perturbEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh11get_perturbEv"></span><span id="_CPPv2NK5pagmo3mbh11get_perturbEv"></span><span id="pagmo::mbh::get_perturbC"></span><span class="target" id="classpagmo_1_1mbh_1af2ed10c253dc31cb69791be1cc9d037e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_perturb</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh11get_perturbEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get the perturbation vector. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -419,7 +325,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3mbh11set_perturbERK13vector_double">
-<span id="_CPPv3N5pagmo3mbh11set_perturbERK13vector_double"></span><span id="_CPPv2N5pagmo3mbh11set_perturbERK13vector_double"></span><span id="pagmo::mbh::set_perturb__vector_doubleCR"></span><span class="target" id="classpagmo_1_1mbh_1afad9c3e352a452271228b32803e64147"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_perturb</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh11set_perturbERK13vector_double" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3mbh11set_perturbERK13vector_double"></span><span id="_CPPv2N5pagmo3mbh11set_perturbERK13vector_double"></span><span id="pagmo::mbh::set_perturb__vector_doubleCR"></span><span class="target" id="classpagmo_1_1mbh_1afad9c3e352a452271228b32803e64147"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_perturb</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh11set_perturbERK13vector_double" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set the perturbation vector. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -433,7 +339,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo3mbh17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo3mbh17get_thread_safetyEv"></span><span id="pagmo::mbh::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1mbh_1a19788fb8a6a14e74e1ce380f69445ecf"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh17get_thread_safetyEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo3mbh17get_thread_safetyEv"></span><span id="pagmo::mbh::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1mbh_1a19788fb8a6a14e74e1ce380f69445ecf"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh17get_thread_safetyEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm’s thread safety level. </p>
 <p>The thread safety of this meta-algorithm is the minimum between the thread safety of the internal <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> and the basic thread safety level. I.e., this algorithm never provides more than the basic thread safety level.</p>
 <dl class="field-list simple">
@@ -445,7 +351,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh19get_inner_algorithmEv">
-<span id="_CPPv3NK5pagmo3mbh19get_inner_algorithmEv"></span><span id="_CPPv2NK5pagmo3mbh19get_inner_algorithmEv"></span><span id="pagmo::mbh::get_inner_algorithmC"></span><span class="target" id="classpagmo_1_1mbh_1af13925a0a1e3e1482d0e47e7dfea9c37"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh19get_inner_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh19get_inner_algorithmEv"></span><span id="_CPPv2NK5pagmo3mbh19get_inner_algorithmEv"></span><span id="pagmo::mbh::get_inner_algorithmC"></span><span class="target" id="classpagmo_1_1mbh_1a4604fc062e6695dee2231ad6ff291b7b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh19get_inner_algorithmEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Getter for the inner algorithm. </p>
 <p>Returns a const reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
 <dl class="field-list simple">
@@ -457,7 +363,7 @@ is not <a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3mbh19get_inner_algorithmEv">
-<span id="_CPPv3N5pagmo3mbh19get_inner_algorithmEv"></span><span id="_CPPv2N5pagmo3mbh19get_inner_algorithmEv"></span><span id="pagmo::mbh::get_inner_algorithm"></span><span class="target" id="classpagmo_1_1mbh_1a647ba2906efbb0607b339979d67ab421"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh19get_inner_algorithmEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo3mbh19get_inner_algorithmEv"></span><span id="_CPPv2N5pagmo3mbh19get_inner_algorithmEv"></span><span id="pagmo::mbh::get_inner_algorithm"></span><span class="target" id="classpagmo_1_1mbh_1ae0748b0bf2b3a10620c26194cd0d8fe5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3mbh19get_inner_algorithmEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Getter for the inner algorithm. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>.</p>
 <div class="admonition warning">
@@ -475,7 +381,7 @@ non-const methods on the internal <a class="reference internal" href="../algorit
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh7get_logEv">
-<span id="_CPPv3NK5pagmo3mbh7get_logEv"></span><span id="_CPPv2NK5pagmo3mbh7get_logEv"></span><span id="pagmo::mbh::get_logC"></span><span class="target" id="classpagmo_1_1mbh_1a3c3c6a719660aea4990413aa04675e7f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3mbh8log_typeE" title="pagmo::mbh::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh7get_logEv"></span><span id="_CPPv2NK5pagmo3mbh7get_logEv"></span><span id="pagmo::mbh::get_logC"></span><span class="target" id="classpagmo_1_1mbh_1a24573ef1d958ba9faf5519b0cf8664c4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3mbh8log_typeE" title="pagmo::mbh::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh7get_logEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to <a class="reference internal" href="#classpagmo_1_1mbh_1a5563ff2739d40d0bf84e71a27567675a"><span class="std std-ref">mbh::evolve()</span></a>. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1mbh_1ae4ed3bb6530e3f683e1f22cd2bb62d60"><span class="std std-ref">mbh::log_line_type</span></a> containing: <code class="docutils literal notranslate"><span class="pre">Fevals</span></code>, <code class="docutils literal notranslate"><span class="pre">Best</span></code>, <code class="docutils literal notranslate"><span class="pre">Violated</span></code>, <code class="docutils literal notranslate"><span class="pre">Viol.Norm</span></code> and <code class="docutils literal notranslate"><span class="pre">Trial</span></code> as described in <a class="reference internal" href="#classpagmo_1_1mbh_1aa871b21e820828c1ff3e0843177aee5a"><span class="std std-ref">mbh::set_verbosity()</span></a>.</p>
 <dl class="field-list simple">
@@ -487,7 +393,7 @@ non-const methods on the internal <a class="reference internal" href="../algorit
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh8get_nameEv">
-<span id="_CPPv3NK5pagmo3mbh8get_nameEv"></span><span id="_CPPv2NK5pagmo3mbh8get_nameEv"></span><span id="pagmo::mbh::get_nameC"></span><span class="target" id="classpagmo_1_1mbh_1a489df1c8ccc1cd7c6084aa34235294bf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh8get_nameEv"></span><span id="_CPPv2NK5pagmo3mbh8get_nameEv"></span><span id="pagmo::mbh::get_nameC"></span><span class="target" id="classpagmo_1_1mbh_1a489df1c8ccc1cd7c6084aa34235294bf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -498,7 +404,7 @@ non-const methods on the internal <a class="reference internal" href="../algorit
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3mbh14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo3mbh14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3mbh14get_extra_infoEv"></span><span id="pagmo::mbh::get_extra_infoC"></span><span class="target" id="classpagmo_1_1mbh_1a18900ca752fc8a85819e52c38ff4c240"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo3mbh14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3mbh14get_extra_infoEv"></span><span id="pagmo::mbh::get_extra_infoC"></span><span class="target" id="classpagmo_1_1mbh_1a18900ca752fc8a85819e52c38ff4c240"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3mbh14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -510,54 +416,37 @@ non-const methods on the internal <a class="reference internal" href="../algorit
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cstrs_self_adaptive.html" class="btn btn-neutral float-right" title="Self-adaptive constraints handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="moead.html" class="btn btn-neutral float-left" title="Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cstrs_self_adaptive.html" class="btn btn-neutral float-right" title="Self-adaptive constraints handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

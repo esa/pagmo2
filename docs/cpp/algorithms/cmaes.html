@@ -1,47 +1,23 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES) &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Compass Search" href="compass_search.html" />
@@ -49,33 +25,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -83,18 +42,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -144,79 +92,37 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/algorithms/cmaes.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="covariance-matrix-adaptation-evolutionary-strategy-cma-es">
-<h1>Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)<a class="headerlink" href="#covariance-matrix-adaptation-evolutionary-strategy-cma-es" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="covariance-matrix-adaptation-evolutionary-strategy-cma-es">
+<h1>Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)<a class="headerlink" href="#covariance-matrix-adaptation-evolutionary-strategy-cma-es" title="Permalink to this headline"></a></h1>
 <p><em>#include &lt;pagmo/algorithms/cmaes.hpp&gt;</em></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5cmaesE">
-<span id="_CPPv3N5pagmo5cmaesE"></span><span id="_CPPv2N5pagmo5cmaesE"></span><span id="pagmo::cmaes"></span><span class="target" id="classpagmo_1_1cmaes"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">cmaes</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo5cmaesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaesE"></span><span id="_CPPv2N5pagmo5cmaesE"></span><span id="pagmo::cmaes"></span><span class="target" id="classpagmo_1_1cmaes"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">cmaes</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo5cmaesE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Covariance Matrix Adaptation Evolutionary Strategy. </p>
 <p><img alt="../../../_images/cmaes.png" src="../../../_images/cmaes.png" /></p>
 <p>CMA-ES is one of the most successful algorithm, classified as an Evolutionary Strategy, for derivative-free global optimization. The version implemented in PaGMO is the “classic” version described in the 2006 paper titled “The CMA evolution strategy: a comparing review.”.</p>
@@ -247,7 +153,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5cmaes13log_line_typeE">
-<span id="_CPPv3N5pagmo5cmaes13log_line_typeE"></span><span id="_CPPv2N5pagmo5cmaes13log_line_typeE"></span><span id="pagmo::cmaes::log_line_type"></span><span class="target" id="classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes13log_line_typeE"></span><span id="_CPPv2N5pagmo5cmaes13log_line_typeE"></span><span id="pagmo::cmaes::log_line_type"></span><span class="target" id="classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes13log_line_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Single data line for the algorithm’s log. </p>
 <p>A log data line is a tuple consisting of:<ul class="simple">
 <li><p>the generation number,</p></li>
@@ -261,7 +167,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5cmaes8log_typeE">
-<span id="_CPPv3N5pagmo5cmaes8log_typeE"></span><span id="_CPPv2N5pagmo5cmaes8log_typeE"></span><span id="pagmo::cmaes::log_type"></span><span class="target" id="classpagmo_1_1cmaes_1ac89577e5fc6ecf0593b3aed4b1ce3b09"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo5cmaes13log_line_typeE" title="pagmo::cmaes::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes8log_typeE"></span><span id="_CPPv2N5pagmo5cmaes8log_typeE"></span><span id="pagmo::cmaes::log_type"></span><span class="target" id="classpagmo_1_1cmaes_1ac89577e5fc6ecf0593b3aed4b1ce3b09"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo5cmaes13log_line_typeE" title="pagmo::cmaes::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes8log_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Log type. </p>
 <p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"><span class="std std-ref">cmaes::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"><span class="std std-ref">cmaes::set_verbosity()</span></a>). </p>
 </dd></dl>
@@ -271,7 +177,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5cmaes5cmaesEjdddddddbbj">
-<span id="_CPPv3N5pagmo5cmaes5cmaesEjdddddddbbj"></span><span id="_CPPv2N5pagmo5cmaes5cmaesEjdddddddbbj"></span><span id="pagmo::cmaes::cmaes__unsigned.double.double.double.double.double.double.double.b.b.unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1a8fa184916260c788cee226051c6dbc52"></span><span class="sig-name descname"><span class="n"><span class="pre">cmaes</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cc</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cs</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c1</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cmu</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sigma0</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.5</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ftol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xtol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">memory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">force_bounds</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes5cmaesEjdddddddbbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes5cmaesEjdddddddbbj"></span><span id="_CPPv2N5pagmo5cmaes5cmaesEjdddddddbbj"></span><span id="pagmo::cmaes::cmaes__unsigned.double.double.double.double.double.double.double.b.b.unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1a8fa184916260c788cee226051c6dbc52"></span><span class="sig-name descname"><span class="n"><span class="pre">cmaes</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cc</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cs</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c1</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cmu</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sigma0</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.5</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ftol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xtol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">memory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">force_bounds</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes5cmaesEjdddddddbbj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs cmaes</p>
 <dl class="field-list simple">
@@ -298,7 +204,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5cmaes6evolveE10population">
-<span id="_CPPv3NK5pagmo5cmaes6evolveE10population"></span><span id="_CPPv2NK5pagmo5cmaes6evolveE10population"></span><span id="pagmo::cmaes::evolve__populationC"></span><span class="target" id="classpagmo_1_1cmaes_1a367e24bfeeedad519c3e10b7f2ba7545"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes6evolveE10population"></span><span id="_CPPv2NK5pagmo5cmaes6evolveE10population"></span><span id="pagmo::cmaes::evolve__populationC"></span><span class="target" id="classpagmo_1_1cmaes_1a367e24bfeeedad519c3e10b7f2ba7545"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes6evolveE10population" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <dl class="field-list simple">
@@ -320,7 +226,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5cmaes8set_seedEj">
-<span id="_CPPv3N5pagmo5cmaes8set_seedEj"></span><span id="_CPPv2N5pagmo5cmaes8set_seedEj"></span><span id="pagmo::cmaes::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1afde1f56cb7e6a43a60b7b3f2eaeaa20a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes8set_seedEj"></span><span id="_CPPv2N5pagmo5cmaes8set_seedEj"></span><span id="pagmo::cmaes::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1afde1f56cb7e6a43a60b7b3f2eaeaa20a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes8set_seedEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -331,7 +237,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5cmaes8get_seedEv">
-<span id="_CPPv3NK5pagmo5cmaes8get_seedEv"></span><span id="_CPPv2NK5pagmo5cmaes8get_seedEv"></span><span id="pagmo::cmaes::get_seedC"></span><span class="target" id="classpagmo_1_1cmaes_1ab320ad394c73f09e95e988d421cdb7fd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes8get_seedEv"></span><span id="_CPPv2NK5pagmo5cmaes8get_seedEv"></span><span id="pagmo::cmaes::get_seedC"></span><span class="target" id="classpagmo_1_1cmaes_1ab320ad394c73f09e95e988d421cdb7fd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes8get_seedEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -342,9 +248,9 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5cmaes13set_verbosityEj">
-<span id="_CPPv3N5pagmo5cmaes13set_verbosityEj"></span><span id="_CPPv2N5pagmo5cmaes13set_verbosityEj"></span><span id="pagmo::cmaes::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo5cmaes13set_verbosityEj"></span><span id="_CPPv2N5pagmo5cmaes13set_verbosityEj"></span><span id="pagmo::cmaes::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5cmaes13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1cmaes_1ac5458b8237b3f40c8d91810428f917e3"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
@@ -371,7 +277,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5cmaes13get_verbosityEv">
-<span id="_CPPv3NK5pagmo5cmaes13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5cmaes13get_verbosityEv"></span><span id="pagmo::cmaes::get_verbosityC"></span><span class="target" id="classpagmo_1_1cmaes_1abb75103d18a3de5fcf5e56e15aeed305"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes13get_verbosityEv"></span><span id="_CPPv2NK5pagmo5cmaes13get_verbosityEv"></span><span id="pagmo::cmaes::get_verbosityC"></span><span class="target" id="classpagmo_1_1cmaes_1abb75103d18a3de5fcf5e56e15aeed305"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes13get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -382,7 +288,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5cmaes7get_genEv">
-<span id="_CPPv3NK5pagmo5cmaes7get_genEv"></span><span id="_CPPv2NK5pagmo5cmaes7get_genEv"></span><span id="pagmo::cmaes::get_genC"></span><span class="target" id="classpagmo_1_1cmaes_1a0dd03ac06f3f5f237fb3a04f63297590"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes7get_genEv"></span><span id="_CPPv2NK5pagmo5cmaes7get_genEv"></span><span id="pagmo::cmaes::get_genC"></span><span class="target" id="classpagmo_1_1cmaes_1a0dd03ac06f3f5f237fb3a04f63297590"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes7get_genEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the generations. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -393,7 +299,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5cmaes8get_nameEv">
-<span id="_CPPv3NK5pagmo5cmaes8get_nameEv"></span><span id="_CPPv2NK5pagmo5cmaes8get_nameEv"></span><span id="pagmo::cmaes::get_nameC"></span><span class="target" id="classpagmo_1_1cmaes_1ab0cdd96f967001586b26a7ba1de1e67e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes8get_nameEv"></span><span id="_CPPv2NK5pagmo5cmaes8get_nameEv"></span><span id="pagmo::cmaes::get_nameC"></span><span class="target" id="classpagmo_1_1cmaes_1ab0cdd96f967001586b26a7ba1de1e67e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -405,7 +311,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5cmaes14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo5cmaes14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5cmaes14get_extra_infoEv"></span><span id="pagmo::cmaes::get_extra_infoC"></span><span class="target" id="classpagmo_1_1cmaes_1ab170be072ec464872e7adabcc9d7f276"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5cmaes14get_extra_infoEv"></span><span id="pagmo::cmaes::get_extra_infoC"></span><span class="target" id="classpagmo_1_1cmaes_1ab170be072ec464872e7adabcc9d7f276"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -417,7 +323,7 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5cmaes7get_logEv">
-<span id="_CPPv3NK5pagmo5cmaes7get_logEv"></span><span id="_CPPv2NK5pagmo5cmaes7get_logEv"></span><span id="pagmo::cmaes::get_logC"></span><span class="target" id="classpagmo_1_1cmaes_1a146a8cc4912e572c6ff9f6e6c15e31a2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5cmaes8log_typeE" title="pagmo::cmaes::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo5cmaes7get_logEv"></span><span id="_CPPv2NK5pagmo5cmaes7get_logEv"></span><span id="pagmo::cmaes::get_logC"></span><span class="target" id="classpagmo_1_1cmaes_1ac5458b8237b3f40c8d91810428f917e3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5cmaes8log_typeE" title="pagmo::cmaes::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5cmaes7get_logEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1cmaes_1ad4f81ec1d063e2ca5662ccb3984bbe76"><span class="std std-ref">cmaes::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df, sigma as described in <a class="reference internal" href="#classpagmo_1_1cmaes_1a033551522f740e701ddef6737d97d39e"><span class="std std-ref">cmaes::set_verbosity</span></a> </p>
 <dl class="field-list simple">
@@ -430,54 +336,37 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="compass_search.html" class="btn btn-neutral float-right" title="Compass Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="bee_colony.html" class="btn btn-neutral float-left" title="Artificial Bee Colony" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="compass_search.html" class="btn btn-neutral float-right" title="Compass Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

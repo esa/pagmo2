@@ -1,46 +1,22 @@
- 
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Exponential Natural Evolution Strategies (xNES) &mdash; pagmo 2.18.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-
-  
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Null problem" href="../problems/null.html" />
@@ -48,33 +24,16 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> pagmo
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 2.18.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +41,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
@@ -143,78 +91,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pagmo</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-        
       <li>Exponential Natural Evolution Strategies (xNES)</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../../../_sources/docs/cpp/algorithms/xnes.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="exponential-natural-evolution-strategies-xnes">
-<h1>Exponential Natural Evolution Strategies (xNES)<a class="headerlink" href="#exponential-natural-evolution-strategies-xnes" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="exponential-natural-evolution-strategies-xnes">
+<h1>Exponential Natural Evolution Strategies (xNES)<a class="headerlink" href="#exponential-natural-evolution-strategies-xnes" title="Permalink to this headline"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4xnesE">
-<span id="_CPPv3N5pagmo4xnesE"></span><span id="_CPPv2N5pagmo4xnesE"></span><span id="pagmo::xnes"></span><span class="target" id="classpagmo_1_1xnes"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">xnes</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4xnesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnesE"></span><span id="_CPPv2N5pagmo4xnesE"></span><span id="pagmo::xnes"></span><span class="target" id="classpagmo_1_1xnes"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">xnes</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4xnesE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Exponential Natural Evolution Strategies. </p>
 <p><img alt="../../../_images/xnes.png" src="../../../_images/xnes.png" /></p>
 <p>Exponential Natural Evolution Strategies is an algorithm closely related to <a class="reference internal" href="cmaes.html#classpagmo_1_1cmaes"><span class="std std-ref">pagmo::cmaes</span></a> and based on the adaptation of a gaussian sampling distribution via the so-called natural gradient. Like <a class="reference internal" href="cmaes.html#classpagmo_1_1cmaes"><span class="std std-ref">pagmo::cmaes</span></a> it is based on the idea of sampling new trial vectors from a multivariate distribution and using the new sampled points to update the distribution parameters. Naively this could be done following the gradient of the expected fitness as approximated by a finite number of sampled points. While this idea offers a powerful lead on algorithmic construction it has some major drawbacks that are solved in the so-called Natural Evolution Strategies class of algorithms by adopting, instead, the natural gradient. xNES is one of the most performing variants in this class.</p>
@@ -252,7 +158,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4xnes13log_line_typeE">
-<span id="_CPPv3N5pagmo4xnes13log_line_typeE"></span><span id="_CPPv2N5pagmo4xnes13log_line_typeE"></span><span id="pagmo::xnes::log_line_type"></span><span class="target" id="classpagmo_1_1xnes_1a2b48b25de896759e546ea3ee660530f2"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4xnes13log_line_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes13log_line_typeE"></span><span id="_CPPv2N5pagmo4xnes13log_line_typeE"></span><span id="pagmo::xnes::log_line_type"></span><span class="target" id="classpagmo_1_1xnes_1a2b48b25de896759e546ea3ee660530f2"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4xnes13log_line_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Single data line for the algorithm’s log. </p>
 <p>A log data line is a tuple consisting of:<ul class="simple">
 <li><p>the generation number,</p></li>
@@ -266,7 +172,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4xnes8log_typeE">
-<span id="_CPPv3N5pagmo4xnes8log_typeE"></span><span id="_CPPv2N5pagmo4xnes8log_typeE"></span><span id="pagmo::xnes::log_type"></span><span class="target" id="classpagmo_1_1xnes_1af688ee4857b322540e91d7f773b94568"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo4xnes13log_line_typeE" title="pagmo::xnes::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4xnes8log_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes8log_typeE"></span><span id="_CPPv2N5pagmo4xnes8log_typeE"></span><span id="pagmo::xnes::log_type"></span><span class="target" id="classpagmo_1_1xnes_1af688ee4857b322540e91d7f773b94568"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo4xnes13log_line_typeE" title="pagmo::xnes::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo4xnes8log_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Log type. </p>
 <p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1xnes_1a2b48b25de896759e546ea3ee660530f2"><span class="std std-ref">xnes::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1xnes_1aedbc4d6f774d33e2573553d90a6b57d6"><span class="std std-ref">xnes::set_verbosity()</span></a>). </p>
 </dd></dl>
@@ -276,7 +182,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4xnes4xnesEjddddddbbj">
-<span id="_CPPv3N5pagmo4xnes4xnesEjddddddbbj"></span><span id="_CPPv2N5pagmo4xnes4xnesEjddddddbbj"></span><span id="pagmo::xnes::xnes__unsigned.double.double.double.double.double.double.b.b.unsigned"></span><span class="target" id="classpagmo_1_1xnes_1ab48ca3ab80a9817076015f862189750d"></span><span class="sig-name descname"><span class="n"><span class="pre">xnes</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eta_mu</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eta_sigma</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eta_b</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sigma0</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ftol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xtol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">memory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">force_bounds</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes4xnesEjddddddbbj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes4xnesEjddddddbbj"></span><span id="_CPPv2N5pagmo4xnes4xnesEjddddddbbj"></span><span id="pagmo::xnes::xnes__unsigned.double.double.double.double.double.double.b.b.unsigned"></span><span class="target" id="classpagmo_1_1xnes_1ab48ca3ab80a9817076015f862189750d"></span><span class="sig-name descname"><span class="n"><span class="pre">xnes</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eta_mu</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eta_sigma</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eta_b</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sigma0</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ftol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xtol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">memory</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">force_bounds</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes4xnesEjddddddbbj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs xnes</p>
 <dl class="field-list simple">
@@ -302,7 +208,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4xnes6evolveE10population">
-<span id="_CPPv3NK5pagmo4xnes6evolveE10population"></span><span id="_CPPv2NK5pagmo4xnes6evolveE10population"></span><span id="pagmo::xnes::evolve__populationC"></span><span class="target" id="classpagmo_1_1xnes_1a06fd17b6bdef1daed353b941c12e138d"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes6evolveE10population" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes6evolveE10population"></span><span id="_CPPv2NK5pagmo4xnes6evolveE10population"></span><span id="pagmo::xnes::evolve__populationC"></span><span class="target" id="classpagmo_1_1xnes_1a06fd17b6bdef1daed353b941c12e138d"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes6evolveE10population" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <p>Evolves the population for a maximum number of generations, until one of tolerances set on the population flatness (x_tol, f_tol) are met.</p>
 <dl class="field-list simple">
@@ -324,7 +230,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4xnes8set_seedEj">
-<span id="_CPPv3N5pagmo4xnes8set_seedEj"></span><span id="_CPPv2N5pagmo4xnes8set_seedEj"></span><span id="pagmo::xnes::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1xnes_1ad8acceacf5c45443696fc8b37c1de9ad"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes8set_seedEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes8set_seedEj"></span><span id="_CPPv2N5pagmo4xnes8set_seedEj"></span><span id="pagmo::xnes::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1xnes_1ad8acceacf5c45443696fc8b37c1de9ad"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes8set_seedEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -335,7 +241,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4xnes8get_seedEv">
-<span id="_CPPv3NK5pagmo4xnes8get_seedEv"></span><span id="_CPPv2NK5pagmo4xnes8get_seedEv"></span><span id="pagmo::xnes::get_seedC"></span><span class="target" id="classpagmo_1_1xnes_1aba33a4a3a3d3f6f83f44cd78281d9fcf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes8get_seedEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes8get_seedEv"></span><span id="_CPPv2NK5pagmo4xnes8get_seedEv"></span><span id="pagmo::xnes::get_seedC"></span><span class="target" id="classpagmo_1_1xnes_1aba33a4a3a3d3f6f83f44cd78281d9fcf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes8get_seedEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -346,9 +252,9 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo4xnes13set_verbosityEj">
-<span id="_CPPv3N5pagmo4xnes13set_verbosityEj"></span><span id="_CPPv2N5pagmo4xnes13set_verbosityEj"></span><span id="pagmo::xnes::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1xnes_1aedbc4d6f774d33e2573553d90a6b57d6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes13set_verbosityEj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N5pagmo4xnes13set_verbosityEj"></span><span id="_CPPv2N5pagmo4xnes13set_verbosityEj"></span><span id="pagmo::xnes::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1xnes_1aedbc4d6f774d33e2573553d90a6b57d6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo4xnes13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
-<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1xnes_1ae7eb0349a85776f3cabf2ca0f0a29440"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
+<p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1xnes_1aaa8bfd0fe5ed2fc9c451c3f1ac1ca511"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
@@ -375,7 +281,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4xnes13get_verbosityEv">
-<span id="_CPPv3NK5pagmo4xnes13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4xnes13get_verbosityEv"></span><span id="pagmo::xnes::get_verbosityC"></span><span class="target" id="classpagmo_1_1xnes_1a54053e355931cebbe7db5e796984bb7a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes13get_verbosityEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes13get_verbosityEv"></span><span id="_CPPv2NK5pagmo4xnes13get_verbosityEv"></span><span id="pagmo::xnes::get_verbosityC"></span><span class="target" id="classpagmo_1_1xnes_1a54053e355931cebbe7db5e796984bb7a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes13get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -386,7 +292,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4xnes7get_genEv">
-<span id="_CPPv3NK5pagmo4xnes7get_genEv"></span><span id="_CPPv2NK5pagmo4xnes7get_genEv"></span><span id="pagmo::xnes::get_genC"></span><span class="target" id="classpagmo_1_1xnes_1ae5e74577a1f506cc6287bc377cb34e85"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes7get_genEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes7get_genEv"></span><span id="_CPPv2NK5pagmo4xnes7get_genEv"></span><span id="pagmo::xnes::get_genC"></span><span class="target" id="classpagmo_1_1xnes_1ae5e74577a1f506cc6287bc377cb34e85"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gen</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes7get_genEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Gets the generations. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -397,7 +303,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4xnes8get_nameEv">
-<span id="_CPPv3NK5pagmo4xnes8get_nameEv"></span><span id="_CPPv2NK5pagmo4xnes8get_nameEv"></span><span id="pagmo::xnes::get_nameC"></span><span class="target" id="classpagmo_1_1xnes_1a5464597e80e5329b370794d43ef38f0b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes8get_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes8get_nameEv"></span><span id="_CPPv2NK5pagmo4xnes8get_nameEv"></span><span id="pagmo::xnes::get_nameC"></span><span class="target" id="classpagmo_1_1xnes_1a5464597e80e5329b370794d43ef38f0b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes8get_nameEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -409,7 +315,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4xnes14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo4xnes14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4xnes14get_extra_infoEv"></span><span id="pagmo::xnes::get_extra_infoC"></span><span class="target" id="classpagmo_1_1xnes_1a049637ce96a535ea9bb2f70a34788392"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes14get_extra_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo4xnes14get_extra_infoEv"></span><span id="pagmo::xnes::get_extra_infoC"></span><span class="target" id="classpagmo_1_1xnes_1a049637ce96a535ea9bb2f70a34788392"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -421,7 +327,7 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo4xnes7get_logEv">
-<span id="_CPPv3NK5pagmo4xnes7get_logEv"></span><span id="_CPPv2NK5pagmo4xnes7get_logEv"></span><span id="pagmo::xnes::get_logC"></span><span class="target" id="classpagmo_1_1xnes_1ae7eb0349a85776f3cabf2ca0f0a29440"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo4xnes8log_typeE" title="pagmo::xnes::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes7get_logEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK5pagmo4xnes7get_logEv"></span><span id="_CPPv2NK5pagmo4xnes7get_logEv"></span><span id="pagmo::xnes::get_logC"></span><span class="target" id="classpagmo_1_1xnes_1aaa8bfd0fe5ed2fc9c451c3f1ac1ca511"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo4xnes8log_typeE" title="pagmo::xnes::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo4xnes7get_logEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1xnes_1a2b48b25de896759e546ea3ee660530f2"><span class="std std-ref">xnes::log_line_type</span></a> containing: Gen, Fevals, Best, dx, df, sigma as described in <a class="reference internal" href="#classpagmo_1_1xnes_1aedbc4d6f774d33e2573553d90a6b57d6"><span class="std std-ref">xnes::set_verbosity</span></a> </p>
 <dl class="field-list simple">
@@ -434,54 +340,37 @@ evolution strategies. In Proceedings of the 12th annual conference on Genetic an
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../problems/null.html" class="btn btn-neutral float-right" title="Null problem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="simulated_annealing.html" class="btn btn-neutral float-left" title="Simulated Annealing (Corana’s version)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../problems/null.html" class="btn btn-neutral float-right" title="Null problem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2021, pagmo development team.
-
-    </p>
+    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
