@@ -148,6 +148,10 @@ population gaco::evolve(population pop) const
     if (m_gen == 0u) {
         return pop;
     }
+    if (pop_size < 2u) {
+        pagmo_throw(std::invalid_argument, get_name() + " needs at least 2 individuals in the population, "
+                                               + std::to_string(pop.size()) + " detected");
+    }
     // I verify that the solution archive is smaller or equal than the population size
     if (m_ker > pop_size || m_ker < 2) {
         pagmo_throw(std::invalid_argument,
