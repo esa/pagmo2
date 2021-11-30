@@ -149,9 +149,9 @@ population gaco::evolve(population pop) const
         return pop;
     }
     // I verify that the solution archive is smaller or equal than the population size
-    if (m_ker > pop_size) {
+    if (m_ker > pop_size || m_ker < 2) {
         pagmo_throw(std::invalid_argument,
-                    get_name() + " cannot work with a solution archive bigger than the population size");
+                    get_name() + " cannot work with a solution archive bigger than the population size or smaller than 2");
     }
     if (n_obj != 1u) {
         pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
