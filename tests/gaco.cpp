@@ -122,6 +122,8 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{zdt{}}, 64u}), std::invalid_argument);
     // Population size smaller than ker size
     BOOST_CHECK_THROW(gaco{2u}.evolve(population{problem{rosenbrock{}}, 60u}), std::invalid_argument);
+    // Population size smaller than 2
+    BOOST_CHECK_THROW(gaco{1u}.evolve(population{problem{rosenbrock{}}, 1}), std::invalid_argument);
     // Stochastic problem
     BOOST_CHECK_THROW((gaco{}.evolve(population{inventory{}, 65u, 23u})), std::invalid_argument);
     // and a clean exit for 0 generation
