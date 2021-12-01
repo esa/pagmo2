@@ -97,7 +97,9 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
  *
  * @param pop population to be evolved
  * @return evolved population
- * @throw std::invalid_argument if pop.get_problem() is stochastic.
+ * @throw std::invalid_argument if pop.get_problem() is multi-objective or stochastic
+ * @throw std::invalid_argument if the population size is not at least 2
+ * @throw std::invalid_argument if kernel parameter is bigger than the population size
  */
 population gaco::evolve(population pop) const
 {
