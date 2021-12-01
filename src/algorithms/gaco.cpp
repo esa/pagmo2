@@ -85,6 +85,10 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
         pagmo_throw(std::invalid_argument, "The convergence speed parameter must be >=0  while a value of "
                                                + std::to_string(q) + " was detected");
     }
+    if (ker < 2u) {
+        pagmo_throw(std::invalid_argument, "The ker size parameter must be >=2  while a value of "
+                                               + std::to_string(ker) + " was detected");
+    }
 }
 
 /// Algorithm evolve method
@@ -153,9 +157,9 @@ population gaco::evolve(population pop) const
                                                + std::to_string(pop.size()) + " detected");
     }
     // I verify that the solution archive is smaller or equal than the population size
-    if (m_ker > pop_size || m_ker < 2) {
+    if (m_ker > pop_size) {
         pagmo_throw(std::invalid_argument,
-                    get_name() + " cannot work with a solution archive bigger than the population size or smaller than 2");
+                    get_name() + " cannot work with a solution archive bigger than the population size");
     }
     if (n_obj != 1u) {
         pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
