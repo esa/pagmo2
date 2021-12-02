@@ -85,6 +85,10 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
         pagmo_throw(std::invalid_argument, "The convergence speed parameter must be >=0  while a value of "
                                                + std::to_string(q) + " was detected");
     }
+    if (ker < 2u) {
+        pagmo_throw(std::invalid_argument, "The ker size parameter must be >=2  while a value of "
+                                               + std::to_string(ker) + " was detected");
+    }
 }
 
 /// Algorithm evolve method
@@ -93,7 +97,9 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
  *
  * @param pop population to be evolved
  * @return evolved population
- * @throw std::invalid_argument if pop.get_problem() is stochastic.
+ * @throw std::invalid_argument if pop.get_problem() is multi-objective or stochastic
+ * @throw std::invalid_argument if the population size is not at least 2
+ * @throw std::invalid_argument if kernel parameter is bigger than the population size
  */
 population gaco::evolve(population pop) const
 {
@@ -147,6 +153,10 @@ population gaco::evolve(population pop) const
     }
     if (m_gen == 0u) {
         return pop;
+    }
+    if (pop_size < 2u) {
+        pagmo_throw(std::invalid_argument, get_name() + " needs at least 2 individuals in the population, "
+                                               + std::to_string(pop.size()) + " detected");
     }
     // I verify that the solution archive is smaller or equal than the population size
     if (m_ker > pop_size) {
