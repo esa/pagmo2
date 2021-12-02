@@ -180,7 +180,7 @@ how two of the three pheromone values are computed (in particular, the weights a
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">acc</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span>, <code class="docutils literal notranslate"><span class="pre">impstop</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">evalstop</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">focus</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span>, <code class="docutils literal notranslate"><span class="pre">ker</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">oracle</span></code> is not positive, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is not <span class="math notranslate nohighlight">\( \in [1,gen] \)</span> when <span class="math notranslate nohighlight">\(memory=false\)</span> and <span class="math notranslate nohighlight">\(gen!=0\)</span>, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is not <span class="math notranslate nohighlight">\( &gt;=1 \)</span> when <span class="math notranslate nohighlight">\(memory=true\)</span> and <span class="math notranslate nohighlight">\(gen!=0\)</span>, <code class="docutils literal notranslate"><span class="pre">q</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span> </p>
+<dd class="field-even"><p><strong>std::invalid_argument</strong> – if <code class="docutils literal notranslate"><span class="pre">acc</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span>, <code class="docutils literal notranslate"><span class="pre">impstop</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">evalstop</span></code> is not a positive integer, <code class="docutils literal notranslate"><span class="pre">focus</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span>, <code class="docutils literal notranslate"><span class="pre">ker</span></code> is not <span class="math notranslate nohighlight">\( &gt;=2 \)</span>, <code class="docutils literal notranslate"><span class="pre">oracle</span></code> is not positive, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is not <span class="math notranslate nohighlight">\( \in [1,gen] \)</span> when <span class="math notranslate nohighlight">\(memory=false\)</span> and <span class="math notranslate nohighlight">\(gen!=0\)</span>, <code class="docutils literal notranslate"><span class="pre">threshold</span></code> is not <span class="math notranslate nohighlight">\( &gt;=1 \)</span> when <span class="math notranslate nohighlight">\(memory=true\)</span> and <span class="math notranslate nohighlight">\(gen!=0\)</span>, <code class="docutils literal notranslate"><span class="pre">q</span></code> is not <span class="math notranslate nohighlight">\( &gt;=0 \)</span> </p>
 </dd>
 </dl>
 </dd></dl>
@@ -195,7 +195,11 @@ how two of the three pheromone values are computed (in particular, the weights a
 <dd class="field-odd"><p><strong>pop</strong> – population to be evolved </p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>std::invalid_argument</strong> – if pop.get_problem() is stochastic. </p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>std::invalid_argument</strong> – if pop.get_problem() is multi-objective or stochastic </p></li>
+<li><p><strong>std::invalid_argument</strong> – if the population size is not at least 2 </p></li>
+<li><p><strong>std::invalid_argument</strong> – if kernel parameter is bigger than the population size </p></li>
+</ul>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>evolved population </p>
