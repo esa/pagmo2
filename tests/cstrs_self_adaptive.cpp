@@ -65,6 +65,7 @@ BOOST_AUTO_TEST_CASE(penalized_problem_construction)
     BOOST_CHECK_EQUAL(udp_p.m_f_hat_down.size(), udp.get_nf());
     BOOST_CHECK_EQUAL(udp_p.m_f_hat_up.size(), udp.get_nf());
     BOOST_CHECK_EQUAL(udp_p.m_f_hat_round.size(), udp.get_nf());
+    BOOST_CHECK_EQUAL(udp_p.get_nix(), udp.get_nix());
     BOOST_CHECK_EQUAL(udp_p.m_fitness_map.size(), NP);
     // We also test get bounds here
     BOOST_CHECK(udp_p.get_bounds() == udp.get_bounds());
