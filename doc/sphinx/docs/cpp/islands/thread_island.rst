@@ -85,16 +85,4 @@ Thread island
      * :cpp:func:`pagmo::island::set_algorithm()`, :cpp:func:`pagmo::island::set_population()`,
      * :cpp:func:`pagmo::algorithm::evolve()`.
 
-   .. cpp:function:: template <typename Archive> void save(Archive &ar, unsigned) const
-   .. cpp:function:: template <typename Archive> void load(Archive &ar, unsigned version)
-
-      Serialisation support.
-
-      These member functions are used to implement the (de)serialisation of an island to/from an archive.
-
-      :param ar: the input/output archive.
-      :param version: the archive version.
-
-      :exception unspecified: any exception raised by the (de)serialisation of primitive types.
-
 .. cpp:namespace-pop::

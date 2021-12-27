@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -950,40 +950,12 @@ std::string ipopt::get_extra_info() const
            + (m_numeric_opts.size() ? "\n\tNumeric options: " + detail::to_string(m_numeric_opts) : "") + "\n";
 }
 
-/// Save to archive.
-/**
- * @param ar the target archive.
- *
- * @throws unspecified any exception thrown by the serialization of primitive types or pagmo::not_population_based.
- */
+// Serialization.
 template <typename Archive>
-void ipopt::save(Archive &ar, unsigned) const
+void ipopt::serialize(Archive &ar, unsigned)
 {
-    detail::to_archive(ar, boost::serialization::base_object<not_population_based>(*this), m_string_opts,
-                       m_integer_opts, m_numeric_opts, m_last_opt_res, m_verbosity, m_log);
-}
-
-/// Load from archive.
-/**
- * In case of exceptions, \p this will be reset to a default-constructed state.
- *
- * @param ar the source archive.
- *
- * @throws unspecified any exception thrown by the deserialization of primitive types or
- * pagmo::not_population_based.
- */
-template <typename Archive>
-void ipopt::load(Archive &ar, unsigned)
-{
-    try {
-        detail::from_archive(ar, boost::serialization::base_object<not_population_based>(*this), m_string_opts,
-                             m_integer_opts, m_numeric_opts, m_last_opt_res, m_verbosity, m_log);
-        // LCOV_EXCL_START
-    } catch (...) {
-        *this = ipopt{};
-        throw;
-        // LCOV_EXCL_STOP
-    }
+    detail::archive(ar, boost::serialization::base_object<not_population_based>(*this), m_string_opts, m_integer_opts,
+                    m_numeric_opts, m_last_opt_res, m_verbosity, m_log);
 }
 
 /// Set string option.

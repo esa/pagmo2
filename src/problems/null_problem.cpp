@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -69,10 +69,7 @@ std::pair<vector_double, vector_double> null_problem::get_bounds() const
     return {{0.}, {1.}};
 }
 
-/// Serialization
-/**
- * @param ar the target serialization archive.
- */
+// Serialization
 template <typename Archive>
 void null_problem::serialize(Archive &ar, unsigned)
 {

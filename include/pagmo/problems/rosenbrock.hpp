@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
 #include <pagmo/types.hpp>
 
@@ -78,9 +79,6 @@ struct PAGMO_DLL_PUBLIC rosenbrock {
     vector_double gradient(const vector_double &) const;
     // Optimal solution.
     vector_double best_known() const;
-    // Object serialization
-    template <typename Archive>
-    void serialize(Archive &, unsigned);
     /// Thread safety level.
     /**
      * @return the ``constant`` thread safety level.
@@ -91,6 +89,12 @@ struct PAGMO_DLL_PUBLIC rosenbrock {
     }
     /// Problem dimensions
     vector_double::size_type m_dim;
+
+private:
+    friend class boost::serialization::access;
+    // Object serialization
+    template <typename Archive>
+    void serialize(Archive &, unsigned);
 };
 
 } // namespace pagmo

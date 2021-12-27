@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <boost/type_traits/integral_constant.hpp>
-#include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/config.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
@@ -128,6 +127,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS s_pol_inner_base {
     virtual std::type_index get_type_index() const = 0;
     virtual const void *get_ptr() const = 0;
     virtual void *get_ptr() = 0;
+
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -201,12 +203,17 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS s_pol_inner final : s_pol_inner_base {
     {
         return &m_value;
     }
+
+private:
+    friend class boost::serialization::access;
     // Serialization
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
         detail::archive(ar, boost::serialization::base_object<s_pol_inner_base>(*this), m_value);
     }
+
+public:
     T m_value;
 };
 
@@ -214,14 +221,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS s_pol_inner final : s_pol_inner_base {
 
 } // namespace pagmo
 
-namespace boost
-{
-
-template <typename T>
-struct is_virtual_base_of<pagmo::detail::s_pol_inner_base, pagmo::detail::s_pol_inner<T>> : false_type {
-};
-
-} // namespace boost
+// Disable Boost.Serialization tracking for the implementation
+// details of s_policy.
+BOOST_CLASS_TRACKING(pagmo::detail::s_pol_inner_base, boost::serialization::track_never)
 
 namespace pagmo
 {
@@ -314,6 +316,8 @@ public:
     // Get a mutable pointer to the UDSP.
     void *get_ptr();
 
+private:
+    friend class boost::serialization::access;
     // Serialisation support.
     template <typename Archive>
     void save(Archive &ar, unsigned) const
@@ -323,14 +327,15 @@ public:
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
-        // Deserialize in a separate object and move it in later, for exception safety.
-        s_policy tmp_s_pol;
-        detail::from_archive(ar, tmp_s_pol.m_ptr, tmp_s_pol.m_name);
-        *this = std::move(tmp_s_pol);
+        try {
+            detail::from_archive(ar, m_ptr, m_name);
+        } catch (...) {
+            *this = s_policy{};
+            throw;
+        }
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     // Just two small helpers to make sure that whenever we require
     // access to the pointer it actually points to something.
     detail::s_pol_inner_base const *ptr() const
@@ -351,7 +356,6 @@ private:
     PAGMO_DLL_LOCAL void verify_select_output(const individuals_group_t &, vector_double::size_type,
                                               vector_double::size_type) const;
 
-private:
     // Pointer to the inner base s_pol.
     std::unique_ptr<detail::s_pol_inner_base> m_ptr;
     // Various properties determined at construction time
@@ -372,8 +376,5 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const s_policy &);
 
 // Add some repr support for CLING
 PAGMO_IMPLEMENT_XEUS_CLING_REPR(s_policy)
-
-// Disable tracking for the serialisation of s_policy.
-BOOST_CLASS_TRACKING(pagmo::s_policy, boost::serialization::track_never)
 
 #endif

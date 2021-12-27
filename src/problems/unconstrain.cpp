@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -317,14 +317,7 @@ std::string unconstrain::get_extra_info() const
     return m_problem.get_extra_info() + oss.str();
 }
 
-/// Object serialization.
-/**
- * This method will save/load \p this into/from the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
- */
+// Object serialization.
 template <typename Archive>
 void unconstrain::serialize(Archive &ar, unsigned)
 {

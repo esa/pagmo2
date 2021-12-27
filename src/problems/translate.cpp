@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -37,8 +37,22 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#if defined(_MSC_VER)
+
+// Disable a warning from MSVC in the TBB code.
+#pragma warning(push)
+#pragma warning(disable : 4324)
+
+#endif
+
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif
 
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
@@ -390,14 +404,7 @@ problem &translate::get_inner_problem()
     return m_problem;
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into/from the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void translate::serialize(Archive &ar, unsigned)
 {

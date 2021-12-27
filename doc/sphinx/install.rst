@@ -7,21 +7,18 @@ Dependencies
 ------------
 
 pagmo is written in modern C++, and it requires a compiler able to understand
-at least C++17. pagmo is known to run on the following setups:
+at least C++17. pagmo is currently tested on the following setups:
 
-* GCC 7 and later versions on GNU/Linux,
-* Clang 4 and later versions on GNU/Linux,
-* MSVC 2015 and later versions on Windows,
-* Clang 4 and later versions on Windows
-  (with the ``clang-cl`` driver for MSVC),
-* MinGW GCC 8 on Windows,
-* Clang on OSX (Xcode 6.4 and later),
-* Clang on FreeBSD.
+* GCC 9 on GNU/Linux,
+* Clang 11 on OSX,
+* MSVC 2017 on Windows.
+
+The officially-supported architectures are 64-bit x86, ARM and PowerPC.
 
 The pagmo C++ library has the following **mandatory** dependencies:
 
 * the `Boost <https://www.boost.org/>`__ C++ libraries (at least version 1.60),
-* the `Intel TBB <https://www.threadingbuildingblocks.org/>`__ library.
+* the `Intel TBB <https://github.com/oneapi-src/oneTBB/>`__ library.
 
 Additionally, pagmo has the following **optional** dependencies:
 
@@ -45,7 +42,7 @@ of package managers on several platforms.
 Conda
 ^^^^^
 
-pagmo is available via the `conda <https://conda.io/docs/>`__ package manager for Linux, OSX and Windows
+pagmo is available via the `conda <https://docs.conda.io/en/latest/>`__ package manager for Linux, OSX and Windows
 thanks to the infrastructure provided by `conda-forge <https://conda-forge.org/>`__.
 Two packages are available:
 
@@ -66,7 +63,7 @@ to the channels, and then we can immediately install pagmo:
 The conda packages for pagmo are maintained by the core development team,
 and they are regularly updated when new pagmo versions are released.
 
-Please refer to the `conda documentation <https://conda.io/docs/>`__ for instructions on how to setup and manage
+Please refer to the `conda documentation <https://docs.conda.io/en/latest/>`__ for instructions on how to setup and manage
 your conda installation.
 
 Arch Linux
@@ -79,20 +76,6 @@ recommended to use an AUR helper like
 `pikaur <https://aur.archlinux.org/packages/pikaur/>`__ for ease of installation.
 See the `AUR helpers <https://wiki.archlinux.org/index.php/AUR_helpers>`__ page on
 the Arch Linux wiki for more info.
-
-.. note::
-
-   To install pagmo with optional dependency support like nlopt or ipopt,
-   make sure to install the optional dependencies before installing the pagmo
-   package.
-
-Install optional dependencies:
-
-.. code-block:: console
-
-    $ yay -S coin-or-ipopt eigen nlopt
-
-Install pagmo:
 
 .. code-block:: console
 
@@ -118,6 +101,27 @@ pagmo on OSX with Homebrew, it is sufficient to execute the following command:
 .. code-block:: console
 
    $ brew install pagmo
+
+vcpkg
+^^^^^
+
+You can download and install pagmo2 using the vcpkg dependency manager:
+
+.. code-block:: console
+
+    $ git clone https://github.com/Microsoft/vcpkg.git
+    $ cd vcpkg
+    $ ./bootstrap-vcpkg.sh    # add -disableMetrics to opt out of telemetry
+    $ ./vcpkg install pagmo2  # or use pagmo2[nlopt] for the NLopt wrappers
+
+Then you may direct cmake or msbuild to use the provided vcpkg toolchain file. Please visit
+the `vcpkg build system documentation
+<https://github.com/microsoft/vcpkg/blob/master/docs/users/integration.md>`_ for
+details.
+
+The pagmo2 port in vcpkg is kept up to date by Microsoft team members and community
+contributors. If the version is out of date, please create an issue or pull
+request on the `vcpkg repository <https://github.com/Microsoft/vcpkg>`_.
 
 
 Installation from source

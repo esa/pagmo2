@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -148,7 +148,7 @@ class PAGMO_DLL_PUBLIC archipelago
     using const_iterator_implementation = boost::indirect_iterator<container_t::const_iterator>;
 
     // NOTE: same utility method as in pagmo::island, see there.
-    PAGMO_DLL_LOCAL void wait_check_ignore();
+    void wait_check_ignore();
 
 public:
     /// The size type of the archipelago.
@@ -270,7 +270,7 @@ private:
     // The "default" constructor from n islands. Just forward
     // the input arguments to n calls to push_back().
     template <typename... Args>
-    void n_ctor(size_type n, const Args &... args)
+    void n_ctor(size_type n, const Args &...args)
     {
         for (size_type i = 0; i < n; ++i) {
             // NOTE: we don't perfectly forward, in order to avoid moving twice
@@ -450,7 +450,7 @@ public:
      * @throws unspecified any exception thrown by archipelago::push_back().
      */
     template <typename... Args, n_ctor_enabler<const Args &...> = 0>
-    explicit archipelago(size_type n, const Args &... args)
+    explicit archipelago(size_type n, const Args &...args)
         : // NOTE: explicitly delegate to the default constructor, so that
           // we get the default migration type and migrant handling.
           archipelago()
@@ -487,7 +487,7 @@ public:
      * the constructor from a topology.
      */
     template <typename Topo, typename... Args, topo_n_ctor_enabler<Topo, const Args &...> = 0>
-    explicit archipelago(Topo &&t, size_type n, const Args &... args) : archipelago(std::forward<Topo>(t))
+    explicit archipelago(Topo &&t, size_type n, const Args &...args) : archipelago(std::forward<Topo>(t))
     {
         n_ctor(n, args...);
     }
@@ -545,7 +545,7 @@ public:
      * - the invoked constructor of pagmo::island.
      */
     template <typename... Args, push_back_enabler<Args &&...> = 0>
-    void push_back(Args &&... args)
+    void push_back(Args &&...args)
     {
         push_back_impl(std::make_unique<island>(std::forward<Args>(args)...));
     }
@@ -660,15 +660,9 @@ public:
     migrant_handling get_migrant_handling() const;
     void set_migrant_handling(migrant_handling);
 
-    /// Save to archive.
-    /**
-     * This method will save to \p ar the islands of the archipelago.
-     *
-     * @param ar the output archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of pagmo::island, pagmo::topology
-     * or primitive types.
-     */
+private:
+    friend class boost::serialization::access;
+    // Save to archive.
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
@@ -676,75 +670,51 @@ public:
                            m_migr_type.load(std::memory_order_relaxed),
                            m_migr_handling.load(std::memory_order_relaxed));
     }
-    /// Load from archive.
-    /**
-     * This method will load into \p this the content of \p ar, after any ongoing evolution
-     * in \p this has finished.
-     *
-     * @param ar the input archive.
-     *
-     * @throws unspecified any exception thrown by the deserialization of pagmo::island, pagmo::topology
-     * or primitive types, or by memory errors in standard containers.
-     */
+    // Load from archive.
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
-        // NOTE: the idea here is that we will be loading the member of archi one by one in
-        // separate variables, move assign the loaded data into a tmp archi and finally move-assign
-        // the tmp archi into this. This allows the method to be exception safe, and to have
-        // archi objects always in a consistent state at every stage of the deserialization.
+        // Make sure all evolutions are finished before attempting
+        // to load from the archive.
+        wait_check_ignore();
 
-        // The tmp archi. This is def-cted and idle, we will be able to move-in data without
-        // worrying about synchronization.
-        archipelago tmp;
+        try {
+            // Recover the islands.
+            ar >> m_islands;
 
-        // The islands.
-        container_t tmp_islands;
-        ar >> tmp_islands;
+            // Reset and remap the island indices, assign the
+            // archi pointers.
+            m_idx_map.clear();
+            for (size_type i = 0; i < m_islands.size(); ++i) {
+                m_idx_map.emplace(m_islands[i].get(), i);
+                m_islands[i]->m_ptr->archi_ptr = this;
+            }
 
-        // Map the islands to indices.
-        idx_map_t tmp_idx_map;
-        for (size_type i = 0; i < tmp_islands.size(); ++i) {
-            tmp_idx_map.emplace(tmp_islands[i].get(), i);
+            // Load the migrants.
+            ar >> m_migrants;
+
+            // Load the migration log.
+            ar >> m_migr_log;
+
+            // Load the topology.
+            ar >> m_topology;
+
+            // Migration type and migrant handling policy.
+            migration_type tmp_migr_type;
+            migrant_handling tmp_migr_handling;
+
+            ar >> tmp_migr_type;
+            ar >> tmp_migr_handling;
+
+            m_migr_type.store(tmp_migr_type, std::memory_order_relaxed);
+            m_migr_handling.store(tmp_migr_handling, std::memory_order_relaxed);
+        } catch (...) {
+            *this = archipelago{};
+            throw;
         }
-
-        // The migrants.
-        migrants_db_t tmp_migrants;
-        ar >> tmp_migrants;
-
-        // The migration log.
-        migration_log_t tmp_migr_log;
-        ar >> tmp_migr_log;
-
-        // The topology.
-        topology tmp_topo;
-        ar >> tmp_topo;
-
-        // Migration type and migrant handling policy.
-        migration_type tmp_migr_type;
-        migrant_handling tmp_migr_handling;
-
-        ar >> tmp_migr_type;
-        ar >> tmp_migr_handling;
-
-        // From now on, everything is noexcept. Thus, there is
-        // no danger that tmp is destructed while in an inconsistent
-        // state.
-        tmp.m_islands = std::move(tmp_islands);
-        tmp.m_idx_map = std::move(tmp_idx_map);
-        tmp.m_migrants = std::move(tmp_migrants);
-        tmp.m_migr_log = std::move(tmp_migr_log);
-        tmp.m_topology = std::move(tmp_topo);
-        tmp.m_migr_type.store(tmp_migr_type, std::memory_order_relaxed);
-        tmp.m_migr_handling.store(tmp_migr_handling, std::memory_order_relaxed);
-
-        // NOTE: this final assignment will take care of setting the islands' archi pointers
-        // appropriately via archi's move assignment operator.
-        *this = std::move(tmp);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     // Private utilities for use only by island.
     // Extract/get/set migrants for the island at the given index.
     PAGMO_DLL_LOCAL individuals_group_t extract_migrants(size_type);
@@ -757,7 +727,6 @@ private:
     // Get the connections to the island at the given index.
     PAGMO_DLL_LOCAL std::pair<std::vector<size_type>, vector_double> get_island_connections(size_type) const;
 
-private:
     container_t m_islands;
     // The map from island pointers to indices in the archi.
     // It needs to be protected by a mutex.
@@ -786,8 +755,5 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const archipelago &);
 
 // Add some repr support for CLING
 PAGMO_IMPLEMENT_XEUS_CLING_REPR(archipelago)
-
-// Disable tracking for the serialisation of archipelago.
-BOOST_CLASS_TRACKING(pagmo::archipelago, boost::serialization::track_never)
 
 #endif

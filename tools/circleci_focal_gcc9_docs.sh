@@ -7,18 +7,17 @@ set -x
 set -e
 
 # Core deps.
-sudo apt-get install build-essential wget doxygen graphviz
+sudo apt-get install wget
 
 # Install conda+deps.
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
 export deps_dir=$HOME/local
 export PATH="$HOME/miniconda/bin:$PATH"
 bash miniconda.sh -b -p $HOME/miniconda
-conda config --add channels conda-forge --force
-conda_pkgs="cmake eigen nlopt ipopt boost-cpp tbb tbb-devel python=3.7 sphinx sphinx_rtd_theme breathe"
-conda create -q -p $deps_dir -y
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+conda create -y -q -p $deps_dir c-compiler cxx-compiler cmake eigen nlopt ipopt boost-cpp tbb tbb-devel python=3.8 sphinx'<4.1.0' sphinx_rtd_theme breathe doxygen graphviz
 source activate $deps_dir
-conda install $conda_pkgs -y
 
 # Create the build dir and cd into it.
 mkdir build
@@ -27,7 +26,7 @@ cd build
 # GCC build.
 cmake ../ -DCMAKE_BUILD_TYPE=Release -DPAGMO_BUILD_TESTS=yes -DPAGMO_WITH_EIGEN3=yes -DPAGMO_WITH_NLOPT=yes -DPAGMO_WITH_IPOPT=yes -DPAGMO_ENABLE_IPO=yes
 make -j2 VERBOSE=1
-ctest -V
+ctest -V -j4
 
 # Build the documentation.
 
@@ -44,13 +43,7 @@ echo "Doxygen ran successfully";
 # Copy the images into the xml output dir (this is needed by sphinx).
 cp images/* xml/;
 cd ../sphinx/;
-export SPHINX_OUTPUT=`make html linkcheck 2>&1 | grep -v "Duplicate declaration" | grep -v "is deprecated" >/dev/null`;
-if [[ "${SPHINX_OUTPUT}" != "" ]]; then
-    echo "Sphinx encountered some problem:";
-    echo "${SPHINX_OUTPUT}";
-    exit 1;
-fi
-echo "Sphinx ran successfully";
+make html linkcheck
 
 if [[ ! -z "${CI_PULL_REQUEST}" ]]; then
     echo "Testing a pull request, the generated documentation will not be uploaded.";

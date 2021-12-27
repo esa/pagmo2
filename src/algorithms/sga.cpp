@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -330,14 +330,7 @@ std::string sga::get_extra_info() const
     return ss.str();
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void sga::serialize(Archive &ar, unsigned)
 {
@@ -522,7 +515,7 @@ void sga::perform_mutation(std::vector<vector_double> &X, const std::pair<vector
                 }
                 break;
             }
-            case (detail::sga_mutation::POLYNOMIAL): { // https://www.iitk.ac.in/kangal/papers/k2012016.pdf
+            case (detail::sga_mutation::POLYNOMIAL): { // https://www.egr.msu.edu/~kdeb/papers/k2012016.pdf
                 // Start of main loop through the chromosome
                 for (decltype(N) j = 0u; j < N; ++j) {
                     auto gene_idx = to_be_mutated[j];

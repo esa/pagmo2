@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -285,14 +285,7 @@ problem &decompose::get_inner_problem()
     return m_problem;
 }
 
-/// Object serialization.
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the inner problem and of primitive types.
- */
+// Object serialization.
 template <typename Archive>
 void decompose::serialize(Archive &ar, unsigned)
 {

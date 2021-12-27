@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -141,7 +141,8 @@ BOOST_AUTO_TEST_CASE(unconstrain_fitness_test)
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 1., 1., -1., 1.}) == vector_double(2, 3.));
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 1., 1., -1., -1.}) == vector_double(2, 2.));
         BOOST_CHECK(p0.fitness(vector_double{0., 0., 0., 1., 0., 0.}) == vector_double(2, 1.));
-        vector_double nan_fitness = p0.fitness(vector_double{0., 0., std::numeric_limits<double>::quiet_NaN(), 1., -1., 1.});
+        vector_double nan_fitness
+            = p0.fitness(vector_double{0., 0., std::numeric_limits<double>::quiet_NaN(), 1., -1., 1.});
         BOOST_CHECK(std::isnan(nan_fitness[0]));
         BOOST_CHECK(std::isnan(nan_fitness[1]));
     }

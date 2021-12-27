@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -108,7 +108,7 @@ bool pareto_dominance(const vector_double &obj1, const vector_double &obj2)
         } else if (detail::less_than_f(obj1[i], obj2[i])) {
             found_strictly_dominating_dimension = true;
         }
-    } 
+    }
     return found_strictly_dominating_dimension;
 }
 

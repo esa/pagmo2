@@ -120,15 +120,3 @@ Non dominated sorting particle swarm optimization(NSPSO)
       Returns the problem name.
 
       :return: a string containing the problem name: "NSPSO".
-
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
-
-      Object serialization.
-
-      This method will save/load this into the archive *ar*.
-
-      :param ``ar``: target archive.
-      :exception unspecified: unspecified any exception thrown by the serialization of the UDA and of primitive types.
-
-
-

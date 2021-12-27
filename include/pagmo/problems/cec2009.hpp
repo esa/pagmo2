@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -75,10 +76,6 @@ typedef void (cec2009::*func_ptr)(vector_double &, const vector_double &) const;
  *
  *    All problems are continuous, multi objective problems.
  *
- * .. seealso:
- *
- *    http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm
- *
  * \endverbatim
  *
  */
@@ -96,9 +93,6 @@ public:
      * yield the CF problems.
      * @param dim problem dimension. Default is 30, which is the setting used by the competition. But all the
      * problems are scalable in terms of decision variable's dimension.
-     *
-     * @see http://www3.ntu.edu.sg/home/EPNSugan/index_files/CEC09-MOEA/CEC09-MOEA.htm
-     *
      */
     cec2009(unsigned prob_id = 1u, bool is_constrained = false, unsigned dim = 30u);
     // Inequality constraint dimension
@@ -111,11 +105,13 @@ public:
     vector_double fitness(const vector_double &) const;
     // Problem name
     std::string get_name() const;
+
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     // Pointers to member functions are used
     PAGMO_DLL_LOCAL vector_double fitness_impl(detail::cec2009_data::func_ptr, const vector_double &) const;
 

@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -38,6 +38,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -104,7 +105,7 @@ public:
      *
      * @throws std::invalid_argument if \p Ts or \p Tf are not finite and positive, \p start_range is not in (0,1],
      * \p n_T_adj or n_range_adj \p are not strictly positive
-     * @throws if \p Tf > \p Ts
+     * @throws std::invalid_argument if \p Tf > \p Ts
      */
     simulated_annealing(double Ts = 10., double Tf = .1, unsigned n_T_adj = 10u, unsigned n_range_adj = 1u,
                         unsigned bin_size = 20u, double start_range = 1., unsigned seed = pagmo::random_device::next());
@@ -195,11 +196,12 @@ public:
         return m_log;
     }
 
-    // Object serialization
-    template <typename Archive>
-    void serialize(Archive &ar, unsigned);
-
 private:
+    // Object serialization
+    friend class boost::serialization::access;
+    template <typename Archive>
+    void serialize(Archive &, unsigned);
+
     // Starting temperature
     double m_Ts;
     // Final temperature
@@ -217,11 +219,6 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
-    // Deleting the methods load save public in base as to avoid conflict with serialize
-    template <typename Archive>
-    void load(Archive &ar, unsigned) = delete;
-    template <typename Archive>
-    void save(Archive &ar, unsigned) const = delete;
 };
 
 } // namespace pagmo

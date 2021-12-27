@@ -1,14 +1,14 @@
-version: 2
+version: 2.1
 
 jobs:
-  bionic_gcc7_coverage:
+  focal_gcc9_coverage:
     docker:
-    - image: circleci/buildpack-deps:bionic
+    - image: circleci/buildpack-deps:focal
     steps:
     - checkout
     - run:
         name: Build and test
-        command: bash ./tools/circleci_bionic_gcc7_coverage.sh
+        command: bash ./tools/circleci_focal_gcc9_coverage.sh
   focal_gcc9_asan:
     docker:
     - image: circleci/buildpack-deps:focal
@@ -25,29 +25,21 @@ jobs:
     - run:
         name: Build and test
         command: bash ./tools/circleci_focal_gcc9_docs.sh
-  focal_clang9:
-    docker:
-    - image: circleci/buildpack-deps:focal
+  ubuntu_arm64:
+    machine:
+      image: ubuntu-2004:202101-01
+    resource_class: arm.medium
     steps:
     - checkout
     - run:
         name: Build and test
-        command: bash ./tools/circleci_focal_clang9.sh
-  bionic_clang6_release:
-    docker:
-    - image: circleci/buildpack-deps:bionic
-    steps:
-    - checkout
-    - run:
-        name: Build and test
-        command: bash ./tools/circleci_bionic_clang6_release.sh
+        command: bash ./tools/circleci_ubuntu_arm64.sh
 
 workflows:
-  version: 2
+  version: 2.1
   all_builds:
     jobs:
-    - bionic_gcc7_coverage
+    - focal_gcc9_coverage
     - focal_gcc9_asan
-    - focal_clang9
-    - bionic_clang6_release
     - focal_gcc9_docs
+    - ubuntu_arm64

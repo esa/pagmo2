@@ -7,18 +7,15 @@ Pagmo
 =====
 
 .. image:: ../sphinx/docs/images/prob.png
-   :target: docs/problem_list.html
    :width: 15%
 
 .. image:: ../sphinx/docs/images/algo.png
-   :target: docs/algorithm_list.html
    :width: 15%
 
 .. image:: ../sphinx/docs/images/pop.png
    :width: 15%
 
 .. image:: ../sphinx/docs/images/island.png
-   :target: docs/island_list.html
    :width: 15%
 
 .. image:: ../sphinx/docs/images/archi.png

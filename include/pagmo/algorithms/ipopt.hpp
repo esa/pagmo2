@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -241,16 +241,13 @@ public:
         return m_log;
     }
 
-    // Save to archive.
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
-    void save(Archive &, unsigned) const;
+    void serialize(Archive &, unsigned);
 
-    // Load from archive.
-    template <typename Archive>
-    void load(Archive &, unsigned);
-
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
-
+public:
     // Set string option.
     void set_string_option(const std::string &, const std::string &);
 

@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -55,14 +55,15 @@ public:
     // run_evolve implementation.
     void run_evolve(island &) const;
 
-    // Serialization support.
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void save(Archive &, unsigned) const;
     template <typename Archive>
     void load(Archive &, unsigned);
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     bool m_use_pool;
 };
 

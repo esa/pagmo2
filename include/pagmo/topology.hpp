@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -42,7 +42,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/type_traits/integral_constant.hpp>
-#include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/config.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
@@ -177,6 +176,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner_base {
     virtual std::type_index get_type_index() const = 0;
     virtual const void *get_ptr() const = 0;
     virtual void *get_ptr() = 0;
+
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -268,12 +270,17 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
     {
         return &m_value;
     }
+
+private:
+    friend class boost::serialization::access;
     // Serialization
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
         detail::archive(ar, boost::serialization::base_object<topo_inner_base>(*this), m_value);
     }
+
+public:
     T m_value;
 };
 
@@ -281,14 +288,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
 
 } // namespace pagmo
 
-namespace boost
-{
-
-template <typename T>
-struct is_virtual_base_of<pagmo::detail::topo_inner_base, pagmo::detail::topo_inner<T>> : false_type {
-};
-
-} // namespace boost
+// Disable Boost.Serialization tracking for the implementation
+// details of topology.
+BOOST_CLASS_TRACKING(pagmo::detail::topo_inner_base, boost::serialization::track_never)
 
 namespace pagmo
 {
@@ -390,6 +392,8 @@ public:
     // Get a mutable pointer to the UDT.
     void *get_ptr();
 
+private:
+    friend class boost::serialization::access;
     // Serialization.
     template <typename Archive>
     void save(Archive &ar, unsigned) const
@@ -399,13 +403,15 @@ public:
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
-        topology tmp;
-        detail::from_archive(ar, tmp.m_ptr, tmp.m_name);
-        *this = std::move(tmp);
+        try {
+            detail::from_archive(ar, m_ptr, m_name);
+        } catch (...) {
+            *this = topology{};
+            throw;
+        }
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     // Two small helpers to make sure that whenever we require
     // access to the pointer it actually points to something.
     detail::topo_inner_base const *ptr() const
@@ -419,7 +425,6 @@ private:
         return m_ptr.get();
     }
 
-private:
     std::unique_ptr<detail::topo_inner_base> m_ptr;
     // Various topology properties determined at construction time
     // from the concrete topology. These will be constant for the lifetime
@@ -446,8 +451,5 @@ PAGMO_DLL_PUBLIC void topology_check_edge_weight(double);
 
 // Add some repr support for CLING
 PAGMO_IMPLEMENT_XEUS_CLING_REPR(topology)
-
-// Disable tracking for the serialisation of topology.
-BOOST_CLASS_TRACKING(pagmo::topology, boost::serialization::track_never)
 
 #endif

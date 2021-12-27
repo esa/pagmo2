@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -39,7 +39,6 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 
 #include <boost/type_traits/integral_constant.hpp>
-#include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/config.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
@@ -124,6 +123,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS bfe_inner_base {
     virtual std::type_index get_type_index() const = 0;
     virtual const void *get_ptr() const = 0;
     virtual void *get_ptr() = 0;
+
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -209,12 +211,17 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS bfe_inner final : bfe_inner_base {
     {
         return &m_value;
     }
+
+private:
+    friend class boost::serialization::access;
     // Serialization.
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
         detail::archive(ar, boost::serialization::base_object<bfe_inner_base>(*this), m_value);
     }
+
+public:
     T m_value;
 };
 
@@ -222,14 +229,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS bfe_inner final : bfe_inner_base {
 
 } // namespace pagmo
 
-namespace boost
-{
-
-template <typename T>
-struct is_virtual_base_of<pagmo::detail::bfe_inner_base, pagmo::detail::bfe_inner<T>> : false_type {
-};
-
-} // namespace boost
+// Disable Boost.Serialization tracking for the implementation
+// details of algorithm.
+BOOST_CLASS_TRACKING(pagmo::detail::bfe_inner_base, boost::serialization::track_never)
 
 namespace pagmo
 {
@@ -343,7 +345,8 @@ public:
     // Get a mutable pointer to the UDBFE.
     void *get_ptr();
 
-    // Serialisation support.
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
@@ -352,14 +355,15 @@ public:
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
-        // Deserialize in a separate object and move it in later, for exception safety.
-        bfe tmp_bfe;
-        detail::from_archive(ar, tmp_bfe.m_ptr, tmp_bfe.m_name, tmp_bfe.m_thread_safety);
-        *this = std::move(tmp_bfe);
+        try {
+            detail::from_archive(ar, m_ptr, m_name, m_thread_safety);
+        } catch (...) {
+            *this = bfe{};
+            throw;
+        }
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     // Just two small helpers to make sure that whenever we require
     // access to the pointer it actually points to something.
     detail::bfe_inner_base const *ptr() const
@@ -373,7 +377,6 @@ private:
         return m_ptr.get();
     }
 
-private:
     // Pointer to the inner base bfe
     std::unique_ptr<detail::bfe_inner_base> m_ptr;
     // Various properties determined at construction time
@@ -396,8 +399,5 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const bfe &);
 
 // Add some repr support for CLING
 PAGMO_IMPLEMENT_XEUS_CLING_REPR(bfe)
-
-// Disable tracking for the serialisation of bfe.
-BOOST_CLASS_TRACKING(pagmo::bfe, boost::serialization::track_never)
 
 #endif

@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/base_sr_policy.hpp>
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/s_policy.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
@@ -62,7 +63,9 @@ public:
     }
     std::string get_extra_info() const;
 
-    // Serialization support.
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 };

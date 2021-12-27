@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -102,11 +103,13 @@ public:
     vector_double best_known() const;
     // Problem name
     std::string get_name() const;
+
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     // Pointers to member functions are used
     PAGMO_DLL_LOCAL vector_double fitness_impl(detail::cec2006_data::func_ptr, detail::cec2006_data::func_ptr,
                                                const vector_double &) const;

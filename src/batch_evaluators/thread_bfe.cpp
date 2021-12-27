@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -32,8 +32,22 @@ see https://www.gnu.org/licenses/. */
 #include <limits>
 #include <stdexcept>
 
+#if defined(_MSC_VER)
+
+// Disable a warning from MSVC in the TBB code.
+#pragma warning(push)
+#pragma warning(disable : 4324)
+
+#endif
+
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif
 
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>

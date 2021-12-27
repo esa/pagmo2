@@ -13,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-project(pagmo VERSION 2.16.1 LANGUAGES CXX C)
+project(pagmo VERSION 2.18.0 LANGUAGES CXX C)
 
 # Setup module path.
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/yacma")
@@ -69,6 +69,28 @@ include(CheckCXXCompilerFlag)
 # Threading setup.
 include(YACMAThreadingSetup)
 
+# NOTE: on Unix systems, the correct library installation path
+# could be something other than just "lib", such as "lib64",
+# "lib32", etc., depending on platform/configuration. Apparently,
+# CMake provides this information via the GNUInstallDirs module.
+# Let's enable this for now on all Unixes except OSX.
+# NOTE: potentially, this could be applicable to Cygwin as well.
+#
+# https://cmake.org/cmake/help/v3.15/module/GNUInstallDirs.html
+# https://cmake.org/pipermail/cmake/2013-July/055375.html
+if(UNIX AND NOT APPLE)
+    include(GNUInstallDirs)
+    set(_PAGMO_INSTALL_LIBDIR_DEFAULT "${CMAKE_INSTALL_LIBDIR}")
+else()
+    set(_PAGMO_INSTALL_LIBDIR_DEFAULT "lib")
+endif()
+if(NOT PAGMO_INSTALL_LIBDIR)
+    set(PAGMO_INSTALL_LIBDIR "${_PAGMO_INSTALL_LIBDIR_DEFAULT}" CACHE STRING
+        "Library installation directory." FORCE)
+endif()
+mark_as_advanced(PAGMO_INSTALL_LIBDIR)
+message(STATUS "Library installation directory: ${PAGMO_INSTALL_LIBDIR}")
+
 # Assemble the flags.
 set(PAGMO_CXX_FLAGS_DEBUG ${YACMA_CXX_FLAGS} ${YACMA_CXX_FLAGS_DEBUG} ${YACMA_THREADING_CXX_FLAGS})
 set(PAGMO_CXX_FLAGS_RELEASE ${YACMA_CXX_FLAGS} ${YACMA_THREADING_CXX_FLAGS})
@@ -80,8 +102,8 @@ endif()
 if(YACMA_COMPILER_IS_MSVC)
   # Disable the idiotic minmax macros on MSVC, some annoying warnings,
   # enable the bigobj option and the WIN32_LEAN_AND_MEAN definition.
-  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
-  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND PAGMO_CXX_FLAGS_DEBUG "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/wd4701" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
+  list(APPEND PAGMO_CXX_FLAGS_RELEASE "-DNOMINMAX" "/wd4459" "/wd4127" "/wd4702" "/wd4251" "/wd4701" "/bigobj" "-DWIN32_LEAN_AND_MEAN")
   # Enable strict conformance mode, if supported.
   set(CMAKE_REQUIRED_QUIET TRUE)
   check_cxx_compiler_flag("/permissive-" _PAGMO_MSVC_SUPPORTS_STRICT_CONFORMANCE)
@@ -114,8 +136,18 @@ if(YACMA_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "8")
     unset(_PAGMO_GCC_SUPPORTS_NO_OVERRIDE)
 endif()
 
-# TBB.
-find_package(TBB REQUIRED)
+# TBB. Try to find it first in config mode (supported
+# since version 2021 after the oneTBB rename), and, if this
+# fails, fall back to our own FindTBB.cmake. This is of course
+# not an ideal solution, but it should work until oneTBB
+# becomes widely deployed.
+find_package(TBB QUIET CONFIG)
+if(NOT TBB_FOUND)
+    message(STATUS "TBB not found using config mode, retrying in module mode.")
+    find_package(TBB REQUIRED MODULE)
+else()
+    message(STATUS "TBB found using config mode.")
+endif()
 
 # Eigen3
 if(PAGMO_WITH_EIGEN3)
@@ -140,27 +172,6 @@ endif()
 
 # Boost setup.
 include(PagmoFindBoost)
-
-# Explanation: on MSVC, when building static libraries, it is good practice to link
-# to the static runtime. CMake, however, is hard-coded to link to the dynamic runtime.
-# Hence we hackishly replace the /MD flag with /MT. This is the approach suggested
-# in the CMake FAQ:
-#
-# https://gitlab.kitware.com/cmake/community/wikis/FAQ#how-can-i-build-my-msvc-application-with-a-static-runtime
-#
-# Note that at one point CMake added the possiblity to set this as a target property,
-# so in the future we should definitely migrate to that approach:
-#
-# https://cmake.org/cmake/help/git-master/prop_tgt/MSVC_RUNTIME_LIBRARY.html
-if(YACMA_COMPILER_IS_MSVC AND PAGMO_BUILD_STATIC_LIBRARY)
-    foreach(flag_var
-            CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-            CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-        if(${flag_var} MATCHES "/MD")
-            string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-        endif()
-    endforeach()
-endif()
 
 # List of source files.
 set(PAGMO_SRC_FILES
@@ -300,8 +311,8 @@ if(PAGMO_BUILD_STATIC_LIBRARY)
     add_library(pagmo STATIC "${PAGMO_SRC_FILES}")
 else()
     add_library(pagmo SHARED "${PAGMO_SRC_FILES}")
-    set_property(TARGET pagmo PROPERTY VERSION "6.0")
-    set_property(TARGET pagmo PROPERTY SOVERSION 6)
+    set_property(TARGET pagmo PROPERTY VERSION "8.0")
+    set_property(TARGET pagmo PROPERTY SOVERSION 8)
     set_target_properties(pagmo PROPERTIES CXX_VISIBILITY_PRESET hidden)
     set_target_properties(pagmo PROPERTIES VISIBILITY_INLINES_HIDDEN TRUE)
 endif()
@@ -424,8 +435,8 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/pagmo/config.hpp" DESTINATION
 # Installation of the library.
 install(TARGETS pagmo
     EXPORT pagmo_export
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION "${PAGMO_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION "${PAGMO_INSTALL_LIBDIR}"
     RUNTIME DESTINATION bin
 )
 
@@ -442,10 +453,10 @@ if(PAGMO_WITH_IPOPT)
 endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pagmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" @ONLY)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "lib/cmake/pagmo")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/Findpagmo_IPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
-    DESTINATION "lib/cmake/pagmo")
-install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION lib/cmake/pagmo)
+    DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
+install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 # Take care of versioning.
 include(CMakePackageConfigHelpers)
 # NOTE: SameMinorVersion available only
@@ -457,7 +468,7 @@ else()
     write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
         COMPATIBILITY SameMinorVersion)
 endif()
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "lib/cmake/pagmo")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 
 # Uninstall target
 if(NOT TARGET uninstall)

@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -43,7 +43,8 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/genetic_operators.hpp>
 
-namespace {
+namespace
+{
 // Helper function for implementation of the binary crossover.
 double sbx_betaq(double beta, double eta_c, double rand01)
 {
@@ -54,7 +55,7 @@ double sbx_betaq(double beta, double eta_c, double rand01)
         return std::pow(1. / (2. - rand01 * alpha), 1. / (eta_c + 1.));
     }
 }
-}
+} // namespace
 
 namespace pagmo
 {
@@ -283,13 +284,13 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
 /// Polynomial mutation
 /**
  * This function performs the polynomial mutation proposed by Agrawal and Deb over some chromosome.
- * 
- * @see https://www.iitk.ac.in/kangal/papers/k2012016.pdf
+ *
+ * @see https://www.egr.msu.edu/~kdeb/papers/k2012016.pdf
  *
  * Example:
  * @code{.unparsed}
  * detail::random_engine_type random_engine(32u);
- * vector_double child = {-1.13, 3.21, 4}; 
+ * vector_double child = {-1.13, 3.21, 4};
  * polynomial_mutation(child, {{-2,-2,-2}, {5,5,5}}, 1u, 0.9, 35, r_engine);
  * @endcode
  *
@@ -315,11 +316,10 @@ void polynomial_mutation(vector_double &dv, const std::pair<vector_double, vecto
 {
     detail::check_problem_bounds(bounds, nix);
     if (dv.size() != bounds.first.size()) {
-        pagmo_throw(
-            std::invalid_argument,
-            "The length of the chromosome should be the same as that of the bounds: detected length is "
-                + std::to_string(dv.size()) + ", while the bounds length is "
-                + std::to_string(bounds.first.size()));
+        pagmo_throw(std::invalid_argument,
+                    "The length of the chromosome should be the same as that of the bounds: detected length is "
+                        + std::to_string(dv.size()) + ", while the bounds length is "
+                        + std::to_string(bounds.first.size()));
     }
     for (decltype(bounds.first.size()) i = 0u; i < bounds.first.size(); ++i) {
         if (!(std::isfinite(bounds.first[i]) && std::isfinite(bounds.second[i]))) {

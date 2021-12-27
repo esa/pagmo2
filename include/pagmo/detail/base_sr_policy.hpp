@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -76,6 +76,8 @@ public:
     {
     }
 
+private:
+    friend class boost::serialization::access;
     // Serialization support.
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
@@ -83,6 +85,7 @@ public:
         detail::archive(ar, m_migr_rate);
     }
 
+public:
     const boost::variant<pop_size_t, double> &get_migr_rate() const;
 
 protected:
@@ -92,8 +95,5 @@ protected:
 } // namespace detail
 
 } // namespace pagmo
-
-// Disable tracking for the serialisation of base_sr_policy.
-BOOST_CLASS_TRACKING(pagmo::detail::base_sr_policy, boost::serialization::track_never)
 
 #endif

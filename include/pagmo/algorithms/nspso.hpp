@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 This file is part of the PaGMO library.
 The PaGMO library is free software; you can redistribute it and/or modify
 it under the terms of either:
@@ -31,9 +31,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
+
 namespace pagmo
 {
-// Non-dominated Sorting Particle Swarm Optimizer (NSPSO)
 // Non-dominated Sorting Particle Swarm Optimizer (NSPSO) is a modified version of PSO for multi-objective optimization.
 // It extends the basic ideas of PSO by making a better use of personal bests and offspring for non-dominated
 // comparison. In order to increase the diversity of the pareto front it is possible to choose between 3 different
@@ -108,11 +109,12 @@ public:
         return m_log;
     }
 
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     PAGMO_DLL_LOCAL double minfit(vector_double::size_type, vector_double::size_type,
                                   const std::vector<vector_double> &) const;
     PAGMO_DLL_LOCAL void compute_maxmin(vector_double &, const std::vector<vector_double> &) const;

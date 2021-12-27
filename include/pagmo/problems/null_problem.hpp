@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -34,6 +34,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -99,11 +100,13 @@ struct PAGMO_DLL_PUBLIC null_problem {
     {
         return "Null problem";
     }
-    // Serialization
+
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     vector_double::size_type m_nobj;
     vector_double::size_type m_nec;
     vector_double::size_type m_nic;

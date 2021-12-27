@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -306,54 +306,31 @@ public:
         return m_seed;
     }
 
-    /// Save to archive.
-    /**
-     * This method will save \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the internal pagmo::problem and of primitive
-     * types.
-     */
+private:
+    friend class boost::serialization::access;
+    // Save to archive.
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
         detail::to_archive(ar, m_prob, m_ID, m_x, m_f, m_champion_x, m_champion_f, m_e, m_seed);
     }
-    /// Load from archive.
-    /**
-     * This method will load a pagmo::population from \p ar into \p this.
-     *
-     * @param ar source archive.
-     *
-     * @throws unspecified any exception thrown by the deserialization of the internal pagmo::problem and of
-     * primitive
-     * types.
-     */
+    // Load from archive.
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
-        population tmp;
         try {
-            detail::from_archive(ar, tmp.m_prob, tmp.m_ID, tmp.m_x, tmp.m_f, tmp.m_champion_x, tmp.m_champion_f,
-                                 tmp.m_e, tmp.m_seed);
+            detail::from_archive(ar, m_prob, m_ID, m_x, m_f, m_champion_x, m_champion_f, m_e, m_seed);
             // LCOV_EXCL_START
         } catch (...) {
-            // NOTE: if anything goes wrong during deserialization, erase
-            // all individuals before re-throwing (otherwise, we would hit
-            // assertion errors in debug mode in tmp's dtor if the vectors containing
-            // the individuals have inconsistent lengths).
-            tmp.clear();
+            *this = population{};
             throw;
         }
         // LCOV_EXCL_STOP
-        *this = std::move(tmp);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
-private:
+
     void clear();
 
-private:
     // Problem.
     problem m_prob;
     // ID of the various decision vectors
@@ -379,8 +356,5 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const population &);
 
 // Add some repr support for CLING
 PAGMO_IMPLEMENT_XEUS_CLING_REPR(population)
-
-// Disable tracking for the serialisation of population.
-BOOST_CLASS_TRACKING(pagmo::population, boost::serialization::track_never)
 
 #endif

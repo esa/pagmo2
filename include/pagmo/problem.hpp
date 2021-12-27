@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <atomic>
 #include <cassert>
+#include <exception>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -41,7 +42,6 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <boost/type_traits/integral_constant.hpp>
-#include <boost/type_traits/is_virtual_base_of.hpp>
 
 #include <pagmo/config.hpp>
 #include <pagmo/detail/support_xeus_cling.hpp>
@@ -494,6 +494,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner_base {
     virtual std::type_index get_type_index() const = 0;
     virtual const void *get_ptr() const = 0;
     virtual void *get_ptr() = 0;
+
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned)
     {
@@ -669,7 +672,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         // in the problem is set to true, and m_has_gradient_sparsity is unconditionally false if the UDP
         // does not implement gradient_sparsity() (see implementation of the three overloads below).
         assert(false); // LCOV_EXCL_LINE
-        throw;
+        std::terminate();
     }
     template <typename U, enable_if_t<detail::conjunction<pagmo::has_gradient_sparsity<U>,
                                                           pagmo::override_has_gradient_sparsity<U>>::value,
@@ -733,7 +736,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
         // in the problem is set to true, and m_has_hessians_sparsity is unconditionally false if the UDP
         // does not implement hessians_sparsity() (see implementation of the three overloads below).
         assert(false); // LCOV_EXCL_LINE
-        throw;
+        std::terminate();
     }
     template <typename U, enable_if_t<detail::conjunction<pagmo::has_hessians_sparsity<U>,
                                                           pagmo::override_has_hessians_sparsity<U>>::value,
@@ -860,12 +863,17 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
     {
         return &m_value;
     }
+
+private:
     // Serialization.
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
         detail::archive(ar, boost::serialization::base_object<prob_inner_base>(*this), m_value);
     }
+
+public:
     T m_value;
 };
 
@@ -873,22 +881,9 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
 
 } // namespace pagmo
 
-namespace boost
-{
-
-// NOTE: in some earlier versions of Boost (i.e., at least up to 1.67)
-// the is_virtual_base_of type trait, used by the Boost serialization library, fails
-// with a compile time error
-// if a class is declared final. Thus, we provide a specialised implementation of
-// this type trait to work around the issue. See:
-// https://www.boost.org/doc/libs/1_52_0/libs/type_traits/doc/html/boost_typetraits/reference/is_virtual_base_of.html
-// https://stackoverflow.com/questions/18982064/boost-serialization-of-base-class-of-final-subclass-error
-// We never use virtual inheritance, thus the specialisation is always false.
-template <typename T>
-struct is_virtual_base_of<pagmo::detail::prob_inner_base, pagmo::detail::prob_inner<T>> : false_type {
-};
-
-} // namespace boost
+// Disable Boost.Serialization tracking for the implementation
+// details of problem.
+BOOST_CLASS_TRACKING(pagmo::detail::prob_inner_base, boost::serialization::track_never)
 
 namespace pagmo
 {
@@ -1603,14 +1598,8 @@ public:
      */
     void *get_ptr();
 
-    /// Save to archive.
-    /**
-     * This method will save \p this into the archive \p ar.
-     *
-     * @param ar target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
-     */
+private:
+    friend class boost::serialization::access;
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
@@ -1621,33 +1610,24 @@ public:
                            m_gs_dim, m_hs_dim, m_thread_safety);
     }
 
-    /// Load from archive.
-    /**
-     * This method will deserialize into \p this the content of \p ar.
-     *
-     * @param ar source archive.
-     *
-     * @throws unspecified any exception thrown by the deserialization of the UDP and of primitive types.
-     */
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
-        // Deserialize in a separate object and move it in later, for exception safety.
-        problem tmp_prob;
-        unsigned long long fevals, gevals, hevals;
-        detail::from_archive(ar, tmp_prob.m_ptr, fevals, gevals, hevals, tmp_prob.m_lb, tmp_prob.m_ub, tmp_prob.m_nobj,
-                             tmp_prob.m_nec, tmp_prob.m_nic, tmp_prob.m_nix, tmp_prob.m_c_tol,
-                             tmp_prob.m_has_batch_fitness, tmp_prob.m_has_gradient, tmp_prob.m_has_gradient_sparsity,
-                             tmp_prob.m_has_hessians, tmp_prob.m_has_hessians_sparsity, tmp_prob.m_has_set_seed,
-                             tmp_prob.m_name, tmp_prob.m_gs_dim, tmp_prob.m_hs_dim, tmp_prob.m_thread_safety);
-        tmp_prob.m_fevals.store(fevals, std::memory_order_relaxed);
-        tmp_prob.m_gevals.store(gevals, std::memory_order_relaxed);
-        tmp_prob.m_hevals.store(hevals, std::memory_order_relaxed);
-        *this = std::move(tmp_prob);
+        try {
+            unsigned long long fevals, gevals, hevals;
+            detail::from_archive(ar, m_ptr, fevals, gevals, hevals, m_lb, m_ub, m_nobj, m_nec, m_nic, m_nix, m_c_tol,
+                                 m_has_batch_fitness, m_has_gradient, m_has_gradient_sparsity, m_has_hessians,
+                                 m_has_hessians_sparsity, m_has_set_seed, m_name, m_gs_dim, m_hs_dim, m_thread_safety);
+            m_fevals.store(fevals, std::memory_order_relaxed);
+            m_gevals.store(gevals, std::memory_order_relaxed);
+            m_hevals.store(hevals, std::memory_order_relaxed);
+        } catch (...) {
+            *this = problem{};
+            throw;
+        }
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-private:
     // Just two small helpers to make sure that whenever we require
     // access to the pointer it actually points to something.
     detail::prob_inner_base const *ptr() const
@@ -1667,7 +1647,6 @@ private:
     void check_gradient_vector(const vector_double &) const;
     void check_hessians_vector(const std::vector<vector_double> &) const;
 
-private:
     // Pointer to the inner base problem
     std::unique_ptr<detail::prob_inner_base> m_ptr;
     // Counter for calls to the fitness
@@ -1707,8 +1686,5 @@ private:
 
 // Add some repr support for CLING
 PAGMO_IMPLEMENT_XEUS_CLING_REPR(problem)
-
-// Disable tracking for the serialisation of problem.
-BOOST_CLASS_TRACKING(pagmo::problem, boost::serialization::track_never)
 
 #endif

@@ -3,6 +3,42 @@
 Changelog
 =========
 
+2.18.0 (2021-08-03)
+-------------------
+
+New
+~~~
+
+- pagmo now officially supports 64-bit ARM and PowerPC processors
+  (`#481 <https://github.com/esa/pagmo2/pull/481>`__).
+
+Changes
+~~~~~~~
+
+- pagmo's build system now honours the ``CMAKE_INSTALL_LIBDIR``
+  setting on Linux to determine the library installation path
+  (`#482 <https://github.com/esa/pagmo2/pull/482>`__).
+- Various internal changes/improvements in the
+  serialisation functions
+  (`#480 <https://github.com/esa/pagmo2/pull/480>`__).
+
+Fix
+~~~
+
+- Do not force the static runtime on MSVC when building pagmo
+  as a static library
+  (`#474 <https://github.com/esa/pagmo2/pull/474>`__).
+
+2.17.0 (2021-03-05)
+-------------------
+
+Fix
+~~~
+
+- Enable support in the build system for the latest
+  TBB version (oneTBB)
+  (`#469 <https://github.com/esa/pagmo2/pull/469>`__).
+
 2.16.1 (2020-12-22)
 -------------------
 

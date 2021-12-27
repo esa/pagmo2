@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -113,31 +113,19 @@ public:
 
     bgl_graph_t to_bgl() const;
 
-    template <typename Archive>
-    void save(Archive &ar, unsigned) const
-    {
-        detail::to_archive(ar, get_graph());
-    }
-    template <typename Archive>
-    void load(Archive &ar, unsigned)
-    {
-        base_bgl_topology tmp;
-        // NOTE: no need to protect the
-        // access to the graph of the
-        // newly-constructed tmp topology.
-        detail::from_archive(ar, tmp.m_graph);
-        *this = std::move(tmp);
-    }
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
-
 private:
+    friend class boost::serialization::access;
+    template <typename Archive>
+    void serialize(Archive &ar, unsigned)
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        detail::archive(ar, m_graph);
+    }
+
     mutable std::mutex m_mutex;
     bgl_graph_t m_graph;
 };
 
 } // namespace pagmo
-
-// Disable tracking for the serialisation of base_bgl_topology.
-BOOST_CLASS_TRACKING(pagmo::base_bgl_topology, boost::serialization::track_never)
 
 #endif

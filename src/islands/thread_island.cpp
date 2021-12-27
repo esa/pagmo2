@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -31,7 +31,21 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#if defined(_MSC_VER)
+
+// Disable a warning from MSVC in the TBB code.
+#pragma warning(push)
+#pragma warning(disable : 4324)
+
+#endif
+
 #include <tbb/task_group.h>
+
+#if defined(_MSC_VER)
+
+#pragma warning(pop)
+
+#endif
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/detail/gte_getter.hpp>

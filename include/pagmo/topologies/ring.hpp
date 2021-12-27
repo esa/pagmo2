@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/topologies/base_bgl_topology.hpp>
 #include <pagmo/topology.hpp>
 
@@ -52,10 +53,12 @@ public:
     std::string get_name() const;
     double get_weight() const;
 
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     double m_weight;
 };
 

@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -156,7 +156,7 @@ inline void stream_impl(std::ostream &os, const std::map<T, U> &m)
 }
 
 template <typename T, typename... Args>
-inline void stream_impl(std::ostream &os, const T &x, const Args &... args)
+inline void stream_impl(std::ostream &os, const T &x, const Args &...args)
 {
     stream_impl(os, x);
     stream_impl(os, args...);
@@ -181,7 +181,7 @@ struct PAGMO_DLL_PUBLIC table {
     // assembled in a row, and the row is then added to the table. The maximum column widths
     // are updated if elements in args require more width than currently allocated.
     template <typename... Args>
-    void add_row(const Args &... args)
+    void add_row(const Args &...args)
     {
         if (sizeof...(args) != m_headers.size()) {
             pagmo_throw(std::invalid_argument, "the table was constructed with " + to_string(m_headers.size())
@@ -214,7 +214,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const table &);
  * @param args the objects that will be directed to to \p os.
  */
 template <typename... Args>
-inline void stream(std::ostream &os, const Args &... args)
+inline void stream(std::ostream &os, const Args &...args)
 {
     detail::stream_impl(os, args...);
 }
@@ -226,7 +226,7 @@ inline void stream(std::ostream &os, const Args &... args)
  * @param args the objects that will be printed to screen.
  */
 template <typename... Args>
-inline void print(const Args &... args)
+inline void print(const Args &...args)
 {
     stream(std::cout, args...);
 }

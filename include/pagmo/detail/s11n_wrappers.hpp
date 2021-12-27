@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -45,7 +45,7 @@ inline void archive(Archive &)
 }
 
 template <typename Archive, typename Arg0, typename... Args>
-inline void archive(Archive &ar, Arg0 &&arg0, Args &&... args)
+inline void archive(Archive &ar, Arg0 &&arg0, Args &&...args)
 {
     ar &std::forward<Arg0>(arg0);
     archive(ar, std::forward<Args>(args)...);
@@ -57,7 +57,7 @@ inline void to_archive(Archive &)
 }
 
 template <typename Archive, typename Arg0, typename... Args>
-inline void to_archive(Archive &ar, Arg0 &&arg0, Args &&... args)
+inline void to_archive(Archive &ar, Arg0 &&arg0, Args &&...args)
 {
     ar << std::forward<Arg0>(arg0);
     to_archive(ar, std::forward<Args>(args)...);
@@ -69,7 +69,7 @@ inline void from_archive(Archive &)
 }
 
 template <typename Archive, typename Arg0, typename... Args>
-inline void from_archive(Archive &ar, Arg0 &&arg0, Args &&... args)
+inline void from_archive(Archive &ar, Arg0 &&arg0, Args &&...args)
 {
     ar >> std::forward<Arg0>(arg0);
     from_archive(ar, std::forward<Args>(args)...);

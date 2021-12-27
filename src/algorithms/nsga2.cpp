@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -344,14 +344,7 @@ std::string nsga2::get_extra_info() const
     return ss.str();
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void nsga2::serialize(Archive &ar, unsigned)
 {

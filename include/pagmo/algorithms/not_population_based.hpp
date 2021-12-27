@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -89,12 +89,10 @@ public:
     }
     // Get the individual replacement policy or index.
     boost::any get_replacement() const;
-    /// Save to archive.
-    /**
-     * @param ar the target archive.
-     *
-     * @throws unspecified any exception thrown by the serialization of primitive types.
-     */
+
+private:
+    friend class boost::serialization::access;
+    // Save to archive.
     template <typename Archive>
     void save(Archive &ar, unsigned) const
     {
@@ -117,40 +115,31 @@ public:
         ar << m_rselect_seed;
         ar << m_e;
     }
-    /// Load from archive.
-    /**
-     * In case of exceptions, \p this will be unaffected.
-     *
-     * @param ar the source archive.
-     *
-     * @throws unspecified any exception thrown by the deserialization of primitive types.
-     */
+    // Load from archive.
     template <typename Archive>
     void load(Archive &ar, unsigned)
     {
-        not_population_based tmp;
         bool flag;
         std::string str;
         population::size_type idx;
         ar >> flag;
         if (flag) {
             ar >> str;
-            tmp.m_select = str;
+            m_select = str;
         } else {
             ar >> idx;
-            tmp.m_select = idx;
+            m_select = idx;
         }
         ar >> flag;
         if (flag) {
             ar >> str;
-            tmp.m_replace = str;
+            m_replace = str;
         } else {
             ar >> idx;
-            tmp.m_replace = idx;
+            m_replace = idx;
         }
-        ar >> tmp.m_rselect_seed;
-        ar >> tmp.m_e;
-        *this = std::move(tmp);
+        ar >> m_rselect_seed;
+        ar >> m_e;
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
@@ -180,8 +169,5 @@ protected:
 };
 
 } // namespace pagmo
-
-// Disable tracking for the serialisation of not_population_based.
-BOOST_CLASS_TRACKING(pagmo::not_population_based, boost::serialization::track_never)
 
 #endif

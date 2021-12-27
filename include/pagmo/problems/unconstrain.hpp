@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/type_traits.hpp>
 #include <pagmo/types.hpp>
 
@@ -158,11 +159,12 @@ public:
     // Extra info.
     std::string get_extra_info() const;
 
-    // Object serialization.
+private:
+    // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     // The inner problem
     problem m_problem;
     // types of unconstrain methods

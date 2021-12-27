@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -121,14 +121,7 @@ std::string lennard_jones::get_name() const
     return "Lennard Jones Cluster (" + std::to_string(m_atoms) + " atoms)";
 }
 
-/// Object serialization
-/**
- * This method will save/load \p this into the archive \p ar.
- *
- * @param ar target archive.
- *
- * @throws unspecified any exception thrown by the serialization of the UDP and of primitive types.
- */
+// Object serialization
 template <typename Archive>
 void lennard_jones::serialize(Archive &ar, unsigned)
 {

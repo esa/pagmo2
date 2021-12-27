@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
+#include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 namespace pagmo
@@ -124,11 +125,13 @@ public:
     double p_distance(const vector_double &) const;
     // Problem name
     std::string get_name() const;
+
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     // Convergence metric for a dv (0 = converged to the optimal front)
     PAGMO_DLL_LOCAL double g_func(const vector_double &) const;
 

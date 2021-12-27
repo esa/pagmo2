@@ -115,14 +115,4 @@ Fair replacement policy
 
       :return: Human-readable extra info about this replacement policy.
 
-   .. cpp:function:: template <typename Archive> void serialize(Archive &ar, unsigned)
-
-      Serialisation support.
-
-      This member function is used to implement the (de)serialisation of this replacement policy to/from an archive.
-
-      :param ar: the input/output archive.
-
-      :exception unspecified: any exception raised by the (de)serialisation of primitive types.
-
 .. cpp:namespace-pop::

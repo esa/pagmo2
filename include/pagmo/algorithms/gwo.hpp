@@ -1,4 +1,4 @@
-/* Copyright 2017-2020 PaGMO development team
+/* Copyright 2017-2021 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
+#include <pagmo/s11n.hpp>
 
 namespace pagmo
 {
@@ -64,8 +65,6 @@ namespace pagmo
  *
  *    https://www.sciencedirect.com/science/article/pii/S0965997813001853 for the paper that introduces Grey Wolf
  *    Optimizer and the pseudo-code
- *
- *    https://github.com/7ossam81/EvoloPy/blob/master/GWO.py for the Python implementation
  *
  * \endverbatim
  *
@@ -176,11 +175,12 @@ public:
         return m_log;
     }
 
+private:
     // Object serialization
+    friend class boost::serialization::access;
     template <typename Archive>
     void serialize(Archive &, unsigned);
 
-private:
     unsigned m_gen;
     unsigned m_seed;
     mutable detail::random_engine_type m_e;
