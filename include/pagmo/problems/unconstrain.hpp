@@ -110,6 +110,17 @@ public:
     // Fitness.
     vector_double fitness(const vector_double &) const;
 
+    /** Check if the inner problem can compute fitnesses in batch mode.
+     * @return a flag whether the problem implements batch evaluation
+     */
+    bool has_batch_fitness() const;
+
+    /** Batch fitness.
+     * @param xs a <tt>std::vector</tt> of the inputs
+     * @return the fitness of all inputs
+     */
+    vector_double batch_fitness(const vector_double & xs) const;
+
     // Number of objectives.
     vector_double::size_type get_nobj() const;
 
@@ -180,6 +191,9 @@ private:
     method_type m_method;
     // weights vector
     vector_double m_weights;
+
+    // Penalize the original fitness
+    vector_double penalize(const vector_double & orignal_fitness) const;
 };
 } // namespace pagmo
 

@@ -300,3 +300,33 @@ BOOST_AUTO_TEST_CASE(unconstrain_thread_safety_test)
     BOOST_CHECK(t.get_thread_safety() == thread_safety::basic);
     BOOST_CHECK((unconstrain{ts2{}}.get_thread_safety() == thread_safety::none));
 }
+
+// UDP which implements batch_fitness.
+struct bf0 {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0, 0};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0}, {1}};
+    }
+    vector_double batch_fitness(const vector_double &dvs) const
+    {
+        ++s_counter;
+        return vector_double(dvs.size(), 1.);
+    }
+    vector_double::size_type get_nic() const
+    {
+      return 1u;
+    }
+    static unsigned s_counter;
+};
+unsigned bf0::s_counter = 0;
+
+BOOST_AUTO_TEST_CASE(unconstrain_batch_test)
+{
+    problem p0{bf0{}};
+    unconstrain t{p0};
+    BOOST_CHECK(t.has_batch_fitness());
+}

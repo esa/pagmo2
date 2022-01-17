@@ -112,6 +112,23 @@ vector_double unconstrain::fitness(const vector_double &x) const
 {
     // some quantities from the orginal udp
     auto original_fitness = m_problem.fitness(x);
+    return penalize(original_fitness);
+}
+
+/// Penalize.
+/**
+ * The unconstrained fitness computation.
+ *
+ * @param original_fitness the fitness
+ *
+ * @return the fitness of \p x.
+ *
+ * @throws unspecified any exception thrown by memory errors in standard containers,
+ * or by problem::fitness().
+ */
+vector_double unconstrain::penalize(const vector_double &original_fitness) const
+{
+    // some quantities from the orginal udp
     auto nobj = m_problem.get_nobj();
     auto nec = m_problem.get_nec();
     auto nic = m_problem.get_nic();
@@ -197,6 +214,28 @@ vector_double unconstrain::fitness(const vector_double &x) const
         } break;
     }
     return retval;
+}
+
+bool unconstrain::has_batch_fitness() const
+{
+  return m_problem.has_batch_fitness();
+}
+
+vector_double unconstrain::batch_fitness(const vector_double & xs) const
+{
+  vector_double original_fitness(m_problem.batch_fitness(xs));
+  const vector_double::size_type nx = m_problem.get_nx();
+  const vector_double::size_type n_dvs = xs.size() / nx;
+  vector_double::size_type nobj = m_problem.get_nobj();
+  vector_double retval(n_dvs * nobj);
+  for (vector_double::size_type i = 0; i < n_dvs; ++ i)
+  {
+    vector_double y(nobj);
+    std::copy(original_fitness.data() + static_cast<long>(i * nobj), original_fitness.data() + static_cast<long>((i + 1) * nobj), y.begin());
+    vector_double z(penalize(y));
+    std::copy(z.begin(), z.begin() + static_cast<long>(nobj), retval.begin() + static_cast<long>(i * nobj));
+  }
+  return retval;
 }
 
 /// Number of objectives.
