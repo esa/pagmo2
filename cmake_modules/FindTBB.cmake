@@ -396,9 +396,15 @@ findpkg_finish(TBB_MALLOC_PROXY tbbmalloc_proxy)
 #parse all the version numbers from tbb
 if(NOT TBB_VERSION)
 
+  if (EXISTS ${TBB_INCLUDE_DIR}/oneapi/tbb/version.h)
+    set (_VERSION_FILE ${TBB_INCLUDE_DIR}/oneapi/tbb/version.h)
+  elseif (EXISTS ${TBB_INCLUDE_DIR}/tbb/tbb_stddef.h)
+    set (_VERSION_FILE ${TBB_INCLUDE_DIR}/tbb/tbb_stddef.h)
+  endif ()
+
  #only read the start of the file
  file(STRINGS
-      "${TBB_INCLUDE_DIR}/tbb/tbb_stddef.h"
+      "${_VERSION_FILE}"
       TBB_VERSION_CONTENTS
       REGEX "VERSION")
 
