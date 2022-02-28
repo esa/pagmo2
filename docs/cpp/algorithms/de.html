@@ -126,17 +126,17 @@
 <p>Differential Evolution is an heuristic optimizer developed by Rainer Storn and Kenneth Price.</p>
 <p>‘’A breakthrough happened, when Ken came up with the idea of using vector differences for perturbing the vector population. Since this seminal idea a lively discussion between Ken and Rainer and endless ruminations and computer simulations on both parts yielded many substantial improvements which make DE the versatile and robust tool it is today’’ (from the official web pages….)</p>
 <p>The implementation provided for PaGMO is based on the code provided in the official DE web site. <a class="reference internal" href="#classpagmo_1_1de"><span class="std std-ref">pagmo::de</span></a> is suitable for box-constrained single-objective continuous optimization.</p>
-<p><p><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
-the allowed box-bounds, is here done by creating a random number in the bounds.</p>
-</div>
-<div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>The paper that introduces Differential Evolution <a class="reference external" href="https://link.springer.com/article/10.1023%2FA%3A1008202821328">https://link.springer.com/article/10.1023%2FA%3A1008202821328</a></p>
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+the allowed box-bounds, is here done by creating a random number in the bounds.</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -159,11 +159,11 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 <span id="_CPPv3N5pagmo2de2deEjddjddj"></span><span id="_CPPv2N5pagmo2de2deEjddjddj"></span><span id="pagmo::de::de__unsigned.double.double.unsigned.double.double.unsigned"></span><span class="target" id="classpagmo_1_1de_1a55f61e3151466b8b978f9b9589d359a2"></span><span class="sig-name descname"><span class="n"><span class="pre">de</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">F</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.8</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">CR</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.9</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">variant</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ftol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xtol</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de2deEjddjddj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs de</p>
-<p>The following variants (mutation variants) are available to create a new candidate individual: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">exp</span>                               <span class="mf">2.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">exp</span>
-<span class="mi">3</span> <span class="o">-</span> <span class="n">rand</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">exp</span>                       <span class="mf">4.</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">exp</span>
-<span class="mi">5</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">exp</span>                               <span class="mf">6.</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="nb">bin</span>
-<span class="mi">7</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="nb">bin</span>                               <span class="mf">8.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="nb">bin</span>
-<span class="mi">9</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="nb">bin</span>                               <span class="mf">10.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="nb">bin</span>
+<p>The following variants (mutation variants) are available to create a new candidate individual: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>1 - best/1/exp                               2. - rand/1/exp
+3 - rand-to-best/1/exp                       4. - best/2/exp
+5 - rand/2/exp                               6. - best/1/bin
+7 - rand/1/bin                               8. - rand-to-best/1/bin
+9 - best/2/bin                               10. - rand/2/bin
 </pre></div>
 </div>
 </p>
@@ -240,13 +240,13 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 100): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">df</span><span class="p">:</span>
-<span class="mi">5001</span>         <span class="mi">100020</span>    <span class="mf">3.62028e-05</span>      <span class="mf">0.0396687</span>      <span class="mf">0.0002866</span>
-<span class="mi">5101</span>         <span class="mi">102020</span>    <span class="mf">1.16784e-05</span>      <span class="mf">0.0473027</span>    <span class="mf">0.000249057</span>
-<span class="mi">5201</span>         <span class="mi">104020</span>    <span class="mf">1.07883e-05</span>      <span class="mf">0.0455471</span>    <span class="mf">0.000243651</span>
-<span class="mi">5301</span>         <span class="mi">106020</span>    <span class="mf">6.05099e-06</span>      <span class="mf">0.0268876</span>    <span class="mf">0.000103512</span>
-<span class="mi">5401</span>         <span class="mi">108020</span>    <span class="mf">3.60664e-06</span>      <span class="mf">0.0230468</span>    <span class="mf">5.78161e-05</span>
-<span class="mi">5501</span>         <span class="mi">110020</span>     <span class="mf">1.7188e-06</span>      <span class="mf">0.0141655</span>    <span class="mf">2.25688e-05</span>
+<p>Example (verbosity 100): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Gen:        Fevals:          Best:            dx:            df:
+5001         100020    3.62028e-05      0.0396687      0.0002866
+5101         102020    1.16784e-05      0.0473027    0.000249057
+5201         104020    1.07883e-05      0.0455471    0.000243651
+5301         106020    6.05099e-06      0.0268876    0.000103512
+5401         108020    3.60664e-06      0.0230468    5.78161e-05
+5501         110020     1.7188e-06      0.0141655    2.25688e-05
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function currently in the population, dx is the population flatness evaluated as the distance between the decisions vector of the best and of the worst individual, df is the population flatness evaluated as the distance between the fitness of the best and of the worst individual.</p>

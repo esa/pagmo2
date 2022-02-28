@@ -126,13 +126,13 @@ state of the archipelago and access its island members. The user can explicitly 
 to conclude by calling the <a class="reference internal" href="#_CPPv4N5pagmo11archipelago4waitEv" title="pagmo::archipelago::wait"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">wait()</span></code></a> and <a class="reference internal" href="#_CPPv4N5pagmo11archipelago10wait_checkEv" title="pagmo::archipelago::wait_check"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">wait_check()</span></code></a>
 methods. The status of
 ongoing evolutions in the archipelago can be queried via <a class="reference internal" href="#_CPPv4NK5pagmo11archipelago6statusEv" title="pagmo::archipelago::status"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">status()</span></code></a>.</p>
+</p>
+ </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::archipelago</span></code></a> are destruction
 and assignment. Any other operation will result in undefined behaviour.</p>
 </div>
-</p>
- </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -734,9 +734,9 @@ occurs.</p>
 
 <section id="types">
 <h2>Types<a class="headerlink" href="#types" title="Permalink to this headline"></a></h2>
-<dl class="cpp enum">
+<dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14migration_typeE">
-<span id="_CPPv3N5pagmo14migration_typeE"></span><span id="_CPPv2N5pagmo14migration_typeE"></span><span class="target" id="namespacepagmo_1ae74c709916e955ead24f235b2af3952c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">migration_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14migration_typeE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo14migration_typeE"></span><span id="_CPPv2N5pagmo14migration_typeE"></span><span class="target" id="namespacepagmo_1ae74c709916e955ead24f235b2af3952c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">migration_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14migration_typeE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Migration type. </p>
 <p><p><p>This enumeration represents the available migration policies
 in an <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>:</p>
@@ -763,9 +763,9 @@ individuals from <em>all</em> the connecting islands.</p></li>
 
 </dd></dl>
 
-<dl class="cpp enum">
+<dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo16migrant_handlingE">
-<span id="_CPPv3N5pagmo16migrant_handlingE"></span><span id="_CPPv2N5pagmo16migrant_handlingE"></span><span class="target" id="namespacepagmo_1aba35c977d7043d115ad8c20867c729c9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">migrant_handling</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo16migrant_handlingE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo16migrant_handlingE"></span><span id="_CPPv2N5pagmo16migrant_handlingE"></span><span class="target" id="namespacepagmo_1aba35c977d7043d115ad8c20867c729c9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">migrant_handling</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo16migrant_handlingE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Migrant handling policy. </p>
 <p><p><p>This enumeration represents the available migrant handling
 policies in an <a class="reference internal" href="#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>.</p>

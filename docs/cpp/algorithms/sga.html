@@ -123,20 +123,19 @@
 <span id="_CPPv3N5pagmo3sgaE"></span><span id="_CPPv2N5pagmo3sgaE"></span><span id="pagmo::sga"></span><span class="target" id="classpagmo_1_1sga"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sga</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sgaE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>A Simple Genetic Algorithm. </p>
 <p><img alt="../../../_images/sga.jpg" src="../../../_images/sga.jpg" /></p>
-<p><p><div class="versionadded">
+<p><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.2.</span></p>
 </div>
 </p>
-</p>
 <p>Approximately during the same decades as Evolutionary Strategies (see <a class="reference internal" href="sea.html#classpagmo_1_1sea"><span class="std std-ref">pagmo::sea</span></a>) were studied, a different group led by John Holland, and later by his student David Goldberg, introduced and studied an algorithmic framework called “genetic algorithms” that were, essentially, leveraging on the same idea but introducing also crossover as a genetic operator. This led to a few decades of confusion and discussions on what was an evolutionary startegy and what a genetic algorithm and on whether the crossover was a useful operator or mutation only algorithms were to be preferred.</p>
 <p>In pagmo we provide a rather classical implementation of a genetic algorithm, letting the user choose between some selected crossover types, selection schemes and mutation types.</p>
-<p>The pseudo code of our version is: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Start</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">population</span> <span class="p">(</span><span class="n">pop</span><span class="p">)</span> <span class="n">of</span> <span class="n">dimension</span> <span class="n">N</span>
-<span class="o">&gt;</span> <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">gen</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Selection</span><span class="p">:</span> <span class="n">create</span> <span class="n">a</span> <span class="n">new</span> <span class="n">population</span> <span class="p">(</span><span class="n">pop2</span><span class="p">)</span> <span class="k">with</span> <span class="n">N</span> <span class="n">individuals</span> <span class="n">selected</span> <span class="kn">from</span> <span class="nn">pop</span> <span class="p">(</span><span class="k">with</span> <span class="n">repetition</span> <span class="n">allowed</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Crossover</span><span class="p">:</span> <span class="n">create</span> <span class="n">a</span> <span class="n">new</span> <span class="n">population</span> <span class="p">(</span><span class="n">pop3</span><span class="p">)</span> <span class="k">with</span> <span class="n">N</span> <span class="n">individuals</span> <span class="n">obtained</span> <span class="n">applying</span> <span class="n">crossover</span> <span class="n">to</span> <span class="n">pop2</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Mutation</span><span class="p">:</span>  <span class="n">create</span> <span class="n">a</span> <span class="n">new</span> <span class="n">population</span> <span class="p">(</span><span class="n">pop4</span><span class="p">)</span> <span class="k">with</span> <span class="n">N</span> <span class="n">individuals</span> <span class="n">obtained</span> <span class="n">applying</span> <span class="n">mutation</span> <span class="n">to</span> <span class="n">pop3</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Evaluate</span> <span class="nb">all</span> <span class="n">new</span> <span class="n">chromosomes</span> <span class="ow">in</span> <span class="n">pop4</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Reinsertion</span><span class="p">:</span> <span class="nb">set</span> <span class="n">pop</span> <span class="n">to</span> <span class="n">contain</span> <span class="n">the</span> <span class="n">best</span> <span class="n">N</span> <span class="n">individuals</span> <span class="n">taken</span> <span class="kn">from</span> <span class="nn">pop</span> <span class="ow">and</span> <span class="n">pop4</span>
+<p>The pseudo code of our version is: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>&gt; Start from a pagmo::population (pop) of dimension N
+&gt; while i &lt; gen
+&gt; &gt; Selection: create a new population (pop2) with N individuals selected from pop (with repetition allowed)
+&gt; &gt; Crossover: create a new population (pop3) with N individuals obtained applying crossover to pop2
+&gt; &gt; Mutation:  create a new population (pop4) with N individuals obtained applying mutation to pop3
+&gt; &gt; Evaluate all new chromosomes in pop4
+&gt; &gt; Reinsertion: set pop to contain the best N individuals taken from pop and pop4
 </pre></div>
 </div>
 </p>
@@ -145,17 +144,7 @@
 <p><em>Crossover</em>: four different crossover schemes are provided: “single”, “exponential”, “binomial”, “sbx”. The single point crossover, called “single”, works selecting a random point in the parent chromosome and inserting the partner chromosome thereafter. The exponential crossover is taken from the algorithm differential evolution, implemented, in pagmo, as <a class="reference internal" href="de.html#classpagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>. It essentially selects a random point in the parent chromosome and inserts, in each successive gene, the partner values with probability <code class="docutils literal notranslate"><span class="pre">cr</span></code> up to when it stops. The binomial crossover inserts each gene from the partner with probability <code class="docutils literal notranslate"><span class="pre">cr</span></code>. The simulated binary crossover (called “sbx”), is taken from the NSGA-II algorithm, implemented in pagmo as <a class="reference internal" href="nsga2.html#classpagmo_1_1nsga2"><span class="std std-ref">pagmo::nsga2</span></a>, and makes use of an additional parameter called distribution index <code class="docutils literal notranslate"><span class="pre">eta_c</span></code>.</p>
 <p><em>Mutation</em>: three different mutations schemes are provided: “uniform”, “gaussian” and “polynomial”. Uniform mutation simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution with standard deviation proportional to the <code class="docutils literal notranslate"><span class="pre">m_param_m</span></code> and the bounds width. The last scheme is the polynomial mutation.</p>
 <p><em>Reinsertion</em>: the only reinsertion strategy provided is what we call pure elitism. After each generation all parents and children are put in the same pool and only the best are passed to the next generation.</p>
-<p><p><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The algorithm is not suitable for multi-objective problems, nor for
-constrained optimization.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Most genetic operators use the lower and upper bound information. Hence, unbounded problems will produce undefined
-behaviours.</p>
-</div>
-<div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Oliveto, Pietro S., Jun He, and Xin Yao. “Time complexity of evolutionary algorithms for
 combinatorial optimization: A decade of results.” International Journal of Automation and Computing
@@ -167,6 +156,16 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Most genetic operators use the lower and upper bound information. Hence, unbounded problems will produce undefined
+behaviours.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The algorithm is not suitable for multi-objective problems, nor for
+constrained optimization.</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -260,24 +259,24 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 <li><p>&gt;1: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>   <span class="n">Improvement</span><span class="p">:</span>
-   <span class="mi">1</span>             <span class="mi">20</span>        <span class="mf">6605.75</span>         <span class="mf">415.95</span>
-   <span class="mi">3</span>             <span class="mi">60</span>        <span class="mf">6189.79</span>        <span class="mf">500.359</span>
-   <span class="mi">4</span>             <span class="mi">80</span>        <span class="mf">5689.44</span>        <span class="mf">477.663</span>
-   <span class="mi">5</span>            <span class="mi">100</span>        <span class="mf">5211.77</span>        <span class="mf">218.231</span>
-   <span class="mi">6</span>            <span class="mi">120</span>        <span class="mf">4993.54</span>        <span class="mf">421.684</span>
-   <span class="mi">8</span>            <span class="mi">160</span>        <span class="mf">4571.86</span>        <span class="mf">246.532</span>
-  <span class="mi">10</span>            <span class="mi">200</span>        <span class="mf">4325.33</span>        <span class="mf">166.685</span>
-  <span class="mi">11</span>            <span class="mi">220</span>        <span class="mf">4158.64</span>        <span class="mf">340.382</span>
-  <span class="mi">14</span>            <span class="mi">280</span>        <span class="mf">3818.26</span>        <span class="mf">294.232</span>
-  <span class="mi">15</span>            <span class="mi">300</span>        <span class="mf">3524.03</span>        <span class="mf">55.0358</span>
-  <span class="mi">16</span>            <span class="mi">320</span>        <span class="mf">3468.99</span>        <span class="mf">452.544</span>
-  <span class="mi">17</span>            <span class="mi">340</span>        <span class="mf">3016.45</span>        <span class="mf">16.7273</span>
-  <span class="mi">19</span>            <span class="mi">380</span>        <span class="mf">2999.72</span>         <span class="mf">150.68</span>
-  <span class="mi">21</span>            <span class="mi">420</span>        <span class="mf">2849.04</span>        <span class="mf">301.156</span>
-  <span class="mi">22</span>            <span class="mi">440</span>        <span class="mf">2547.88</span>        <span class="mf">1.25038</span>
-  <span class="mi">23</span>            <span class="mi">460</span>        <span class="mf">2546.63</span>        <span class="mf">192.561</span>
-  <span class="mi">25</span>            <span class="mi">500</span>        <span class="mf">2354.07</span>        <span class="mf">22.6248</span>
+<p>Example (verbosity 1): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Gen:        Fevals:          Best:   Improvement:
+   1             20        6605.75         415.95
+   3             60        6189.79        500.359
+   4             80        5689.44        477.663
+   5            100        5211.77        218.231
+   6            120        4993.54        421.684
+   8            160        4571.86        246.532
+  10            200        4325.33        166.685
+  11            220        4158.64        340.382
+  14            280        3818.26        294.232
+  15            300        3524.03        55.0358
+  16            320        3468.99        452.544
+  17            340        3016.45        16.7273
+  19            380        2999.72         150.68
+  21            420        2849.04        301.156
+  22            440        2547.88        1.25038
+  23            460        2546.63        192.561
+  25            500        2354.07        22.6248
 </pre></div>
 </div>
  Gen is the generation number, Fevals the number of fitness evaluations , Best is the best fitness found, Improvement is the improvement of the new population of offspring with respect to the parents.</p>

@@ -114,7 +114,7 @@
 <span id="_CPPv3N5pagmo6islandE"></span><span id="_CPPv2N5pagmo6islandE"></span><span id="pagmo::island"></span><span class="target" id="classpagmo_1_1island"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">island</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6islandE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Island class. </p>
 <p><img alt="../../_images/island_no_text.png" src="../../_images/island_no_text.png" /></p>
-<p><p><p>In the pagmo jargon, an island is a class that encapsulates the following entities:</p>
+<p><p>In the pagmo jargon, an island is a class that encapsulates the following entities:</p>
 <ul class="simple">
 <li><p>a user-defined island (UDI),</p></li>
 <li><p>an <a class="reference internal" href="algorithm.html#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">algorithm</span></code></a>,</p></li>
@@ -143,10 +143,9 @@ island must implement the following method:</p>
 </pre></div>
 </div>
 </p>
-</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method of the UDI will use the input island algorithm’s <a class="reference internal" href="algorithm.html#classpagmo_1_1algorithm_1af738085169bf75c21377a0945ebfd199"><span class="std std-ref">algorithm::evolve()</span></a> method to evolve the input island’s <a class="reference internal" href="population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a>. Once the evolution is finished, <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> will then replace the population and the algorithm of the input island with, respectively, the evolved population and the algorithm used for the evolution.</p>
-<p>In addition to the mandatory <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method, a UDI may implement the following optional methods: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<p>In addition to the mandatory <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method, a UDI may implement the following optional methods: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::string get_name() const;
+std::string get_extra_info() const;
 </pre></div>
 </div>
 </p>
@@ -156,14 +155,14 @@ island must implement the following method:</p>
 <li><p>in a specific UDI object, any method from the public API of the UDI may be called while <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> is running concurrently in another thread (the only exception being the destructor, which will wait for the end of any ongoing evolution before taking any action). Thus, UDI writers must ensure that actions such as copying the UDI, calling the optional methods (such as <code class="docutils literal notranslate"><span class="pre">get_name()</span></code>), etc. can be safely performed while the island is evolving.</p></li>
 </ul>
 </p>
-<p><p><div class="admonition warning">
+<p><p></p>
+ </p>
+<div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::island</span></code></a> are destruction,
 assignment, and the invocation of the <a class="reference internal" href="#_CPPv4NK5pagmo6island8is_validEv" title="pagmo::island::is_valid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">is_valid()</span></code></a> member function.
 Any other operation will result in undefined behaviour.</p>
 </div>
-</p>
- </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -988,9 +987,9 @@ the public interface of <a class="reference internal" href="#_CPPv4N5pagmo6islan
 </section>
 <section id="types">
 <h2>Types<a class="headerlink" href="#types" title="Permalink to this headline"></a></h2>
-<dl class="cpp enum">
+<dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13evolve_statusE">
-<span id="_CPPv3N5pagmo13evolve_statusE"></span><span id="_CPPv2N5pagmo13evolve_statusE"></span><span class="target" id="namespacepagmo_1a63ec699ef819280210acf6d6048f43af"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">evolve_status</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13evolve_statusE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo13evolve_statusE"></span><span id="_CPPv2N5pagmo13evolve_statusE"></span><span class="target" id="namespacepagmo_1a63ec699ef819280210acf6d6048f43af"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">evolve_status</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13evolve_statusE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Evolution status. </p>
 <p>This enumeration contains status flags used to represent the current status of asynchronous evolution/optimisation in <a class="reference internal" href="#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a> and <a class="reference internal" href="archipelago.html#classpagmo_1_1archipelago"><span class="std std-ref">pagmo::archipelago</span></a>.</p>
 <p><p><div class="admonition seealso">

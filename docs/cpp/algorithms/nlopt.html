@@ -143,23 +143,23 @@
 <p>The desired NLopt solver is selected upon construction of a <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm. Various properties of the solver (e.g., the stopping criteria) can be configured after construction via methods provided by this class. Multiple stopping criteria can be active at the same time: the optimisation will stop as soon as at least one stopping criterion is satisfied. By default, only the <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> stopping criterion is active (see <a class="reference internal" href="#classpagmo_1_1nlopt_1a9bbe3d1fbaa1dc7fc03590afcea4fd51"><span class="std std-ref">get_xtol_rel()</span></a>).</p>
 <p>All NLopt solvers support only single-objective optimisation, and, as usual in pagmo, minimisation is always assumed. The gradient-based algorithms require the optimisation problem to provide a gradient. Some solvers support equality and/or inequality constraints. The constraints’ tolerances will be set to those specified in the <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> being optimised (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ab1bbd8f6f4c119aef9e04fdfa499a33e"><span class="std std-ref">pagmo::problem::set_c_tol()</span></a>).</p>
 <p>In order to support pagmo’s population-based optimisation model, <a class="reference internal" href="#classpagmo_1_1nlopt_1a19fa46d8d7360074232af5f106279b97"><span class="std std-ref">nlopt::evolve()</span></a> will select a single individual from the input <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> to be optimised by the NLopt solver. If the optimisation produces a better individual (as established by <a class="reference internal" href="../utils/constrained.html#namespacepagmo_1a5933d992cb780a189f50728594e81345"><span class="std std-ref">pagmo::compare_fc()</span></a>), the optimised individual will be inserted back into the population. The selection and replacement strategies can be configured via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
-<p><p><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>A moved-from <a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a> is destructible and assignable. Any other operation will result
-in undefined behaviour.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
-enabled (see the <a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
-</div>
-<div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>The <a class="reference external" href="https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/">NLopt website</a> contains a detailed description
 of each supported solver.</p>
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_NLOPT</span></code> option
+enabled (see the <a class="reference internal" href="../../../install.html#install"><span class="std std-ref">installation instructions</span></a>).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A moved-from <a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a> is destructible and assignable. Any other operation will result
+in undefined behaviour.</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -369,11 +369,11 @@ description of each supported solver.</p>
 <span id="_CPPv3N5pagmo5nlopt13set_verbosityEj"></span><span id="_CPPv2N5pagmo5nlopt13set_verbosityEj"></span><span id="pagmo::nlopt::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1nlopt_1a96226e26c0b8174bfa890f8050bb0f4f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set verbosity. </p>
 <p>This method will set the algorithm’s verbosity. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is zero, no output is produced during the optimisation and no logging is performed. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is nonzero, then every <code class="docutils literal notranslate"><span class="pre">n</span></code> objective function evaluations the status of the optimisation will be both printed to screen and recorded internally. See <a class="reference internal" href="#classpagmo_1_1nlopt_1ac073586cae8175d0de2b389f3fdb509e"><span class="std std-ref">nlopt::log_line_type</span></a> and <a class="reference internal" href="#classpagmo_1_1nlopt_1a0bbd40bdc7321bd0caab5e010c95daa2"><span class="std std-ref">nlopt::log_type</span></a> for information on the logging format. The internal log can be fetched via <a class="reference internal" href="#classpagmo_1_1nlopt_1a751ad57115eb51c516c04f1fa5f8ebd3"><span class="std std-ref">get_log()</span></a>.</p>
-<p>Example (verbosity 5): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">objevals</span><span class="p">:</span>       <span class="n">objval</span><span class="p">:</span>      <span class="n">violated</span><span class="p">:</span>    <span class="n">viol</span><span class="o">.</span> <span class="n">norm</span><span class="p">:</span>
-       <span class="mi">1</span>       <span class="mf">47.9474</span>              <span class="mi">1</span>        <span class="mf">2.07944</span> <span class="n">i</span>
-       <span class="mi">6</span>       <span class="mf">17.1986</span>              <span class="mi">2</span>       <span class="mf">0.150557</span> <span class="n">i</span>
-      <span class="mi">11</span>        <span class="mf">17.014</span>              <span class="mi">0</span>              <span class="mi">0</span>
-      <span class="mi">16</span>        <span class="mf">17.014</span>              <span class="mi">0</span>              <span class="mi">0</span>
+<p>Example (verbosity 5): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>objevals:       objval:      violated:    viol. norm:
+       1       47.9474              1        2.07944 i
+       6       17.1986              2       0.150557 i
+      11        17.014              0              0
+      16        17.014              0              0
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">i</span></code> at the end of some rows indicates that the decision vector is infeasible. Feasibility is checked against the problem’s tolerance.</p>

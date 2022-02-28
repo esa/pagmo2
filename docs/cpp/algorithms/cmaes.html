@@ -126,11 +126,13 @@
 <dd><p>Covariance Matrix Adaptation Evolutionary Strategy. </p>
 <p><img alt="../../../_images/cmaes.png" src="../../../_images/cmaes.png" /></p>
 <p>CMA-ES is one of the most successful algorithm, classified as an Evolutionary Strategy, for derivative-free global optimization. The version implemented in PaGMO is the “classic” version described in the 2006 paper titled “The CMA evolution strategy: a comparing review.”.</p>
-<p><p><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>A moved-from pagmo::cmaes is destructible and assignable. Any other operation will result
-in undefined behaviour.</p>
+<p><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Hansen, Nikolaus. “The CMA evolution strategy: a comparing review.” Towards a new evolutionary computation.
+Springer Berlin Heidelberg, 2006. 75-102.</p>
 </div>
+</p>
+ </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This user-defined algorithm is available only if pagmo was compiled with the <code class="docutils literal notranslate"><span class="pre">PAGMO_WITH_EIGEN3</span></code> option
@@ -142,13 +144,11 @@ enabled (see the <a class="reference internal" href="../../../install.html#insta
 reinserted into the population, CMA-ES may not preserve the best individual (not elitist). As a consequence the
 plot of the population best fitness may not be perfectly monotonically decreasing.</p>
 </div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p>Hansen, Nikolaus. “The CMA evolution strategy: a comparing review.” Towards a new evolutionary computation.
-Springer Berlin Heidelberg, 2006. 75-102.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A moved-from pagmo::cmaes is destructible and assignable. Any other operation will result
+in undefined behaviour.</p>
 </div>
-</p>
- </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -255,16 +255,16 @@ Springer Berlin Heidelberg, 2006. 75-102.</p>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>      <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">df</span><span class="p">:</span>         <span class="n">sigma</span><span class="p">:</span>
-<span class="mi">51</span>           <span class="mi">1000</span>    <span class="mf">1.15409e-06</span>     <span class="mf">0.00205151</span>    <span class="mf">3.38618e-05</span>       <span class="mf">0.138801</span>
-<span class="mi">52</span>           <span class="mi">1020</span>     <span class="mf">3.6735e-07</span>     <span class="mf">0.00423372</span>    <span class="mf">2.91669e-05</span>        <span class="mf">0.13002</span>
-<span class="mi">53</span>           <span class="mi">1040</span>     <span class="mf">3.7195e-07</span>    <span class="mf">0.000655583</span>    <span class="mf">1.04182e-05</span>       <span class="mf">0.107739</span>
-<span class="mi">54</span>           <span class="mi">1060</span>    <span class="mf">6.26405e-08</span>     <span class="mf">0.00181163</span>    <span class="mf">3.86002e-06</span>      <span class="mf">0.0907474</span>
-<span class="mi">55</span>           <span class="mi">1080</span>    <span class="mf">4.09783e-09</span>    <span class="mf">0.000714699</span>    <span class="mf">3.57819e-06</span>      <span class="mf">0.0802022</span>
-<span class="mi">56</span>           <span class="mi">1100</span>    <span class="mf">1.77896e-08</span>    <span class="mf">4.91136e-05</span>    <span class="mf">9.14752e-07</span>       <span class="mf">0.075623</span>
-<span class="mi">57</span>           <span class="mi">1120</span>    <span class="mf">7.63914e-09</span>    <span class="mf">0.000355162</span>    <span class="mf">1.10134e-06</span>      <span class="mf">0.0750457</span>
-<span class="mi">58</span>           <span class="mi">1140</span>    <span class="mf">1.35199e-09</span>    <span class="mf">0.000356034</span>    <span class="mf">2.65614e-07</span>      <span class="mf">0.0622128</span>
-<span class="mi">59</span>           <span class="mi">1160</span>    <span class="mf">8.24796e-09</span>    <span class="mf">0.000695454</span>    <span class="mf">1.14508e-07</span>        <span class="mf">0.04993</span>
+<p>Example (verbosity 1): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Gen:      Fevals:          Best:            dx:            df:         sigma:
+51           1000    1.15409e-06     0.00205151    3.38618e-05       0.138801
+52           1020     3.6735e-07     0.00423372    2.91669e-05        0.13002
+53           1040     3.7195e-07    0.000655583    1.04182e-05       0.107739
+54           1060    6.26405e-08     0.00181163    3.86002e-06      0.0907474
+55           1080    4.09783e-09    0.000714699    3.57819e-06      0.0802022
+56           1100    1.77896e-08    4.91136e-05    9.14752e-07       0.075623
+57           1120    7.63914e-09    0.000355162    1.10134e-06      0.0750457
+58           1140    1.35199e-09    0.000356034    2.65614e-07      0.0622128
+59           1160    8.24796e-09    0.000695454    1.14508e-07        0.04993
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function currently in the population, dx is the norm of the distance to the population mean of the mutant vectors, df is the population flatness evaluated as the distance between the fitness of the best and of the worst individual and sigma is the current step-size</p>

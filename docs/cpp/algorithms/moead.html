@@ -124,13 +124,7 @@
 <dd><p>Multi Objective Evolutionary Algorithms by Decomposition (the DE variant) </p>
 <p><img alt="../../../_images/moead.png" src="../../../_images/moead.png" /></p>
 <p>MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of problem decomposition, it leverages evolutionary operators to combine good solutions of neighbouring problems thus allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particular algorithm implemented in pagmo with the name <a class="reference internal" href="#classpagmo_1_1moead"><span class="std std-ref">pagmo::moead</span></a> uses the rand/2/exp Differential Evolution operator followed by a polynomial mutation to create offsprings, and the Tchebycheff, weighted or boundary intersection decomposition method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is also implemented.</p>
-<p><p><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
-allows to have MOEA/D-DE work on populations having arbitrary size, while preserving a nice coverage of the final
-non-dominated front.</p>
-</div>
-<div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Zhang, Qingfu, and Hui Li. “MOEA/D: A multiobjective evolutionary algorithm based on decomposition.”
 Evolutionary Computation, IEEE Transactions on 11.6 (2007): 712-731.</p>
@@ -142,6 +136,12 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The decomposition weights may be created by sampling on a simplex via a low discrepancy sequence. This
+allows to have MOEA/D-DE work on populations having arbitrary size, while preserving a nice coverage of the final
+non-dominated front.</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -232,17 +232,17 @@ NSGA-II.” Evolutionary Computation, IEEE Transactions on 13.2 (2009): 284-302.
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>           <span class="n">ADF</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>        <span class="n">ideal2</span><span class="p">:</span>
-  <span class="mi">1</span>              <span class="mi">0</span>        <span class="mf">24.9576</span>       <span class="mf">0.117748</span>        <span class="mf">2.77748</span>
-  <span class="mi">2</span>             <span class="mi">40</span>        <span class="mf">19.2461</span>      <span class="mf">0.0238826</span>        <span class="mf">2.51403</span>
-  <span class="mi">3</span>             <span class="mi">80</span>        <span class="mf">12.4375</span>      <span class="mf">0.0238826</span>        <span class="mf">2.51403</span>
-  <span class="mi">4</span>            <span class="mi">120</span>        <span class="mf">9.08406</span>     <span class="mf">0.00389182</span>        <span class="mf">2.51403</span>
-  <span class="mi">5</span>            <span class="mi">160</span>        <span class="mf">7.10407</span>       <span class="mf">0.002065</span>        <span class="mf">2.51403</span>
-  <span class="mi">6</span>            <span class="mi">200</span>        <span class="mf">6.11242</span>     <span class="mf">0.00205598</span>        <span class="mf">2.51403</span>
-  <span class="mi">7</span>            <span class="mi">240</span>        <span class="mf">8.79749</span>     <span class="mf">0.00205598</span>        <span class="mf">2.25538</span>
-  <span class="mi">8</span>            <span class="mi">280</span>        <span class="mf">7.23155</span>    <span class="mf">7.33914e-05</span>        <span class="mf">2.25538</span>
-  <span class="mi">9</span>            <span class="mi">320</span>        <span class="mf">6.83249</span>    <span class="mf">7.33914e-05</span>        <span class="mf">2.25538</span>
- <span class="mi">10</span>            <span class="mi">360</span>        <span class="mf">6.55125</span>    <span class="mf">7.33914e-05</span>        <span class="mf">2.25538</span>
+<p>Example (verbosity 1): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Gen:        Fevals:           ADF:        ideal1:        ideal2:
+  1              0        24.9576       0.117748        2.77748
+  2             40        19.2461      0.0238826        2.51403
+  3             80        12.4375      0.0238826        2.51403
+  4            120        9.08406     0.00389182        2.51403
+  5            160        7.10407       0.002065        2.51403
+  6            200        6.11242     0.00205598        2.51403
+  7            240        8.79749     0.00205598        2.25538
+  8            280        7.23155    7.33914e-05        2.25538
+  9            320        6.83249    7.33914e-05        2.25538
+ 10            360        6.55125    7.33914e-05        2.25538
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used. ADF is the Average Decomposed Fitness, that is the average across all decomposed problem of the single objective decomposed fitness along the corresponding direction. The ideal point of the current population follows cropped to its 5th component.</p>

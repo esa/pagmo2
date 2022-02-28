@@ -138,17 +138,7 @@
 <li><p>Variant 5: <span class="math notranslate nohighlight">\(\mathbf r_1 = [r_{11}, r_{12}, ..., r_{1n}]\)</span>, <span class="math notranslate nohighlight">\(\mathbf r_2 = [r_{21}, r_{21}, ..., r_{2n}]\)</span> … (constriction coefficient) </p></li>
 <li><p>Variant 6: Fully Informed Particle Swarm (FIPS)</p></li>
 </ul>
-<p><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The default variant in PaGMO is n. 5 corresponding to the canonical PSO and thus using the constriction
-coefficient velocity update formula</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The algorithm is not suitable for multi-objective problems, nor for
-constrained or stochastic optimization</p>
-</div>
-<div class="admonition seealso">
+<p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference external" href="http://www.particleswarm.info/">http://www.particleswarm.info/</a> for a repository of information related to PSO</p>
 </div>
@@ -158,6 +148,16 @@ constrained or stochastic optimization</p>
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The default variant in PaGMO is n. 5 corresponding to the canonical PSO and thus using the constriction
+coefficient velocity update formula</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The algorithm is not suitable for multi-objective problems, nor for
+constrained or stochastic optimization</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -227,17 +227,17 @@ constrained or stochastic optimization</p>
 <li><p>&gt;=1u: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations</p></li>
 </ul>
 </p>
-<p>Example (verbosity 50u): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>         <span class="n">gbest</span><span class="p">:</span>     <span class="n">Mean</span> <span class="n">Vel</span><span class="o">.</span><span class="p">:</span>    <span class="n">Mean</span> <span class="n">lbest</span><span class="p">:</span>    <span class="n">Avg</span><span class="o">.</span> <span class="n">Dist</span><span class="o">.</span><span class="p">:</span>
-   <span class="mi">1</span>             <span class="mi">40</span>        <span class="mf">2.01917</span>       <span class="mf">0.298551</span>        <span class="mf">1855.03</span>       <span class="mf">0.394038</span>
-   <span class="mi">51</span>           <span class="mi">1040</span>     <span class="mf">0.00436298</span>      <span class="mf">0.0407766</span>         <span class="mf">1.0704</span>         <span class="mf">0.1288</span>
-  <span class="mi">101</span>           <span class="mi">2040</span>    <span class="mf">0.000228898</span>      <span class="mf">0.0110884</span>       <span class="mf">0.282699</span>      <span class="mf">0.0488969</span>
-  <span class="mi">151</span>           <span class="mi">3040</span>    <span class="mf">5.53426e-05</span>     <span class="mf">0.00231688</span>       <span class="mf">0.106807</span>      <span class="mf">0.0167147</span>
-  <span class="mi">201</span>           <span class="mi">4040</span>    <span class="mf">3.88181e-06</span>    <span class="mf">0.000972132</span>      <span class="mf">0.0315856</span>     <span class="mf">0.00988859</span>
-  <span class="mi">251</span>           <span class="mi">5040</span>    <span class="mf">1.25676e-06</span>    <span class="mf">0.000330553</span>     <span class="mf">0.00146805</span>     <span class="mf">0.00397989</span>
-  <span class="mi">301</span>           <span class="mi">6040</span>    <span class="mf">3.76784e-08</span>    <span class="mf">0.000118192</span>    <span class="mf">0.000738972</span>      <span class="mf">0.0018789</span>
-  <span class="mi">351</span>           <span class="mi">7040</span>    <span class="mf">2.35193e-09</span>    <span class="mf">5.39387e-05</span>    <span class="mf">0.000532189</span>     <span class="mf">0.00253805</span>
-  <span class="mi">401</span>           <span class="mi">8040</span>    <span class="mf">3.24364e-10</span>     <span class="mf">2.2936e-05</span>    <span class="mf">9.02879e-06</span>    <span class="mf">0.000178279</span>
-  <span class="mi">451</span>           <span class="mi">9040</span>    <span class="mf">2.31237e-10</span>    <span class="mf">5.01558e-06</span>    <span class="mf">8.12575e-07</span>    <span class="mf">9.77163e-05</span>
+<p>Example (verbosity 50u): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Gen:        Fevals:         gbest:     Mean Vel.:    Mean lbest:    Avg. Dist.:
+   1             40        2.01917       0.298551        1855.03       0.394038
+   51           1040     0.00436298      0.0407766         1.0704         0.1288
+  101           2040    0.000228898      0.0110884       0.282699      0.0488969
+  151           3040    5.53426e-05     0.00231688       0.106807      0.0167147
+  201           4040    3.88181e-06    0.000972132      0.0315856     0.00988859
+  251           5040    1.25676e-06    0.000330553     0.00146805     0.00397989
+  301           6040    3.76784e-08    0.000118192    0.000738972      0.0018789
+  351           7040    2.35193e-09    5.39387e-05    0.000532189     0.00253805
+  401           8040    3.24364e-10     2.2936e-05    9.02879e-06    0.000178279
+  451           9040    2.31237e-10    5.01558e-06    8.12575e-07    9.77163e-05
 </pre></div>
 </div>
 </p>

@@ -126,22 +126,7 @@
 .<img alt="../../../_images/adaptation.jpg" src="../../../_images/adaptation.jpg" /></p>
 <p>Two different variants of the Differential Evolution algorithm exploiting the idea of self-adaptation.</p>
 <p>The original Differential Evolution algorithm (<a class="reference internal" href="de.html#classpagmo_1_1de"><span class="std std-ref">pagmo::de</span></a>) can be significantly improved introducing the idea of parameter self-adaptation. Many different proposals have been made to self-adapt both the CR and the F parameters of the original differential evolution algorithm. In PaGMO we implement two different mechanisms we found effective. The first one, proposed by Brest et al., does not make use of the DE operators to produce new values for F and CR and, strictly speaking, is thus not self-adaptation, rather parameter control. The resulting DE variant is often referred to as jDE. The second variant here implemented is inspired by the ideas introduced by Elsayed et al. and uses a variaton of the selected DE operator to produce new CR anf F parameters for each individual. We refer to this variant as to iDE.</p>
-<p><p><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>A moved-from pagmo::sade is destructible and assignable. Any other operation will result
-in undefined behaviour.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The algorithm referred to as SaDE in the literature is not the algorithm implemented in pagmo. We
-use the name sade to indicate, generically, self-adaptation in a differential evolution algorithm</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
-the allowed box-bounds, is here done by creating a random number in the bounds.</p>
-</div>
-<div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>(jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., &amp; Zumer, V. (2006). Self-adapting control parameters
 in differential evolution: a comparative study on numerical benchmark problems. Evolutionary Computation, IEEE
@@ -155,6 +140,21 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
+the allowed box-bounds, is here done by creating a random number in the bounds.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A moved-from pagmo::sade is destructible and assignable. Any other operation will result
+in undefined behaviour.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The algorithm referred to as SaDE in the literature is not the algorithm implemented in pagmo. We
+use the name sade to indicate, generically, self-adaptation in a differential evolution algorithm</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -178,20 +178,20 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 <dd><p>Constructor. </p>
 <p>Constructs self-adaptive differential evolution</p>
 <p>Two self-adaptation variants are available to control the F and CR parameters:</p>
-<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">-</span> <span class="n">jDE</span> <span class="p">(</span><span class="n">Brest</span> <span class="n">et</span> <span class="n">al</span><span class="o">.</span><span class="p">)</span>                       <span class="mi">2</span> <span class="o">-</span> <span class="n">iDE</span> <span class="p">(</span><span class="n">Elsayed</span> <span class="n">at</span> <span class="n">al</span><span class="o">.</span><span class="p">)</span>
+<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>1 - jDE (Brest et al.)                       2 - iDE (Elsayed at al.)
 </pre></div>
 </div>
 </p>
 <p>The following variants are available to produce a mutant vector:</p>
-<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">exp</span>                               <span class="mf">2.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">exp</span>
-<span class="mi">3</span> <span class="o">-</span> <span class="n">rand</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="n">exp</span>                       <span class="mf">4.</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">exp</span>
-<span class="mi">5</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">exp</span>                               <span class="mf">6.</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="nb">bin</span>
-<span class="mi">7</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="nb">bin</span>                               <span class="mf">8.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">best</span><span class="o">/</span><span class="mi">1</span><span class="o">/</span><span class="nb">bin</span>
-<span class="mi">9</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="nb">bin</span>                               <span class="mf">10.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="nb">bin</span>
-<span class="mf">11.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="n">exp</span>                             <span class="mf">12.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="nb">bin</span>
-<span class="mf">13.</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="n">exp</span>                             <span class="mf">14.</span> <span class="o">-</span> <span class="n">best</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="nb">bin</span>
-<span class="mf">15.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">current</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">exp</span>                  <span class="mf">16.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">current</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="nb">bin</span>
-<span class="mf">17.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">best</span><span class="o">-</span><span class="ow">and</span><span class="o">-</span><span class="n">current</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">exp</span>         <span class="mf">18.</span> <span class="o">-</span> <span class="n">rand</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">best</span><span class="o">-</span><span class="ow">and</span><span class="o">-</span><span class="n">current</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="nb">bin</span>
+<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>1 - best/1/exp                               2. - rand/1/exp
+3 - rand-to-best/1/exp                       4. - best/2/exp
+5 - rand/2/exp                               6. - best/1/bin
+7 - rand/1/bin                               8. - rand-to-best/1/bin
+9 - best/2/bin                               10. - rand/2/bin
+11. - rand/3/exp                             12. - rand/3/bin
+13. - best/3/exp                             14. - best/3/bin
+15. - rand-to-current/2/exp                  16. - rand-to-current/2/bin
+17. - rand-to-best-and-current/2/exp         18. - rand-to-best-and-current/2/bin
 </pre></div>
 </div>
 </p>
@@ -269,14 +269,14 @@ IEEE Congress on (pp. 1041-1048). IEEE.</p>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>             <span class="n">F</span><span class="p">:</span>            <span class="n">CR</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">df</span><span class="p">:</span>
- <span class="mi">301</span>           <span class="mi">4515</span>       <span class="mf">0.668472</span>       <span class="mf">0.374983</span>       <span class="mf">0.502932</span>    <span class="mf">0.000276682</span>    <span class="mf">0.000388866</span>
- <span class="mi">302</span>           <span class="mi">4530</span>       <span class="mf">0.668472</span>       <span class="mf">0.374983</span>       <span class="mf">0.502932</span>    <span class="mf">0.000213271</span>     <span class="mf">0.00020986</span>
- <span class="mi">303</span>           <span class="mi">4545</span>       <span class="mf">0.668426</span>       <span class="mf">0.598243</span>       <span class="mf">0.234825</span>    <span class="mf">0.000167061</span>    <span class="mf">0.000186339</span>
- <span class="mi">304</span>           <span class="mi">4560</span>       <span class="mf">0.668426</span>       <span class="mf">0.598243</span>       <span class="mf">0.234825</span>    <span class="mf">0.000217549</span>    <span class="mf">0.000144896</span>
- <span class="mi">305</span>           <span class="mi">4575</span>       <span class="mf">0.668339</span>       <span class="mf">0.807236</span>       <span class="mf">0.863048</span>    <span class="mf">0.000192539</span>    <span class="mf">0.000232005</span>
- <span class="mi">306</span>           <span class="mi">4590</span>       <span class="mf">0.668339</span>       <span class="mf">0.807236</span>       <span class="mf">0.863048</span>    <span class="mf">0.000143711</span>    <span class="mf">0.000229041</span>
- <span class="mi">307</span>           <span class="mi">4605</span>       <span class="mf">0.668307</span>       <span class="mf">0.374983</span>       <span class="mf">0.820731</span>    <span class="mf">0.000163919</span>    <span class="mf">0.000245393</span>
+<p>Example (verbosity 1): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Gen:        Fevals:          Best:             F:            CR:            dx:            df:
+ 301           4515       0.668472       0.374983       0.502932    0.000276682    0.000388866
+ 302           4530       0.668472       0.374983       0.502932    0.000213271     0.00020986
+ 303           4545       0.668426       0.598243       0.234825    0.000167061    0.000186339
+ 304           4560       0.668426       0.598243       0.234825    0.000217549    0.000144896
+ 305           4575       0.668339       0.807236       0.863048    0.000192539    0.000232005
+ 306           4590       0.668339       0.807236       0.863048    0.000143711    0.000229041
+ 307           4605       0.668307       0.374983       0.820731    0.000163919    0.000245393
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function currently in the population, F is the F used to create the best so far, CR the CR used to create the best so far, dx is the population flatness evaluated as the distance between the decisions vector of the best and of the worst individual and df is the population flatness evaluated as the distance between the fitness of the best and of the worst individual.</p>

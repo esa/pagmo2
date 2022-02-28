@@ -123,18 +123,11 @@
 <dd><p>ZDT problem test suite. </p>
 <p>This widespread test suite was conceived for two-objective problems and takes its name from its authors Zitzler, Deb and Thiele.</p>
 <p>In their paper the authors propose a set of 6 different scalable problems all originating from a well thought combination of functions allowing, by construction, to measure the distance of any point to the Pareto front while creating interesting problems. They also suggest some dimensions for instantiating the problems, namely <span class="math notranslate nohighlight">\(m = [30, 30, 30, 10, 11, 10]\)</span>.</p>
-<p><p><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The ZDT5 problem is an integer problem, its fitness is computed rounding all the chromosome values,
-so that [1,0,1] or [0.97, 0.23, 0.57] will have the same fitness. Integer relaxation techniques are
-thus not appropriate fot this type of fitness.</p>
-</div>
-<div class="admonition seealso">
+<p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Zitzler, Eckart, Kalyanmoy Deb, and Lothar Thiele. “Comparison of multiobjective evolutionary algorithms:
 Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.30.5848</p>
 </div>
-</p>
 </p>
 <p>ZDT1:</p>
 <p>This is a box-constrained continuous <span class="math notranslate nohighlight">\(n\)</span>-dimensional ( <span class="math notranslate nohighlight">\(n\)</span>&gt;1) multi-objecive problem. <div class="math notranslate nohighlight">
@@ -155,9 +148,15 @@ Empirical results.” Evolutionary computation 8.2 (2000): 173-195. doi: 10.1.1.
 <p>ZDT5</p>
 <p>This is a box-constrained integer <span class="math notranslate nohighlight">\(n\)</span>-dimension multi-objecive problem. The chromosome is a bitstring so that <span class="math notranslate nohighlight">\(x_i \in \left\{0,1\right\}\)</span>. Refer to the original paper for the formal definition.</p>
 <p>ZDT6</p>
-<p>This is a box-constrained continuous <span class="math notranslate nohighlight">\(n\)</span>dimension multi-objecive problem. <div class="math notranslate nohighlight">
+<p>This is a box-constrained continuous <span class="math notranslate nohighlight">\(n\)</span>&amp;#8212;dimension multi-objecive problem. <div class="math notranslate nohighlight">
 \[\begin{split} \begin{array}{l} g\left(x\right) = 1 + 9 \left[\left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right)\right]^{0.25} \\ F_1 \left(x\right) = 1 - \exp(-4 x_1) \sin^6(6 \pi \ x_1) \\ F_2 \left(x\right) = g(x) \left[ 1 - (f_1(x) / g(x))^2 \right] x \in \left[ 0,1 \right]. \end{array} \end{split}\]</div>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ZDT5 problem is an integer problem, its fitness is computed rounding all the chromosome values,
+so that [1,0,1] or [0.97, 0.23, 0.57] will have the same fitness. Integer relaxation techniques are
+thus not appropriate fot this type of fitness.</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">

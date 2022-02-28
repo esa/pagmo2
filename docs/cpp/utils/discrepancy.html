@@ -109,11 +109,11 @@
 <dd><p>Sample from a simplex. </p>
 <p>Samples a point on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex from a <span class="math notranslate nohighlight">\(n-1\)</span> dimensional point</p>
 <p>In order to generate a uniform distribution on a simplex, that is to sample a <span class="math notranslate nohighlight">\(n\)</span>-dimensional point <span class="math notranslate nohighlight">\(\mathbf x\)</span> such that <span class="math notranslate nohighlight">\(\sum_{i=1}^{n} x_i = 1\)</span> one can follow the following approach: take <span class="math notranslate nohighlight">\(n-1\)</span> random numbers from the interval (0,1)(0,1), then add a 0 and 1 to get a list of <span class="math notranslate nohighlight">\(n+1\)</span> numbers. Sort the list and record the differences between two consecutive elements. This creates a list of <span class="math notranslate nohighlight">\(n\)</span> number that, by construction, will sum up to 1. Moreover this sampling is uniform. As an example the following code would generate points distributed on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex:</p>
-<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">double</span><span class="o">&gt;&gt;</span> <span class="n">points_on_a_simplex</span><span class="p">;</span>
-<span class="n">halton</span> <span class="n">ld_rng</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="n">u</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="n">u</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-     <span class="n">points_on_a_simplex</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">project_to_simplex</span><span class="p">(</span><span class="n">ld_rng</span><span class="p">()));</span>
-<span class="p">}</span>
+<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::vector&lt;std::vector&lt;double&gt;&gt; points_on_a_simplex;
+halton ld_rng(n-1);
+for (auto i = 0u; i &lt; 100u; ++i) {
+     points_on_a_simplex.push_back(project_to_simplex(ld_rng()));
+}
 </pre></div>
 </div>
 </p>
@@ -194,15 +194,15 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 \[ seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac 19\right), \left(\frac 18, \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\} \]</div>
 </p>
 <p>
-See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_sequence">https://en.wikipedia.org/wiki/Halton_sequence</a> <dl class="field-list simple">
-<dt class="field-odd">param n</dt>
-<dd class="field-odd"><p>selects which element of the sequence to return </p>
-</dd>
-<dt class="field-even">param dim</dt>
-<dd class="field-even"><p>dimensions of the returned point</p>
+See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_sequence">https://en.wikipedia.org/wiki/Halton_sequence</a> </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – selects which element of the sequence to return </p></li>
+<li><p><strong>dim</strong> – dimensions of the returned point</p></li>
+</ul>
 </dd>
 </dl>
-</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">

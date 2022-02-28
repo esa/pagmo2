@@ -125,22 +125,7 @@
 <p><img alt="../../../_images/Hill_Climbing_with_Simulated_Annealing.gif" src="../../../_images/Hill_Climbing_with_Simulated_Annealing.gif" /></p>
 <p>This version of the simulated annealing algorithm is, essentially, an iterative random search procedure with adaptive moves along the coordinate directions. It permits uphill moves under the control of metropolis criterion, in the hope to avoid the first local minima encountered.</p>
 <p>The implementation provided here allows to obtain a reannealing procedure via subsequent calls to the <a class="reference internal" href="#classpagmo_1_1simulated__annealing_1a54cb4b99ada204e589cf85ca39d60164"><span class="std std-ref">pagmo::simulated_annealing::evolve()</span></a> method.</p>
-<p><p><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The algorithm is not suitable for multi-objective problems, nor for
-constrained or stochastic optimization</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When selecting the starting and final temperature values it helps to think about the tempertaure
-as the deterioration in the objective function value that still has a 37% chance of being accepted.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>At each call of the evolve method the number of fitness evaluations will be
-<cite>n_T_adj</cite> * <cite>n_range_adj</cite> * <cite>bin_size</cite> times the problem dimension</p>
-</div>
-<div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Corana, A., Marchesi, M., Martini, C., &amp; Ridella, S. (1987). Minimizing multimodal
 functions of continuous variables with the “simulated annealing” algorithm Corrigenda
@@ -152,6 +137,21 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When selecting the starting and final temperature values it helps to think about the tempertaure
+as the deterioration in the objective function value that still has a 37% chance of being accepted.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At each call of the evolve method the number of fitness evaluations will be
+<cite>n_T_adj</cite> * <cite>n_range_adj</cite> * <cite>bin_size</cite> times the problem dimension</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The algorithm is not suitable for multi-objective problems, nor for
+constrained or stochastic optimization</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -224,19 +224,19 @@ for this article is available here. ACM Transactions on Mathematical Software (T
 <li><p>&gt;=1: will print and log one line at minimum every <code class="docutils literal notranslate"><span class="pre">level</span></code> fitness evaluations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 5000): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>       <span class="n">Current</span><span class="p">:</span>    <span class="n">Mean</span> <span class="nb">range</span><span class="p">:</span>   <span class="n">Temperature</span><span class="p">:</span>
- <span class="o">...</span>
- <span class="mi">45035</span>      <span class="mf">0.0700823</span>       <span class="mf">0.135928</span>     <span class="mf">0.00116657</span>      <span class="mf">0.0199526</span>
- <span class="mi">50035</span>      <span class="mf">0.0215442</span>      <span class="mf">0.0261641</span>    <span class="mf">0.000770297</span>           <span class="mf">0.01</span>
- <span class="mi">55035</span>     <span class="mf">0.00551839</span>      <span class="mf">0.0124842</span>    <span class="mf">0.000559839</span>     <span class="mf">0.00501187</span>
- <span class="mi">60035</span>     <span class="mf">0.00284761</span>     <span class="mf">0.00703856</span>    <span class="mf">0.000314098</span>     <span class="mf">0.00251189</span>
- <span class="mi">65035</span>     <span class="mf">0.00264808</span>      <span class="mf">0.0114764</span>    <span class="mf">0.000314642</span>     <span class="mf">0.00125893</span>
- <span class="mi">70035</span>      <span class="mf">0.0011007</span>     <span class="mf">0.00293813</span>    <span class="mf">0.000167859</span>    <span class="mf">0.000630957</span>
- <span class="mi">75035</span>    <span class="mf">0.000435798</span>     <span class="mf">0.00184352</span>    <span class="mf">0.000126954</span>    <span class="mf">0.000316228</span>
- <span class="mi">80035</span>    <span class="mf">0.000287984</span>    <span class="mf">0.000825294</span>    <span class="mf">8.91823e-05</span>    <span class="mf">0.000158489</span>
- <span class="mi">85035</span>     <span class="mf">9.5885e-05</span>    <span class="mf">0.000330647</span>    <span class="mf">6.49981e-05</span>    <span class="mf">7.94328e-05</span>
- <span class="mi">90035</span>     <span class="mf">4.7986e-05</span>    <span class="mf">0.000148512</span>    <span class="mf">4.24692e-05</span>    <span class="mf">3.98107e-05</span>
- <span class="mi">95035</span>    <span class="mf">2.43633e-05</span>    <span class="mf">2.43633e-05</span>    <span class="mf">2.90025e-05</span>    <span class="mf">1.99526e-05</span>
+<p>Example (verbosity 5000): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Fevals:          Best:       Current:    Mean range:   Temperature:
+ ...
+ 45035      0.0700823       0.135928     0.00116657      0.0199526
+ 50035      0.0215442      0.0261641    0.000770297           0.01
+ 55035     0.00551839      0.0124842    0.000559839     0.00501187
+ 60035     0.00284761     0.00703856    0.000314098     0.00251189
+ 65035     0.00264808      0.0114764    0.000314642     0.00125893
+ 70035      0.0011007     0.00293813    0.000167859    0.000630957
+ 75035    0.000435798     0.00184352    0.000126954    0.000316228
+ 80035    0.000287984    0.000825294    8.91823e-05    0.000158489
+ 85035     9.5885e-05    0.000330647    6.49981e-05    7.94328e-05
+ 90035     4.7986e-05    0.000148512    4.24692e-05    3.98107e-05
+ 95035    2.43633e-05    2.43633e-05    2.90025e-05    1.99526e-05
 </pre></div>
 </div>
 </p>

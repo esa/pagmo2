@@ -132,6 +132,8 @@
 <p>M. Schlueter, et al. (2009). Extended ant colony optimization for non-convex mixed integer non-linear programming.
 Computers &amp; Operations Research.</p>
 </div>
+</p>
+ </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The ACO version implemented in PaGMO is an extension of Schlueter’s originally proposed extended ACO algorithm.
@@ -139,8 +141,6 @@ The main difference between the implemented version  and the original one lies i
 how two of the three pheromone values are computed (in particular, the weights and the standard deviations).</p>
 <p>Image credit: <a class="reference external" href="https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg">https://commons.wikimedia.org/wiki/File:Knapsack_ants.svg</a></p>
 </div>
-</p>
- </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -238,17 +238,17 @@ how two of the three pheromone values are computed (in particular, the weights a
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>        <span class="n">Kernel</span><span class="p">:</span>        <span class="n">Oracle</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">dp</span><span class="p">:</span>
-   <span class="mi">1</span>              <span class="mi">0</span>        <span class="mf">179.464</span>             <span class="mi">13</span>            <span class="mi">100</span>        <span class="mf">4.33793</span>          <span class="mi">47876</span>
-   <span class="mi">2</span>             <span class="mi">15</span>         <span class="mf">14.205</span>             <span class="mi">13</span>            <span class="mi">100</span>        <span class="mf">5.20084</span>        <span class="mf">5928.12</span>
-   <span class="mi">3</span>             <span class="mi">30</span>         <span class="mf">14.205</span>             <span class="mi">13</span>         <span class="mf">14.205</span>        <span class="mf">1.24173</span>        <span class="mf">1037.44</span>
-   <span class="mi">4</span>             <span class="mi">45</span>         <span class="mf">14.205</span>             <span class="mi">13</span>         <span class="mf">14.205</span>        <span class="mf">3.05807</span>         <span class="mf">395.89</span>
-   <span class="mi">5</span>             <span class="mi">60</span>        <span class="mf">7.91087</span>             <span class="mi">13</span>         <span class="mf">14.205</span>       <span class="mf">0.711446</span>        <span class="mf">286.599</span>
-   <span class="mi">6</span>             <span class="mi">75</span>        <span class="mf">2.81437</span>             <span class="mi">13</span>        <span class="mf">7.91087</span>        <span class="mf">5.80451</span>        <span class="mf">71.8174</span>
-   <span class="mi">7</span>             <span class="mi">90</span>        <span class="mf">2.81437</span>             <span class="mi">13</span>        <span class="mf">2.81437</span>        <span class="mf">1.90561</span>        <span class="mf">48.3829</span>
-   <span class="mi">8</span>            <span class="mi">105</span>        <span class="mf">2.81437</span>             <span class="mi">13</span>        <span class="mf">2.81437</span>         <span class="mf">1.3072</span>        <span class="mf">26.9496</span>
-   <span class="mi">9</span>            <span class="mi">120</span>         <span class="mf">1.4161</span>             <span class="mi">13</span>        <span class="mf">2.81437</span>        <span class="mf">1.61732</span>        <span class="mf">10.6527</span>
-  <span class="mi">10</span>            <span class="mi">150</span>         <span class="mf">1.4161</span>             <span class="mi">13</span>         <span class="mf">1.4161</span>        <span class="mf">2.54262</span>        <span class="mf">3.67034</span>
+<p>Example (verbosity 1): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>*Gen:        Fevals:          Best:        Kernel:        Oracle:            dx:            dp:
+   1              0        179.464             13            100        4.33793          47876
+   2             15         14.205             13            100        5.20084        5928.12
+   3             30         14.205             13         14.205        1.24173        1037.44
+   4             45         14.205             13         14.205        3.05807         395.89
+   5             60        7.91087             13         14.205       0.711446        286.599
+   6             75        2.81437             13        7.91087        5.80451        71.8174
+   7             90        2.81437             13        2.81437        1.90561        48.3829
+   8            105        2.81437             13        2.81437         1.3072        26.9496
+   9            120         1.4161             13        2.81437        1.61732        10.6527
+  10            150         1.4161             13         1.4161        2.54262        3.67034
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function value found until that generation, Kernel is the kernel size, Oracle is the oracle parameter value, dx is the flatness in the individuals, dp is the flatness in the penalty function values.</p>

@@ -125,7 +125,15 @@
 <p><img alt="../../../_images/compass_search.png" src="../../../_images/compass_search.png" /></p>
 <p>In the review paper by Kolda, Lewis, Torczon: ‘Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods’ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003), the following description of the compass search algorithm is given:</p>
 <p>‘Davidon describes what is one of the earliest examples of a direct search method used on a digital computer to solve an optimization problem: Enrico Fermi and Nicholas Metropolis used one of the first digital computers, the Los Alamos Maniac, to determine which values of certain theoretical parameters (phase shifts) best fit experimental data (scattering cross sections). They varied one theoretical parameter at a time by steps of the same magnitude, and when no such increase or decrease in any one parameter further improved the fit to the experimental data, they halved the step size and repeated the process until the steps were deemed sufficiently small. Their simple procedure was slow but sure, and several of us used it on the Avidac computer at the Argonne National Laboratory for adjusting six theoretical parameters to fit the pion-proton scattering data we had gathered using the University of Chicago synchrocyclotron. While this basic algorithm undoubtedly predates Fermi and Metropolis, it has remained a standard in the scientific computing community for exactly the reason observed by Davidon: it is slow but sure’.</p>
-<p><p><div class="admonition note">
+<p><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Kolda, Lewis, Torczon: ‘Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods’
+published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
+<p><a class="reference external" href="http://www.cs.wm.edu/~va/research/sirev.pdf">http://www.cs.wm.edu/~va/research/sirev.pdf</a></p>
+</div>
+</p>
+ </p>
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This algorithm does not work for multi-objective problems, nor for stochastic problems.</p>
 </div>
@@ -139,14 +147,6 @@ will produce an error.</p>
 <p>Compass search is a fully deterministic algorithms and will produce identical results if its evolve method is
 called from two identical populations.</p>
 </div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p>Kolda, Lewis, Torczon: ‘Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods’
-published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
-<p><a class="reference external" href="http://www.cs.wm.edu/~va/research/sirev.pdf">http://www.cs.wm.edu/~va/research/sirev.pdf</a></p>
-</div>
-</p>
- </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -218,24 +218,24 @@ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)</p>
 <li><p>&gt;0: will print and log one line each objective function improvement, or range reduction</p></li>
 </ul>
 </p>
-<p>Example (verbosity &gt; 0u): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>         <span class="n">Range</span><span class="p">:</span>
-      <span class="mi">4</span>        <span class="mf">110.785</span>              <span class="mi">1</span>        <span class="mf">2.40583</span>            <span class="mf">0.5</span>
-     <span class="mi">12</span>        <span class="mf">110.785</span>              <span class="mi">1</span>        <span class="mf">2.40583</span>           <span class="mf">0.25</span>
-     <span class="mi">20</span>        <span class="mf">110.785</span>              <span class="mi">1</span>        <span class="mf">2.40583</span>          <span class="mf">0.125</span>
-     <span class="mi">22</span>        <span class="mf">91.0454</span>              <span class="mi">1</span>        <span class="mf">1.01855</span>          <span class="mf">0.125</span>
-     <span class="mi">25</span>        <span class="mf">96.2795</span>              <span class="mi">1</span>       <span class="mf">0.229446</span>          <span class="mf">0.125</span>
-     <span class="mi">33</span>        <span class="mf">96.2795</span>              <span class="mi">1</span>       <span class="mf">0.229446</span>         <span class="mf">0.0625</span>
-     <span class="mi">41</span>        <span class="mf">96.2795</span>              <span class="mi">1</span>       <span class="mf">0.229446</span>        <span class="mf">0.03125</span>
-     <span class="o">..</span>        <span class="o">.......</span>              <span class="o">.</span>       <span class="o">........</span>        <span class="mf">0.03125</span>
-    <span class="mi">111</span>        <span class="mf">95.4617</span>              <span class="mi">1</span>     <span class="mf">0.00117433</span>    <span class="mf">0.000244141</span>
-    <span class="mi">115</span>        <span class="mf">95.4515</span>              <span class="mi">0</span>              <span class="mi">0</span>    <span class="mf">0.000244141</span>
-    <span class="mi">123</span>        <span class="mf">95.4515</span>              <span class="mi">0</span>              <span class="mi">0</span>     <span class="mf">0.00012207</span>
-    <span class="mi">131</span>        <span class="mf">95.4515</span>              <span class="mi">0</span>              <span class="mi">0</span>    <span class="mf">6.10352e-05</span>
-    <span class="mi">139</span>        <span class="mf">95.4515</span>              <span class="mi">0</span>              <span class="mi">0</span>    <span class="mf">3.05176e-05</span>
-    <span class="mi">143</span>        <span class="mf">95.4502</span>              <span class="mi">0</span>              <span class="mi">0</span>    <span class="mf">3.05176e-05</span>
-    <span class="mi">151</span>        <span class="mf">95.4502</span>              <span class="mi">0</span>              <span class="mi">0</span>    <span class="mf">1.52588e-05</span>
-    <span class="mi">159</span>        <span class="mf">95.4502</span>              <span class="mi">0</span>              <span class="mi">0</span>    <span class="mf">7.62939e-06</span>
-<span class="n">Exit</span> <span class="n">condition</span> <span class="o">--</span> <span class="nb">range</span><span class="p">:</span> <span class="mf">7.62939e-06</span> <span class="o">&lt;=</span> <span class="mf">1e-05</span>
+<p>Example (verbosity &gt; 0u): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Fevals:          Best:      Violated:    Viol. Norm:         Range:
+      4        110.785              1        2.40583            0.5
+     12        110.785              1        2.40583           0.25
+     20        110.785              1        2.40583          0.125
+     22        91.0454              1        1.01855          0.125
+     25        96.2795              1       0.229446          0.125
+     33        96.2795              1       0.229446         0.0625
+     41        96.2795              1       0.229446        0.03125
+     ..        .......              .       ........        0.03125
+    111        95.4617              1     0.00117433    0.000244141
+    115        95.4515              0              0    0.000244141
+    123        95.4515              0              0     0.00012207
+    131        95.4515              0              0    6.10352e-05
+    139        95.4515              0              0    3.05176e-05
+    143        95.4502              0              0    3.05176e-05
+    151        95.4502              0              0    1.52588e-05
+    159        95.4502              0              0    7.62939e-06
+Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 </pre></div>
 </div>
  Fevals, is the number of fitness evaluations made, Best is the best fitness Violated and Viol.Norm are the number of constraints violated and the L2 norm of the violation (accounting for the tolerances returned by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">problem::get_c_tol</span></a>, and Range is the range used at that point of the search</p>

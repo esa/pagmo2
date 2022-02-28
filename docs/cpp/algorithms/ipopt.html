@@ -124,10 +124,9 @@
 <span id="_CPPv3N5pagmo5ipoptE"></span><span id="_CPPv2N5pagmo5ipoptE"></span><span id="pagmo::ipopt"></span><span class="target" id="classpagmo_1_1ipopt"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ipopt</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv4N5pagmo20not_population_basedE" title="pagmo::not_population_based"><span class="n"><span class="pre">not_population_based</span></span></a><a class="headerlink" href="#_CPPv4N5pagmo5ipoptE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Ipopt. </p>
 <p><img alt="../../../_images/ipopt.png" src="../../../_images/ipopt.png" /></p>
-<p><p><div class="versionadded">
+<p><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.2.</span></p>
 </div>
-</p>
 </p>
 <p>This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver, a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.</p>
 <p>Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt can estimate numerically the Hessians if needed).</p>
@@ -224,19 +223,19 @@
 <span id="_CPPv3N5pagmo5ipopt13set_verbosityEj"></span><span id="_CPPv2N5pagmo5ipopt13set_verbosityEj"></span><span id="pagmo::ipopt::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1ipopt_1a758ec78a12b9903b555e2c1cb55c14ab"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5ipopt13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set verbosity. </p>
 <p>This method will set the algorithm’s verbosity. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is zero, no output is produced during the optimisation and no logging is performed. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is nonzero, then every <code class="docutils literal notranslate"><span class="pre">n</span></code> objective function evaluations the status of the optimisation will be both printed to screen and recorded internally. See <a class="reference internal" href="#classpagmo_1_1ipopt_1ac5e712ea5dcc0093ae9ba4649b0fedad"><span class="std std-ref">ipopt::log_line_type</span></a> and <a class="reference internal" href="#classpagmo_1_1ipopt_1a7320e3c2277c5a684be9d594319d8e7e"><span class="std std-ref">ipopt::log_type</span></a> for information on the logging format. The internal log can be fetched via <a class="reference internal" href="#classpagmo_1_1ipopt_1a359a18751d494dd6c810bd36e4f58540"><span class="std std-ref">get_log()</span></a>.</p>
-<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">objevals</span><span class="p">:</span>        <span class="n">objval</span><span class="p">:</span>      <span class="n">violated</span><span class="p">:</span>    <span class="n">viol</span><span class="o">.</span> <span class="n">norm</span><span class="p">:</span>
-        <span class="mi">1</span>        <span class="mf">48.9451</span>              <span class="mi">1</span>        <span class="mf">1.25272</span> <span class="n">i</span>
-        <span class="mi">2</span>         <span class="mf">30.153</span>              <span class="mi">1</span>       <span class="mf">0.716591</span> <span class="n">i</span>
-        <span class="mi">3</span>        <span class="mf">26.2884</span>              <span class="mi">1</span>        <span class="mf">1.04269</span> <span class="n">i</span>
-        <span class="mi">4</span>        <span class="mf">14.6958</span>              <span class="mi">2</span>        <span class="mf">7.80753</span> <span class="n">i</span>
-        <span class="mi">5</span>        <span class="mf">14.7742</span>              <span class="mi">2</span>        <span class="mf">5.41342</span> <span class="n">i</span>
-        <span class="mi">6</span>         <span class="mf">17.093</span>              <span class="mi">1</span>      <span class="mf">0.0905025</span> <span class="n">i</span>
-        <span class="mi">7</span>        <span class="mf">17.1772</span>              <span class="mi">1</span>      <span class="mf">0.0158448</span> <span class="n">i</span>
-        <span class="mi">8</span>        <span class="mf">17.0254</span>              <span class="mi">2</span>      <span class="mf">0.0261289</span> <span class="n">i</span>
-        <span class="mi">9</span>        <span class="mf">17.0162</span>              <span class="mi">2</span>     <span class="mf">0.00435195</span> <span class="n">i</span>
-       <span class="mi">10</span>        <span class="mf">17.0142</span>              <span class="mi">2</span>    <span class="mf">0.000188461</span> <span class="n">i</span>
-       <span class="mi">11</span>         <span class="mf">17.014</span>              <span class="mi">1</span>    <span class="mf">1.90997e-07</span> <span class="n">i</span>
-       <span class="mi">12</span>         <span class="mf">17.014</span>              <span class="mi">0</span>              <span class="mi">0</span>
+<p>Example (verbosity 1): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>objevals:        objval:      violated:    viol. norm:
+        1        48.9451              1        1.25272 i
+        2         30.153              1       0.716591 i
+        3        26.2884              1        1.04269 i
+        4        14.6958              2        7.80753 i
+        5        14.7742              2        5.41342 i
+        6         17.093              1      0.0905025 i
+        7        17.1772              1      0.0158448 i
+        8        17.0254              2      0.0261289 i
+        9        17.0162              2     0.00435195 i
+       10        17.0142              2    0.000188461 i
+       11         17.014              1    1.90997e-07 i
+       12         17.014              0              0
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">i</span></code> at the end of some rows indicates that the decision vector is infeasible. Feasibility is checked against the problem’s tolerance.</p>

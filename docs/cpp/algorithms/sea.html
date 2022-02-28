@@ -126,17 +126,7 @@
 <p><img alt="../../../_images/sea.png" src="../../../_images/sea.png" /></p>
 <p>Evolutionary strategies date back to the mid 1960s when P. Bienert, I. Rechenberg, and H.-P. Schwefel at the Technical University of Berlin, Germany, developed the first bionics-inspired schemes for evolving optimal shapes of minimal drag bodies in a wind tunnel using Darwin’s evolution principle.</p>
 <p>This c++ class represents the simplest evolutionary strategy, where a population of <span class="math notranslate nohighlight">\( \lambda \)</span> individuals at each generation produces one offspring by mutating its best individual uniformly at random within the bounds. Should the offspring be better than the worst individual in the population it will substitute it.</p>
-<p><p><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The algorithm is not suitable for multi-objective problems, nor for
-constrained or stochastic optimization</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The mutation is uniform within box-bounds. Hence, unbounded problems will produce undefined
-behaviours.</p>
-</div>
-<div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Oliveto, Pietro S., Jun He, and Xin Yao. “Time complexity of evolutionary algorithms for
 combinatorial optimization: A decade of results.” International Journal of Automation and Computing
@@ -148,6 +138,16 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mutation is uniform within box-bounds. Hence, unbounded problems will produce undefined
+behaviours.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The algorithm is not suitable for multi-objective problems, nor for
+constrained or stochastic optimization</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -207,12 +207,12 @@ combinatorial optimization: A decade of results.” International Journal of Aut
 <li><p>&gt;1: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gen</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span>   <span class="n">Improvement</span><span class="p">:</span>     <span class="n">Mutations</span><span class="p">:</span>
-<span class="mi">632</span>           <span class="mi">3797</span>        <span class="mf">1464.31</span>        <span class="mf">51.0203</span>              <span class="mi">1</span>
-<span class="mi">633</span>           <span class="mi">3803</span>        <span class="mf">1463.23</span>        <span class="mf">13.4503</span>              <span class="mi">1</span>
-<span class="mi">635</span>           <span class="mi">3815</span>        <span class="mf">1562.02</span>        <span class="mf">31.0434</span>              <span class="mi">3</span>
-<span class="mi">667</span>           <span class="mi">4007</span>         <span class="mf">1481.6</span>        <span class="mf">24.1889</span>              <span class="mi">1</span>
-<span class="mi">668</span>           <span class="mi">4013</span>        <span class="mf">1487.34</span>        <span class="mf">73.2677</span>              <span class="mi">2</span>
+<p>Example (verbosity 1): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Gen:        Fevals:          Best:   Improvement:     Mutations:
+632           3797        1464.31        51.0203              1
+633           3803        1463.23        13.4503              1
+635           3815        1562.02        31.0434              3
+667           4007         1481.6        24.1889              1
+668           4013        1487.34        73.2677              2
 </pre></div>
 </div>
  Gen, is the generation number, Fevals the number of function evaluation used, Best is the best fitness function currently in the population, Improvement is the improvement made by the last mutation and Mutations is the number of mutated components of the decision vector</p>

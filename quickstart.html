@@ -117,7 +117,7 @@ you will be able to compile and run your first C++ pagmo program:</p>
 <span class="linenos">29</span><span class="w">    </span><span class="n">archi</span><span class="p">.</span><span class="n">wait_check</span><span class="p">();</span><span class="w"></span>
 <span class="linenos">30</span>
 <span class="linenos">31</span><span class="w">    </span><span class="c1">// 6 - Print the fitness of the best solution in each island.</span>
-<span class="linenos">32</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="nl">isl</span> <span class="p">:</span><span class="w"> </span><span class="n">archi</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">32</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">isl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">archi</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">33</span><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">isl</span><span class="p">.</span><span class="n">get_population</span><span class="p">().</span><span class="n">champion_f</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">34</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
 <span class="linenos">35</span><span class="p">}</span><span class="w"></span>
@@ -161,14 +161,14 @@ program presented earlier may look like this:</p>
 <span class="nb">project</span><span class="p">(</span><span class="s">sample_project</span><span class="p">)</span>
 
 <span class="c"># Look for an installation of pagmo in the system.</span>
-<span class="nb">find_package</span><span class="p">(</span><span class="s">Pagmo</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">Pagmo</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 
 <span class="c"># Create an executable, and link it to the Pagmo::pagmo imported target.</span>
 <span class="c"># This ensures that, in the compilation of &#39;getting_started&#39;, pagmo&#39;s include</span>
 <span class="c"># dirs are added to the include path of the compiler and that pagmo&#39;s</span>
 <span class="c"># dependencies are transitively linked to &#39;getting_started&#39;.</span>
-<span class="nb">add_executable</span><span class="p">(</span><span class="s">getting_started</span> <span class="s">getting_started.cpp</span><span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">getting_started</span> <span class="s">Pagmo::pagmo</span><span class="p">)</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">getting_started</span><span class="w"> </span><span class="s">getting_started.cpp</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">getting_started</span><span class="w"> </span><span class="s">Pagmo::pagmo</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Place this <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and the <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> files

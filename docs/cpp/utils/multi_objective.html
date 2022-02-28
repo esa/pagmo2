@@ -212,12 +212,12 @@ more in general, to multi-objective optimization tasks.</p>
 </p>
 <p>Complexity is <span class="math notranslate nohighlight">\( O(MN^2)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of individuals.</p>
 <p>This function will also work for single objective optimization, i.e. with 1 objective in which case, though, it is more efficient to sort using directly one of the following forms:</p>
-<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">sort</span><span class="p">(</span><span class="n">input_f</span><span class="o">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">input_f</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[]</span> <span class="p">(</span><span class="n">auto</span> <span class="n">a</span><span class="p">,</span> <span class="n">auto</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">];});</span>
+<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::sort(input_f.begin(), input_f.end(), [] (auto a, auto b) {return a[0] &lt; b[0];});
 </pre></div>
 </div>
- <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">pop_size_t</span><span class="o">&gt;</span> <span class="n">idx</span><span class="p">(</span><span class="n">input_f</span><span class="o">.</span><span class="n">size</span><span class="p">());</span>
-<span class="n">std</span><span class="p">::</span><span class="n">iota</span><span class="p">(</span><span class="n">idx</span><span class="o">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">idx</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">pop_size_t</span><span class="p">(</span><span class="mi">0</span><span class="n">u</span><span class="p">));</span>
-<span class="n">std</span><span class="p">::</span><span class="n">sort</span><span class="p">(</span><span class="n">idx</span><span class="o">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">idx</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[]</span> <span class="p">(</span><span class="n">auto</span> <span class="n">a</span><span class="p">,</span> <span class="n">auto</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">input_f</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">input_f</span><span class="p">[</span><span class="n">b</span><span class="p">][</span><span class="mi">0</span><span class="p">];});</span>
+ <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::vector&lt;pop_size_t&gt; idx(input_f.size());
+std::iota(idx.begin(), idx.end(), pop_size_t(0u));
+std::sort(idx.begin(), idx.end(), [] (auto a, auto b) {return input_f[a][0] &lt; input_f[b][0];});
 </pre></div>
 </div>
 </p>
@@ -242,7 +242,7 @@ more in general, to multi-objective optimization tasks.</p>
 <p>Selects the best N individuals out of a population, (intended here as an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;vector_double&gt;</span></code> containing the objective vectors). The strict ordering used is the same as that defined in <a class="reference internal" href="#namespacepagmo_1a580b5f4b60c15b204d79240140f4190f"><span class="std std-ref">pagmo::sort_population_mo</span></a>.</p>
 <p>Complexity is <span class="math notranslate nohighlight">\( O(MN^2)\)</span> where <span class="math notranslate nohighlight">\(M\)</span> is the number of objectives and <span class="math notranslate nohighlight">\(N\)</span> is the number of individuals.</p>
 <p>While the complexity is the same as that of <a class="reference internal" href="#namespacepagmo_1a580b5f4b60c15b204d79240140f4190f"><span class="std std-ref">pagmo::sort_population_mo</span></a>, this function returns a permutation of:</p>
-<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">sort_population_mo</span><span class="p">(</span><span class="n">input_f</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>auto ret = pagmo::sort_population_mo(input_f).resize(N);
 </pre></div>
 </div>
 </p>
@@ -312,8 +312,8 @@ more in general, to multi-objective optimization tasks.</p>
 <li><p>”low discrepancy” generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of the Pareto front. Halton sequence is used since low dimensionalities are expected in the number of objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.</p></li>
 </ul>
 </p>
-<p>Example: to generate 10 weights distributed somewhat regularly to decompose a three dimensional problem: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">r_engine</span><span class="p">;</span>
-<span class="n">auto</span> <span class="n">lambdas</span> <span class="o">=</span> <span class="n">decomposition_weights</span><span class="p">(</span><span class="mi">3</span><span class="n">u</span><span class="p">,</span> <span class="mi">10</span><span class="n">u</span><span class="p">,</span> <span class="s2">&quot;low discrepancy&quot;</span><span class="p">,</span> <span class="n">r_engine</span><span class="p">);</span>
+<p>Example: to generate 10 weights distributed somewhat regularly to decompose a three dimensional problem: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::mt19937 r_engine;
+auto lambdas = decomposition_weights(3u, 10u, &quot;low discrepancy&quot;, r_engine);
 </pre></div>
 </div>
 </p>

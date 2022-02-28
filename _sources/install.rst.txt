@@ -17,7 +17,7 @@ The officially-supported architectures are 64-bit x86, ARM and PowerPC.
 
 The pagmo C++ library has the following **mandatory** dependencies:
 
-* the `Boost <https://www.boost.org/>`__ C++ libraries (at least version 1.60),
+* the `Boost <https://www.boost.org/>`__ C++ libraries (at least version 1.68),
 * the `Intel TBB <https://github.com/oneapi-src/oneTBB/>`__ library.
 
 Additionally, pagmo has the following **optional** dependencies:

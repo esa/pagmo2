@@ -126,22 +126,7 @@
 <p>Harmony search (HS) is a metaheuristic algorithm said to mimick the improvisation process of musicians. In the metaphor, each musician (i.e., each variable) plays (i.e., generates) a note (i.e., a value) for finding a best harmony (i.e., the global optimum) all together.</p>
 <p>This code implements the so-called improved harmony search algorithm (IHS), in which the probability of picking the variables from the decision vector and the amount of mutation to which they are subject vary (respectively linearly and exponentially) at each call of the <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1ihs_1a2e6e87e094bd1a22ed3cd2c3f7324b8e"><span class="std std-ref"><span class="pre">evolve()</span></span></a></code> method.</p>
 <p>In this algorithm the number of fitness function evaluations is equal to the number of iterations. All the individuals in the input population participate in the evolution. A new individual is generated at every iteration, substituting the current worst individual of the population if better.</p>
-<p><p><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The HS algorithm can and has been  criticized, not for its performances,
-but for the use of a metaphor that does not add anything to existing ones. The HS
-algorithm essentially applies mutation and crossover operators to a background population and as such
-should have been developed in the context of Evolutionary Strategies or Genetic Algorithms and studied
-in that context. The use of the musicians metaphor only obscures its internal functioning
-making theoretical results from ES and GA erroneously seem as unapplicable to HS.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
-In pagmo, the algorithm was modified to tackle also multi-objective (unconstrained), constrained
-(single-objective), mixed-integer and stochastic problems. Such extension is original with pagmo.</p>
-</div>
-<div class="admonition seealso">
+<p><p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference external" href="https://en.wikipedia.org/wiki/Harmony_search">https://en.wikipedia.org/wiki/Harmony_search</a> for an introduction on harmony search.</p>
 </div>
@@ -152,6 +137,21 @@ harmony search.</p>
 </div>
 </p>
  </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The original IHS algorithm was designed to solve unconstrained, deterministic single objective problems.
+In pagmo, the algorithm was modified to tackle also multi-objective (unconstrained), constrained
+(single-objective), mixed-integer and stochastic problems. Such extension is original with pagmo.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The HS algorithm can and has been  criticized, not for its performances,
+but for the use of a metaphor that does not add anything to existing ones. The HS
+algorithm essentially applies mutation and crossover operators to a background population and as such
+should have been developed in the context of Evolutionary Strategies or Genetic Algorithms and studied
+in that context. The use of the musicians metaphor only obscures its internal functioning
+making theoretical results from ES and GA erroneously seem as unapplicable to HS.</p>
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -226,17 +226,17 @@ harmony search.</p>
 <span id="_CPPv3N5pagmo3ihs13set_verbosityEj"></span><span id="_CPPv2N5pagmo3ihs13set_verbosityEj"></span><span id="pagmo::ihs::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1ihs_1a2da9cce0eff422ca0fffd0256c28f39f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3ihs13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set verbosity. </p>
 <p>This method will set the algorithm’s verbosity. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is zero, no output is produced during the optimisation and no logging is performed. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is nonzero, then every <code class="docutils literal notranslate"><span class="pre">n</span></code> objective function evaluations the status of the optimisation will be both printed to screen and recorded internally. See <a class="reference internal" href="#classpagmo_1_1ihs_1ab05ace99e70adc551964e2bb46b0d1fd"><span class="std std-ref">ihs::log_line_type</span></a> and <a class="reference internal" href="#classpagmo_1_1ihs_1aac463b75b3c5a1aa9b8926fc06f426e9"><span class="std std-ref">ihs::log_type</span></a> for information on the logging format. The internal log can be fetched via <a class="reference internal" href="#classpagmo_1_1ihs_1a5efd3df26edc54c7d76e852ceab1677e"><span class="std std-ref">get_log()</span></a>.</p>
-<p>Example (verbosity 100, a constrained problem): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fevals</span><span class="p">:</span>          <span class="n">ppar</span><span class="p">:</span>            <span class="n">bw</span><span class="p">:</span>            <span class="n">dx</span><span class="p">:</span>            <span class="n">df</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>        <span class="n">ideal1</span><span class="p">:</span>
-      <span class="mi">1</span>        <span class="mf">0.35064</span>       <span class="mf">0.988553</span>        <span class="mf">5.17002</span>        <span class="mf">68.4027</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
-    <span class="mi">101</span>        <span class="mf">0.41464</span>       <span class="mf">0.312608</span>        <span class="mf">4.21626</span>         <span class="mf">46.248</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
-    <span class="mi">201</span>        <span class="mf">0.47864</span>      <span class="mf">0.0988553</span>        <span class="mf">2.27851</span>        <span class="mf">8.00679</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
-    <span class="mi">301</span>        <span class="mf">0.54264</span>      <span class="mf">0.0312608</span>        <span class="mf">3.94453</span>        <span class="mf">31.9834</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
-    <span class="mi">401</span>        <span class="mf">0.60664</span>     <span class="mf">0.00988553</span>        <span class="mf">4.74834</span>         <span class="mf">40.188</span>              <span class="mi">1</span>      <span class="mf">0.0495288</span>        <span class="mf">85.1946</span>
-    <span class="mi">501</span>        <span class="mf">0.67064</span>     <span class="mf">0.00312608</span>        <span class="mf">2.91583</span>        <span class="mf">6.53575</span>              <span class="mi">1</span>     <span class="mf">0.00904482</span>        <span class="mf">90.3601</span>
-    <span class="mi">601</span>        <span class="mf">0.73464</span>    <span class="mf">0.000988553</span>        <span class="mf">2.98691</span>        <span class="mf">10.6425</span>              <span class="mi">1</span>    <span class="mf">0.000760728</span>        <span class="mf">110.121</span>
-    <span class="mi">701</span>        <span class="mf">0.79864</span>    <span class="mf">0.000312608</span>        <span class="mf">2.27775</span>        <span class="mf">39.7507</span>              <span class="mi">1</span>    <span class="mf">0.000760728</span>        <span class="mf">110.121</span>
-    <span class="mi">801</span>        <span class="mf">0.86264</span>    <span class="mf">9.88553e-05</span>       <span class="mf">0.265908</span>         <span class="mf">4.5488</span>              <span class="mi">1</span>    <span class="mf">0.000760728</span>        <span class="mf">110.121</span>
-    <span class="mi">901</span>        <span class="mf">0.92664</span>    <span class="mf">3.12608e-05</span>       <span class="mf">0.566348</span>       <span class="mf">0.354253</span>              <span class="mi">1</span>    <span class="mf">0.000760728</span>        <span class="mf">110.121</span>
+<p>Example (verbosity 100, a constrained problem): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Fevals:          ppar:            bw:            dx:            df:      Violated:    Viol. Norm:        ideal1:
+      1        0.35064       0.988553        5.17002        68.4027              1      0.0495288        85.1946
+    101        0.41464       0.312608        4.21626         46.248              1      0.0495288        85.1946
+    201        0.47864      0.0988553        2.27851        8.00679              1      0.0495288        85.1946
+    301        0.54264      0.0312608        3.94453        31.9834              1      0.0495288        85.1946
+    401        0.60664     0.00988553        4.74834         40.188              1      0.0495288        85.1946
+    501        0.67064     0.00312608        2.91583        6.53575              1     0.00904482        90.3601
+    601        0.73464    0.000988553        2.98691        10.6425              1    0.000760728        110.121
+    701        0.79864    0.000312608        2.27775        39.7507              1    0.000760728        110.121
+    801        0.86264    9.88553e-05       0.265908         4.5488              1    0.000760728        110.121
+    901        0.92664    3.12608e-05       0.566348       0.354253              1    0.000760728        110.121
 </pre></div>
 </div>
  Feasibility is checked against the problem’s tolerance.</p>

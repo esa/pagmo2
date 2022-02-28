@@ -119,43 +119,43 @@
 </p>
 <p>where <span class="math notranslate nohighlight">\(\mathbf x \in \mathbb R^{n_{cx}} \times \mathbb Z^{n_{ix}}\)</span> is called <em>decision vector</em> or <em>chromosome</em>, and is made of <span class="math notranslate nohighlight">\(n_{cx}\)</span> real numbers and <span class="math notranslate nohighlight">\(n_{ix}\)</span> integers (all represented as doubles). The total problem dimension is then indicated with <span class="math notranslate nohighlight">\(n_x = n_{cx} + n_{ix}\)</span>. <span class="math notranslate nohighlight">\(\mathbf{lb}, \mathbf{ub} \in \mathbb R^{n_{cx}} \times \mathbb Z^{n_{ix}}\)</span> are the <em>box-bounds</em>, <span class="math notranslate nohighlight">\( \mathbf f: \mathbb R^{n_{cx}} \times \mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{obj}}\)</span> define the <em>objectives</em>, <span class="math notranslate nohighlight">\( \mathbf c_e: \mathbb R^{n_{cx}} \times \mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{ec}}\)</span> are non linear <em>equality constraints</em>, and <span class="math notranslate nohighlight">\( \mathbf c_i: \mathbb R^{n_{cx}} \times \mathbb Z^{n_{ix}} \rightarrow \mathbb R^{n_{ic}}\)</span> are non linear <em>inequality constraints</em>. Note that the objectives and constraints may also depend from an added value <span class="math notranslate nohighlight">\(s\)</span> seeding the values of any number of stochastic variables. This allows also for stochastic programming tasks to be represented by this class. A tolerance is also considered for all constraints and set, by default, to zero. It can be modified via the <a class="reference internal" href="#classpagmo_1_1problem_1ab1bbd8f6f4c119aef9e04fdfa499a33e"><span class="std std-ref">problem::set_c_tol()</span></a> method.</p>
 <p>In order to define an optimizaztion problem in pagmo, the user must first define a class (or a struct) whose methods describe the properties of the problem and allow to compute the objective function, the gradient, the constraints, etc. In pagmo, we refer to such a class as a <strong>user-defined problem</strong>, or UDP for short. Once defined and instantiated, a UDP can then be used to construct an instance of this class, <a class="reference internal" href="#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>, which provides a generic interface to optimization problems.</p>
-<p>Every UDP must implement at least the following two methods: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span> <span class="n">fitness</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">std</span><span class="p">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span> <span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">get_bounds</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<p>Every UDP must implement at least the following two methods: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>vector_double fitness(const vector_double &amp;) const;
+std::pair&lt;vector_double, vector_double&gt; get_bounds() const;
 </pre></div>
 </div>
 </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> method is expected to return the fitness of the input decision vector ( concatenating the objectives, the equality and the inequality constraints), while <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code> is expected to return the box bounds of the problem, <span class="math notranslate nohighlight">\((\mathbf{lb}, \mathbf{ub})\)</span>, which also implicitly define the dimension of the problem. The <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code> methods of the UDP are accessible from the corresponding <a class="reference internal" href="#classpagmo_1_1problem_1a5969da5bb800845eda3101ce1cfa053f"><span class="std std-ref">problem::fitness()</span></a> and <a class="reference internal" href="#classpagmo_1_1problem_1a63956ae17409319bba96f8683967311b"><span class="std std-ref">problem::get_bounds()</span></a> methods (see their documentation for details). In addition to providing the above methods, a UDP must also be default, copy and move constructible.</p>
-<p>The two mandatory methods above allow to define a continuous, single objective, deterministic, derivative-free, unconstrained optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following methods: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nobj</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nec</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nic</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">vector_double</span><span class="p">::</span><span class="n">size_type</span> <span class="n">get_nix</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">vector_double</span> <span class="n">batch_fitness</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
-<span class="nb">bool</span> <span class="n">has_batch_fitness</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="nb">bool</span> <span class="n">has_gradient</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">vector_double</span> <span class="n">gradient</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
-<span class="nb">bool</span> <span class="n">has_gradient_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">sparsity_pattern</span> <span class="n">gradient_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="nb">bool</span> <span class="n">has_hessians</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="o">&gt;</span> <span class="n">hessians</span><span class="p">(</span><span class="n">const</span> <span class="n">vector_double</span> <span class="o">&amp;</span><span class="p">)</span> <span class="n">const</span><span class="p">;</span>
-<span class="nb">bool</span> <span class="n">has_hessians_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">sparsity_pattern</span><span class="o">&gt;</span> <span class="n">hessians_sparsity</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="nb">bool</span> <span class="n">has_set_seed</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">void</span> <span class="n">set_seed</span><span class="p">(</span><span class="n">unsigned</span><span class="p">);</span>
-<span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">get_extra_info</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
-<span class="n">thread_safety</span> <span class="n">get_thread_safety</span><span class="p">()</span> <span class="n">const</span><span class="p">;</span>
+<p>The two mandatory methods above allow to define a continuous, single objective, deterministic, derivative-free, unconstrained optimization problem. In order to consider more complex cases, the UDP may implement one or more of the following methods: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nobj() const;
+vector_double::size_type get_nec() const;
+vector_double::size_type get_nic() const;
+vector_double::size_type get_nix() const;
+vector_double batch_fitness(const vector_double &amp;) const;
+bool has_batch_fitness() const;
+bool has_gradient() const;
+vector_double gradient(const vector_double &amp;) const;
+bool has_gradient_sparsity() const;
+sparsity_pattern gradient_sparsity() const;
+bool has_hessians() const;
+std::vector&lt;vector_double&gt; hessians(const vector_double &amp;) const;
+bool has_hessians_sparsity() const;
+std::vector&lt;sparsity_pattern&gt; hessians_sparsity() const;
+bool has_set_seed() const;
+void set_seed(unsigned);
+std::string get_name() const;
+std::string get_extra_info() const;
+thread_safety get_thread_safety() const;
 </pre></div>
 </div>
 </p>
 <p>See the documentation of the corresponding methods in this class for details on how the optional methods in the UDP are used by <a class="reference internal" href="#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
-<p><p><div class="admonition warning">
+<p><p></p>
+ </p>
+<div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> are destruction,
 assignment, and the invocation of the <a class="reference internal" href="#_CPPv4NK5pagmo7problem8is_validEv" title="pagmo::problem::is_valid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">is_valid()</span></code></a> member function.
 Any other operation will result in undefined behaviour.</p>
 </div>
-</p>
- </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">

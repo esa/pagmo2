@@ -131,18 +131,25 @@
 \[\begin{split} \begin{array}{rl} \check X &amp; \mbox{: the best decision vector} \\ \hat X &amp; \mbox{: the worst decision vector} \\ \breve X &amp; \mbox{: the decision vector with the highest objective} \end{array} \end{split}\]</div>
 </p>
 <p>The best and worst decision vectors are defined accounting for their infeasibilities and for the value of the objective function. Using the above definitions the overall pseudo code can be summarized as follows:</p>
-<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Select</span> <span class="n">a</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">population</span> <span class="p">(</span><span class="n">related</span> <span class="n">to</span> <span class="n">a</span> <span class="n">single</span><span class="o">-</span><span class="n">objective</span> <span class="n">constrained</span> <span class="n">problem</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="n">Select</span> <span class="n">a</span> <span class="n">UDA</span> <span class="p">(</span><span class="n">able</span> <span class="n">to</span> <span class="n">solve</span> <span class="n">single</span><span class="o">-</span><span class="n">objective</span> <span class="n">unconstrained</span> <span class="n">problems</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">iter</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Compute</span> <span class="n">the</span> <span class="n">normalization</span> <span class="n">factors</span> <span class="p">(</span><span class="n">will</span> <span class="n">depend</span> <span class="n">on</span> <span class="n">the</span> <span class="n">current</span> <span class="n">population</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Compute</span> <span class="n">the</span> <span class="n">best</span><span class="p">,</span> <span class="n">worst</span><span class="p">,</span> <span class="n">highest</span> <span class="p">(</span><span class="n">will</span> <span class="n">depend</span> <span class="n">on</span> <span class="n">the</span> <span class="n">current</span> <span class="n">population</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Evolve</span> <span class="n">the</span> <span class="n">population</span> <span class="n">using</span> <span class="n">the</span> <span class="n">UDA</span> <span class="ow">and</span> <span class="n">a</span> <span class="n">penalized</span> <span class="n">objective</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Reinsert</span> <span class="n">the</span> <span class="n">best</span> <span class="n">decision</span> <span class="n">vector</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">previous</span> <span class="n">evolution</span>
+<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>&gt; Select a pagmo::population (related to a single-objective constrained problem)
+&gt; Select a UDA (able to solve single-objective unconstrained problems)
+&gt; while i &lt; iter
+&gt; &gt; Compute the normalization factors (will depend on the current population)
+&gt; &gt; Compute the best, worst, highest (will depend on the current population)
+&gt; &gt; Evolve the population using the UDA and a penalized objective
+&gt; &gt; Reinsert the best decision vector from the previous evolution
 </pre></div>
 </div>
 </p>
 <p><a class="reference internal" href="#classpagmo_1_1cstrs__self__adaptive"><span class="std std-ref">pagmo::cstrs_self_adaptive</span></a> is a user-defined algorithm (UDA) that can be used to construct <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> objects.</p>
-<p><p><div class="admonition note">
+<p><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Farmani, Raziyeh, and Jonathan A. Wright. “Self-adaptive fitness formulation for constrained optimization.” IEEE
+Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
+</div>
+</p>
+ </p>
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Self-adaptive constraints handling implements an internal cache to avoid the re-evaluation of the fitness
 for decision vectors already evaluated. This makes the final counter of function evaluations somewhat
@@ -161,13 +168,6 @@ the decision vectors in the population satisfy that particular constraint (i.e. 
 <p>The performances of <a class="reference internal" href="#_CPPv4N5pagmo19cstrs_self_adaptiveE" title="pagmo::cstrs_self_adaptive"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::cstrs_self_adaptive</span></code></a> are highly dependent on the particular inner UDA
 employed and in particular to its parameters (generations / iterations).</p>
 </div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p>Farmani, Raziyeh, and Jonathan A. Wright. “Self-adaptive fitness formulation for constrained optimization.” IEEE
-Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
-</div>
-</p>
- </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -267,21 +267,21 @@ Transactions on Evolutionary Computation 7.5 (2003): 445-455.</p>
 <li><p>&gt;0: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> call to the inner algorithm.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 10): <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Iter</span><span class="p">:</span>        <span class="n">Fevals</span><span class="p">:</span>          <span class="n">Best</span><span class="p">:</span> <span class="n">Infeasibility</span><span class="p">:</span>      <span class="n">Violated</span><span class="p">:</span>    <span class="n">Viol</span><span class="o">.</span> <span class="n">Norm</span><span class="p">:</span>   <span class="n">N</span><span class="o">.</span> <span class="n">Feasible</span><span class="p">:</span>
-    <span class="mi">1</span>              <span class="mi">0</span>       <span class="o">-</span><span class="mf">69.2141</span>       <span class="mf">0.235562</span>              <span class="mi">6</span>        <span class="mf">117.743</span>              <span class="mi">0</span> <span class="n">i</span>
-   <span class="mi">11</span>            <span class="mi">200</span>       <span class="o">-</span><span class="mf">69.2141</span>       <span class="mf">0.248216</span>              <span class="mi">6</span>        <span class="mf">117.743</span>              <span class="mi">0</span> <span class="n">i</span>
-   <span class="mi">21</span>            <span class="mi">400</span>       <span class="o">-</span><span class="mf">29.4754</span>      <span class="mf">0.0711599</span>              <span class="mi">5</span>          <span class="mf">44.39</span>              <span class="mi">0</span> <span class="n">i</span>
-   <span class="mi">31</span>            <span class="mi">600</span>       <span class="o">-</span><span class="mf">30.0791</span>      <span class="mf">0.0878253</span>              <span class="mi">4</span>        <span class="mf">44.3803</span>              <span class="mi">0</span> <span class="n">i</span>
-  <span class="o">...</span>            <span class="o">...</span>       <span class="o">........</span>      <span class="o">.........</span>              <span class="o">.</span>        <span class="o">.......</span>              <span class="o">.</span> <span class="o">.</span>
-  <span class="mi">211</span>           <span class="mi">4190</span>       <span class="o">-</span><span class="mf">7.68336</span>    <span class="mf">0.000341894</span>              <span class="mi">1</span>       <span class="mf">0.273829</span>              <span class="mi">0</span> <span class="n">i</span>
-  <span class="mi">221</span>           <span class="mi">4390</span>       <span class="o">-</span><span class="mf">7.89941</span>     <span class="mf">0.00031154</span>              <span class="mi">1</span>       <span class="mf">0.273829</span>              <span class="mi">0</span> <span class="n">i</span>
-  <span class="mi">231</span>           <span class="mi">4590</span>       <span class="o">-</span><span class="mf">8.38299</span>    <span class="mf">0.000168309</span>              <span class="mi">1</span>       <span class="mf">0.147935</span>              <span class="mi">0</span> <span class="n">i</span>
-  <span class="mi">241</span>           <span class="mi">4790</span>       <span class="o">-</span><span class="mf">8.38299</span>    <span class="mf">0.000181461</span>              <span class="mi">1</span>       <span class="mf">0.147935</span>              <span class="mi">0</span> <span class="n">i</span>
-  <span class="mi">251</span>           <span class="mi">4989</span>       <span class="o">-</span><span class="mf">8.71021</span>    <span class="mf">0.000191197</span>              <span class="mi">1</span>       <span class="mf">0.100357</span>              <span class="mi">0</span> <span class="n">i</span>
-  <span class="mi">261</span>           <span class="mi">5189</span>       <span class="o">-</span><span class="mf">8.71021</span>    <span class="mf">0.000165734</span>              <span class="mi">1</span>       <span class="mf">0.100357</span>              <span class="mi">0</span> <span class="n">i</span>
-  <span class="mi">271</span>           <span class="mi">5389</span>       <span class="o">-</span><span class="mf">10.7421</span>              <span class="mi">0</span>              <span class="mi">0</span>              <span class="mi">0</span>              <span class="mi">3</span>
-  <span class="mi">281</span>           <span class="mi">5585</span>       <span class="o">-</span><span class="mf">10.7421</span>              <span class="mi">0</span>              <span class="mi">0</span>              <span class="mi">0</span>              <span class="mi">3</span>
-  <span class="mi">291</span>           <span class="mi">5784</span>       <span class="o">-</span><span class="mf">11.4868</span>              <span class="mi">0</span>              <span class="mi">0</span>              <span class="mi">0</span>              <span class="mi">4</span>
+<p>Example (verbosity 10): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Iter:        Fevals:          Best: Infeasibility:      Violated:    Viol. Norm:   N. Feasible:
+    1              0       -69.2141       0.235562              6        117.743              0 i
+   11            200       -69.2141       0.248216              6        117.743              0 i
+   21            400       -29.4754      0.0711599              5          44.39              0 i
+   31            600       -30.0791      0.0878253              4        44.3803              0 i
+  ...            ...       ........      .........              .        .......              . .
+  211           4190       -7.68336    0.000341894              1       0.273829              0 i
+  221           4390       -7.89941     0.00031154              1       0.273829              0 i
+  231           4590       -8.38299    0.000168309              1       0.147935              0 i
+  241           4790       -8.38299    0.000181461              1       0.147935              0 i
+  251           4989       -8.71021    0.000191197              1       0.100357              0 i
+  261           5189       -8.71021    0.000165734              1       0.100357              0 i
+  271           5389       -10.7421              0              0              0              3
+  281           5585       -10.7421              0              0              0              3
+  291           5784       -11.4868              0              0              0              4
 </pre></div>
 </div>
  <code class="docutils literal notranslate"><span class="pre">Iter</span></code> is the iteration number, <code class="docutils literal notranslate"><span class="pre">Fevals</span></code> is the number of fitness evaluations, <code class="docutils literal notranslate"><span class="pre">Best</span></code> is the objective function of the best fitness currently in the population, <code class="docutils literal notranslate"><span class="pre">Infeasibility</span></code> is the normailized infeasibility measure, <code class="docutils literal notranslate"><span class="pre">Violated</span></code> is the number of constraints currently violated by the best solution, <code class="docutils literal notranslate"><span class="pre">Viol.</span> <span class="pre">Norm</span></code> is the norm of the violation (discounted already by the constraints tolerance) and N. Feasible is the number of feasible individuals in the current iteration. The small <code class="docutils literal notranslate"><span class="pre">i</span></code> appearing at the end of the line stands for “infeasible” and will disappear only once <code class="docutils literal notranslate"><span class="pre">Violated</span></code> is 0.</p>

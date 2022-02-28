@@ -125,17 +125,17 @@
 <dd><p>Monotonic Basin Hopping (generalized). </p>
 <p><img alt="../../../_images/mbh.png" src="../../../_images/mbh.png" /></p>
 <p>Monotonic basin hopping, or simply, basin hopping, is an algorithm rooted in the idea of mapping the objective function <span class="math notranslate nohighlight">\(f(\mathbf x_0)\)</span> into the local minima found starting from <span class="math notranslate nohighlight">\(\mathbf x_0\)</span>. This simple idea allows a substantial increase of efficiency in solving problems, such as the Lennard-Jones cluster or the MGA-1DSM interplanetary trajectory problem that are conjectured to have a so-called funnel structure.</p>
-<p>In pagmo we provide an original generalization of this concept resulting in a meta-algorithm that operates on any <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using any suitable user-defined algorithm (UDA). When a population containing a single individual is used and coupled with a local optimizer, the original method is recovered. The pseudo code of our generalized version is: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">Create</span> <span class="n">a</span> <span class="n">pagmo</span><span class="p">::</span><span class="n">population</span>
-<span class="o">&gt;</span> <span class="n">Select</span> <span class="n">a</span> <span class="n">UDA</span>
-<span class="o">&gt;</span> <span class="n">Store</span> <span class="n">best</span> <span class="n">individual</span>
-<span class="o">&gt;</span> <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">stop_criteria</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Perturb</span> <span class="n">the</span> <span class="n">population</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">selected</span> <span class="n">neighbourhood</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">Evolve</span> <span class="n">the</span> <span class="n">population</span> <span class="n">using</span> <span class="n">the</span> <span class="n">algorithm</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="k">if</span> <span class="n">the</span> <span class="n">best</span> <span class="n">individual</span> <span class="ow">is</span> <span class="n">improved</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">increment</span> <span class="n">i</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">update</span> <span class="n">best</span> <span class="n">individual</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="k">else</span>
-<span class="o">&gt;</span> <span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<p>In pagmo we provide an original generalization of this concept resulting in a meta-algorithm that operates on any <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> using any suitable user-defined algorithm (UDA). When a population containing a single individual is used and coupled with a local optimizer, the original method is recovered. The pseudo code of our generalized version is: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>&gt; Create a pagmo::population
+&gt; Select a UDA
+&gt; Store best individual
+&gt; while i &lt; stop_criteria
+&gt; &gt; Perturb the population in a selected neighbourhood
+&gt; &gt; Evolve the population using the algorithm
+&gt; &gt; if the best individual is improved
+&gt; &gt; &gt; increment i
+&gt; &gt; &gt; update best individual
+&gt; &gt; else
+&gt; &gt; &gt; i = 0
 </pre></div>
 </div>
 </p>

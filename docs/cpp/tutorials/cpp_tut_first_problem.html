@@ -152,7 +152,7 @@ for our simple example problem:</p>
 <span class="linenos"> 9</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">pagmo</span><span class="p">;</span><span class="w"></span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1">// Our simple example problem, version 0.</span>
-<span class="linenos">12</span><span class="k">struct</span> <span class="nc">problem_v0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">12</span><span class="k">struct</span><span class="w"> </span><span class="nc">problem_v0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="linenos">13</span><span class="w">    </span><span class="c1">// Implementation of the objective function.</span>
 <span class="linenos">14</span><span class="w">    </span><span class="n">vector_double</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"></span>
 <span class="linenos">15</span><span class="w">    </span><span class="p">{</span><span class="w"></span>
@@ -319,57 +319,57 @@ objective function, also the value of the constraints for
 an input decision vector.</p></li>
 </ul>
 <p>Let us see the code:</p>
-<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- /home/circleci/project/tutorials/first_udp_ver0.cpp</span>
-<span class="gi">+++ /home/circleci/project/tutorials/first_udp_ver1.cpp</span>
-<span class="gu">@@ -8,12 +8,26 @@</span>
- 
- using namespace pagmo;
- 
-<span class="gd">-// Our simple example problem, version 0.</span>
-<span class="gd">-struct problem_v0 {</span>
-<span class="gi">+// Our simple example problem, version 1.</span>
-<span class="gi">+struct problem_v1 {</span>
-<span class="gi">+    // Number of equality constraints.</span>
-<span class="gi">+    vector_double::size_type get_nec() const</span>
-<span class="gi">+    {</span>
-<span class="gi">+        return 1;</span>
-<span class="gi">+    }</span>
-<span class="gi">+    // Number of inequality constraints.</span>
-<span class="gi">+    vector_double::size_type get_nic() const</span>
-<span class="gi">+    {</span>
-<span class="gi">+        return 1;</span>
-<span class="gi">+    }</span>
-     // Implementation of the objective function.
-     vector_double fitness(const vector_double &amp;dv) const
-     {
-<span class="gd">-        return {dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2]};</span>
-<span class="gi">+        return {</span>
-<span class="gi">+            dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2],                     // objfun</span>
-<span class="gi">+            dv[0] * dv[0] + dv[1] * dv[1] + dv[2] * dv[2] + dv[3] * dv[3] - 40., // equality con.</span>
-<span class="gi">+            25. - dv[0] * dv[1] * dv[2] * dv[3]                                  // inequality con.</span>
-<span class="gi">+        };</span>
-     }
-     // Implementation of the box bounds.
-     std::pair&lt;vector_double, vector_double&gt; get_bounds() const
-<span class="gu">@@ -25,11 +39,14 @@</span>
- int main()
- {
-     // Construct a pagmo::problem from our example problem.
-<span class="gd">-    problem p{problem_v0{}};</span>
-<span class="gi">+    problem p{problem_v1{}};</span>
- 
-<span class="gd">-    // Compute the value of the objective function</span>
-<span class="gd">-    // in the point (1, 2, 3, 4).</span>
-<span class="gd">-    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; p.fitness({1, 2, 3, 4})[0] &lt;&lt; &#39;\n&#39;;</span>
-<span class="gi">+    // Compute the value of the objective function, equality and</span>
-<span class="gi">+    // inequality constraints in the point (1, 2, 3, 4).</span>
-<span class="gi">+    const auto fv = p.fitness({1, 2, 3, 4});</span>
-<span class="gi">+    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; fv[0] &lt;&lt; &#39;\n&#39;;</span>
-<span class="gi">+    std::cout &lt;&lt; &quot;Value of the eq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[1] &lt;&lt; &#39;\n&#39;;</span>
-<span class="gi">+    std::cout &lt;&lt; &quot;Value of the ineq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[2] &lt;&lt; &#39;\n&#39;;</span>
- 
-     // Fetch the lower/upper bounds for the first variable.
-     std::cout &lt;&lt; &quot;Lower bounds: [&quot; &lt;&lt; p.get_lb()[0] &lt;&lt; &quot;]\n&quot;;
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- /home/circleci/project/tutorials/first_udp_ver0.cpp</span><span class="w"></span>
+<span class="gi">+++ /home/circleci/project/tutorials/first_udp_ver1.cpp</span><span class="w"></span>
+<span class="gu">@@ -8,12 +8,26 @@</span><span class="w"></span>
+<span class="w"> </span>
+<span class="w"> </span>using namespace pagmo;<span class="w"></span>
+<span class="w"> </span>
+<span class="gd">-// Our simple example problem, version 0.</span><span class="w"></span>
+<span class="gd">-struct problem_v0 {</span><span class="w"></span>
+<span class="gi">+// Our simple example problem, version 1.</span><span class="w"></span>
+<span class="gi">+struct problem_v1 {</span><span class="w"></span>
+<span class="gi">+    // Number of equality constraints.</span><span class="w"></span>
+<span class="gi">+    vector_double::size_type get_nec() const</span><span class="w"></span>
+<span class="gi">+    {</span><span class="w"></span>
+<span class="gi">+        return 1;</span><span class="w"></span>
+<span class="gi">+    }</span><span class="w"></span>
+<span class="gi">+    // Number of inequality constraints.</span><span class="w"></span>
+<span class="gi">+    vector_double::size_type get_nic() const</span><span class="w"></span>
+<span class="gi">+    {</span><span class="w"></span>
+<span class="gi">+        return 1;</span><span class="w"></span>
+<span class="gi">+    }</span><span class="w"></span>
+<span class="w"> </span>    // Implementation of the objective function.<span class="w"></span>
+<span class="w"> </span>    vector_double fitness(const vector_double &amp;dv) const<span class="w"></span>
+<span class="w"> </span>    {<span class="w"></span>
+<span class="gd">-        return {dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2]};</span><span class="w"></span>
+<span class="gi">+        return {</span><span class="w"></span>
+<span class="gi">+            dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2],                     // objfun</span><span class="w"></span>
+<span class="gi">+            dv[0] * dv[0] + dv[1] * dv[1] + dv[2] * dv[2] + dv[3] * dv[3] - 40., // equality con.</span><span class="w"></span>
+<span class="gi">+            25. - dv[0] * dv[1] * dv[2] * dv[3]                                  // inequality con.</span><span class="w"></span>
+<span class="gi">+        };</span><span class="w"></span>
+<span class="w"> </span>    }<span class="w"></span>
+<span class="w"> </span>    // Implementation of the box bounds.<span class="w"></span>
+<span class="w"> </span>    std::pair&lt;vector_double, vector_double&gt; get_bounds() const<span class="w"></span>
+<span class="gu">@@ -25,11 +39,14 @@</span><span class="w"></span>
+<span class="w"> </span>int main()<span class="w"></span>
+<span class="w"> </span>{<span class="w"></span>
+<span class="w"> </span>    // Construct a pagmo::problem from our example problem.<span class="w"></span>
+<span class="gd">-    problem p{problem_v0{}};</span><span class="w"></span>
+<span class="gi">+    problem p{problem_v1{}};</span><span class="w"></span>
+<span class="w"> </span>
+<span class="gd">-    // Compute the value of the objective function</span><span class="w"></span>
+<span class="gd">-    // in the point (1, 2, 3, 4).</span><span class="w"></span>
+<span class="gd">-    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; p.fitness({1, 2, 3, 4})[0] &lt;&lt; &#39;\n&#39;;</span><span class="w"></span>
+<span class="gi">+    // Compute the value of the objective function, equality and</span><span class="w"></span>
+<span class="gi">+    // inequality constraints in the point (1, 2, 3, 4).</span><span class="w"></span>
+<span class="gi">+    const auto fv = p.fitness({1, 2, 3, 4});</span><span class="w"></span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; fv[0] &lt;&lt; &#39;\n&#39;;</span><span class="w"></span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the eq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[1] &lt;&lt; &#39;\n&#39;;</span><span class="w"></span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the ineq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[2] &lt;&lt; &#39;\n&#39;;</span><span class="w"></span>
+<span class="w"> </span>
+<span class="w"> </span>    // Fetch the lower/upper bounds for the first variable.<span class="w"></span>
+<span class="w"> </span>    std::cout &lt;&lt; &quot;Lower bounds: [&quot; &lt;&lt; p.get_lb()[0] &lt;&lt; &quot;]\n&quot;;<span class="w"></span>
 </pre></div>
 </div>
 <p>In order to specify the type and number of constraints in our
