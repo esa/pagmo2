@@ -18,7 +18,7 @@ Non dominated sorting particle swarm optimization(NSPSO)
 
    This constructor will construct NSPSO.
 
-   .. cpp:function:: nspso(unsigned gen = 1u, double min_w = 0.95, double max_w = 10., double c1 = 0.01, double c2 = 0.5, double chi = 0.5, double v_coeff = 0.5, unsigned leader_selection_range = 2u, std::string diversity_mechansim = "crowding distance", unsigned seed = pagmo::random_device::next())
+   .. cpp:function:: nspso(unsigned gen = 1u, double omega = 0.6, double c1 = 2.0, double c2 = 2.0, double chi = 1.0, double v_coeff = 0.5, unsigned leader_selection_range = 60u, std::string diversity_mechanism = "crowding distance", bool memory = false, unsigned seed = pagmo::random_device::next())
 
       :param `gen`: number of generations to evolve.
       :param `omega`: particles' inertia weight.
