@@ -33,7 +33,10 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <pagmo/algorithm.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
@@ -162,6 +165,9 @@ public:
         return m_verbosity;
     }
 
+    // Sets the bfe
+    void set_bfe(const bfe &b);
+
     /// Gets the generations
     /**
      * @return the number of generations to evolve for
@@ -222,6 +228,7 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    boost::optional<bfe> m_bfe;
 };
 
 } // namespace pagmo
