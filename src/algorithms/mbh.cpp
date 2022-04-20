@@ -129,7 +129,7 @@ population mbh::evolve(population pop) const
     }
     // Check if the perturbation vector has size 1, in which case the whole perturbation vector is filled with
     // the same value equal to its first entry
-    auto perturb = m_perturb;
+    vector_double perturb = m_perturb;
     if (perturb.size() == 1u) {
         for (decltype(dim) i = 1u; i < dim; ++i) {
             perturb.push_back(perturb[0]);
