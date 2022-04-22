@@ -186,6 +186,35 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain17has_batch_fitnessEv">
+<span id="_CPPv3NK5pagmo11unconstrain17has_batch_fitnessEv"></span><span id="_CPPv2NK5pagmo11unconstrain17has_batch_fitnessEv"></span><span id="pagmo::unconstrain::has_batch_fitnessC"></span><span class="target" id="classpagmo_1_1unconstrain_1a89d785c83f85180a2d623dd606b1db3e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_batch_fitness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17has_batch_fitnessEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Check if the inner problem can compute fitnesses in batch mode. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the output of the <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a89d785c83f85180a2d623dd606b1db3e"><span class="std std-ref"><span class="pre">has_batch_fitness()</span></span></a></code> member function invoked by the inner problem. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain13batch_fitnessERK13vector_double">
+<span id="_CPPv3NK5pagmo11unconstrain13batch_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo11unconstrain13batch_fitnessERK13vector_double"></span><span id="pagmo::unconstrain::batch_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1unconstrain_1ac663570649c33cee1fa5963a908a7f85"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batch_fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">xs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain13batch_fitnessERK13vector_double" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Batch fitness. </p>
+<p>The batch fitness computation is forwarded to the inner UDP and then all are penalized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xs</strong> – the input decision vectors.</p>
+</dd>
+<dt class="field-even">Throws</dt>
+<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by memory errors in standard containers, threading primitives, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1aa73f9fac0a8b273bad8185ddbb738f8f"><span class="std std-ref">problem::batch_fitness()</span></a>. </p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the fitnesses of <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain8get_nobjEv">
 <span id="_CPPv3NK5pagmo11unconstrain8get_nobjEv"></span><span id="_CPPv2NK5pagmo11unconstrain8get_nobjEv"></span><span id="pagmo::unconstrain::get_nobjC"></span><span class="target" id="classpagmo_1_1unconstrain_1a0f3204bcc8926b4abee8293d07bd94ed"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nobj</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain8get_nobjEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Number of objectives. </p>
