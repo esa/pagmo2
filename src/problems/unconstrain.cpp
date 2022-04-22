@@ -55,8 +55,6 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=const"
 #endif
 
-using namespace boost::safe_numerics;
-
 namespace pagmo
 {
 
@@ -246,6 +244,7 @@ bool unconstrain::has_batch_fitness() const
  */
 vector_double unconstrain::batch_fitness(const vector_double & xs) const
 {
+  using namespace boost::safe_numerics;
   vector_double original_fitness(m_problem.batch_fitness(xs));
   const vector_double::size_type nx = m_problem.get_nx();
   const vector_double::size_type n_dvs = xs.size() / nx;
