@@ -125,9 +125,7 @@ vector_double unconstrain::fitness(const vector_double &x) const
  *
  * @param original_fitness the fitness
  * @param unconstrained_fitness the fitness
- *
- * @return the fitness of \p x.
- *
+ * *
  * @throws unspecified any exception thrown by memory errors in standard containers,
  * or by problem::fitness().
  */
