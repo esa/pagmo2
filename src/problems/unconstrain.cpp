@@ -255,9 +255,9 @@ vector_double unconstrain::batch_fitness(const vector_double & xs) const
   vector_double z; // will be resized in penalize if necessary.
   for (vector_double::size_type i = 0; i < n_dvs; ++ i)
   {
-    std::copy(original_fitness.data() + i * nobj, original_fitness.data() + (i + 1) * nobj, y.begin());
+    std::copy(original_fitness.data() + i * nobj, original_fitness.data() + (i + 1) * nobj, y.data());
     penalize(y, z);
-    std::copy(z.begin(), z.begin() + nobj, retval.begin() + i * nobj);
+    std::copy(z.data(), z.data() + nobj, retval.data() + i * nobj);
   }
   return retval;
 }
