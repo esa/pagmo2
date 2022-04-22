@@ -129,14 +129,15 @@ population mbh::evolve(population pop) const
     }
     // Check if the perturbation vector has size 1, in which case the whole perturbation vector is filled with
     // the same value equal to its first entry
-    if (m_perturb.size() == 1u) {
+    vector_double perturb = m_perturb;
+    if (perturb.size() == 1u) {
         for (decltype(dim) i = 1u; i < dim; ++i) {
-            m_perturb.push_back(m_perturb[0]);
+            perturb.push_back(perturb[0]);
         }
     }
     // Check that the perturbation vector size equals the size of the problem
-    if (m_perturb.size() != dim) {
-        pagmo_throw(std::invalid_argument, "The perturbation vector size is: " + std::to_string(m_perturb.size())
+    if (perturb.size() != dim) {
+        pagmo_throw(std::invalid_argument, "The perturbation vector size is: " + std::to_string(perturb.size())
                                                + ", while the problem dimension is: " + std::to_string(dim)
                                                + ". They need to be equal for MBH to work.");
     }
@@ -154,8 +155,8 @@ population mbh::evolve(population pop) const
             vector_double tmp_x(dim);
             for (decltype(dim) k = 0u; k < dim; ++k) {
                 tmp_x[k]
-                    = uniform_real_from_range(std::max(pop.get_x()[j][k] - m_perturb[k] * (ub[k] - lb[k]), lb[k]),
-                                              std::min(pop.get_x()[j][k] + m_perturb[k] * (ub[k] - lb[k]), ub[k]), m_e);
+                    = uniform_real_from_range(std::max(pop.get_x()[j][k] - perturb[k] * (ub[k] - lb[k]), lb[k]),
+                                              std::min(pop.get_x()[j][k] + perturb[k] * (ub[k] - lb[k]), ub[k]), m_e);
             }
             pop.set_x(j, tmp_x); // fitness is evaluated here
         }
