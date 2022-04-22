@@ -36,6 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include <boost/safe_numerics/safe_integer.hpp>
+
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
@@ -52,6 +54,8 @@ see https://www.gnu.org/licenses/. */
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=const"
 #endif
+
+using namespace boost::safe_numerics;
 
 namespace pagmo
 {
@@ -112,7 +116,9 @@ vector_double unconstrain::fitness(const vector_double &x) const
 {
     // some quantities from the orginal udp
     auto original_fitness = m_problem.fitness(x);
-    return penalize(original_fitness);
+    vector_double new_fitness;
+    penalize(original_fitness, new_fitness);
+    return new_fitness;
 }
 
 /// Penalize.
@@ -126,7 +132,7 @@ vector_double unconstrain::fitness(const vector_double &x) const
  * @throws unspecified any exception thrown by memory errors in standard containers,
  * or by problem::fitness().
  */
-vector_double unconstrain::penalize(const vector_double &original_fitness) const
+void unconstrain::penalize(const vector_double &original_fitness, vector_double& retval) const
 {
     // some quantities from the orginal udp
     auto nobj = m_problem.get_nobj();
@@ -134,8 +140,10 @@ vector_double unconstrain::penalize(const vector_double &original_fitness) const
     auto nic = m_problem.get_nic();
     auto nc = nec + nic;
 
+    // We make sure its dimension is correct
+    retval.resize(nobj);
+
     // the different methods
-    vector_double retval;
     switch (m_method) {
         case method_type::DEATH: {
             // copy the objectives
@@ -213,27 +221,44 @@ vector_double unconstrain::penalize(const vector_double &original_fitness) const
             retval = vector_double(1, norm_ec + norm_ic);
         } break;
     }
-    return retval;
 }
 
+/// Check if the inner problem can compute fitnesses in batch mode.
+/**
+ * @return the output of the <tt>has_batch_fitness()</tt> member function invoked
+ * by the inner problem.
+ */
 bool unconstrain::has_batch_fitness() const
 {
   return m_problem.has_batch_fitness();
 }
 
+/// Batch fitness.
+/**
+ * The batch fitness computation is forwarded to the inner UDP and then all are penalized.
+ *
+ * @param xs the input decision vectors.
+ *
+ * @return the fitnesses of \p xs.
+ *
+ * @throws unspecified any exception thrown by memory errors in standard containers,
+ * threading primitives, or by problem::batch_fitness().
+ */
 vector_double unconstrain::batch_fitness(const vector_double & xs) const
 {
   vector_double original_fitness(m_problem.batch_fitness(xs));
   const vector_double::size_type nx = m_problem.get_nx();
   const vector_double::size_type n_dvs = xs.size() / nx;
   vector_double::size_type nobj = m_problem.get_nobj();
-  vector_double retval(n_dvs * nobj);
+  vector_double retval;
+  retval.resize(safe<vector_double::size_type>(n_dvs) * nobj);
+  vector_double y(nobj);
+  vector_double z; // will be resized in penalize if necessary.
   for (vector_double::size_type i = 0; i < n_dvs; ++ i)
   {
-    vector_double y(nobj);
-    std::copy(original_fitness.data() + static_cast<long>(i * nobj), original_fitness.data() + static_cast<long>((i + 1) * nobj), y.begin());
-    vector_double z(penalize(y));
-    std::copy(z.begin(), z.begin() + static_cast<long>(nobj), retval.begin() + static_cast<long>(i * nobj));
+    std::copy(original_fitness.data() + i * nobj, original_fitness.data() + (i + 1) * nobj, y.begin());
+    penalize(y, z);
+    std::copy(z.begin(), z.begin() + nobj, retval.begin() + i * nobj);
   }
   return retval;
 }

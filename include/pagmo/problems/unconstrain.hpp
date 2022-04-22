@@ -111,7 +111,7 @@ public:
     vector_double fitness(const vector_double &) const;
 
     /** Check if the inner problem can compute fitnesses in batch mode.
-     * @return a flag whether the problem implements batch evaluation
+     * @return a flag reporting whether the problem implements batch evaluation
      */
     bool has_batch_fitness() const;
 
@@ -171,6 +171,9 @@ public:
     std::string get_extra_info() const;
 
 private:
+    // Penalizes the original multidimensional fitness returning a single fitness value
+    void penalize(const vector_double &, vector_double &) const;
+
     // Object serialization
     friend class boost::serialization::access;
     template <typename Archive>
@@ -191,9 +194,6 @@ private:
     method_type m_method;
     // weights vector
     vector_double m_weights;
-
-    // Penalize the original fitness
-    vector_double penalize(const vector_double & orignal_fitness) const;
 };
 } // namespace pagmo
 

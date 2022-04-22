@@ -314,7 +314,7 @@ struct bf0 {
     vector_double batch_fitness(const vector_double &dvs) const
     {
         ++s_counter;
-        return vector_double(dvs.size(), 1.);
+        return vector_double(dvs.size() * 2u, 1.);
     }
     vector_double::size_type get_nic() const
     {
@@ -329,4 +329,7 @@ BOOST_AUTO_TEST_CASE(unconstrain_batch_test)
     problem p0{bf0{}};
     unconstrain t{p0};
     BOOST_CHECK(t.has_batch_fitness());
+    bfe dafault_bfe{};
+    population pop{p0, dafault_bfe, 20u};
+    BOOST_CHECK(bf0::s_counter == 1u);
 }
