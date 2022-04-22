@@ -115,7 +115,7 @@ public:
      *
      * @throws std::invalid_argument if \p acc is not \f$ >=0 \f$, \p impstop is not a
      * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$,
-     * \p ker is not a positive integer, \p oracle is not positive, \p
+     * \p ker is not \f$ >=2 \f$, \p oracle is not positive, \p
      * threshold is not \f$ \in [1,gen] \f$ when \f$memory=false\f$ and  \f$gen!=0\f$, \p threshold is not \f$ >=1 \f$
      * when \f$memory=true\f$ and \f$gen!=0\f$, \p q is not \f$ >=0 \f$
      */

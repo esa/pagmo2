@@ -48,7 +48,7 @@ namespace pagmo
  *
  * All problems in this test suite are box-constrained continuous n-dimensional multi-objective problems, scalable in
  * fitness dimension. The dimension of the decision space is \f$ k + fdim - 1 \f$, whereas fdim is the number of
- * objectives and k a paramter. Properties of the decision space and the Pareto-front of each problems are as follows:
+ * objectives and k a parameter. Properties of the decision space and the Pareto-front of each problems are as follows:
  *
  * DTLZ1:
  *

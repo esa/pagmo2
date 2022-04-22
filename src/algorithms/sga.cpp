@@ -515,7 +515,7 @@ void sga::perform_mutation(std::vector<vector_double> &X, const std::pair<vector
                 }
                 break;
             }
-            case (detail::sga_mutation::POLYNOMIAL): { // https://www.iitk.ac.in/kangal/papers/k2012016.pdf
+            case (detail::sga_mutation::POLYNOMIAL): { // https://www.egr.msu.edu/~kdeb/papers/k2012016.pdf
                 // Start of main loop through the chromosome
                 for (decltype(N) j = 0u; j < N; ++j) {
                     auto gene_idx = to_be_mutated[j];
