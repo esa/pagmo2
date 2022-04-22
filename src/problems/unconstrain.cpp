@@ -124,13 +124,14 @@ vector_double unconstrain::fitness(const vector_double &x) const
  * The unconstrained fitness computation.
  *
  * @param original_fitness the fitness
+ * @param unconstrained_fitness the fitness
  *
  * @return the fitness of \p x.
  *
  * @throws unspecified any exception thrown by memory errors in standard containers,
  * or by problem::fitness().
  */
-void unconstrain::penalize(const vector_double &original_fitness, vector_double& retval) const
+void unconstrain::penalize(const vector_double &original_fitness, vector_double& unconstrained_fitness) const
 {
     // some quantities from the orginal udp
     auto nobj = m_problem.get_nobj();
@@ -139,21 +140,21 @@ void unconstrain::penalize(const vector_double &original_fitness, vector_double&
     auto nc = nec + nic;
 
     // We make sure its dimension is correct
-    retval.resize(nobj);
+    unconstrained_fitness.resize(nobj);
 
     // the different methods
     switch (m_method) {
         case method_type::DEATH: {
             // copy the objectives
-            retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
+            unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
             // penalize them if unfeasible
             if (!m_problem.feasibility_f(original_fitness)) {
-                std::fill(retval.begin(), retval.end(), std::numeric_limits<double>::max());
+                std::fill(unconstrained_fitness.begin(), unconstrained_fitness.end(), std::numeric_limits<double>::max());
             }
         } break;
         case method_type::KURI: {
             // copy the objectives
-            retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
+            unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
             // penalize them if unfeasible
             if (!m_problem.feasibility_f(original_fitness)) {
                 // get the tolerances
@@ -170,12 +171,12 @@ void unconstrain::penalize(const vector_double &original_fitness, vector_double&
                 // sets the Kuri penalization
                 auto penalty = std::numeric_limits<double>::max()
                                * (1. - static_cast<double>(sat_ec + sat_ic) / static_cast<double>(nc));
-                std::fill(retval.begin(), retval.end(), penalty);
+                std::fill(unconstrained_fitness.begin(), unconstrained_fitness.end(), penalty);
             }
         } break;
         case method_type::WEIGHTED: {
             // copy the objectives
-            retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
+            unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
             // copy the constraints (NOTE: not necessary remove)
             vector_double c(original_fitness.data() + nobj, original_fitness.data() + original_fitness.size());
             // get the tolerances
@@ -195,12 +196,12 @@ void unconstrain::penalize(const vector_double &original_fitness, vector_double&
                 }
             }
             // penalizing the objectives
-            for (double &value : retval) {
+            for (double &value : unconstrained_fitness) {
                 value += penalty;
             }
         } break;
         case method_type::IGNORE_C: {
-            retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
+            unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
         } break;
         case method_type::IGNORE_O: {
             // get the tolerances
@@ -216,7 +217,7 @@ void unconstrain::penalize(const vector_double &original_fitness, vector_double&
                 = detail::test_ineq_constraints(original_fitness.data() + n_obj_orig + nec,
                                                 original_fitness.data() + original_fitness.size(), c_tol.data() + nec)
                       .second;
-            retval = vector_double(1, norm_ec + norm_ic);
+            unconstrained_fitness = vector_double(1, norm_ec + norm_ic);
         } break;
     }
 }

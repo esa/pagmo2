@@ -110,15 +110,10 @@ public:
     // Fitness.
     vector_double fitness(const vector_double &) const;
 
-    /** Check if the inner problem can compute fitnesses in batch mode.
-     * @return a flag reporting whether the problem implements batch evaluation
-     */
+    // The has_batch_fitness of the problem.
     bool has_batch_fitness() const;
 
-    /** Batch fitness.
-     * @param xs a <tt>std::vector</tt> of the inputs
-     * @return the fitness of all inputs
-     */
+    // The batch fitness of the problem.
     vector_double batch_fitness(const vector_double & xs) const;
 
     // Number of objectives.
