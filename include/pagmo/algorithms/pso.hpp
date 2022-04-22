@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_ALGORITHMS_PSO_HPP
 #define PAGMO_ALGORITHMS_PSO_HPP
 
+#include <boost/optional.hpp>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -223,6 +224,21 @@ public:
     }
 
 private:
+    struct memory {
+        std::vector<vector_double> m_V;
+        std::vector<vector_double> m_X;
+        std::vector<vector_double> m_lbX;
+        std::vector<vector_double> m_fit;
+        std::vector<vector_double> m_lbfit;
+        vector_double m_best_fit;
+        std::vector<std::vector<population::size_type>> m_neighb;
+        vector_double m_best_neighb;
+
+        // Object serialization
+        template <typename Archive>
+        void serialize(Archive &, unsigned);
+    };
+
     // Object serialization
     friend class boost::serialization::access;
     template <typename Archive>
@@ -254,8 +270,7 @@ private:
     unsigned m_neighb_param;
     // memory
     bool m_memory;
-    // paricles' velocities
-    mutable std::vector<vector_double> m_V;
+    mutable boost::optional<pso::memory> m_memory_data;
 
     mutable detail::random_engine_type m_e;
     unsigned m_seed;

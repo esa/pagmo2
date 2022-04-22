@@ -134,6 +134,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
         }
     }
 }
+
 BOOST_AUTO_TEST_CASE(setters_getters_test)
 {
     pso user_algo{5000u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u};
@@ -182,5 +183,101 @@ BOOST_AUTO_TEST_CASE(serialization_test)
         BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<4>(before_log[i]), std::get<4>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<5>(before_log[i]), std::get<5>(after_log[i]), 1e-8);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(pso_memory_test)
+{
+    // We check here that when memory is true calling evolve(pop) two times on 1 gen
+    // is the same as calling 1 time evolve with 2 gens
+    auto omega = 0.5;
+    auto eta1 = 0.5;
+    auto eta2 = 0.5;
+    auto max_vel = 0.5;
+    auto neighb_param = 4u;
+    auto seed = 42u;
+    auto pop_size = 10u;
+
+    for (auto variant = 1u; variant <= 6; ++variant) {
+        for (auto neighb_type = 1u; neighb_type <= 4; ++neighb_type) {
+            auto log1 = ([&]() {
+                auto n_generations = 1u;
+                auto memory = true;
+                algorithm algo{
+                    pso{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param, memory, seed}};
+                algo.set_verbosity(1u);
+                problem prob{rosenbrock{25u}};
+                population pop{prob, pop_size, seed};
+                pop = algo.evolve(pop);
+                pop = algo.evolve(pop);
+                pop = algo.evolve(pop);
+                return algo.extract<pso>()->get_log();
+            })();
+
+            auto log2 = ([&]() {
+                auto n_generations = 3u;
+                auto memory = false;
+                algorithm algo{
+                    pso{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param, memory, seed}};
+                algo.set_verbosity(1u);
+                problem prob{rosenbrock{25u}};
+                population pop{prob, pop_size, seed};
+                pop = algo.evolve(pop);
+                return algo.extract<pso>()->get_log();
+            })();
+
+            // indexes 0 (Gen) and 1 (Fevals) may be different
+            // Check index 2 (gbest)
+            BOOST_CHECK_CLOSE(std::get<2>(log1[0]), std::get<2>(log2[2]), 1e-8);
+            // Check index 3 (Mean Vel.)
+            BOOST_CHECK_CLOSE(std::get<3>(log1[0]), std::get<3>(log2[2]), 1e-8);
+            // Check index 4 (Mean lbest)
+            BOOST_CHECK_CLOSE(std::get<4>(log1[0]), std::get<4>(log2[2]), 1e-8);
+            // Check index 5 (Avg. Dist.)
+            BOOST_CHECK_CLOSE(std::get<5>(log1[0]), std::get<5>(log2[2]), 1e-8);
+
+            // Make sure serializing and deserializing the results will give the same answer
+            auto serialize_and_deserialize = [](algorithm &algo) {
+                std::stringstream ss;
+                {
+                    boost::archive::binary_oarchive oarchive(ss);
+                    oarchive << algo;
+                }
+                algo = algorithm{};
+                {
+                    boost::archive::binary_iarchive iarchive(ss);
+                    iarchive >> algo;
+                }
+            };
+            auto log3 = ([&]() {
+                auto n_generations = 1u;
+                auto memory = true;
+                algorithm algo{
+                    pso{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param, memory, seed}};
+                algo.set_verbosity(1u);
+                problem prob{rosenbrock{25u}};
+                population pop{prob, pop_size, seed};
+                pop = algo.evolve(pop);
+                serialize_and_deserialize(algo);
+                pop = algo.evolve(pop);
+                serialize_and_deserialize(algo);
+                pop = algo.evolve(pop);
+                return algo.extract<pso>()->get_log();
+            })();
+            // While comparing the serialized vs non-serialized versions, all logs must be the same.
+            BOOST_CHECK_EQUAL(log1.size(), log3.size());
+            // Check index 0 (Gen)
+            BOOST_CHECK_EQUAL(std::get<0>(log1[0]), std::get<0>(log3[0]));
+            // Check index 1 (Fevals)
+            BOOST_CHECK_EQUAL(std::get<1>(log1[0]), std::get<1>(log3[0]));
+            // Check index 2 (gbest)
+            BOOST_CHECK_CLOSE(std::get<2>(log1[0]), std::get<2>(log3[0]), 1e-8);
+            // Check index 3 (Mean Vel.)
+            BOOST_CHECK_CLOSE(std::get<3>(log1[0]), std::get<3>(log3[0]), 1e-8);
+            // Check index 4 (Mean lbest)
+            BOOST_CHECK_CLOSE(std::get<4>(log1[0]), std::get<4>(log3[0]), 1e-8);
+            // Check index 5 (Avg. Dist.)
+            BOOST_CHECK_CLOSE(std::get<5>(log1[0]), std::get<5>(log3[0]), 1e-8);
+        }
     }
 }

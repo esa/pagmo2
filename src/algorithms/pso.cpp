@@ -46,6 +46,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
+
 namespace pagmo
 {
 
@@ -73,7 +77,7 @@ constexpr int pso_vonNeumann_neighb_diff[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 
 pso::pso(unsigned gen, double omega, double eta1, double eta2, double max_vel, unsigned variant, unsigned neighb_type,
          unsigned neighb_param, bool memory, unsigned seed)
     : m_max_gen(gen), m_omega(omega), m_eta1(eta1), m_eta2(eta2), m_max_vel(max_vel), m_variant(variant),
-      m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_V(), m_e(seed), m_seed(seed),
+      m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_e(seed), m_seed(seed),
       m_verbosity(0u), m_log()
 {
     if (m_omega < 0. || m_omega > 1.) {
@@ -179,44 +183,62 @@ population pso::evolve(population pop) const
     }
 
     // Copy the particle positions and their fitness
-    for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
-        X[i] = pop.get_x()[i];
-        lbX[i] = pop.get_x()[i];
+    // If calling from memory, the positions from last run may not be the same as the best population
+    // so it is make a correction here
+    if (m_memory && m_memory_data) {
+        X = m_memory_data->m_X;
+        lbX = m_memory_data->m_lbX;
 
-        fit[i] = pop.get_f()[i];
-        lbfit[i] = pop.get_f()[i];
+        fit = m_memory_data->m_fit;
+        lbfit = m_memory_data->m_lbfit;
+    } else {
+        for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
+            X[i] = pop.get_x()[i];
+            lbX[i] = pop.get_x()[i];
+
+            fit[i] = pop.get_f()[i];
+            lbfit[i] = pop.get_f()[i];
+        }
     }
 
     // Initialize the particle velocities if necessary
-    if ((m_V.size() != swarm_size) || (!m_memory)) {
-        m_V = std::vector<vector_double>(swarm_size, dummy);
+    std::vector<vector_double> V(swarm_size, dummy);
+    if (m_memory && m_memory_data) {
+        V = m_memory_data->m_V;
+    } else {
         for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
             for (decltype(dim) j = 0u; j < dim; ++j) {
-                m_V[i][j] = uniform_real_from_range(minv[j], maxv[j], m_e);
+                V[i][j] = uniform_real_from_range(minv[j], maxv[j], m_e);
             }
         }
     }
 
     // Initialize the Swarm's topology
-    switch (m_neighb_type) {
-        case 1:
-            initialize_topology__gbest(pop, best_neighb, best_fit, neighb);
-            break;
-        case 3:
-            initialize_topology__von(neighb);
-            break;
-        case 4:
-            initialize_topology__adaptive_random(neighb);
-            // need to track improvements in best found fitness, to know when to rewire
-            best_fit = pop.get_f()[pop.best_idx()];
-            break;
-        case 2:
-        default:
-            initialize_topology__lbest(neighb);
+    if (m_memory && m_memory_data) {
+        neighb = m_memory_data->m_neighb;
+        best_fit = m_memory_data->m_best_fit;
+        best_neighb = m_memory_data->m_best_neighb;
+    } else {
+        switch (m_neighb_type) {
+            case 1:
+                initialize_topology__gbest(pop, best_neighb, best_fit, neighb);
+                break;
+            case 3:
+                initialize_topology__von(neighb);
+                break;
+            case 4:
+                initialize_topology__adaptive_random(neighb);
+                // need to track improvements in best found fitness, to know when to rewire
+                best_fit = pop.get_f()[pop.best_idx()];
+                break;
+            case 2:
+            default:
+                initialize_topology__lbest(neighb);
+        }
     }
     // auxiliary variables specific to the Fully Informed Particle Swarm variant
     double acceleration_coefficient = m_eta1 + m_eta2;
-    double sum_forces;
+    double sum_forces = 0.;
 
     double r1 = 0.;
     double r2 = 0.;
@@ -242,8 +264,8 @@ population pso::evolve(population pop) const
                 for (decltype(dim) d = 0u; d < dim; ++d) {
                     r1 = drng(m_e);
                     r2 = drng(m_e);
-                    m_V[p][d] = m_omega * m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
-                                + m_eta2 * r2 * (best_neighb[d] - X[p][d]);
+                    V[p][d] = m_omega * V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
+                              + m_eta2 * r2 * (best_neighb[d] - X[p][d]);
                 }
             }
 
@@ -253,8 +275,8 @@ population pso::evolve(population pop) const
             else if (m_variant == 2u) {
                 for (decltype(dim) d = 0u; d < dim; ++d) {
                     r1 = drng(m_e);
-                    m_V[p][d] = m_omega * m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
-                                + m_eta2 * r1 * (best_neighb[d] - X[p][d]);
+                    V[p][d] = m_omega * V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
+                              + m_eta2 * r1 * (best_neighb[d] - X[p][d]);
                 }
             }
 
@@ -264,8 +286,8 @@ population pso::evolve(population pop) const
                 r1 = drng(m_e);
                 r2 = drng(m_e);
                 for (decltype(dim) d = 0u; d < dim; ++d) {
-                    m_V[p][d] = m_omega * m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
-                                + m_eta2 * r2 * (best_neighb[d] - X[p][d]);
+                    V[p][d] = m_omega * V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
+                              + m_eta2 * r2 * (best_neighb[d] - X[p][d]);
                 }
             }
 
@@ -275,8 +297,8 @@ population pso::evolve(population pop) const
             else if (m_variant == 4u) {
                 r1 = drng(m_e);
                 for (decltype(dim) d = 0u; d < dim; ++d) {
-                    m_V[p][d] = m_omega * m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
-                                + m_eta2 * r1 * (best_neighb[d] - X[p][d]);
+                    V[p][d] = m_omega * V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
+                              + m_eta2 * r1 * (best_neighb[d] - X[p][d]);
                 }
             }
 
@@ -297,9 +319,9 @@ population pso::evolve(population pop) const
                 for (decltype(dim) d = 0u; d < dim; ++d) {
                     r1 = drng(m_e);
                     r2 = drng(m_e);
-                    m_V[p][d] = m_omega
-                                * (m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
-                                   + m_eta2 * r2 * (best_neighb[d] - X[p][d]));
+                    V[p][d]
+                        = m_omega
+                          * (V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d]) + m_eta2 * r2 * (best_neighb[d] - X[p][d]));
                 }
             }
 
@@ -319,7 +341,7 @@ population pso::evolve(population pop) const
                     for (decltype(neighb[p].size()) n = 0u; n < neighb[p].size(); ++n) {
                         sum_forces += drng(m_e) * acceleration_coefficient * (lbX[neighb[p][n]][d] - X[p][d]);
                     }
-                    m_V[p][d] = m_omega * (m_V[p][d] + sum_forces / static_cast<double>(neighb[p].size()));
+                    V[p][d] = m_omega * (V[p][d] + sum_forces / static_cast<double>(neighb[p].size()));
                 }
             }
 
@@ -327,28 +349,28 @@ population pso::evolve(population pop) const
             // and we perform the position update and the feasibility correction
             for (decltype(dim) d = 0u; d < dim; ++d) {
 
-                if (m_V[p][d] > maxv[d]) {
-                    m_V[p][d] = maxv[d];
+                if (V[p][d] > maxv[d]) {
+                    V[p][d] = maxv[d];
                 }
 
-                else if (m_V[p][d] < minv[d]) {
-                    m_V[p][d] = minv[d];
+                else if (V[p][d] < minv[d]) {
+                    V[p][d] = minv[d];
                 }
 
                 // update position
-                new_x = X[p][d] + m_V[p][d];
+                new_x = X[p][d] + V[p][d];
 
                 // feasibility correction
                 // (velocity updated to that which would have taken the previous position
                 // to the newly corrected feasible position)
                 if (new_x < lb[d]) {
                     new_x = lb[d];
-                    m_V[p][d] = 0.;
+                    V[p][d] = 0.;
                     //					new_x = boost::uniform_real<double>(lb[d],ub[d])(m_drng);
                     //					V[p][d] = new_x - X[p][d];
                 } else if (new_x > ub[d]) {
                     new_x = ub[d];
-                    m_V[p][d] = 0.;
+                    V[p][d] = 0.;
                     //					new_x = boost::uniform_real<double>(lb[d],ub[d])(m_drng);
                     //					V[p][d] = new_x - X[p][d];
                 }
@@ -393,13 +415,13 @@ population pso::evolve(population pop) const
                 auto best = local_fits[static_cast<vector_double::size_type>(idx_best)];
                 // We compute a measure for the average particle velocity across the swarm
                 auto mean_velocity = 0.;
-                for (decltype(m_V.size()) i = 0u; i < m_V.size(); ++i) {
-                    for (decltype(m_V[i].size()) j = 0u; j < m_V[i].size(); ++j) {
+                for (decltype(V.size()) i = 0u; i < V.size(); ++i) {
+                    for (decltype(V[i].size()) j = 0u; j < V[i].size(); ++j) {
                         if (ub[j] > lb[j]) {
-                            mean_velocity += std::abs(m_V[i][j] / (ub[j] - lb[j]));
+                            mean_velocity += std::abs(V[i][j] / (ub[j] - lb[j]));
                         } // else 0
                     }
-                    mean_velocity /= static_cast<double>(m_V[i].size());
+                    mean_velocity /= static_cast<double>(V[i].size());
                 }
                 // We compute the average distance across particles (NOTE: N^2 complexity)
                 auto avg_dist = 0.;
@@ -439,6 +461,12 @@ population pso::evolve(population pop) const
     for (decltype(swarm_size) i = 0u; i < swarm_size; ++i) {
         pop.set_xf(i, lbX[i], lbfit[i]);
     }
+
+    // Keep memory variables only if asked for
+    if (m_memory) {
+        m_memory_data = pso::memory{V, X, lbX, fit, lbfit, best_fit, neighb, best_neighb};
+    }
+
     return pop;
 }
 
@@ -481,8 +509,15 @@ std::string pso::get_extra_info() const
 template <typename Archive>
 void pso::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, m_max_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param, m_e,
-                    m_seed, m_verbosity, m_log);
+    detail::archive(ar, m_max_gen, m_omega, m_eta1, m_eta2, m_max_vel, m_variant, m_neighb_type, m_neighb_param,
+                    m_memory, m_memory_data, m_e, m_seed, m_verbosity, m_log);
+}
+
+// Object'm memory serialization
+template <typename Archive>
+void pso::memory::serialize(Archive &ar, unsigned)
+{
+    detail::archive(ar, m_V, m_X, m_lbX, m_fit, m_lbfit, m_best_fit, m_neighb, m_best_neighb);
 }
 
 /**
