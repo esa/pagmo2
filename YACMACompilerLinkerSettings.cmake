@@ -112,6 +112,9 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsizeof-array-div)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wxor-used-as-pow)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wfinal-dtor-non-final-class)
+        # NOTE: this is a new flag in Clang 13 which seems to give
+        # incorrect warnings for UDLs.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wno-reserved-identifier)
     endif()
 
     # Common configuration for GCC, clang and Intel.
@@ -135,11 +138,6 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         # This is useful when the compiler decides the template backtrace is too verbose.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-ftemplate-backtrace-limit=0)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-fstack-protector-all)
-        # A few suggestion flags.
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=pure)
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=const)
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=noreturn)
-        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-attribute=format)
         # From GCC 5.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wodr)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsuggest-final-types)
