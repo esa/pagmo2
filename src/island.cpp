@@ -45,8 +45,16 @@ see https://www.gnu.org/licenses/. */
 #include <utility>
 #include <vector>
 
+#if defined(PAGMO_HAVE_PTHREAD_ATFORK)
+
+#include <pthread.h>
+
+#endif
+
 #include <boost/any.hpp>
 #include <boost/optional.hpp>
+
+#include <tbb/concurrent_queue.h>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/archipelago.hpp>
@@ -64,7 +72,9 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 
 #if defined(PAGMO_WITH_FORK_ISLAND)
+
 #include <pagmo/islands/fork_island.hpp>
+
 #endif
 
 // MINGW-specific warnings.
@@ -177,6 +187,77 @@ void default_island_factory(const algorithm &algo, const population &pop, std::u
 std::function<void(const algorithm &, const population &, std::unique_ptr<detail::isl_inner_base> &)> island_factory
     = &default_island_factory;
 
+namespace
+{
+
+// Factory function for the global task_queue cache. Note that the cache is returned
+// wrapped in a unique_ptr, so that we can reset it while avoiding calling its
+// destructor in the child process after a fork().
+auto &get_task_queue_cache()
+{
+    static auto tq_cache = std::make_unique<oneapi::tbb::concurrent_queue<std::unique_ptr<task_queue>>>();
+
+    return tq_cache;
+}
+
+#if defined(PAGMO_HAVE_PTHREAD_ATFORK)
+
+// NOTE: this machinery is used to automatically clean up the task queue cache in the child
+// process after a fork(). This is necessary because fork() duplicates the memory state of the calling
+// thread only, and the destruction of the other thread objects in the task queue cache leads to deadlocks.
+// In order to accomplish this, we register a callback via pthread_atfork() that will be called
+// by the child process immediately after fork(). The registration of the callback needs to be done
+// once per thread, hence we use a thread local std::once_flag in conjuction with the std::call_once()
+// mechanism.
+
+// Per-thread flag to indicate that the fork() callback has been registered.
+thread_local std::once_flag fork_callback_flag;
+
+// The callback that will be invoked by the child process after fork().
+extern "C" void clear_task_queue_cache() noexcept
+{
+    // NOTE: there are no concerns about thread-safety in the modification
+    // of the global cache: in the child process there is only 1 running thread.
+
+    auto &tqc_ptr = get_task_queue_cache();
+
+    // Release the pointer to the current cache, in order to avoid invoking its
+    // destructor which would lead to a deadlock.
+    [[maybe_unused]] auto old_ptr = tqc_ptr.release();
+
+    // Create a new empty cache.
+    tqc_ptr = std::make_unique<oneapi::tbb::concurrent_queue<std::unique_ptr<task_queue>>>();
+}
+
+#endif
+
+} // namespace
+
+std::unique_ptr<task_queue> get_task_queue()
+{
+    // Fetch the global cache.
+    auto &tqc = get_task_queue_cache();
+
+    assert(static_cast<bool>(tqc));
+
+#if defined(PAGMO_HAVE_PTHREAD_ATFORK)
+
+    // Register the fork() callback here, after
+    // having triggered the construction of the global cache.
+    std::call_once(fork_callback_flag, []() { ::pthread_atfork(nullptr, nullptr, clear_task_queue_cache); });
+
+#endif
+
+    // Try to pop a task queue from the cache,
+    // or create a new one.
+    std::unique_ptr<task_queue> retval;
+    if (!tqc->try_pop(retval)) {
+        retval = std::make_unique<task_queue>();
+    }
+
+    return retval;
+}
+
 // NOTE: thread_island is ok as default choice, as the null_prob/null_algo
 // are both thread safe.
 island_data::island_data()
@@ -194,6 +275,15 @@ island_data::island_data(std::unique_ptr<isl_inner_base> &&ptr, algorithm &&a, p
     : isl_ptr(std::move(ptr)), algo(std::make_shared<algorithm>(std::move(a))),
       pop(std::make_shared<population>(std::move(p))), r_pol(r), s_pol(s)
 {
+}
+
+island_data::~island_data()
+{
+    // Consume all tasks in the queue.
+    queue->wait_all();
+
+    // Move the queue to the cache.
+    get_task_queue_cache()->push(std::move(queue));
 }
 
 namespace
@@ -339,7 +429,7 @@ void island::evolve(unsigned n)
         // Move assign a new future provided by the enqueue() method.
         // NOTE: enqueue either returns a valid future, or throws without
         // having enqueued any task.
-        m_ptr->futures.back() = m_ptr->queue.enqueue([this, n]() {
+        m_ptr->futures.back() = m_ptr->queue->enqueue([this, n]() {
             // Random engine for use in the migration logic.
             // Wrap it in an optional so that, if we don't need
             // it, we don't waste CPU/memory.

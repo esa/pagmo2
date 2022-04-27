@@ -268,6 +268,8 @@ PAGMO_DLL_PUBLIC extern std::function<void(const algorithm &, const population &
                                            std::unique_ptr<detail::isl_inner_base> &)>
     island_factory;
 
+PAGMO_DLL_PUBLIC std::unique_ptr<task_queue> get_task_queue();
+
 // NOTE: the idea with this class is that we use it to store the data members of pagmo::island, and,
 // within pagmo::island, we store a pointer to an instance of this struct. The reason for this approach
 // is that, like this, we can provide sensible move semantics: just move the internal pointer of pagmo::island.
@@ -317,11 +319,15 @@ struct PAGMO_DLL_PUBLIC island_data {
     // to be thread-safe.
     explicit island_data(std::unique_ptr<isl_inner_base> &&, algorithm &&, population &&, const r_policy &,
                          const s_policy &);
+
     // Delete all the rest, make sure we don't implicitly rely on any of this.
     island_data(const island_data &) = delete;
     island_data(island_data &&) = delete;
     island_data &operator=(const island_data &) = delete;
     island_data &operator=(island_data &&) = delete;
+
+    ~island_data();
+
     // The data members.
     // NOTE: isl_ptr has no associated mutex, as it's supposed to be fully
     // thread-safe on its own.
@@ -348,7 +354,7 @@ struct PAGMO_DLL_PUBLIC island_data {
     // This will be explicitly set only during archipelago::push_back().
     // In all other situations, it will be null.
     archipelago *archi_ptr = nullptr;
-    task_queue queue;
+    std::unique_ptr<task_queue> queue = get_task_queue();
 };
 
 } // namespace detail
