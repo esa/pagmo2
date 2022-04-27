@@ -195,7 +195,7 @@ namespace
 // destructor in the child process after a fork().
 auto &get_task_queue_cache()
 {
-    static auto tq_cache = std::make_unique<oneapi::tbb::concurrent_queue<std::unique_ptr<task_queue>>>();
+    static auto tq_cache = std::make_unique<tbb::concurrent_queue<std::unique_ptr<task_queue>>>();
 
     return tq_cache;
 }
@@ -226,7 +226,7 @@ extern "C" void clear_task_queue_cache() noexcept
     [[maybe_unused]] auto old_ptr = tqc_ptr.release();
 
     // Create a new empty cache.
-    tqc_ptr = std::make_unique<oneapi::tbb::concurrent_queue<std::unique_ptr<task_queue>>>();
+    tqc_ptr = std::make_unique<tbb::concurrent_queue<std::unique_ptr<task_queue>>>();
 }
 
 #endif
