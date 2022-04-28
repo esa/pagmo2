@@ -73,7 +73,7 @@ include(YACMAThreadingSetup)
 # cache) when a process is forked.
 if(PAGMO_HAVE_FORK_SYSCALL AND CMAKE_USE_PTHREADS_INIT)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}")
-    CHECK_CXX_SYMBOL_EXISTS(pthread_atfork "pthread.h" PAGMO_WITH_PTHREAD_ATFORK)
+    CHECK_CXX_SYMBOL_EXISTS(pthread_atfork "pthread.h" PAGMO_HAVE_PTHREAD_ATFORK)
     unset(CMAKE_REQUIRED_LIBRARIES)
 endif()
 
