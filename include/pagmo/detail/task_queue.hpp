@@ -74,7 +74,7 @@ struct PAGMO_DLL_PUBLIC task_queue {
     std::condition_variable m_cond;
     std::mutex m_mutex;
     std::queue<task_type> m_tasks;
-    // NOTE: it's important that this comes last,
+    // NOTE: it's **important** that this comes last,
     // so that when the thread starts all other
     // members have been inited.
     std::thread m_thread;
