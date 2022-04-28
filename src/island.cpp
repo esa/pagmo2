@@ -244,7 +244,10 @@ std::unique_ptr<task_queue> get_task_queue()
 
     // Register the fork() callback here, after
     // having triggered the construction of the global cache.
-    std::call_once(fork_callback_flag, []() { ::pthread_atfork(nullptr, nullptr, clear_task_queue_cache); });
+    std::call_once(fork_callback_flag, []() {
+        std::cout << "Registering fork callback for thread " << std::this_thread::get_id() << '\n';
+        ::pthread_atfork(nullptr, nullptr, clear_task_queue_cache);
+    });
 
 #endif
 
