@@ -28,3 +28,4 @@ doc/sphinx/_build
 
 # Specific to editors setting
 .vscode/*
+.cache/*
