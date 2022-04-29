@@ -129,7 +129,7 @@ vector_double unconstrain::fitness(const vector_double &x) const
  * @throws unspecified any exception thrown by memory errors in standard containers,
  * or by problem::fitness().
  */
-void unconstrain::penalize(const vector_double &original_fitness, vector_double& unconstrained_fitness) const
+void unconstrain::penalize(const vector_double &original_fitness, vector_double &unconstrained_fitness) const
 {
     // some quantities from the orginal udp
     auto nobj = m_problem.get_nobj();
@@ -147,7 +147,8 @@ void unconstrain::penalize(const vector_double &original_fitness, vector_double&
             unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
             // penalize them if unfeasible
             if (!m_problem.feasibility_f(original_fitness)) {
-                std::fill(unconstrained_fitness.begin(), unconstrained_fitness.end(), std::numeric_limits<double>::max());
+                std::fill(unconstrained_fitness.begin(), unconstrained_fitness.end(),
+                          std::numeric_limits<double>::max());
             }
         } break;
         case method_type::KURI: {
@@ -227,7 +228,7 @@ void unconstrain::penalize(const vector_double &original_fitness, vector_double&
  */
 bool unconstrain::has_batch_fitness() const
 {
-  return m_problem.has_batch_fitness();
+    return m_problem.has_batch_fitness();
 }
 
 /// Batch fitness.
@@ -241,24 +242,23 @@ bool unconstrain::has_batch_fitness() const
  * @throws unspecified any exception thrown by memory errors in standard containers,
  * threading primitives, or by problem::batch_fitness().
  */
-vector_double unconstrain::batch_fitness(const vector_double & xs) const
+vector_double unconstrain::batch_fitness(const vector_double &xs) const
 {
-  using namespace boost::safe_numerics;
-  vector_double original_fitness(m_problem.batch_fitness(xs));
-  const vector_double::size_type nx = m_problem.get_nx();
-  const vector_double::size_type n_dvs = xs.size() / nx;
-  vector_double::size_type nobj = m_problem.get_nobj();
-  vector_double retval;
-  retval.resize(safe<vector_double::size_type>(n_dvs) * nobj);
-  vector_double y(nobj);
-  vector_double z; // will be resized in penalize if necessary.
-  for (vector_double::size_type i = 0; i < n_dvs; ++ i)
-  {
-    std::copy(original_fitness.data() + i * nobj, original_fitness.data() + (i + 1) * nobj, y.data());
-    penalize(y, z);
-    std::copy(z.data(), z.data() + nobj, retval.data() + i * nobj);
-  }
-  return retval;
+    using namespace boost::safe_numerics;
+    vector_double original_fitness(m_problem.batch_fitness(xs));
+    const vector_double::size_type nx = m_problem.get_nx();
+    const vector_double::size_type n_dvs = xs.size() / nx;
+    vector_double::size_type nobj = m_problem.get_nobj();
+    vector_double retval;
+    retval.resize(safe<vector_double::size_type>(n_dvs) * nobj);
+    vector_double y(nobj);
+    vector_double z; // will be resized in penalize if necessary.
+    for (vector_double::size_type i = 0; i < n_dvs; ++i) {
+        std::copy(original_fitness.data() + i * nobj, original_fitness.data() + (i + 1) * nobj, y.data());
+        penalize(y, z);
+        std::copy(z.data(), z.data() + nobj, retval.data() + i * nobj);
+    }
+    return retval;
 }
 
 /// Number of objectives.
