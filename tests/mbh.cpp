@@ -118,6 +118,22 @@ BOOST_AUTO_TEST_CASE(mbh_evolve_test)
         mbh user_algo{compass_search{100u, 0.1, 0.001, 0.7}, 5u, {1e-3, 1e-2}, 23u};
         BOOST_CHECK_THROW(user_algo.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
     }
+    // Here we test that the algo can be called twice with problems of different dimensions (Issue #505)
+    {
+        // prepare problems and populations
+        problem prob1{rosenbrock{5u}};
+        population pop1{prob1, 5u, 23u};
+
+        problem prob2{rosenbrock{10u}};
+        population pop2{prob2, 5u, 23u};
+
+        // prepare algo with perturbation 0.1
+        mbh user_algo{compass_search{100u, 0.1, 0.001, 0.7}, 5u, 0.1};
+
+        // test
+        user_algo.evolve(pop1);
+        user_algo.evolve(pop2);
+    }
     // And a clean exit for 0 generations
     problem prob{hock_schittkowsky_71{}};
     population pop{prob, 10u};

@@ -36,6 +36,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include <boost/safe_numerics/safe_integer.hpp>
+
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problem.hpp>
@@ -112,25 +114,45 @@ vector_double unconstrain::fitness(const vector_double &x) const
 {
     // some quantities from the orginal udp
     auto original_fitness = m_problem.fitness(x);
+    vector_double new_fitness;
+    penalize(original_fitness, new_fitness);
+    return new_fitness;
+}
+
+/// Penalize.
+/**
+ * The unconstrained fitness computation.
+ *
+ * @param original_fitness the fitness
+ * @param unconstrained_fitness the fitness
+ * *
+ * @throws unspecified any exception thrown by memory errors in standard containers,
+ * or by problem::fitness().
+ */
+void unconstrain::penalize(const vector_double &original_fitness, vector_double& unconstrained_fitness) const
+{
+    // some quantities from the orginal udp
     auto nobj = m_problem.get_nobj();
     auto nec = m_problem.get_nec();
     auto nic = m_problem.get_nic();
     auto nc = nec + nic;
 
+    // We make sure its dimension is correct
+    unconstrained_fitness.resize(nobj);
+
     // the different methods
-    vector_double retval;
     switch (m_method) {
         case method_type::DEATH: {
             // copy the objectives
-            retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
+            unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
             // penalize them if unfeasible
             if (!m_problem.feasibility_f(original_fitness)) {
-                std::fill(retval.begin(), retval.end(), std::numeric_limits<double>::max());
+                std::fill(unconstrained_fitness.begin(), unconstrained_fitness.end(), std::numeric_limits<double>::max());
             }
         } break;
         case method_type::KURI: {
             // copy the objectives
-            retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
+            unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
             // penalize them if unfeasible
             if (!m_problem.feasibility_f(original_fitness)) {
                 // get the tolerances
@@ -147,12 +169,12 @@ vector_double unconstrain::fitness(const vector_double &x) const
                 // sets the Kuri penalization
                 auto penalty = std::numeric_limits<double>::max()
                                * (1. - static_cast<double>(sat_ec + sat_ic) / static_cast<double>(nc));
-                std::fill(retval.begin(), retval.end(), penalty);
+                std::fill(unconstrained_fitness.begin(), unconstrained_fitness.end(), penalty);
             }
         } break;
         case method_type::WEIGHTED: {
             // copy the objectives
-            retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
+            unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
             // copy the constraints (NOTE: not necessary remove)
             vector_double c(original_fitness.data() + nobj, original_fitness.data() + original_fitness.size());
             // get the tolerances
@@ -172,12 +194,12 @@ vector_double unconstrain::fitness(const vector_double &x) const
                 }
             }
             // penalizing the objectives
-            for (double &value : retval) {
+            for (double &value : unconstrained_fitness) {
                 value += penalty;
             }
         } break;
         case method_type::IGNORE_C: {
-            retval = vector_double(original_fitness.data(), original_fitness.data() + nobj);
+            unconstrained_fitness = vector_double(original_fitness.data(), original_fitness.data() + nobj);
         } break;
         case method_type::IGNORE_O: {
             // get the tolerances
@@ -193,10 +215,50 @@ vector_double unconstrain::fitness(const vector_double &x) const
                 = detail::test_ineq_constraints(original_fitness.data() + n_obj_orig + nec,
                                                 original_fitness.data() + original_fitness.size(), c_tol.data() + nec)
                       .second;
-            retval = vector_double(1, norm_ec + norm_ic);
+            unconstrained_fitness = vector_double(1, norm_ec + norm_ic);
         } break;
     }
-    return retval;
+}
+
+/// Check if the inner problem can compute fitnesses in batch mode.
+/**
+ * @return the output of the <tt>has_batch_fitness()</tt> member function invoked
+ * by the inner problem.
+ */
+bool unconstrain::has_batch_fitness() const
+{
+  return m_problem.has_batch_fitness();
+}
+
+/// Batch fitness.
+/**
+ * The batch fitness computation is forwarded to the inner UDP and then all are penalized.
+ *
+ * @param xs the input decision vectors.
+ *
+ * @return the fitnesses of \p xs.
+ *
+ * @throws unspecified any exception thrown by memory errors in standard containers,
+ * threading primitives, or by problem::batch_fitness().
+ */
+vector_double unconstrain::batch_fitness(const vector_double & xs) const
+{
+  using namespace boost::safe_numerics;
+  vector_double original_fitness(m_problem.batch_fitness(xs));
+  const vector_double::size_type nx = m_problem.get_nx();
+  const vector_double::size_type n_dvs = xs.size() / nx;
+  vector_double::size_type nobj = m_problem.get_nobj();
+  vector_double retval;
+  retval.resize(safe<vector_double::size_type>(n_dvs) * nobj);
+  vector_double y(nobj);
+  vector_double z; // will be resized in penalize if necessary.
+  for (vector_double::size_type i = 0; i < n_dvs; ++ i)
+  {
+    std::copy(original_fitness.data() + i * nobj, original_fitness.data() + (i + 1) * nobj, y.data());
+    penalize(y, z);
+    std::copy(z.data(), z.data() + nobj, retval.data() + i * nobj);
+  }
+  return retval;
 }
 
 /// Number of objectives.

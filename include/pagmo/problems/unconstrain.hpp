@@ -110,6 +110,12 @@ public:
     // Fitness.
     vector_double fitness(const vector_double &) const;
 
+    // The has_batch_fitness of the problem.
+    bool has_batch_fitness() const;
+
+    // The batch fitness of the problem.
+    vector_double batch_fitness(const vector_double & xs) const;
+
     // Number of objectives.
     vector_double::size_type get_nobj() const;
 
@@ -160,6 +166,9 @@ public:
     std::string get_extra_info() const;
 
 private:
+    // Penalizes the original multidimensional fitness returning a single fitness value
+    void penalize(const vector_double &, vector_double &) const;
+
     // Object serialization
     friend class boost::serialization::access;
     template <typename Archive>
