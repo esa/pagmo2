@@ -46,12 +46,12 @@ namespace pagmo
 {
 /// Multi Objective Evolutionary Algorithms by Decomposition (the DE variant)
 /**
- * \image html moead.png "Solving by decomposition" width=3cm
+ * \image html moead_gen.png "Solving by decomposition" width=3cm
  *
  * MOEA/D-DE is a very successful multi-objective optimization algorithm, always worth a try. Based on the idea of
  * problem decomposition, it leverages evolutionary operators to combine good solutions of neighbouring problems thus
  * allowing for nice convergence properties. MOEA/D is, essentially, a framework and this particular algorithm
- * implemented in pagmo with the name pagmo::moead uses the rand/2/exp Differential Evolution operator followed by a
+ * implemented in pagmo with the name pagmo::moead_gen uses the rand/2/exp Differential Evolution operator followed by a
  * polynomial mutation to create offsprings, and the Tchebycheff, weighted or boundary intersection decomposition
  * method. A diversity preservation mechanism, as proposed in the work from Li et al. referenced below, is
  * also implemented.
@@ -75,7 +75,7 @@ namespace pagmo
  *
  * \endverbatim
  */
-class PAGMO_DLL_PUBLIC moead
+class PAGMO_DLL_PUBLIC moead_gen
 {
 public:
     /// Single entry of the log (gen, fevals, adf, ideal_point)
@@ -103,7 +103,7 @@ public:
      * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
      * in [1.0] or m_eta is < 0, if neighbours is <2
      */
-    moead(unsigned gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
+    moead_gen(unsigned gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
           population::size_type neighbours = 20u, double CR = 1.0, double F = 0.5, double eta_m = 20.,
           double realb = 0.9, unsigned limit = 2u, bool preserve_diversity = true,
           unsigned seed = pagmo::random_device::next());
@@ -194,9 +194,9 @@ public:
     /// Get log
     /**
      * A log containing relevant quantities monitoring the last call to evolve. Each element of the returned
-     * <tt>std::vector</tt> is a moead::log_line_type containing: Gen, Fevals, ADR, ideal_point
-     * as described in moead::set_verbosity
-     * @return an <tt>std::vector</tt> of moead::log_line_type containing the logged values Gen, Fevals, ADR,
+     * <tt>std::vector</tt> is a moead_gen::log_line_type containing: Gen, Fevals, ADR, ideal_point
+     * as described in moead_gen::set_verbosity
+     * @return an <tt>std::vector</tt> of moead_gen::log_line_type containing the logged values Gen, Fevals, ADR,
      * ideal_point
      */
     const log_type &get_log() const
@@ -233,6 +233,6 @@ private:
 
 } // namespace pagmo
 
-PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::moead)
+PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::moead_gen)
 
 #endif
