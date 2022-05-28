@@ -281,13 +281,7 @@ private:
 
     algorithm m_algorithm;
     unsigned m_stop;
-    // The member m_perturb is mutable as to allow to construct mbh also using a perturbation defined as a scalar
-    // (in which case upon the first call to evolve it is expanded to the problem dimension)
-    // and as a vector (in which case mbh will only operate on problem having the correct dimension)
-    // While the use of "mutable" is not encouraged, in this case the alternative would be to have the user
-    // construct the mbh algo passing one further parameter (the problem dmension) rather than having this determined
-    // upon the first call to evolve.
-    mutable std::vector<double> m_perturb;
+    std::vector<double> m_perturb;
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
     unsigned m_verbosity;
