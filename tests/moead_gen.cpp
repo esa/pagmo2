@@ -254,3 +254,34 @@ BOOST_AUTO_TEST_CASE(moead_gen_serialization_test)
         }
     }
 }
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test)
+{
+    // 1 - Algorithm with bfe disabled
+    problem prob{zdt{1u, 30u}};
+    moead_gen uda1{moead_gen{10u, "grid", "tchebycheff", 10u, 0.9, 0.5, 20., 0.9, 2u, true, 23u}};
+    uda1.set_verbosity(1u);
+    uda1.set_seed(23u);
+    // 2 - Instantiate
+    algorithm algo1{uda1};
+
+    // 3 - Instantiate populations
+    population pop{prob, 24, 32u};
+    population pop1{prob, 24, 456u};
+    population pop2{prob, 24, 67345u};
+
+    // 4 - Evolve the population
+    pop1 = algo1.evolve(pop);
+
+    // 5 - new algorithm that is bfe enabled
+    moead_gen uda2{moead_gen{10u, "grid", "tchebycheff", 10u, 0.9, 0.5, 20., 0.9, 2u, true, 23u}};
+    uda2.set_verbosity(1u);
+    uda2.set_seed(23u);
+    uda2.set_bfe(bfe{}); // This will use the default bfe.
+    // 6 - Instantiate a pagmo algorithm
+    algorithm algo2{uda2};
+
+    // 7 - Evolve the population
+    pop2 = algo2.evolve(pop);
+    BOOST_CHECK(algo1.extract<moead_gen>()->get_log() == algo2.extract<moead_gen>()->get_log());
+}

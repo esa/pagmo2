@@ -255,13 +255,15 @@ population moead_gen::evolve(population pop) const
                 } else {
                     candidate[kk] = pop.get_x()[n][kk];
                 }
-                genes[pos] = candidate[kk];
-                ++pos;
             }
             // 6 - We apply a further mutation using polynomial mutation
             detail::polynomial_mutation_impl(candidate, bounds, 0u, 1.0 / static_cast<double>(dim), m_eta_m, m_e);
             poptemp.push_back(candidate);
             fidtemp.push_back(n);
+            for (decltype(dim) kk = 0u; kk < dim; ++kk) {
+                genes[pos] = candidate[kk];
+                ++pos;
+            }
         }
         if (m_bfe) {
             // bfe is available:
