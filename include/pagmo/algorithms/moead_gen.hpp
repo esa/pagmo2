@@ -26,8 +26,8 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#ifndef PAGMO_ALGORITHMS_MOEAD_HPP
-#define PAGMO_ALGORITHMS_MOEAD_HPP
+#ifndef PAGMO_ALGORITHMS_MOEAD_GEN_HPP
+#define PAGMO_ALGORITHMS_MOEAD_GEN_HPP
 
 #include <string>
 #include <tuple>
