@@ -163,7 +163,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
         {
             // NOTE: our format for the gradient sparsity matches almost exactly Ipopt's. The only difference
             // is that we also report the sparsity for the objective function's gradient, while Ipopt's jacobian
-            // contains only constraints' gradients. Thus, we will need to discard the the objfun's sparsity
+            // contains only constraints' gradients. Thus, we will need to discard the objfun's sparsity
             // information and to decrease by one the row indices in the pattern (i.e., a first index of zero in
             // a pattern element must refer to the first constraint).
             // https://www.coin-or.org/Ipopt/documentation/node22.html
@@ -231,7 +231,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
         // interfaces for languages other than C++?). This is the same approach we adopt in the
         // NLopt wrapper: trap everything in a try/catch block, and store the exception for re-throw
         // in ipopt::evolve(). In case of errors we return "false" from the callback, as this
-        // signals to the the Ipopt API that something went wrong.
+        // signals to the Ipopt API that something went wrong.
         try {
             // Number of dimensions of the problem.
             n = boost::numeric_cast<Index>(m_prob.get_nx());
