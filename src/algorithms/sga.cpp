@@ -68,7 +68,7 @@ namespace detail
 namespace
 {
 
-// All this scaffolding is to establish a one to one correspondance between enums and genetic operator types
+// All this scaffolding is to establish a one to one correspondence between enums and genetic operator types
 // represented as strings.
 using sga_selection_map_t = boost::bimap<std::string, sga_selection>;
 using sga_crossover_map_t = boost::bimap<std::string, sga_crossover>;
