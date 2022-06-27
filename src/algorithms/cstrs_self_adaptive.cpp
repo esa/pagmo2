@@ -435,7 +435,7 @@ population cstrs_self_adaptive::evolve(population pop) const
     m_log.clear();
     // cstrs_self_adaptive main loop
 
-    // 1 - We create a penalized meta-problem that mantains a pointer to pop and uses it to define and adapt the
+    // 1 - We create a penalized meta-problem that maintains a pointer to pop and uses it to define and adapt the
     // penalty. Upon construction a cache is also initialized mapping decision vectors to constrained fitnesses.
     detail::penalized_udp udp_p{pop};
     // 2 - We construct a new population with the penalized udp so that we can evolve it with single objective,
