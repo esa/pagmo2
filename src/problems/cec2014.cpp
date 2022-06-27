@@ -742,7 +742,7 @@ void cec2014::escaffer6_func(const double *x, double *f, const unsigned nx, cons
     f[0] += 0.5 + (temp1 - 0.5) / (temp2 * temp2);
 }
 
-/* HappyCat, provdided by Hans-Georg Beyer (HGB) */
+/* HappyCat, provided by Hans-Georg Beyer (HGB) */
 /* original global optimum: [-1,-1,...,-1] */
 void cec2014::happycat_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                             int s_flag, int r_flag) const
@@ -765,7 +765,7 @@ void cec2014::happycat_func(const double *x, double *f, const unsigned nx, const
     f[0] = std::pow(std::abs(r2 - nx), 2 * alpha) + (0.5 * r2 + sum_z) / nx + 0.5;
 }
 
-/* HGBat, provdided by Hans-Georg Beyer (HGB)*/
+/* HGBat, provided by Hans-Georg Beyer (HGB)*/
 /* original global optimum: [-1,-1,...,-1] */
 void cec2014::hgbat_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr, int s_flag,
                          int r_flag) const

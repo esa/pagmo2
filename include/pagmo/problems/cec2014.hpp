@@ -163,11 +163,11 @@ private:
     /* Expanded Scaffer??s F6  */
     PAGMO_DLL_LOCAL void escaffer6_func(const double *x, double *f, const unsigned nx, const double *Os,
                                         const double *Mr, int s_flag, int r_flag) const;
-    /* HappyCat, provdided by Hans-Georg Beyer (HGB) */
+    /* HappyCat, provided by Hans-Georg Beyer (HGB) */
     /* original global optimum: [-1,-1,...,-1] */
     PAGMO_DLL_LOCAL void happycat_func(const double *x, double *f, const unsigned nx, const double *Os,
                                        const double *Mr, int s_flag, int r_flag) const;
-    /* HGBat, provdided by Hans-Georg Beyer (HGB)*/
+    /* HGBat, provided by Hans-Georg Beyer (HGB)*/
     /* original global optimum: [-1,-1,...,-1] */
     PAGMO_DLL_LOCAL void hgbat_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
                                     int s_flag, int r_flag) const;

@@ -324,7 +324,7 @@ int hv_algorithm::dom_cmp(const vector_double &a, const vector_double &b, vector
 // Compute the extreme contributor
 /**
  * Computes the index of the individual that contributes the most or the least to the
- * hypervolume (depending on the  prodivded comparison function)
+ * hypervolume (depending on the  provided comparison function)
  */
 unsigned hv_algorithm::extreme_contributor(std::vector<vector_double> &points, const vector_double &r_point,
                                            bool (*cmp_func)(double, double)) const
