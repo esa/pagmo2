@@ -24,7 +24,7 @@ Some utilities to perform common genetic operations
    :exception std\:\:invalid_argument: if *bounds* contain any nan or infs.
    :exception std\:\:invalid_argument: if any lower bound is greater than the corresponding upper bound.
    :exception std\:\:invalid_argument: if *nix* is larger than bounds size.
-   :exception std\:\:invalid_argument: if any of the integer bounds are not not integers.
+   :exception std\:\:invalid_argument: if any of the integer bounds are not integers.
    :exception std\:\:invalid_argument: if *p_cr* or *eta_c* are not finite numbers.
 
 
@@ -52,7 +52,7 @@ Some utilities to perform common genetic operations
    :exception std\:\:invalid_argument: if *bounds* contain any nan or infs.
    :exception std\:\:invalid_argument: if any lower bound is greater than the corresponding upper bound.
    :exception std\:\:invalid_argument: if *nix* is larger than bounds size.
-   :exception std\:\:invalid_argument: if any of the integer bounds are not not integers.
+   :exception std\:\:invalid_argument: if any of the integer bounds are not integers.
    :exception std\:\:invalid_argument: if *m_cr* or *m_c* are not finite numbers.
 
 
