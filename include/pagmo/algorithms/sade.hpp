@@ -55,7 +55,7 @@ namespace pagmo
  * The first one, proposed by Brest et al., does not make use of the DE operators to produce new
  * values for F and CR and, strictly speaking, is thus not self-adaptation, rather parameter control.
  * The resulting DE variant is often referred to as jDE. The second variant
- * here implemented is inspired by the ideas introduced by Elsayed et al. and uses a variaton of the selected DE
+ * here implemented is inspired by the ideas introduced by Elsayed et al. and uses a variation of the selected DE
  * operator to produce new
  * CR anf F parameters for each individual. We refer to this variant as to iDE.
  *
