@@ -176,7 +176,7 @@ population nsga2::evolve(population pop) const
         // At each generation we make a copy of the population into popnew
         population popnew(pop);
 
-        // We create some pseudo-random permutation of the poulation indexes
+        // We create some pseudo-random permutation of the population indexes
         std::shuffle(shuffle1.begin(), shuffle1.end(), m_e);
         std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
 
