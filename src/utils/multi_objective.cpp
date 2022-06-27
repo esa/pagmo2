@@ -260,7 +260,7 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
 /**
  * An implementation of the crowding distance. Complexity is \f$ O(MNlog(N))\f$ where \f$M\f$ is the number of
  * objectives
- * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failiure to this
+ * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failure to this
  * condition
  * will result in undefined behaviour.
  *
