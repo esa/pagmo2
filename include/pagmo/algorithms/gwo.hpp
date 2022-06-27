@@ -52,7 +52,7 @@ namespace pagmo
  * our millenia to the development of an entire zoo of metaphors inspiring optimization heuristics. In our opinion they,
  * as is the case for the grey wolf optimizer, are often but small variations of already existing heuristics rebranded
  * with unnecessray and convoluted biological metaphors. In the case of GWO this is particularly evident as the position
- * update rule is shokingly trivial and can also be easily seen as a product of an evolutionary metaphor or a particle
+ * update rule is shockingly trivial and can also be easily seen as a product of an evolutionary metaphor or a particle
  * swarm one. Such an update rule is also not particularly effective and results in a rather poor performance most of
  * times. Reading the original peer-reviewed paper, where the poor algorithmic performance is hidden by the
  * methodological flaws of the benchmark presented, one is left with a bitter opinion of the whole peer-review system.
