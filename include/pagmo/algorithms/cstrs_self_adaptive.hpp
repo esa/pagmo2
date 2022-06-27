@@ -157,7 +157,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const penalized_udp &)
  * approach is an alternative to using the meta-problem pagmo::unconstrain to transform the
  * constrained fitness into an unconstrained fitness.
  *
- * The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
+ * The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Farmani and Wright but it
  * extends their use to any-algorithm, in particular to non generational population based evolutionary approaches where
  * a steady-state reinsertion is used (i.e., as soon as an individual is found fit it is immediately reinserted into the
  * pop and will influence the next offspring genetic material).
@@ -203,7 +203,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const penalized_udp &)
  *
  * .. note::
  *
- *    Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+ *    Several modification were made to the original Farmani and Wright ideas to allow their approach to work on
  *    corner cases and with any UDAs. Most notably, a violation to the :math:`j`-th  constraint is ignored if all
  *    the decision vectors in the population satisfy that particular constraint (i.e. if :math:`c_{j_{max}} = 0`).
  *
