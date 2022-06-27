@@ -61,7 +61,7 @@ see https://www.gnu.org/licenses/. */
 // sparsity_pattern gradient_sparsity() const
 //
 // The gradient sparsity pattern is a std::vector of pairs (i,j)
-// containing the indeces of non null entries of the gradients.
+// containing the indices of non null entries of the gradients.
 // Note that the dimensions of the sparsity pattern of the gradients
 // must match that of the value returned by the implemented gradient
 // method

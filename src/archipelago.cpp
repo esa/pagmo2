@@ -782,7 +782,7 @@ std::pair<std::vector<archipelago::size_type>, vector_double> get_island_connect
 
 // Get the list of connection to the island at index i.
 // The returned value is made of two vectors of equal size:
-// - the indicies of the connecting islands,
+// - the indices of the connecting islands,
 // - the weights of the connections.
 // This function will take care of safely converting the topology
 // indices to island indices, if necessary.
