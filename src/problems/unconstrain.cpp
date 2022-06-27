@@ -85,7 +85,7 @@ void unconstrain::generic_ctor_impl(const std::string &method, const vector_doub
         && method != "ignore_o") {
         pagmo_throw(std::invalid_argument, "The method " + method + " is not supported (did you misspell?)");
     }
-    // 4 - We throw if a non empty weight vector is passed but the method weghted is not selected
+    // 4 - We throw if a non empty weight vector is passed but the method weighted is not selected
     if (weights.size() != 0u && method != "weighted") {
         pagmo_throw(std::invalid_argument,
                     "The weight vector needs to be empty to use the unconstrain method " + method);
