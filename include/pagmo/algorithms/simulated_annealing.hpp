@@ -63,7 +63,7 @@ namespace pagmo
  *
  * .. note::
  *
- *    When selecting the starting and final temperature values it helps to think about the tempertaure
+ *    When selecting the starting and final temperature values it helps to think about the temperature
  *    as the deterioration in the objective function value that still has a 37% chance of being accepted.
  *
  * .. note::
