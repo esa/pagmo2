@@ -98,7 +98,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
         pagmo_throw(std::invalid_argument,
                     "Number of equality constraints declared: " + std::to_string(neq)
                         + " while fitness vector has dimension: " + std::to_string(f1.size())
-                        + "(it must be striclty smaller as the objfun is assumed to be at position 0)");
+                        + "(it must be strictly smaller as the objfun is assumed to be at position 0)");
     }
 
     auto c1eq = detail::test_eq_constraints(f1.data() + 1, f1.data() + 1 + neq, tol.data());
