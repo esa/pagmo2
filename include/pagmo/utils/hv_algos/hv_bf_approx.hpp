@@ -67,7 +67,7 @@ public:
      * @param gamma constant used for computation of delta for each of the points during the sampling
      * @param delta_multiplier factor with which delta diminishes each round
      * @param initial_delta_coeff initial coefficient multiplied by the delta at round 0
-     * @param alpha coefficicient stating how accurately current lowest contributor should be sampled
+     * @param alpha coefficient stating how accurately current lowest contributor should be sampled
      * @param seed seeding for the pseudo-random number generator
      */
     bf_approx(bool use_exact = true, unsigned trivial_subcase_size = 1, double eps = 1e-2, double delta = 1e-6,
