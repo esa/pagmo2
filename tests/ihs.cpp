@@ -35,7 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/null_problem.hpp>
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(ihs_evolve_test)
     std::vector<problem> prob_list;
     prob_list.push_back(problem(rosenbrock{10u}));
     prob_list.push_back(problem(zdt{1u}));
-    prob_list.push_back(problem(hock_schittkowsky_71{}));
+    prob_list.push_back(problem(hock_schittkowski_71{}));
     prob_list.push_back(problem(minlp_rastrigin{}));
     for (auto &prob : prob_list) {
         prob.set_c_tol(1e-4);

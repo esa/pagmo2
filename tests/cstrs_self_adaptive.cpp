@@ -43,7 +43,7 @@
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/cec2006.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction)
     // Here we only test that evolution is deterministic if the
     // seed is controlled
     {
-        problem prob{hock_schittkowsky_71{}};
+        problem prob{hock_schittkowski_71{}};
         prob.set_c_tol({1e-3, 1e-3});
         population pop1{prob, 5u, 23u};
         population pop2{prob, 5u, 23u};
@@ -150,10 +150,10 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction)
     }
     {
         cstrs_self_adaptive user_algo{150u, de{10u, 0.8, 0.9, 2u, 1e-6, 1e-6, 32u}, 32u};
-        BOOST_CHECK_THROW(user_algo.evolve(population{hock_schittkowsky_71{}, 3u}), std::invalid_argument);
+        BOOST_CHECK_THROW(user_algo.evolve(population{hock_schittkowski_71{}, 3u}), std::invalid_argument);
     }
     // And a clean exit for 0 iterations
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population pop{prob, 10u};
     BOOST_CHECK((cstrs_self_adaptive{0u, de{10u, 0.8, 0.9, 2u, 1e-6, 1e-6, 32u}, 32u}.evolve(pop).get_x()[0])
                 == (pop.get_x()[0]));
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction)
 BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_serialization)
 {
     // Make one evolution
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population pop{prob, 10u, 23u};
     algorithm algo{cstrs_self_adaptive{1500u, de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 32u}, 32u}};
     algo.set_verbosity(1u);
@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_all_feasible_test)
     // We check the behavior when all individuals are feasible
 
     // We build an all feasible population
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population pop{prob, 4u};
     BOOST_CHECK_EQUAL(prob.get_nf(), 3u);
     BOOST_CHECK_EQUAL(prob.get_nobj(), 1u);
@@ -294,7 +294,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_infeasible_better_than_hat_down_test)
     // We check the behavior when all individuals are feasible
 
     // We build an all feasible population
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population pop{prob, 4u};
     BOOST_CHECK_EQUAL(prob.get_nf(), 3u);
     BOOST_CHECK_EQUAL(prob.get_nobj(), 1u);
@@ -319,7 +319,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_infeasible_not_better_than_hat_down_tes
     // We check the behavior when all individuals are feasible
 
     // We build an all feasible population
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population pop{prob, 5u};
     BOOST_CHECK_EQUAL(prob.get_nf(), 3u);
     BOOST_CHECK_EQUAL(prob.get_nobj(), 1u);
@@ -345,7 +345,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_all_infeasible_test)
     // We check the behavior when all individuals are feasible
 
     // We build an all feasible population
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population pop{prob, 4u};
     BOOST_CHECK_EQUAL(prob.get_nf(), 3u);
     BOOST_CHECK_EQUAL(prob.get_nobj(), 1u);

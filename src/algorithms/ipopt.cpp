@@ -68,7 +68,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
@@ -682,7 +682,7 @@ unsigned ipopt_internal_test()
     auto ret = 0u;
 
     using Index = ipopt_nlp::Index;
-    problem prob(hock_schittkowsky_71{});
+    problem prob(hock_schittkowski_71{});
     ipopt_nlp nlp(prob, {1.1, 1.2, 1.3, 1.4}, 5u);
     ipopt_test_check_equal(nlp.m_verbosity, 5u);
 

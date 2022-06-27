@@ -194,7 +194,7 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/cec2009.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/schwefel.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/rosenbrock.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/hock_schittkowsky_71.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/hock_schittkowski_71.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/inventory.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/zdt.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/problems/dtlz.cpp"

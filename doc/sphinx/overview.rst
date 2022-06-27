@@ -157,7 +157,7 @@ Common Name                                                Docs of the C++ class
 Ackley                                                     :cpp:class:`pagmo::ackley`                S-U
 Golomb Ruler                                               :cpp:class:`pagmo::golomb_ruler`          S-C-I
 Griewank                                                   :cpp:class:`pagmo::griewank`              S-U
-Hock Schittkowsky 71                                       :cpp:class:`pagmo::hock_schittkowsky_71`  S-C
+Hock Schittkowski 71                                       :cpp:class:`pagmo::hock_schittkowski_71`  S-C
 Inventory                                                  :cpp:class:`pagmo::inventory`             S-U-sto
 Lennard Jones                                              :cpp:class:`pagmo::lennard_jones`         S-U
 Luksan Vlcek 1                                             :cpp:class:`pagmo::luksan_vlcek1`         S-C

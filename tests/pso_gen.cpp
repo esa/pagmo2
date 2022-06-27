@@ -41,7 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/pso_gen.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{rosenbrock{}}}), std::invalid_argument);
     BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(pso_gen{10u}.evolve(population{problem{hock_schittkowski_71{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{2u}, 20u};
     BOOST_CHECK(pso_gen{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);

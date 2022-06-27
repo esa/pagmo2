@@ -40,7 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/types.hpp>
@@ -733,7 +733,7 @@ BOOST_AUTO_TEST_CASE(hypervolume_construction_test)
 {
     population pop_empty(zdt(1u, 10u));
     population pop_ok(zdt(1u, 10u), 10u);
-    population pop_wrong1(hock_schittkowsky_71{}, 10u);
+    population pop_wrong1(hock_schittkowski_71{}, 10u);
     population pop_wrong2(rosenbrock{10u}, 10u);
     BOOST_CHECK_THROW((hypervolume{pop_empty, true}), std::invalid_argument);
     BOOST_CHECK_THROW((hypervolume{pop_wrong1, true}), std::invalid_argument);
