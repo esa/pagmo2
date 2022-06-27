@@ -205,7 +205,7 @@ population nsga2::evolve(population pop) const
             }
         }
 
-        // 3 - We then loop thorugh all individuals with increment 4 to select two pairs of parents that will
+        // 3 - We then loop through all individuals with increment 4 to select two pairs of parents that will
         // each create 2 new offspring
         if (m_bfe) {
             // bfe is available:
