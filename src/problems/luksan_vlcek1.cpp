@@ -124,7 +124,7 @@ vector_double luksan_vlcek1::gradient(const vector_double &x) const
 
 /// Gradients sparsity
 /**
- * It returns the gradent sparisty structure for the Luksan Vlcek 1 problem.
+ * It returns the gradient sparisty structure for the Luksan Vlcek 1 problem.
  *
  * The gradients sparisty is represented in the form required by
  * problem::gradient_sparsity().
