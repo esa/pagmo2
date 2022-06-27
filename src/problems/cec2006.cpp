@@ -803,7 +803,7 @@ void cec2006::g17_objfun_impl(vector_double &f, const vector_double &x) const
     double aux2
         = -(((x3 * x4) * std::cos(1.48477 + x6)) - ((0.90798 * std::pow(x4, 2.0)) * std::cos(1.47588))) / 131.078;
 
-    /* objective fucntion */
+    /* objective function */
     if (x1 >= 0.0 && x1 < 300.0) {
         f1 = 30.0 * aux1;
     } else {
