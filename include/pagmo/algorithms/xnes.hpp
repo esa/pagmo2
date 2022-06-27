@@ -235,7 +235,7 @@ private:
     // Eigen stores indexes and sizes as signed types, while PaGMO
     // uses STL containers thus sizes and indexes are unsigned. To
     // make the conversion as painless as possible this template is provided
-    // allowing, for example, syntax of the type D(_(i),_(j)) to adress an Eigen matrix
+    // allowing, for example, syntax of the type D(_(i),_(j)) to address an Eigen matrix
     // when i and j are unsigned
     template <typename I>
     static Eigen::DenseIndex _(I n)

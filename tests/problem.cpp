@@ -393,7 +393,7 @@ BOOST_AUTO_TEST_CASE(problem_construction_test)
 
         auto a2 = p2.extract<full_p>();
 
-        // 1 - We check the resource pointed by m_ptr has a different addres
+        // 1 - We check the resource pointed by m_ptr has a different address
         BOOST_CHECK(a1 != 0);
         BOOST_CHECK(a2 != 0);
         BOOST_CHECK(a1 != a2);
@@ -498,7 +498,7 @@ BOOST_AUTO_TEST_CASE(problem_assignment_test)
 
         auto a2 = p2.extract<full_p>();
 
-        // 1 - We check the resource pointed by m_ptr has a different addres
+        // 1 - We check the resource pointed by m_ptr has a different address
         BOOST_CHECK(a1 != 0);
         BOOST_CHECK(a2 != 0);
         BOOST_CHECK(a1 != a2);
