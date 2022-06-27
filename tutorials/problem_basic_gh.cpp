@@ -77,7 +77,7 @@ see https://www.gnu.org/licenses/. */
 // returning a vector of vector_double. Each vector_double contains
 // the hessian of the relative fitness component. Each hessian
 // being symmetric PaGMO only allow the definition of the diagonal and
-// lower triangular compoents in the order defined by the
+// lower triangular components in the order defined by the
 // hessians sparsity pattern which, by default is dense and is:
 // [[(0,0),(1,0), (1,1), (2,0), (2,1), ...], [...], ...]
 //
