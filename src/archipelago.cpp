@@ -531,7 +531,7 @@ void archipelago::push_back_impl(std::unique_ptr<island> &&new_island)
 
 // Get the index of an island.
 // This function will return the index of the island \p isl in the archipelago. If \p isl does
-// not belong to the archipelago, an error will be reaised.
+// not belong to the archipelago, an error will be raised.
 archipelago::size_type archipelago::get_island_idx(const island &isl) const
 {
     std::lock_guard<std::mutex> lock(m_idx_map_mutex);
