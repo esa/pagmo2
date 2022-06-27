@@ -65,7 +65,7 @@ enum class sga_mutation { GAUSSIAN, UNIFORM, POLYNOMIAL };
  * Approximately during the same decades as Evolutionary Strategies (see pagmo::sea) were studied, a different group
  * led by John Holland, and later by his student David Goldberg, introduced and studied an algorithmic framework called
  * "genetic algorithms" that were, essentially, leveraging on the same idea but introducing also crossover as a genetic
- * operator. This led to a few decades of confusion and discussions on what was an evolutionary startegy and what a
+ * operator. This led to a few decades of confusion and discussions on what was an evolutionary strategy and what a
  * genetic algorithm and on whether the crossover was a useful operator or mutation only algorithms were to be
  * preferred.
  *
