@@ -89,7 +89,7 @@ void mbh::vector_ctor_impl(const vector_double &perturb)
 
 /// Evolve method.
 /**
- * This method will evolve the input population up to when \p stop consecutve runs of the internal
+ * This method will evolve the input population up to when \p stop consecutive runs of the internal
  * algorithm do not improve the solution.
  *
  * @param pop population to be evolved.
