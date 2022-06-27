@@ -370,7 +370,7 @@ population cmaes::evolve(population pop) const
                     Dinv(_(j), _(j)) = 1. / D(_(j), _(j));
                 }
                 invsqrtC = B * Dinv * B.transpose();
-            } // if eigendecomposition fails just skip it and keep pevious successful one.
+            } // if eigendecomposition fails just skip it and keep previous successful one.
         }
     } // end of generation loop
     if (m_verbosity) {
