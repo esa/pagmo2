@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_CASE(algorithm_copy_assignment_test)
     algo.set_seed(1u);
     algo.set_verbosity(1u);
 
-    // We call the copy assignment opeator
+    // We call the copy assignment operator
     algorithm algo_copy{};
     algo_copy = algo;
     // We extract the user algorithm
