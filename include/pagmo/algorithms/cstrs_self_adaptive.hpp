@@ -52,7 +52,7 @@ namespace pagmo
 namespace detail
 {
 
-// Constrainted self adaptive udp
+// Constrained self adaptive udp
 /**
  * Implements a udp that wraps a population and results in self adaptive constraints handling.
  *
