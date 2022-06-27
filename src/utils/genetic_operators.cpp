@@ -144,7 +144,7 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
 }
 
 // Performs polynomial mutation. Requires all sizes to be consistent. Does not check if input is well formed.
-// p_m is the mutation probability, eta_m the distibution index
+// p_m is the mutation probability, eta_m the distribution index
 void polynomial_mutation_impl(vector_double &child, const std::pair<vector_double, vector_double> &bounds,
                               vector_double::size_type nix, const double p_m, const double eta_m,
                               detail::random_engine_type &random_engine)
