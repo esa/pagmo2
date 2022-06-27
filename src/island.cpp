@@ -147,7 +147,7 @@ boost::any default_wait_raii_getter()
 
 } // namespace
 
-// NOTE: the default implementation just returns a defcted boost::any, whose ctor and dtor
+// NOTE: the default implementation just returns a defected boost::any, whose ctor and dtor
 // will have no effect.
 std::function<boost::any()> wait_raii_getter = &default_wait_raii_getter;
 
