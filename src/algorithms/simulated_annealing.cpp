@@ -100,7 +100,7 @@ population simulated_annealing::evolve(population pop) const
     const auto bounds = prob.get_bounds();
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
-    auto fevals0 = prob.get_fevals(); // disount for the already made fevals
+    auto fevals0 = prob.get_fevals(); // discount for the already made fevals
     unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------

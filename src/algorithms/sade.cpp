@@ -86,7 +86,7 @@ population sade::evolve(population pop) const
     const auto &ub = bounds.second;
     auto NP = pop.size();
     auto prob_f_dimension = prob.get_nf();
-    auto fevals0 = prob.get_fevals(); // disount for the already made fevals
+    auto fevals0 = prob.get_fevals(); // discount for the already made fevals
     unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
