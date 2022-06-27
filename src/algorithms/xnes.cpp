@@ -185,7 +185,7 @@ population xnes::evolve(population pop) const
         }
         A = Eigen::MatrixXd::Identity(_(dim), _(dim));
         // The diagonal of the initial covariance matrix A defines the search width in all directions.
-        // By default we set this to be sigma times the witdh of the box bounds or 1e-6 if too small.
+        // By default we set this to be sigma times the width of the box bounds or 1e-6 if too small.
         for (decltype(dim) j = 0u; j < dim; ++j) {
             A(_(j), _(j)) = std::max((ub[j] - lb[j]), 1e-6) * sigma;
         }

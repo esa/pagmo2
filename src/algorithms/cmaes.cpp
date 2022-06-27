@@ -209,7 +209,7 @@ population cmaes::evolve(population pop) const
         // We define the starting B,D,C
         B = Eigen::MatrixXd::Identity(_(dim), _(dim)); // B defines the coordinate system
         D = Eigen::MatrixXd::Identity(_(dim), _(dim));
-        // diagonal D defines the scaling. By default this is the witdh of the box bounds.
+        // diagonal D defines the scaling. By default this is the width of the box bounds.
         // If this is too small... then 1e-6 is used
         for (decltype(dim) j = 0u; j < dim; ++j) {
             D(_(j), _(j)) = std::max((ub[j] - lb[j]), 1e-6);
