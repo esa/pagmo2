@@ -110,7 +110,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
     auto c2ineq = detail::test_ineq_constraints(f2.data() + 1 + neq, f2.data() + f2.size(), tol.data() + neq);
     auto n2 = c2eq.first + c2ineq.first;
     auto l2 = std::sqrt(c2eq.second * c2eq.second + c2ineq.second * c2ineq.second);
-    if (n1 == n2) {                 // same number of constraints satistfied
+    if (n1 == n2) {                 // same number of constraints satisfied
         if (n1 == f1.size() - 1u) { // fitness decides
             return detail::less_than_f(f1[0], f2[0]);
         } else { // l2 norm decides
