@@ -173,7 +173,7 @@ population xnes::evolve(population pop) const
         sum += u[i];
     }
     for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
-        u[i] = u[i] / sum - 1. / lam_d; // Give an option to turn off the unifrm baseline (i.e. -1/lam_d) ?
+        u[i] = u[i] / sum - 1. / lam_d; // Give an option to turn off the uniform baseline (i.e. -1/lam_d) ?
     }
     // If m_memory is false we redefine mutable members erasing the memory of past calls.
     // This is also done if the problem dimension has changed
