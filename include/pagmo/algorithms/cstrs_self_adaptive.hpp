@@ -300,7 +300,7 @@ public:
      *
      * @endcode
      * \p Iter is the iteration number, \p Fevals is the number of fitness evaluations, \p Best is the objective
-     * function of the best fitness currently in the population, \p Infeasibility is the normailized infeasibility
+     * function of the best fitness currently in the population, \p Infeasibility is the normalized infeasibility
      * measure, \p Violated is the number of constraints currently violated by the best solution, <tt>Viol. Norm</tt> is
      * the norm of the violation (discounted already by the constraints tolerance) and N. Feasible is the number of
      * feasible individuals in the current iteration. The small \p i appearing at the end of the line stands for
