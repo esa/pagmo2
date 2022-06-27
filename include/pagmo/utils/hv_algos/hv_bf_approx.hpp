@@ -179,7 +179,7 @@ private:
     // exact hypervolumes of the bounding boxes
     mutable vector_double m_box_volume;
 
-    // approximated exlusive hypervolume of each point
+    // approximated exclusive hypervolume of each point
     mutable vector_double m_approx_volume;
 
     // deltas computed for each point using chernoff inequality component

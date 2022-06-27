@@ -107,7 +107,7 @@ double hv_algorithm::volume_between(double *a, double *b, vector_double::size_ty
  * @param points vector of vector_doubles for which the hypervolume is computed
  * @param r_point distinguished "reference point".
  *
- * @return exlusive hypervolume contributed by the individual at index p_idx
+ * @return exclusive hypervolume contributed by the individual at index p_idx
  */
 double hv_algorithm::exclusive(unsigned p_idx, std::vector<vector_double> &points, const vector_double &r_point) const
 {
