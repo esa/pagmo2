@@ -3,7 +3,7 @@ Advanced Concepts Team (ACT), European Space Agency (ESA)
 
 This directory contains the data for the hypervolume indicator tests.
 Purpose of this test suite is to verify the validity of the algorithms, and comparison on common data.
-These tests do not validate the proper usage of the classes or the user interface - tests validating that that can be found in PyGMO test suite.
+These tests do not validate the proper usage of the classes or the user interface - tests validating that can be found in PyGMO test suite.
 
 ************************************
 *  1. Structure of this directory  *
