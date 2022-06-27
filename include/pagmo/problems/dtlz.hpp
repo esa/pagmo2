@@ -56,11 +56,11 @@ namespace pagmo
  *
  * DTLZ2:
  *
- * The search space is continous, unimodal and the problem is not deceptive.
+ * The search space is continuous, unimodal and the problem is not deceptive.
  *
  * DTLZ3:
  *
- * The search space is continous, unimodal and the problem is not deceptive.
+ * The search space is continuous, unimodal and the problem is not deceptive.
  * It is supposed to be harder to converge towards the optimal pareto front than DTLZ2
  *
  * DTLZ4:
