@@ -246,7 +246,7 @@ private:
     double m_eta2;
     // Maximum particle velocity
     double m_max_vel;
-    // Algoritmic variant
+    // Algorithmic variant
     unsigned m_variant;
     // Particle topology (only relevant for some variants)
     unsigned m_neighb_type;

@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     BOOST_CHECK(pso{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
 
     // We check that evolution is deterministic if the
-    // seed is controlled and for all algoritmic variants:
+    // seed is controlled and for all algorithmic variants:
     for (unsigned variant = 1u; variant <= 6u; ++variant) {
         for (unsigned neighb_type = 1u; neighb_type <= 4u; ++neighb_type) {
             problem prob{rosenbrock{10u}};

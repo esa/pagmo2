@@ -54,7 +54,7 @@ namespace pagmo
  * with unnecessray and convoluted biological metaphors. In the case of GWO this is particularly evident as the position
  * update rule is shokingly trivial and can also be easily seen as a product of an evolutionary metaphor or a particle
  * swarm one. Such an update rule is also not particulary effective and results in a rather poor performance most of
- * times. Reading the original peer-reviewed paper, where the poor algoritmic perfromance is hidden by the
+ * times. Reading the original peer-reviewed paper, where the poor algorithmic perfromance is hidden by the
  * methodological flaws of the benchmark presented, one is left with a bitter opinion of the whole peer-review system.
  *
  * The implementation provided for PaGMO is based on the pseudo-code provided in the original Seyedali and Andrew (2014)
