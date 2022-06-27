@@ -263,11 +263,11 @@ void ihs::log_a_line(const population &pop, unsigned &count, unsigned long long 
     if (prob.get_nobj() == 1u) {
         best_idx = pop.best_idx();
         worst_idx = pop.worst_idx();
-        // The population flattness in chromosome
+        // The population flatness in chromosome
         for (decltype(dim) i = 0u; i < dim; ++i) {
             dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
         }
-        // The population flattness in fitness
+        // The population flatness in fitness
         df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
         // Constraints stuff
         auto cur_best_f = pop.get_f()[pop.best_idx()];

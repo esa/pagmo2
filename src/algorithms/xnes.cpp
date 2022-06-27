@@ -268,9 +268,9 @@ population xnes::evolve(population pop) const
         if (m_verbosity > 0u) {
             // Every m_verbosity generations print a log line
             if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                // The population flattness in chromosome
+                // The population flatness in chromosome
                 auto dx = (A * z[0]).norm();
-                // The population flattness in fitness
+                // The population flatness in fitness
                 auto idx_b = pop.best_idx();
                 auto idx_w = pop.worst_idx();
                 auto df = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);

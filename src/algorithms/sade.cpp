@@ -559,11 +559,11 @@ population sade::evolve(population pop) const
                 best_idx = pop.best_idx();
                 worst_idx = pop.worst_idx();
                 dx = 0.;
-                // The population flattness in chromosome
+                // The population flatness in chromosome
                 for (decltype(dim) i = 0u; i < dim; ++i) {
                     dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
                 }
-                // The population flattness in fitness
+                // The population flatness in fitness
                 df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
                 // Every 50 lines print the column names
                 if (count % 50u == 1u) {
