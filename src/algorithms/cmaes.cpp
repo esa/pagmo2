@@ -195,7 +195,7 @@ population cmaes::evolve(population pop) const
     vector_double dumb(dim, 0.);
 
     // If the algorithm is called for the first time on this problem dimension / pop size or if m_memory is false we
-    // erease the memory of past calls
+    // erase the memory of past calls
     if ((newpop.size() != lam) || (static_cast<unsigned>(newpop[0].rows()) != dim) || (m_memory == false)) {
         sigma = m_sigma0;
         mean.resize(_(dim));
