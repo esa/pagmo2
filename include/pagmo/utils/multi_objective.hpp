@@ -102,7 +102,7 @@ PAGMO_DLL_PUBLIC vector_double nadir(const std::vector<vector_double> &);
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    All genration methods are guaranteed to generate weights on the simplex (:math:`\sum_i \lambda_i = 1`). All
+ *    All generation methods are guaranteed to generate weights on the simplex (:math:`\sum_i \lambda_i = 1`). All
  *    weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
  *
  * \endverbatim
