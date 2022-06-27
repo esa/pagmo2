@@ -24,7 +24,7 @@ Functions
 
    :return: a reference to *os*.
 
-   :exception unspecified: any exception trown by the stream operators of fundamental types or by
+   :exception unspecified: any exception thrown by the stream operators of fundamental types or by
       the public interface of :cpp:class:`pagmo::island` and of all its members.
 
 .. cpp:namespace-pop::
