@@ -88,7 +88,7 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
 
     // This implements a Simulated Binary Crossover SBX
-    if (drng(random_engine) < p_cr) { // No crossever at all will happen with probability p_cr
+    if (drng(random_engine) < p_cr) { // No crossover at all will happen with probability p_cr
         for (decltype(ncx) i = 0u; i < ncx; i++) {
             // Each chromosome value has 0.5 probability to be crossovered.
             if ((drng(random_engine) < 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
