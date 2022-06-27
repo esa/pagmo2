@@ -99,7 +99,7 @@ public:
      * @param alpha controls density of solutions (used only by DTLZ4)
      *
      * @throw std::invalid_argument if the prob_id is not in [1 .. 7], if fdim is less than 2 or if fdim or dim_param
-     * are larger than an implementation defiend value
+     * are larger than an implementation defined value
      *
      */
     dtlz(unsigned prob_id = 1u, vector_double::size_type dim = 5u, vector_double::size_type fdim = 3u,
