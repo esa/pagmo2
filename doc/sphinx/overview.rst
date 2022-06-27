@@ -109,7 +109,7 @@ Preconditioned truncated Newton (from NLopt)           :cpp:class:`pagmo::nlopt`
 Shifted limited-memory variable-metric (from NLopt)    :cpp:class:`pagmo::nlopt`                                                                     S-U
 Ipopt                                                  :cpp:class:`pagmo::ipopt`                                                                     S-CU
 SNOPT (in pagmo_plugins_non_free affiliated package)   `pagmo::snopt7 <https://esa.github.io/pagmo_plugins_nonfree/cpp_snopt7.html>`__               S-CU
-WORHP (in pagmo_plugins_non_free affiliated package)   `pagmo::wohrp <https://esa.github.io/pagmo_plugins_nonfree/cpp_worhp.html>`__                 S-CU
+WORHP (in pagmo_plugins_non_free affiliated package)   `pagmo::worhp <https://esa.github.io/pagmo_plugins_nonfree/cpp_worhp.html>`__                 S-CU
 ====================================================== ============================================================================================= ===============
 
 Meta-algorithms
