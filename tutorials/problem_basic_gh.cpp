@@ -142,7 +142,7 @@ struct problem_basic_gh {
         return {{{0, 0}, {1, 1}, {2, 2}, {3, 3}}};
     }
 
-    // Optional, provides a name for the problem overrding the default name
+    // Optional, provides a name for the problem overriding the default name
     std::string get_name() const
     {
         return "My Problem with derivatives!!";
