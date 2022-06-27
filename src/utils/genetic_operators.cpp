@@ -298,7 +298,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
  * @param bounds problem bounds.
  * @param nix integer dimension of the problem.
  * @param p_m mutation probability.
- * @param eta_m mutation distribution index (siggested to be in [20, 100]).
+ * @param eta_m mutation distribution index (suggested to be in [20, 100]).
  * @param random_engine the pagmo random engine
  *
  * @throws std::invalid_argument if:
