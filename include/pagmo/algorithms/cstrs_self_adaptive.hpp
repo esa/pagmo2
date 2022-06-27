@@ -104,7 +104,7 @@ struct PAGMO_DLL_PUBLIC penalized_udp {
 
     // Call to this method updates all the members that are used to penalize the objective function
     // As the penalization algorithm depends heavily on the ref population this method takes care of
-    // updating the necessary information. It also builds the hash map used to avoid unecessary fitness
+    // updating the necessary information. It also builds the hash map used to avoid unnecessary fitness
     // evaluations. We exclude this method from the test as all of its corner cases are difficult to trigger
     // and test for correctness
     PAGMO_DLL_LOCAL void update();
@@ -133,7 +133,7 @@ struct PAGMO_DLL_PUBLIC penalized_udp {
 
     vector_double::size_type m_n_feasible;
     // A NAKED pointer to the reference population, allowing to call the fitness function and later recover
-    // the counters outside of the class, and avoiding unecessary copies. Use with care.
+    // the counters outside of the class, and avoiding unnecessary copies. Use with care.
     population *m_pop_ptr;
     // The hash map connecting the decision vector to their fitnesses. The use of
     // custom comparison is needed to take care of nans, while the custom hasher is needed as std::hash does not

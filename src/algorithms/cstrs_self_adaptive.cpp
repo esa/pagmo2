@@ -126,7 +126,7 @@ vector_double penalized_udp::fitness(const vector_double &x) const
 
 // Call to this method updates all the members that are used to penalize the objective function
 // As the penalization algorithm depends heavily on the ref population this method takes care of
-// updating the necessary information. It also builds the hash map used to avoid unecessary fitness
+// updating the necessary information. It also builds the hash map used to avoid unnecessary fitness
 // evaluations. We exclude this method from the test as all of its corner cases are difficult to trigger
 // and test for correctness
 void penalized_udp::update()
