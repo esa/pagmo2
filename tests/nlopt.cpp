@@ -373,7 +373,7 @@ BOOST_AUTO_TEST_CASE(nlopt_loc_opt)
         algo.evolve(pop);
         BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() < 0);
     }
-    // Check setting a local opt does not do anythig for normal solvers.
+    // Check setting a local opt does not do anything for normal solvers.
     nlopt n{"slsqp"};
     n.set_local_optimizer(nlopt{"lbfgs"});
     algorithm algo{n};
