@@ -101,7 +101,7 @@ enum class sga_mutation { GAUSSIAN, UNIFORM, POLYNOMIAL };
  * distribution index \p eta_c.
  *
  * *Mutation*: three different mutations schemes are provided: "uniform", "gaussian" and "polynomial". Uniform mutation
- * simply randomly samples from the bounds. Gaussian muattion samples around each gene using a normal distribution
+ * simply randomly samples from the bounds. Gaussian mutation samples around each gene using a normal distribution
  * with standard deviation proportional to the \p m_param_m and the bounds width. The last scheme is the polynomial
  * mutation.
  *
