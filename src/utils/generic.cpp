@@ -73,7 +73,7 @@ bool some_bound_is_equal(const problem &prob)
 /**
  * An implementation of the binomial coefficient using gamma functions
  * @param  n first parameter \f$n\f$
- * @param  k second paramater \f$k\f$
+ * @param  k second parameter \f$k\f$
  * @return the binomial coefficient \f$ n \choose k \f$
  */
 double binomial_coefficient(vector_double::size_type n, vector_double::size_type k)
