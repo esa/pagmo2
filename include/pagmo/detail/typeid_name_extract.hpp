@@ -55,7 +55,7 @@ template <typename T, typename C>
 inline typename std::conditional<std::is_const<C>::value, const T *, T *>::type typeid_name_extract(C &class_inst)
 {
     // NOTE: typeid() strips away both reference and cv qualifiers. Thus,
-    // if T is cv-qualified or a reference type, return nullptr pre-empitvely
+    // if T is cv-qualified or a reference type, return nullptr preemptively
     // (in any case, extraction cannot be successful in such cases).
     if (!std::is_same<T, uncvref_t<T>>::value || std::is_reference<T>::value) {
         return nullptr;
