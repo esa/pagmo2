@@ -49,7 +49,7 @@ namespace pagmo
  * greywolves, proposed by Seyedali Mirjalilia, Seyed Mohammad Mirjalilib, Andrew Lewis in 2014.
  *
  * This algorithm is a classic example of a highly criticizable line of search that led in the first decades of
- * our millenia to the development of an entire zoo of metaphors inspiring optimzation heuristics. In our opinion they,
+ * our millenia to the development of an entire zoo of metaphors inspiring optimization heuristics. In our opinion they,
  * as is the case for the grey wolf optimizer, are often but small variations of already existing heuristics rebranded
  * with unnecessray and convoluted biological metaphors. In the case of GWO this is particularly evident as the position
  * update rule is shokingly trivial and can also be easily seen as a product of an evolutionary metaphor or a particle

@@ -932,7 +932,7 @@ PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, co
  * this class. A tolerance is also considered for all constraints and set, by default, to zero. It can be modified
  * via the problem::set_c_tol() method.
  *
- * In order to define an optimizaztion problem in pagmo, the user must first define a class
+ * In order to define an optimization problem in pagmo, the user must first define a class
  * (or a struct) whose methods describe the properties of the problem and allow to compute
  * the objective function, the gradient, the constraints, etc. In pagmo, we refer to such
  * a class as a **user-defined problem**, or UDP for short. Once defined and instantiated,
