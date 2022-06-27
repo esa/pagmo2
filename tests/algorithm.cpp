@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     // having only the mandatory methods implemented
     algorithm algo_full{al_01{}};
     algorithm algo_minimal{al_02{}};
-    // We test that the optional methods are appropiately detected in the full case
+    // We test that the optional methods are appropriately detected in the full case
     BOOST_CHECK(algo_full.has_set_seed() == true);
     BOOST_CHECK(algo_full.has_set_verbosity() == true);
     BOOST_CHECK_NO_THROW(algo_full.set_seed(1u));
