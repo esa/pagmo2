@@ -168,7 +168,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
  *
  * @param input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
  * @param neq number of equality constraints
- * @param tol a vector_double containing tolerances to be accouted for in the constraints
+ * @param tol a vector_double containing tolerances to be accounted for in the constraints
  *
  * @return an <tt>std::vector</tt> of indexes containing the sorted population
  *
@@ -206,7 +206,7 @@ std::vector<pop_size_t> sort_population_con(const std::vector<vector_double> &in
  *
  * @param input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
  * @param neq number of equality constraints
- * @param tol scalar tolerance to be accouted for in the constraints
+ * @param tol scalar tolerance to be accounted for in the constraints
  *
  * @return an <tt>std::vector</tt> of indexes containing the sorted population
  *
