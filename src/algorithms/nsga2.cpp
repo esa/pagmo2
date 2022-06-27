@@ -117,7 +117,7 @@ population nsga2::evolve(population pop) const
                                                + get_name() + " cannot deal with them.");
     }
     if (prob.get_nf() < 2u) {
-        pagmo_throw(std::invalid_argument, "This is a multiobjective algortihm, while number of objectives detected in "
+        pagmo_throw(std::invalid_argument, "This is a multiobjective algorithm, while number of objectives detected in "
                                                + prob.get_name() + " is " + std::to_string(prob.get_nf()));
     }
     if (NP < 5u || (NP % 4 != 0u)) {

@@ -71,7 +71,7 @@ namespace pagmo
  *
  * This problem will test an MOEA's ability to converge to a cruve and will also allow an easier way to visually
  * demonstrate (just by plotting f_M with any other objective function) the performance of an MOEA. Since there is a
- * natural bias for solutions close to this Pareto-optimal curve, this problem may be easy for an algorithmn to solve.
+ * natural bias for solutions close to this Pareto-optimal curve, this problem may be easy for an algorithm to solve.
  * Because of its simplicity its recommended to use a higher number of objectives \f$ M \in [5, 10]\f$.
  *
  * DTLZ6:
