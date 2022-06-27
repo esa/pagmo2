@@ -51,7 +51,7 @@ namespace pagmo
  * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
  is smaller.
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
- * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
+ * in \f$f_1\f$ is smaller than the objective value in \f$f_2\f$
  *
  * \verbatim embed:rst:leading-asterisk
  * .. note::
@@ -156,7 +156,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
  * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
  * is smaller.
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
- * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
+ * in \f$f_1\f$ is smaller than the objective value in \f$f_2\f$
  *
  * \verbatim embed:rst:leading-asterisk
  * .. note::

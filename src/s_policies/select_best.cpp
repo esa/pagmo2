@@ -103,7 +103,7 @@ individuals_group_t select_best::select(const individuals_group_t &inds, const v
     assert(n_migr <= inds_size);
 
     // NOTE: currently this selection policy can handle:
-    // - single-ojective (un)constrained optimisation,
+    // - single-objective (un)constrained optimisation,
     // - multiobjective unconstrained optimisation.
     // We already checked above that we are not in an MO
     // constrained case.

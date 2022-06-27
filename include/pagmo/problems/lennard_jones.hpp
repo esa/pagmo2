@@ -45,7 +45,7 @@ namespace pagmo
  *
  * \image html lennard_jones.jpg "Pictures of Lennard-Jones clusters." width=3cm
  *
- * This is a box-constrained continuous single-objecive problem. It represents the minimization
+ * This is a box-constrained continuous single-objective problem. It represents the minimization
  * of the energy of a cluster of atoms assuming a Lennard-Jones potential between each pair.
  * The complexity for computing the objective function scales with the square of the number of atoms.
  *
