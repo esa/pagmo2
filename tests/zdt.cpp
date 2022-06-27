@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(zdt_construction_test)
     BOOST_CHECK(zdt_default.get_nobj() == 2u);
     // We also test get_name()
     BOOST_CHECK(zdt5.get_name().find("ZDT5") != std::string::npos);
-    // And the integer dimansion
+    // And the integer dimension
     BOOST_CHECK(problem(zdt5).get_nix() == (11u - 1u) * 5u + 30u);
     BOOST_CHECK(problem(zdt5).get_ncx() == 0u);
     BOOST_CHECK(problem(zdt_default).get_nix() == 0u);
