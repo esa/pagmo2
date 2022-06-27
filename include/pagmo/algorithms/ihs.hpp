@@ -47,7 +47,7 @@ namespace pagmo
 /**
  * \image html ihs.gif
  *
- * Harmony search (HS) is a metaheuristic algorithm said to mimick the improvisation process of musicians.
+ * Harmony search (HS) is a metaheuristic algorithm said to mimic the improvisation process of musicians.
  * In the metaphor, each musician (i.e., each variable) plays (i.e., generates) a note (i.e., a value)
  * for finding a best harmony (i.e., the global optimum) all together.
  *
