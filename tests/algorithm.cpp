@@ -317,7 +317,7 @@ BOOST_AUTO_TEST_CASE(algorithm_extract_is_test)
     BOOST_CHECK(user_algo->m_seed == 1u);
     BOOST_CHECK(user_algo->m_verbosity == 1u);
 
-    // We check that a non succesfull cast returns a null pointer
+    // We check that a non successful cast returns a null pointer
     BOOST_CHECK(!algo.extract<al_02>());
 
     // We check the is method
