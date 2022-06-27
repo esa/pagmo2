@@ -91,7 +91,7 @@ PAGMO_DLL_PUBLIC vector_double nadir(const std::vector<vector_double> &);
  * Generates a requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are
  * available:
  * - "grid" generates weights on an uniform grid. This method may only be used when the number of requested weights to
- * be genrated is such that a uniform grid is indeed possible. In
+ * be generated is such that a uniform grid is indeed possible. In
  * two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases
  * - "random" generates weights randomly distributing them uniformly on the simplex (weights are such that \f$\sum_i
  * \lambda_i = 1\f$)
@@ -185,7 +185,7 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
             retval.push_back(vector_double(n_f, 0.));
             retval[i][i] = 1.;
         }
-        // Then we add points on the simplex randomly genrated using Halton low discrepancy sequence
+        // Then we add points on the simplex randomly generated using Halton low discrepancy sequence
         halton ld_seq{boost::numeric_cast<unsigned>(n_f - 1u), boost::numeric_cast<unsigned>(n_f)};
         for (decltype(n_w) i = n_f; i < n_w; ++i) {
             retval.push_back(sample_from_simplex(ld_seq()));
