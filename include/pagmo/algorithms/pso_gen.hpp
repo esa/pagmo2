@@ -222,7 +222,7 @@ private:
     unsigned m_neighb_param;
     // memory
     bool m_memory;
-    // paricles' velocities
+    // particles' velocities
     mutable std::vector<vector_double> m_V;
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
