@@ -145,7 +145,7 @@ private:
     PAGMO_DLL_LOCAL double h7_func(const vector_double &, double) const;
 
     // Implementation of the objective functions.
-    /* The chomosome: x_1, x_2, ........, x_M-1, x_M, .........., x_M+k
+    /* The chromosome: x_1, x_2, ........, x_M-1, x_M, .........., x_M+k
      *											 [------- Vector x_M -------]
      *               x[0], x[1], ... ,x[fdim-2], x[fdim-1], ... , x[fdim+k-1] */
     PAGMO_DLL_LOCAL vector_double f1_objfun_impl(const vector_double &) const;
