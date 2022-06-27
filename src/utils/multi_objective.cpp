@@ -329,7 +329,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  * auto ret = pagmo::sort_population_mo(input_f).resize(N);
  * @endcode
  *
- * but it is faster than the above code: it avoids to compute the crowidng distance for all individuals and only
+ * but it is faster than the above code: it avoids to compute the crowding distance for all individuals and only
  * computes it for the last non-dominated front that contains individuals included in the best N.
  *
  * If N is zero, an empty vector will be returned.
