@@ -161,7 +161,7 @@ population simulated_annealing::evolve(population pop) const
                                                          std::min(xOLD[nter] + width, ub[nter]), m_e);
                     // And we valuate the objective function for the new point
                     fNEW = prob.fitness(xNEW);
-                    // We decide wether to accept or discard the point
+                    // We decide whether to accept or discard the point
                     if (fNEW[0] <= fOLD[0]) {
                         // accept
                         xOLD[nter] = xNEW[nter];

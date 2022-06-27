@@ -300,7 +300,7 @@ std::pair<vector_double, vector_double> unconstrain::get_bounds() const
 /**
  * Calls the method <tt>has_set_seed()</tt> of the inner problem.
  *
- * @return a flag signalling wether the inner problem is stochastic.
+ * @return a flag signalling whether the inner problem is stochastic.
  */
 bool unconstrain::has_set_seed() const
 {

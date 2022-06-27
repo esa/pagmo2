@@ -244,7 +244,7 @@ std::string decompose::get_extra_info() const
 /**
  * Calls the method <tt>has_set_seed()</tt> of the inner problem.
  *
- * @return a flag signalling wether the inner problem is stochastic.
+ * @return a flag signalling whether the inner problem is stochastic.
  */
 bool decompose::has_set_seed() const
 {
