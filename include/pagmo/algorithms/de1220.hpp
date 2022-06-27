@@ -130,7 +130,7 @@ public:
      * 17. - rand-to-best-and-current/2/exp         18. - rand-to-best-and-current/2/bin
      * @endcode
      *
-     * The first ten are the classical variants introduced in the orginal DE algorithm, the remaining ones are,
+     * The first ten are the classical variants introduced in the original DE algorithm, the remaining ones are,
      * instead, introduced in the work by Elsayed et al.
      *
      * @param gen number of generations.

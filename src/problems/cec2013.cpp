@@ -418,7 +418,7 @@ void cec2013::rosenbrock_func(const double *x, double *f, const unsigned nx, con
     unsigned i;
     double tmp1, tmp2;
     shiftfunc(x, &m_y[0], nx, Os); // shift
-    for (i = 0u; i < nx; ++i)      // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i)      // shrink to the original search range
     {
         m_y[i] = m_y[i] * 2.048 / 100.;
     }
@@ -427,7 +427,7 @@ void cec2013::rosenbrock_func(const double *x, double *f, const unsigned nx, con
     else
         for (i = 0u; i < nx; ++i)
             m_z[i] = m_y[i];
-    for (i = 0u; i < nx; ++i) // shift to orgin
+    for (i = 0u; i < nx; ++i) // shift to origin
     {
         m_z[i] = m_z[i] + 1;
     }
@@ -510,7 +510,7 @@ void cec2013::weierstrass_func(const double *x, double *f, const unsigned nx, co
     double sum = 0, sum2 = 0, a, b;
 
     shiftfunc(x, &m_y[0], nx, Os);
-    for (i = 0u; i < nx; ++i) // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i) // shrink to the original search range
     {
         m_y[i] = m_y[i] * 0.5 / 100;
     }
@@ -552,7 +552,7 @@ void cec2013::griewank_func(const double *x, double *f, const unsigned nx, const
     double s, p;
 
     shiftfunc(x, &m_y[0], nx, Os);
-    for (i = 0u; i < nx; ++i) // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i) // shrink to the original search range
     {
         m_y[i] = m_y[i] * 600.0 / 100.0;
     }
@@ -580,7 +580,7 @@ void cec2013::rastrigin_func(const double *x, double *f, const unsigned nx, cons
     unsigned i;
     double alpha = 10.0, beta = 0.2;
     shiftfunc(x, &m_y[0], nx, Os);
-    for (i = 0u; i < nx; ++i) // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i) // shrink to the original search range
     {
         m_y[i] = m_y[i] * 5.12 / 100;
     }
@@ -622,7 +622,7 @@ void cec2013::step_rastrigin_func(const double *x, double *f, const unsigned nx,
     unsigned i;
     double alpha = 10.0, beta = 0.2;
     shiftfunc(x, &m_y[0], nx, Os);
-    for (i = 0u; i < nx; ++i) // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i) // shrink to the original search range
     {
         m_y[i] = m_y[i] * 5.12 / 100;
     }
@@ -668,7 +668,7 @@ void cec2013::schwefel_func(const double *x, double *f, const unsigned nx, const
     unsigned i;
     double tmp;
     shiftfunc(x, &m_y[0], nx, Os);
-    for (i = 0u; i < nx; ++i) // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i) // shrink to the original search range
     {
         m_y[i] *= 1000. / 100.;
     }
@@ -708,7 +708,7 @@ void cec2013::katsuura_func(const double *x, double *f, const unsigned nx, const
     double temp, tmp1, tmp2, tmp3;
     tmp3 = std::pow(1.0 * nx, 1.2);
     shiftfunc(x, &m_y[0], nx, Os);
-    for (i = 0u; i < nx; ++i) // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i) // shrink to the original search range
     {
         m_y[i] *= 5.0 / 100.0;
     }
@@ -752,7 +752,7 @@ void cec2013::bi_rastrigin_func(const double *x, double *f, const unsigned nx, c
     mu1 = -std::pow((mu0 * mu0 - d) / s, 0.5);
 
     shiftfunc(x, &m_y[0], nx, Os);
-    for (i = 0u; i < nx; ++i) // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i) // shrink to the original search range
     {
         m_y[i] *= 10.0 / 100.0;
     }
@@ -810,7 +810,7 @@ void cec2013::grie_rosen_func(const double *x, double *f, const unsigned nx, con
     double temp, tmp1, tmp2;
 
     shiftfunc(x, &m_y[0], nx, Os);
-    for (i = 0u; i < nx; ++i) // shrink to the orginal search range
+    for (i = 0u; i < nx; ++i) // shrink to the original search range
     {
         m_y[i] = m_y[i] * 5 / 100;
     }
@@ -820,7 +820,7 @@ void cec2013::grie_rosen_func(const double *x, double *f, const unsigned nx, con
         for (i = 0u; i < nx; ++i)
             m_z[i] = m_y[i];
 
-    for (i = 0u; i < nx; ++i) // shift to orgin
+    for (i = 0u; i < nx; ++i) // shift to origin
     {
         m_z[i] = m_y[i] + 1;
     }

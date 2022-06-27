@@ -442,9 +442,9 @@ void cec2014::rosenbrock_func(const double *x, double *f, const unsigned nx, con
     double tmp1, tmp2;
     f[0] = 0.0;
     sr_func(x, m_z.data(), nx, Os, Mr, 2.048 / 100.0, s_flag, r_flag); /* shift and rotate */
-    m_z[0] += 1.0;                                                     // shift to orgin
+    m_z[0] += 1.0;                                                     // shift to origin
     for (i = 0; i < nx - 1; i++) {
-        m_z[i + 1] += 1.0; // shift to orgin
+        m_z[i + 1] += 1.0; // shift to origin
         tmp1 = m_z[i] * m_z[i] - m_z[i + 1];
         tmp2 = m_z[i] - 1.0;
         f[0] += 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
@@ -635,12 +635,12 @@ void cec2014::bi_rastrigin_func(const double *x, double *f, const unsigned nx, c
     if (s_flag == 1) {
         shiftfunc(x, m_y.data(), nx, Os);
     } else {
-        // shrink to the orginal search range
+        // shrink to the original search range
         for (i = 0; i < nx; i++) {
             m_y[i] = x[i];
         }
     }
-    // shrink to the orginal search range
+    // shrink to the original search range
     for (i = 0; i < nx; i++) {
         m_y[i] *= 10.0 / 100.0;
     }
@@ -705,9 +705,9 @@ void cec2014::grie_rosen_func(const double *x, double *f, const unsigned nx, con
 
     sr_func(x, m_z.data(), nx, Os, Mr, 5.0 / 100.0, s_flag, r_flag); /* shift and rotate */
 
-    m_z[0] += 1.0; // shift to orgin
+    m_z[0] += 1.0; // shift to origin
     for (i = 0; i < nx - 1; i++) {
-        m_z[i + 1] += 1.0; // shift to orgin
+        m_z[i + 1] += 1.0; // shift to origin
         tmp1 = m_z[i] * m_z[i] - m_z[i + 1];
         tmp2 = m_z[i] - 1.0;
         temp = 100.0 * tmp1 * tmp1 + tmp2 * tmp2;
@@ -757,7 +757,7 @@ void cec2014::happycat_func(const double *x, double *f, const unsigned nx, const
     r2 = 0.0;
     sum_z = 0.0;
     for (i = 0; i < nx; i++) {
-        m_z[i] = m_z[i] - 1.0; // shift to orgin
+        m_z[i] = m_z[i] - 1.0; // shift to origin
         r2 += m_z[i] * m_z[i];
         sum_z += m_z[i];
     }
@@ -780,7 +780,7 @@ void cec2014::hgbat_func(const double *x, double *f, const unsigned nx, const do
     r2 = 0.0;
     sum_z = 0.0;
     for (i = 0; i < nx; i++) {
-        m_z[i] = m_z[i] - 1.0; // shift to orgin
+        m_z[i] = m_z[i] - 1.0; // shift to origin
         r2 += m_z[i] * m_z[i];
         sum_z += m_z[i];
     }
