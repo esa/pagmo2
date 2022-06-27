@@ -9,7 +9,7 @@ WFG problem test suite
 
    This test suite was conceived to exceed the functionalities of previously implemented
    test suites. In particular, non-separable problems, deceptive problems, truly degenerative
-   problems and mixed shape Pareto front problems are thorougly covered, as well as scalable problems
+   problems and mixed shape Pareto front problems are thoroughly covered, as well as scalable problems
    in both the number of objectives and variables. Also, problems with dependencies between position and distance
    related parameters are covered.
    The WFG test suite was introduced by Simon Huband, Luigi Barone, Lyndon While, and Phil Hingston. In their paper the 
