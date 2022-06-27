@@ -216,7 +216,7 @@ void penalized_udp::update()
             // Do apply penalty 1
             m_apply_penalty_1 = true;
         } else {
-            // all the infeasible soutions have an objective function value greater than f_hat_down
+            // all the infeasible solutions have an objective function value greater than f_hat_down
             // the worst is the one that has the maximum infeasibility
             // initialize hat_up_idx
             hat_up_idx = infeasible_idx[0];
