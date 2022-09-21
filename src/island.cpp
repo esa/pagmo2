@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -52,7 +53,6 @@ see https://www.gnu.org/licenses/. */
 #endif
 
 #include <boost/any.hpp>
-#include <boost/optional.hpp>
 
 #include <tbb/concurrent_queue.h>
 
@@ -435,7 +435,7 @@ void island::evolve(unsigned n)
             // Random engine for use in the migration logic.
             // Wrap it in an optional so that, if we don't need
             // it, we don't waste CPU/memory.
-            boost::optional<std::mt19937> migr_eng;
+            std::optional<std::mt19937> migr_eng;
 
             // Cache the archi pointer.
             const auto aptr = this->m_ptr->archi_ptr;
