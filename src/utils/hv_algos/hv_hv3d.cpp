@@ -94,7 +94,7 @@ hv3d::hv3d(const bool initial_sorting) : m_initial_sorting(initial_sorting) {}
  * The implementation uses std::multiset (which is based on red-black tree data structure) as a container for the
  * sweeping front.
  * Original implementation by Beume et. al uses AVL-tree.
- * The difference is insiginificant as the important characteristics (maintaining order when traversing,
+ * The difference is insignificant as the important characteristics (maintaining order when traversing,
  * self-balancing) of both structures and the asymptotic times (O(log n) updates) are guaranteed.
  * Computational complexity: O(n*log(n))
  *

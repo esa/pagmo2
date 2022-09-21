@@ -45,7 +45,7 @@ namespace pagmo
  *
  * \image html griewank.png "Two-dimensional Griewank function." width=3cm
  *
- * This is a scalabale box-constrained continuous single-objective problem.
+ * This is a scalable box-constrained continuous single-objective problem.
  * The objective function is the generalised n-dimensional Griewank function:
  * \f[
  * 	F\left(x_1,\ldots,x_n\right) = \sum_{i=1}^n x_i^2 / 4000 - \prod_{i=1}^n\cos\frac{x_i}{\sqrt{i}}, \quad x_i \in

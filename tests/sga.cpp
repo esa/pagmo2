@@ -41,7 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/sga.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(sga_evolve_test)
     // We start testing the various throws in case the evolve is called on a population
     // not suitable for sga
     BOOST_CHECK_THROW((sga{}.evolve(population{zdt{}, 5u, 23u})), std::invalid_argument);
-    BOOST_CHECK_THROW((sga{}.evolve(population{hock_schittkowsky_71{}, 5u, 23u})), std::invalid_argument);
+    BOOST_CHECK_THROW((sga{}.evolve(population{hock_schittkowski_71{}, 5u, 23u})), std::invalid_argument);
     BOOST_CHECK_THROW((sga{}.evolve(population{schwefel{20u}, 1u, 23u})), std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, .5, 21u, "exponential", "gaussian", "tournament", 32u}.evolve(
                           population{schwefel{20u}, 20u, 23u})),

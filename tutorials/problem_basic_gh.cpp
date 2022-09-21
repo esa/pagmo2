@@ -61,7 +61,7 @@ see https://www.gnu.org/licenses/. */
 // sparsity_pattern gradient_sparsity() const
 //
 // The gradient sparsity pattern is a std::vector of pairs (i,j)
-// containing the indeces of non null entries of the gradients.
+// containing the indices of non null entries of the gradients.
 // Note that the dimensions of the sparsity pattern of the gradients
 // must match that of the value returned by the implemented gradient
 // method
@@ -77,7 +77,7 @@ see https://www.gnu.org/licenses/. */
 // returning a vector of vector_double. Each vector_double contains
 // the hessian of the relative fitness component. Each hessian
 // being symmetric PaGMO only allow the definition of the diagonal and
-// lower triangular compoents in the order defined by the
+// lower triangular components in the order defined by the
 // hessians sparsity pattern which, by default is dense and is:
 // [[(0,0),(1,0), (1,1), (2,0), (2,1), ...], [...], ...]
 //
@@ -142,7 +142,7 @@ struct problem_basic_gh {
         return {{{0, 0}, {1, 1}, {2, 2}, {3, 3}}};
     }
 
-    // Optional, provides a name for the problem overrding the default name
+    // Optional, provides a name for the problem overriding the default name
     std::string get_name() const
     {
         return "My Problem with derivatives!!";

@@ -68,7 +68,7 @@ Implemented problems
   problems/lennard_jones
   problems/zdt
   problems/dtlz
-  problems/hock_schittkowsky_71
+  problems/hock_schittkowski_71
   problems/inventory
   problems/luksan_vlcek1
   problems/minlp_rastrigin

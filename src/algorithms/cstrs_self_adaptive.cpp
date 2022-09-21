@@ -126,7 +126,7 @@ vector_double penalized_udp::fitness(const vector_double &x) const
 
 // Call to this method updates all the members that are used to penalize the objective function
 // As the penalization algorithm depends heavily on the ref population this method takes care of
-// updating the necessary information. It also builds the hash map used to avoid unecessary fitness
+// updating the necessary information. It also builds the hash map used to avoid unnecessary fitness
 // evaluations. We exclude this method from the test as all of its corner cases are difficult to trigger
 // and test for correctness
 void penalized_udp::update()
@@ -216,7 +216,7 @@ void penalized_udp::update()
             // Do apply penalty 1
             m_apply_penalty_1 = true;
         } else {
-            // all the infeasible soutions have an objective function value greater than f_hat_down
+            // all the infeasible solutions have an objective function value greater than f_hat_down
             // the worst is the one that has the maximum infeasibility
             // initialize hat_up_idx
             hat_up_idx = infeasible_idx[0];
@@ -435,8 +435,8 @@ population cstrs_self_adaptive::evolve(population pop) const
     m_log.clear();
     // cstrs_self_adaptive main loop
 
-    // 1 - We create a penalized meta-problem that mantains a pointer to pop and uses it to define and adapt the
-    // penalty. Upon consruction a cache is also initialized mapping decision vectors to constrained fitnesses.
+    // 1 - We create a penalized meta-problem that maintains a pointer to pop and uses it to define and adapt the
+    // penalty. Upon construction a cache is also initialized mapping decision vectors to constrained fitnesses.
     detail::penalized_udp udp_p{pop};
     // 2 - We construct a new population with the penalized udp so that we can evolve it with single objective,
     // unconstrained solvers. Upon construction the problem is copied and so is the cache.
@@ -499,7 +499,7 @@ population cstrs_self_adaptive::evolve(population pop) const
         for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
             auto x = new_pop.get_x()[i];
             auto it_f = penalized_udp_ptr->m_fitness_map.find(x);
-            assert(it_f != penalized_udp_ptr->m_fitness_map.end()); // We are assasserting here the cache will be hit
+            assert(it_f != penalized_udp_ptr->m_fitness_map.end()); // We are asserting here the cache will be hit
             pop.set_xf(i, x, it_f->second);
         }
         pop.set_xf(worst_idx, best_x, best_f);

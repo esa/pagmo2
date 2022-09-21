@@ -89,7 +89,7 @@ public:
         m_seed = seed;
     }
 
-    // Optional, provides a name for the problem overrding the default name
+    // Optional, provides a name for the problem overriding the default name
     std::string get_name() const
     {
         return "My Problem";

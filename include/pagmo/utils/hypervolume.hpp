@@ -43,7 +43,7 @@ namespace pagmo
 
 /// Hypervolume
 /**
- * This class encapsulate various utilities used to compute the hyervolume of a set of
+ * This class encapsulate various utilities used to compute the hypervolume of a set of
  * points or the various exclusive contributions.
  *
  * The main API consists of the five methods:

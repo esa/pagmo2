@@ -40,7 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/nsga2.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problems/dtlz.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
     // stochastic
     BOOST_CHECK_THROW((nsga2{}.evolve(population{inventory{}, 5u, 23u})), std::invalid_argument);
     // constrained prob
-    BOOST_CHECK_THROW((nsga2{}.evolve(population{hock_schittkowsky_71{}, 5u, 23u})), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga2{}.evolve(population{hock_schittkowski_71{}, 5u, 23u})), std::invalid_argument);
     // single objective prob
     BOOST_CHECK_THROW((nsga2{}.evolve(population{rosenbrock{}, 5u, 23u})), std::invalid_argument);
     // wrong population size

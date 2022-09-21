@@ -347,7 +347,7 @@ problem &problem::operator=(const problem &other)
  *
  * @throws std::invalid_argument if either
  * - the length of \p dv differs from the value returned by get_nx(), or
- * - the length of the returned fitness vector differs from the the value returned by get_nf().
+ * - the length of the returned fitness vector differs from the value returned by get_nf().
  * @throws unspecified any exception thrown by the <tt>%fitness()</tt> method of the UDP.
  */
 vector_double problem::fitness(const vector_double &dv) const

@@ -39,7 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/sea.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE(sea_evolve_test)
     }
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{zdt{}}, 5u, 23u}), std::invalid_argument);
-    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 5u, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{hock_schittkowski_71{}}, 5u, 23u}), std::invalid_argument);
     // Or with not enough individuals
     BOOST_CHECK_THROW(sea{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     // And a clean exit for 0 generations

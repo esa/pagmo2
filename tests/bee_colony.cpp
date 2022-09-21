@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problems/ackley.hpp>
 #include <pagmo/problems/griewank.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rastrigin.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(bee_colony_evolve_test)
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{rosenbrock{}}, 1u}), std::invalid_argument);
     BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{hock_schittkowski_71{}}, 15u}), std::invalid_argument);
     BOOST_CHECK_THROW(bee_colony{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};

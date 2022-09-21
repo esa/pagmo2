@@ -91,7 +91,7 @@ public:
 private:
     // error of the approximation
     const double m_eps;
-    // probabiltiy of error
+    // probability of error
     const double m_delta;
 
     mutable detail::random_engine_type m_e;

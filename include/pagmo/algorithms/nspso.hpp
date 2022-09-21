@@ -131,7 +131,7 @@ private:
     unsigned m_leader_selection_range;
     std::string m_diversity_mechanism;
     bool m_memory;
-    // paricles' velocities
+    // particles' velocities
     mutable std::vector<vector_double> m_velocity;
     mutable std::vector<vector_double> m_best_fit;
     mutable std::vector<vector_double> m_best_dvs;

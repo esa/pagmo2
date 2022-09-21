@@ -42,7 +42,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problems/dtlz.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/lennard_jones.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(maco_evolve_test)
     // Empty population.
     BOOST_CHECK_THROW(maco{10u}.evolve(population{problem{rosenbrock{}}, 0u}), std::invalid_argument);
     // constrained prob
-    BOOST_CHECK_THROW((maco{}.evolve(population{hock_schittkowsky_71{}, 63u, 23u})), std::invalid_argument);
+    BOOST_CHECK_THROW((maco{}.evolve(population{hock_schittkowski_71{}, 63u, 23u})), std::invalid_argument);
     // single objective prob
     BOOST_CHECK_THROW((maco{}.evolve(population{rosenbrock{}, 63u, 23u})), std::invalid_argument);
     // population size smaller than ker size

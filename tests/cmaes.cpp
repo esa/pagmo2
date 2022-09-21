@@ -41,7 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/cmaes.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
     // We then check that the evolve throws if called on unsuitable problems
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{rosenbrock{}}, 4u}), std::invalid_argument);
     BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
-    BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+    BOOST_CHECK_THROW(cmaes{10u}.evolve(population{problem{hock_schittkowski_71{}}, 15u}), std::invalid_argument);
 
     detail::random_engine_type r_engine(32u);
     population pop_lb{problem{unbounded_lb{}}};

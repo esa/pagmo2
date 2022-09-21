@@ -56,7 +56,7 @@ struct problem_basic {
         return {{-10, -10, -10, -10}, {10, 10, 10, 10}};
     }
 
-    // Optional, provides a name for the problem overrding the default name
+    // Optional, provides a name for the problem overriding the default name
     std::string get_name() const
     {
         return "My Problem";

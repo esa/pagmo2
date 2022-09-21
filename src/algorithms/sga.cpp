@@ -68,7 +68,7 @@ namespace detail
 namespace
 {
 
-// All this scaffolding is to establish a one to one correspondance between enums and genetic operator types
+// All this scaffolding is to establish a one to one correspondence between enums and genetic operator types
 // represented as strings.
 using sga_selection_map_t = boost::bimap<std::string, sga_selection>;
 using sga_crossover_map_t = boost::bimap<std::string, sga_crossover>;
@@ -359,7 +359,7 @@ std::vector<vector_double::size_type> sga::perform_selection(const std::vector<v
             // We make one tournament for each of the offspring to be generated
             for (decltype(retval.size()) j = 0u; j < retval.size(); ++j) {
                 // Fisher Yates algo http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-                // to select m_param_s individial at random
+                // to select m_param_s individual at random
                 for (decltype(m_param_s) i = 0u; i < m_param_s; ++i) {
                     dist.param(
                         std::uniform_int_distribution<std::vector<vector_double::size_type>::size_type>::param_type(

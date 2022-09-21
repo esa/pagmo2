@@ -52,7 +52,7 @@ namespace pagmo
 namespace detail
 {
 
-// Constrainted self adaptive udp
+// Constrained self adaptive udp
 /**
  * Implements a udp that wraps a population and results in self adaptive constraints handling.
  *
@@ -104,7 +104,7 @@ struct PAGMO_DLL_PUBLIC penalized_udp {
 
     // Call to this method updates all the members that are used to penalize the objective function
     // As the penalization algorithm depends heavily on the ref population this method takes care of
-    // updating the necessary information. It also builds the hash map used to avoid unecessary fitness
+    // updating the necessary information. It also builds the hash map used to avoid unnecessary fitness
     // evaluations. We exclude this method from the test as all of its corner cases are difficult to trigger
     // and test for correctness
     PAGMO_DLL_LOCAL void update();
@@ -133,7 +133,7 @@ struct PAGMO_DLL_PUBLIC penalized_udp {
 
     vector_double::size_type m_n_feasible;
     // A NAKED pointer to the reference population, allowing to call the fitness function and later recover
-    // the counters outside of the class, and avoiding unecessary copies. Use with care.
+    // the counters outside of the class, and avoiding unnecessary copies. Use with care.
     population *m_pop_ptr;
     // The hash map connecting the decision vector to their fitnesses. The use of
     // custom comparison is needed to take care of nans, while the custom hasher is needed as std::hash does not
@@ -157,7 +157,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const penalized_udp &)
  * approach is an alternative to using the meta-problem pagmo::unconstrain to transform the
  * constrained fitness into an unconstrained fitness.
  *
- * The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Faramani and Wright but it
+ * The self-adaptive constraints handling meta-algorithm is largely based on the ideas of Farmani and Wright but it
  * extends their use to any-algorithm, in particular to non generational population based evolutionary approaches where
  * a steady-state reinsertion is used (i.e., as soon as an individual is found fit it is immediately reinserted into the
  * pop and will influence the next offspring genetic material).
@@ -203,7 +203,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const penalized_udp &)
  *
  * .. note::
  *
- *    Several modification were made to the original Faramani and Wright ideas to allow their approach to work on
+ *    Several modification were made to the original Farmani and Wright ideas to allow their approach to work on
  *    corner cases and with any UDAs. Most notably, a violation to the :math:`j`-th  constraint is ignored if all
  *    the decision vectors in the population satisfy that particular constraint (i.e. if :math:`c_{j_{max}} = 0`).
  *
@@ -300,7 +300,7 @@ public:
      *
      * @endcode
      * \p Iter is the iteration number, \p Fevals is the number of fitness evaluations, \p Best is the objective
-     * function of the best fitness currently in the population, \p Infeasibility is the normailized infeasibility
+     * function of the best fitness currently in the population, \p Infeasibility is the normalized infeasibility
      * measure, \p Violated is the number of constraints currently violated by the best solution, <tt>Viol. Norm</tt> is
      * the norm of the violation (discounted already by the constraints tolerance) and N. Feasible is the number of
      * feasible individuals in the current iteration. The small \p i appearing at the end of the line stands for

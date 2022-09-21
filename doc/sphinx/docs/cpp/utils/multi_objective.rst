@@ -4,7 +4,7 @@ Multi-objective optimization utilities
 ======================================
 
 A number of utilities to compute quantities that are of relevance to
-the determination of non dominated fronts, Pareto dominance criterias and
+the determination of non dominated fronts, Pareto dominance criteria and
 more in general, to multi-objective optimization tasks.
 
 --------------------------------------------------------------------------

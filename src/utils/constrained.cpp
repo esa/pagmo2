@@ -51,7 +51,7 @@ namespace pagmo
  * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
  is smaller.
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
- * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
+ * in \f$f_1\f$ is smaller than the objective value in \f$f_2\f$
  *
  * \verbatim embed:rst:leading-asterisk
  * .. note::
@@ -98,7 +98,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
         pagmo_throw(std::invalid_argument,
                     "Number of equality constraints declared: " + std::to_string(neq)
                         + " while fitness vector has dimension: " + std::to_string(f1.size())
-                        + "(it must be striclty smaller as the objfun is assumed to be at position 0)");
+                        + "(it must be strictly smaller as the objfun is assumed to be at position 0)");
     }
 
     auto c1eq = detail::test_eq_constraints(f1.data() + 1, f1.data() + 1 + neq, tol.data());
@@ -110,7 +110,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
     auto c2ineq = detail::test_ineq_constraints(f2.data() + 1 + neq, f2.data() + f2.size(), tol.data() + neq);
     auto n2 = c2eq.first + c2ineq.first;
     auto l2 = std::sqrt(c2eq.second * c2eq.second + c2ineq.second * c2ineq.second);
-    if (n1 == n2) {                 // same number of constraints satistfied
+    if (n1 == n2) {                 // same number of constraints satisfied
         if (n1 == f1.size() - 1u) { // fitness decides
             return detail::less_than_f(f1[0], f2[0]);
         } else { // l2 norm decides
@@ -156,7 +156,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
  * number of constraints, if the \f$L_2\f$ norm of the overall constraint violation
  * is smaller.
  * - \f$f_1 \prec f_2\f$ if both fitness vectors are feasible and the objective value
- * in \f$f_1\f$ is smaller than the objectve value in \f$f_2\f$
+ * in \f$f_1\f$ is smaller than the objective value in \f$f_2\f$
  *
  * \verbatim embed:rst:leading-asterisk
  * .. note::
@@ -168,7 +168,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
  *
  * @param input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
  * @param neq number of equality constraints
- * @param tol a vector_double containing tolerances to be accouted for in the constraints
+ * @param tol a vector_double containing tolerances to be accounted for in the constraints
  *
  * @return an <tt>std::vector</tt> of indexes containing the sorted population
  *
@@ -206,7 +206,7 @@ std::vector<pop_size_t> sort_population_con(const std::vector<vector_double> &in
  *
  * @param input_f an <tt>std::vector</tt> of fitness vectors (containing objectives and constraints)
  * @param neq number of equality constraints
- * @param tol scalar tolerance to be accouted for in the constraints
+ * @param tol scalar tolerance to be accounted for in the constraints
  *
  * @return an <tt>std::vector</tt> of indexes containing the sorted population
  *

@@ -105,7 +105,7 @@ population nspso::evolve(population pop) const
     }
     if (prob.get_nf() < 2u) {
         pagmo_throw(std::invalid_argument,
-                    "This is a multi-objective algortihm, while number of objectives detected in " + prob.get_name()
+                    "This is a multi-objective algorithm, while number of objectives detected in " + prob.get_name()
                         + " is " + std::to_string(prob.get_nf()));
     }
     if (pop.size() <= 1u) {

@@ -90,9 +90,9 @@ public:
      * @endcode
      *
      * @param gen number of generations.
-     * @param F weight coefficient (dafault value is 0.8)
-     * @param CR crossover probability (dafault value is 0.9)
-     * @param variant mutation variant (dafault variant is 2: /rand/1/exp)
+     * @param F weight coefficient (default value is 0.8)
+     * @param CR crossover probability (default value is 0.9)
+     * @param variant mutation variant (default variant is 2: /rand/1/exp)
      * @param ftol stopping criteria on the f tolerance (default is 1e-6)
      * @param xtol stopping criteria on the x tolerance (default is 1e-6)
      * @param seed seed used by the internal random number generator (default is random)

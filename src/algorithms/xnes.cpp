@@ -173,7 +173,7 @@ population xnes::evolve(population pop) const
         sum += u[i];
     }
     for (decltype(u.size()) i = 0u; i < u.size(); ++i) {
-        u[i] = u[i] / sum - 1. / lam_d; // Give an option to turn off the unifrm baseline (i.e. -1/lam_d) ?
+        u[i] = u[i] / sum - 1. / lam_d; // Give an option to turn off the uniform baseline (i.e. -1/lam_d) ?
     }
     // If m_memory is false we redefine mutable members erasing the memory of past calls.
     // This is also done if the problem dimension has changed
@@ -185,7 +185,7 @@ population xnes::evolve(population pop) const
         }
         A = Eigen::MatrixXd::Identity(_(dim), _(dim));
         // The diagonal of the initial covariance matrix A defines the search width in all directions.
-        // By default we set this to be sigma times the witdh of the box bounds or 1e-6 if too small.
+        // By default we set this to be sigma times the width of the box bounds or 1e-6 if too small.
         for (decltype(dim) j = 0u; j < dim; ++j) {
             A(_(j), _(j)) = std::max((ub[j] - lb[j]), 1e-6) * sigma;
         }
@@ -268,9 +268,9 @@ population xnes::evolve(population pop) const
         if (m_verbosity > 0u) {
             // Every m_verbosity generations print a log line
             if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                // The population flattness in chromosome
+                // The population flatness in chromosome
                 auto dx = (A * z[0]).norm();
-                // The population flattness in fitness
+                // The population flatness in fitness
                 auto idx_b = pop.best_idx();
                 auto idx_w = pop.worst_idx();
                 auto df = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);

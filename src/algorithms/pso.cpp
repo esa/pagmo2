@@ -386,7 +386,7 @@ population pso::evolve(population pop) const
                 }
                 auto lb_avg = std::accumulate(local_fits.begin(), local_fits.end(), 0.)
                               / static_cast<double>(local_fits.size());
-                // We compute the best fitness encounterd so far across generations and across the swarm
+                // We compute the best fitness encountered so far across generations and across the swarm
                 // TODO: distance returns a signed type that can be overflown by the local_fits::size_type
                 auto idx_best = std::distance(std::begin(local_fits),
                                               std::min_element(std::begin(local_fits), std::end(local_fits)));

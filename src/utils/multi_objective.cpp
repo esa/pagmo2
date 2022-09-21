@@ -260,7 +260,7 @@ fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &po
 /**
  * An implementation of the crowding distance. Complexity is \f$ O(MNlog(N))\f$ where \f$M\f$ is the number of
  * objectives
- * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failiure to this
+ * and \f$N\f$ is the number of individuals. The function assumes the input is a non-dominated front. Failure to this
  * condition
  * will result in undefined behaviour.
  *
@@ -329,7 +329,7 @@ vector_double crowding_distance(const std::vector<vector_double> &non_dom_front)
  * auto ret = pagmo::sort_population_mo(input_f).resize(N);
  * @endcode
  *
- * but it is faster than the above code: it avoids to compute the crowidng distance for all individuals and only
+ * but it is faster than the above code: it avoids to compute the crowding distance for all individuals and only
  * computes it for the last non-dominated front that contains individuals included in the best N.
  *
  * If N is zero, an empty vector will be returned.

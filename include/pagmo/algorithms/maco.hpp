@@ -45,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-// Multi-objective Hypervolume-based Ant Colony Opitmization (MHACO)
+// Multi-objective Hypervolume-based Ant Colony Optimization (MHACO)
 class PAGMO_DLL_PUBLIC maco
 {
 public:

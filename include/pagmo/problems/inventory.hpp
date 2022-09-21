@@ -71,11 +71,11 @@ class PAGMO_DLL_PUBLIC inventory
 public:
     /// Constructor from weeks, sample size and random seed
     /**
-     * Given the numer of weeks (i.e. prolem dimension), the sample size to
+     * Given the number of weeks (i.e. prolem dimension), the sample size to
      * approximate the expected value and a starting random seed, we construct
      * the inventory prolem
      *
-     * @param weeks dimension of the problem corresponding to the numer of weeks
+     * @param weeks dimension of the problem corresponding to the number of weeks
      * to plan the inventory for.
      * @param sample_size dimension of the sample used to approximate the expected value
      * @param seed starting random seed to build the pseudorandom sequences used to

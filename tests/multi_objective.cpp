@@ -231,7 +231,7 @@ BOOST_AUTO_TEST_CASE(select_best_N_mo_test)
     result = {0, 1, 2, 3};
     BOOST_CHECK(select_best_N_mo(example, N) == result);
 
-    // Test 2 - The best N individuals will be a permutaion of the first N in the sorted index list.
+    // Test 2 - The best N individuals will be a permutation of the first N in the sorted index list.
     example = {{0, 7}, {1, 5}, {2, 3}, {4, 2}, {7, 1}, {10, 0}, {2, 6}, {4, 4}, {10, 2}, {6, 6}, {9, 5}};
     auto tmp2 = sort_population_mo(example);
     for (decltype(example.size()) i = 1; i < example.size() + 3; ++i) {

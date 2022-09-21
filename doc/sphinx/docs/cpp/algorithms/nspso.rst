@@ -59,7 +59,7 @@ Non dominated sorting particle swarm optimization(NSPSO)
    .. cpp:function:: void set_verbosity(unsigned level)
 
       Sets the algorithm verbosity: sets the verbosity level
-      of the screen ouput and of the log returned by ``get_log()``.
+      of the screen output and of the log returned by ``get_log()``.
       *level* can be:
 
       * 0: no verbosity.

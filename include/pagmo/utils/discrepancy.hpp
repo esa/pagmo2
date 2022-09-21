@@ -76,7 +76,7 @@ class PAGMO_DLL_PUBLIC van_der_corput
 public:
     /// Constructor from base and starting element
     /**
-     * Consruct a van der Corput lowp-discrepancy sequence with base
+     * Construct a van der Corput lowp-discrepancy sequence with base
      * \p b and starting element position \p n
      *
      * @param b base
@@ -128,7 +128,7 @@ class PAGMO_DLL_PUBLIC halton
 public:
     /// Constructor from base and starting element
     /**
-     * Consruct a Halton low-discrepancy sequence with dimension
+     * Construct a Halton low-discrepancy sequence with dimension
      * \p dim and starting element position \p n
      *
      * @param dim dimension
