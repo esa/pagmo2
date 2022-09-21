@@ -70,7 +70,7 @@ struct PAGMO_DLL_PUBLIC task_queue {
     // being executed. Note that the opposite is not
     // true, i.e., the flag could be true
     // without any running task.
-    std::atomic<bool> m_task_running = false;
+    std::atomic<bool> m_task_maybe_running = false;
     std::condition_variable m_cond;
     std::mutex m_mutex;
     std::queue<task_type> m_tasks;

@@ -354,6 +354,8 @@ struct PAGMO_DLL_PUBLIC island_data {
     // This will be explicitly set only during archipelago::push_back().
     // In all other situations, it will be null.
     archipelago *archi_ptr = nullptr;
+    // NOTE: this will either create a brand new queue,
+    // or grab one from the global cache.
     std::unique_ptr<task_queue> queue = get_task_queue();
 };
 

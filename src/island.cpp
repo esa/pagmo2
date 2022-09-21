@@ -233,6 +233,8 @@ extern "C" void clear_task_queue_cache() noexcept
 
 } // namespace
 
+// Helper to either fetch a task_queue from a global cache,
+// or to create a new one (in case the global cache is empty).
 std::unique_ptr<task_queue> get_task_queue()
 {
     // Fetch the global cache.

@@ -58,11 +58,11 @@ task_queue::task_queue()
                   auto task(std::move(this->m_tasks.front()));
                   this->m_tasks.pop();
 
-                  // Set m_task_running to true (even tohugh the task
+                  // Set m_task_maybe_running to true (even tohugh the task
                   // has not started yet) so that wait_all() will not
                   // exit before the task is finished.
-                  assert(!m_task_running.load());
-                  m_task_running.store(true);
+                  assert(!m_task_maybe_running.load());
+                  m_task_maybe_running.store(true);
 
                   // Release the lock, so that we can enqueue
                   // more tasks while the current one is running.
@@ -71,8 +71,8 @@ task_queue::task_queue()
                   // Run the current task.
                   task();
 
-                  // Task is finished, set m_task_running to false.
-                  m_task_running.store(false);
+                  // Task is finished, set m_task_maybe_running to false.
+                  m_task_maybe_running.store(false);
 
                   // Notify that we popped a task from the queue
                   // and we consumed it. The only consumer of
@@ -107,20 +107,23 @@ std::future<void> task_queue::enqueue_impl(task_type &&task)
 }
 
 // Helper to wait for all the enqueued tasks
-// to be processed.
+// to be processed. This method is called by
+// the island_data destructor in order to make sure that
+// all tasks have finished before the queue is put
+// into the cache.
 void task_queue::wait_all()
 {
     std::unique_lock lock(m_mutex);
 
     m_cond.wait(lock, [this]() {
-        // NOTE: here we check for m_task_running (in addition to m_tasks
+        // NOTE: here we check for m_task_maybe_running (in addition to m_tasks
         // being empty) in order to deal with possible spurious wakeups of m_cond
         // while the last task is running. In such a case, we would be exiting
         // this function (because m_tasks is empty) while the last
         // task is still running, which would invalidate the guarantee
         // provided by this function that all running tasks
         // have finished by the time it returns.
-        return m_task_running.load() == false && m_tasks.empty();
+        return m_task_maybe_running.load() == false && m_tasks.empty();
     });
 }
 
