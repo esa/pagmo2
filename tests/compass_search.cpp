@@ -39,7 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -67,11 +67,11 @@ BOOST_AUTO_TEST_CASE(compass_search_evolve_test)
     double stop_range = 1e-5;
 
     // Here we only test that evolution is deterministic (stop criteria will be range)
-    problem prob1{hock_schittkowsky_71{}};
+    problem prob1{hock_schittkowski_71{}};
     prob1.set_c_tol({1e-3, 1e-3});
     population pop1{prob1, 5u, 23u};
 
-    problem prob2{hock_schittkowsky_71{}};
+    problem prob2{hock_schittkowski_71{}};
     prob2.set_c_tol({1e-3, 1e-3});
     population pop2{prob2, 5u, 23u};
 

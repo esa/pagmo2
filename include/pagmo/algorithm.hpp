@@ -390,7 +390,7 @@ namespace pagmo
  * all types of algorithms that can be applied to find solution to a generic mathematical
  * programming problem as represented by the pagmo::problem class.
  *
- * In order to define an optimizaztion algorithm in pagmo, the user must first define a class
+ * In order to define an optimization algorithm in pagmo, the user must first define a class
  * (or a struct) whose methods describe the properties of the algorithm and implement its logic.
  * In pagmo, we refer to such a class as a **user-defined algorithm**, or UDA for short. Once defined and instantiated,
  * a UDA can then be used to construct an instance of this class, pagmo::algorithm, which

@@ -45,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-/// Extended Ant Colony Opitmization
+/// Extended Ant Colony Optimization
 /**
  * \image html gaco.png "Ant Colony Optimization Illustration" width=0.5cm
  *

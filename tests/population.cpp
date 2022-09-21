@@ -45,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/bfe.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -223,9 +223,9 @@ BOOST_AUTO_TEST_CASE(population_best_worst_test)
     }
     // Test on constrained
     {
-        population pop{problem{hock_schittkowsky_71{}}};
+        population pop{problem{hock_schittkowski_71{}}};
         pop.push_back({1.5, 1.5, 1.5, 1.5});
-        pop.push_back(pop.get_problem().extract<hock_schittkowsky_71>()->best_known());
+        pop.push_back(pop.get_problem().extract<hock_schittkowski_71>()->best_known());
         BOOST_CHECK(pop.worst_idx(1e-5) == 0u); // tolerance matter here!!!
         BOOST_CHECK(pop.best_idx(1e-5) == 1u);
     }
@@ -294,20 +294,20 @@ BOOST_AUTO_TEST_CASE(population_champion_test)
     }
     // Constrained case
     {
-        population pop{problem{hock_schittkowsky_71{}}};
+        population pop{problem{hock_schittkowski_71{}}};
         // Upon construction of an empty population the Champion is empty
         BOOST_CHECK((pop.champion_x() == vector_double{}));
         BOOST_CHECK((pop.champion_f() == vector_double{}));
-        // We push back 1.1,1.1,.. in hock_schittkowsky_71 this has a fitness of [  5.093, -35.16, 23.5359]
+        // We push back 1.1,1.1,.. in hock_schittkowski_71 this has a fitness of [  5.093, -35.16, 23.5359]
         pop.push_back({1.1, 1.1, 1.1, 1.1});
         auto ch = pop.champion_f();
         BOOST_CHECK((pop.champion_x() == vector_double{1.1, 1.1, 1.1, 1.1}));
-        // We push back all ones, in hock_schittkowsky_71 this has a fitness of [ 4., -36., 24.] and does not trigger a
+        // We push back all ones, in hock_schittkowski_71 this has a fitness of [ 4., -36., 24.] and does not trigger a
         // champion update
         pop.push_back({1., 1., 1., 1.});
         BOOST_CHECK((pop.champion_x() == vector_double{1.1, 1.1, 1.1, 1.1}));
         BOOST_CHECK((pop.champion_f() == ch));
-        // We push back 2.1,2.1, in hock_schittkowsky_71 this has a fitness of [29.883 ,-22.36, 5.5519] and triggers a
+        // We push back 2.1,2.1, in hock_schittkowski_71 this has a fitness of [29.883 ,-22.36, 5.5519] and triggers a
         // champion update
         pop.push_back({2.1, 2.1, 2.1, 2.1});
         BOOST_CHECK((pop.champion_x() == vector_double{2.1, 2.1, 2.1, 2.1}));

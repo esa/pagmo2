@@ -251,11 +251,11 @@ population gaco::evolve(population pop) const
             if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                 auto best_fit = sol_archive[0][1 + n_x];
                 double dx = 0., dp = 0.;
-                // The population flattness in variables
+                // The population flatness in variables
                 for (decltype(n_x) i = 0u; i < n_x; ++i) {
                     dx += std::abs(sol_archive[m_ker - 1][1 + i] - sol_archive[0][1 + i]);
                 }
-                // The population flattness in penalty
+                // The population flatness in penalty
                 dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
                 // Every line print the column names
                 if (m_memory == false) {
@@ -419,11 +419,11 @@ population gaco::evolve(population pop) const
     if (m_verbosity > 0u && m_memory == false) {
         if (m_gen % m_verbosity == 1u || m_verbosity == 1u) {
             double dx = 0., dp = 0.;
-            // The population flattness in variables
+            // The population flatness in variables
             for (decltype(n_x) i = 0u; i < n_x; ++i) {
                 dx += std::abs(sol_archive[m_ker - 1][1 + i] - sol_archive[0][1 + i]);
             }
-            // The population flattness in penalty
+            // The population flatness in penalty
             dp = std::abs(sol_archive[m_ker - 1][0] - sol_archive[0][0]);
 
             if (m_gen == 1) {

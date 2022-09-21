@@ -88,7 +88,7 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
 
     // This implements a Simulated Binary Crossover SBX
-    if (drng(random_engine) < p_cr) { // No crossever at all will happen with probability p_cr
+    if (drng(random_engine) < p_cr) { // No crossover at all will happen with probability p_cr
         for (decltype(ncx) i = 0u; i < ncx; i++) {
             // Each chromosome value has 0.5 probability to be crossovered.
             if ((drng(random_engine) < 0.5) && (std::abs(parent1[i] - parent2[i])) > 1e-14 && lb[i] != ub[i]) {
@@ -144,7 +144,7 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
 }
 
 // Performs polynomial mutation. Requires all sizes to be consistent. Does not check if input is well formed.
-// p_m is the mutation probability, eta_m the distibution index
+// p_m is the mutation probability, eta_m the distribution index
 void polynomial_mutation_impl(vector_double &child, const std::pair<vector_double, vector_double> &bounds,
                               vector_double::size_type nix, const double p_m, const double eta_m,
                               detail::random_engine_type &random_engine)
@@ -298,7 +298,7 @@ std::pair<vector_double, vector_double> sbx_crossover(const vector_double &paren
  * @param bounds problem bounds.
  * @param nix integer dimension of the problem.
  * @param p_m mutation probability.
- * @param eta_m mutation distribution index (siggested to be in [20, 100]).
+ * @param eta_m mutation distribution index (suggested to be in [20, 100]).
  * @param random_engine the pagmo random engine
  *
  * @throws std::invalid_argument if:

@@ -246,7 +246,7 @@ private:
     double m_eta2;
     // Maximum particle velocity
     double m_max_vel;
-    // Algoritmic variant
+    // Algorithmic variant
     unsigned m_variant;
     // Particle topology (only relevant for some variants)
     unsigned m_neighb_type;
@@ -254,7 +254,7 @@ private:
     unsigned m_neighb_param;
     // memory
     bool m_memory;
-    // paricles' velocities
+    // particles' velocities
     mutable std::vector<vector_double> m_V;
 
     mutable detail::random_engine_type m_e;

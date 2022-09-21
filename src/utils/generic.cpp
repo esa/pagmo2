@@ -73,7 +73,7 @@ bool some_bound_is_equal(const problem &prob)
 /**
  * An implementation of the binomial coefficient using gamma functions
  * @param  n first parameter \f$n\f$
- * @param  k second paramater \f$k\f$
+ * @param  k second parameter \f$k\f$
  * @return the binomial coefficient \f$ n \choose k \f$
  */
 double binomial_coefficient(vector_double::size_type n, vector_double::size_type k)
@@ -133,7 +133,7 @@ std::vector<std::vector<vector_double::size_type>> kNN(const std::vector<vector_
         std::sort(idxs.begin(), idxs.end(), [&distances](vector_double::size_type idx1, vector_double::size_type idx2) {
             return detail::less_than_f(distances[idx1], distances[idx2]);
         });
-        // We remove the first element containg the self-distance (0)
+        // We remove the first element containing the self-distance (0)
         idxs.erase(std::remove(idxs.begin(), idxs.end(), i), idxs.end());
         neigh_idxs.push_back(idxs);
     }

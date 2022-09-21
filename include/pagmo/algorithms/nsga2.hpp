@@ -51,7 +51,7 @@ namespace pagmo
  * NSGA-II is a solid multi-objective algorithm, widely used in many real-world applications.
  * While today it can be considered as an outdated approach, nsga2 has still a great value, if not
  * as a solid benchmark to test against.
- * NSGA-II genererates offsprings using a specific type of crossover and mutation and then selects the next
+ * NSGA-II generates offsprings using a specific type of crossover and mutation and then selects the next
  * generation according to nondominated-sorting and crowding distance comparison.
  *
  * The version implemented in pagmo can be applied to box-bounded multiple-objective optimization. It also

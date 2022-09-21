@@ -45,7 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/nlopt.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/luksan_vlcek1.hpp>
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -55,7 +55,7 @@ see https://www.gnu.org/licenses/. */
 
 using namespace pagmo;
 
-using hs71 = hock_schittkowsky_71;
+using hs71 = hock_schittkowski_71;
 
 BOOST_AUTO_TEST_CASE(nlopt_construction)
 {
@@ -373,7 +373,7 @@ BOOST_AUTO_TEST_CASE(nlopt_loc_opt)
         algo.evolve(pop);
         BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() < 0);
     }
-    // Check setting a local opt does not do anythig for normal solvers.
+    // Check setting a local opt does not do anything for normal solvers.
     nlopt n{"slsqp"};
     n.set_local_optimizer(nlopt{"lbfgs"});
     algorithm algo{n};

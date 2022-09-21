@@ -85,12 +85,12 @@ void unconstrain::generic_ctor_impl(const std::string &method, const vector_doub
         && method != "ignore_o") {
         pagmo_throw(std::invalid_argument, "The method " + method + " is not supported (did you misspell?)");
     }
-    // 4 - We throw if a non empty weight vector is passed but the method weghted is not selected
+    // 4 - We throw if a non empty weight vector is passed but the method weighted is not selected
     if (weights.size() != 0u && method != "weighted") {
         pagmo_throw(std::invalid_argument,
                     "The weight vector needs to be empty to use the unconstrain method " + method);
     }
-    // 5 - We store the method in a more efficient enum type and the number of objectives of the orginal udp
+    // 5 - We store the method in a more efficient enum type and the number of objectives of the original udp
     std::map<std::string, method_type> my_map = {{"death penalty", method_type::DEATH},
                                                  {"kuri", method_type::KURI},
                                                  {"weighted", method_type::WEIGHTED},
@@ -112,7 +112,7 @@ void unconstrain::generic_ctor_impl(const std::string &method, const vector_doub
  */
 vector_double unconstrain::fitness(const vector_double &x) const
 {
-    // some quantities from the orginal udp
+    // some quantities from the original udp
     auto original_fitness = m_problem.fitness(x);
     vector_double new_fitness;
     penalize(original_fitness, new_fitness);
@@ -131,7 +131,7 @@ vector_double unconstrain::fitness(const vector_double &x) const
  */
 void unconstrain::penalize(const vector_double &original_fitness, vector_double& unconstrained_fitness) const
 {
-    // some quantities from the orginal udp
+    // some quantities from the original udp
     auto nobj = m_problem.get_nobj();
     auto nec = m_problem.get_nec();
     auto nic = m_problem.get_nic();
@@ -300,7 +300,7 @@ std::pair<vector_double, vector_double> unconstrain::get_bounds() const
 /**
  * Calls the method <tt>has_set_seed()</tt> of the inner problem.
  *
- * @return a flag signalling wether the inner problem is stochastic.
+ * @return a flag signalling whether the inner problem is stochastic.
  */
 bool unconstrain::has_set_seed() const
 {

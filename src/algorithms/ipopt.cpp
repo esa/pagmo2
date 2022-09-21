@@ -68,7 +68,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
@@ -163,7 +163,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
         {
             // NOTE: our format for the gradient sparsity matches almost exactly Ipopt's. The only difference
             // is that we also report the sparsity for the objective function's gradient, while Ipopt's jacobian
-            // contains only constraints' gradients. Thus, we will need to discard the the objfun's sparsity
+            // contains only constraints' gradients. Thus, we will need to discard the objfun's sparsity
             // information and to decrease by one the row indices in the pattern (i.e., a first index of zero in
             // a pattern element must refer to the first constraint).
             // https://www.coin-or.org/Ipopt/documentation/node22.html
@@ -231,7 +231,7 @@ struct ipopt_nlp final : Ipopt::TNLP {
         // interfaces for languages other than C++?). This is the same approach we adopt in the
         // NLopt wrapper: trap everything in a try/catch block, and store the exception for re-throw
         // in ipopt::evolve(). In case of errors we return "false" from the callback, as this
-        // signals to the the Ipopt API that something went wrong.
+        // signals to the Ipopt API that something went wrong.
         try {
             // Number of dimensions of the problem.
             n = boost::numeric_cast<Index>(m_prob.get_nx());
@@ -682,7 +682,7 @@ unsigned ipopt_internal_test()
     auto ret = 0u;
 
     using Index = ipopt_nlp::Index;
-    problem prob(hock_schittkowsky_71{});
+    problem prob(hock_schittkowski_71{});
     ipopt_nlp nlp(prob, {1.1, 1.2, 1.3, 1.4}, 5u);
     ipopt_test_check_equal(nlp.m_verbosity, 5u);
 

@@ -102,7 +102,7 @@ const bool has_push_back<T>::value;
 #if !defined(PAGMO_DOXYGEN_INVOKED)
 
 // A Boost graph type which is used as an export format for topologies
-// and also as the underyling graph type for base_bgl_topology.
+// and also as the underlying graph type for base_bgl_topology.
 // NOTE: the definition of the graph type is taken from pagmo 1. We might
 // want to consider alternative storage classes down the line, as the complexity
 // of some graph operations is not that great when using vecs and lists.

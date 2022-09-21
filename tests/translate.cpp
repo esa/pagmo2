@@ -41,7 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/io.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/cec2009.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/translate.hpp>
@@ -71,9 +71,9 @@ BOOST_AUTO_TEST_CASE(translate_construction_test)
 
 BOOST_AUTO_TEST_CASE(translate_functional_test)
 {
-    // Then we check that the hock_schittkowsky_71 problem is actually translated
+    // Then we check that the hock_schittkowski_71 problem is actually translated
     {
-        hock_schittkowsky_71 hs;
+        hock_schittkowski_71 hs;
         problem p0{hs};
         translate t1{hs, {0.1, -0.2, 0.3, 0.4}};
         problem p1{t1};
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(translate_functional_test)
 BOOST_AUTO_TEST_CASE(translate_serialization_test)
 {
     // Do the checking with the full problem.
-    hock_schittkowsky_71 p0{};
+    hock_schittkowski_71 p0{};
     problem p{translate{p0, {0.1, -0.2, 0.3, 0.4}}};
     // Call objfun, grad and hess to increase
     // the internal counters.
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(translate_serialization_test)
 
 BOOST_AUTO_TEST_CASE(translate_stochastic_test)
 {
-    hock_schittkowsky_71 p0{};
+    hock_schittkowski_71 p0{};
     problem p{translate{p0, {0.1, -0.2, 0.3, 0.4}}};
     BOOST_CHECK(!p.is_stochastic());
 }
@@ -154,7 +154,7 @@ struct ts2 {
 
 BOOST_AUTO_TEST_CASE(translate_thread_safety_test)
 {
-    hock_schittkowsky_71 p0{};
+    hock_schittkowski_71 p0{};
     translate t{p0, {0.1, -0.2, 0.3, 0.4}};
     BOOST_CHECK(t.get_thread_safety() == thread_safety::basic);
     BOOST_CHECK((translate{ts2{}, {1}}.get_thread_safety() == thread_safety::none));
@@ -178,7 +178,7 @@ void check_inheritance(T udp, const vector_double &t)
 
 BOOST_AUTO_TEST_CASE(translate_inheritance_test)
 {
-    check_inheritance(hock_schittkowsky_71{}, vector_double(4, 0.5));
+    check_inheritance(hock_schittkowski_71{}, vector_double(4, 0.5));
     check_inheritance(cec2006{1}, vector_double(13, 0.5));
     check_inheritance(cec2009{1}, vector_double(30, 0.5));
     // We check the forwarding of the integer dimension. The translation needs to be integer too as to
@@ -200,12 +200,12 @@ BOOST_AUTO_TEST_CASE(translate_inner_algo_get_test)
 {
     // We check that the correct overload is called according to (*this) being const or not
     {
-        const translate udp(hock_schittkowsky_71{}, vector_double(4, 0.5));
+        const translate udp(hock_schittkowski_71{}, vector_double(4, 0.5));
         BOOST_CHECK(std::is_const<decltype(udp)>::value);
         BOOST_CHECK(std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
     }
     {
-        translate udp(hock_schittkowsky_71{}, vector_double(4, 0.5));
+        translate udp(hock_schittkowski_71{}, vector_double(4, 0.5));
         BOOST_CHECK(!std::is_const<decltype(udp)>::value);
         BOOST_CHECK(!std::is_const<std::remove_reference<decltype(udp.get_inner_problem())>::type>::value);
     }
@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE(translate_batch_fitness_test)
     BOOST_CHECK(fvs0 != fvs1);
     BOOST_CHECK(fvs0 == fvs2);
 
-    auto no_bfe = problem{translate{hock_schittkowsky_71{}, {0.1, -0.2, 0.3, 0.4}}};
+    auto no_bfe = problem{translate{hock_schittkowski_71{}, {0.1, -0.2, 0.3, 0.4}}};
     BOOST_CHECK(!no_bfe.has_batch_fitness());
     BOOST_CHECK_THROW(no_bfe.batch_fitness({3., 3., 3., 3.}), not_implemented_error);
 }

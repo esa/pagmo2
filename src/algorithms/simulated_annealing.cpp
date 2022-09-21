@@ -100,7 +100,7 @@ population simulated_annealing::evolve(population pop) const
     const auto bounds = prob.get_bounds();
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
-    auto fevals0 = prob.get_fevals(); // disount for the already made fevals
+    auto fevals0 = prob.get_fevals(); // discount for the already made fevals
     unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
@@ -161,7 +161,7 @@ population simulated_annealing::evolve(population pop) const
                                                          std::min(xOLD[nter] + width, ub[nter]), m_e);
                     // And we valuate the objective function for the new point
                     fNEW = prob.fitness(xNEW);
-                    // We decide wether to accept or discard the point
+                    // We decide whether to accept or discard the point
                     if (fNEW[0] <= fOLD[0]) {
                         // accept
                         xOLD[nter] = xNEW[nter];

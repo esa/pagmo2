@@ -41,7 +41,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE(mbh_evolve_test)
     // Here we only test that evolution is deterministic if the
     // seed is controlled
     {
-        problem prob{hock_schittkowsky_71{}};
+        problem prob{hock_schittkowski_71{}};
         prob.set_c_tol({1e-3, 1e-3});
         population pop1{prob, 5u, 23u};
         population pop2{prob, 5u, 23u};
@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(mbh_evolve_test)
     // And that it throws if called with a wrong dimension of the perturbation vector
     {
         mbh user_algo{compass_search{100u, 0.1, 0.001, 0.7}, 5u, {1e-3, 1e-2}, 23u};
-        BOOST_CHECK_THROW(user_algo.evolve(population{problem{hock_schittkowsky_71{}}, 15u}), std::invalid_argument);
+        BOOST_CHECK_THROW(user_algo.evolve(population{problem{hock_schittkowski_71{}}, 15u}), std::invalid_argument);
     }
     // Here we test that the algo can be called twice with problems of different dimensions (Issue #505)
     {
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(mbh_evolve_test)
         user_algo.evolve(pop2);
     }
     // And a clean exit for 0 generations
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population pop{prob, 10u};
     BOOST_CHECK((mbh{compass_search{100u, 0.1, 0.001, 0.7}, 0u, {1e-3, 1e-2}, 23u}.evolve(pop).get_x()[0])
                 == (pop.get_x()[0]));
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_CASE(mbh_setters_getters_test)
 BOOST_AUTO_TEST_CASE(mbh_serialization_test)
 {
     // Make one evolution
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population pop{prob, 10u, 23u};
     algorithm algo{mbh{compass_search{100u, 0.1, 0.001, 0.7}, 5u, 1e-3, 23u}};
     algo.set_verbosity(1u);

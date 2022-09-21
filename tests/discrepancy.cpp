@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(van_der_corput_test)
          ++i) { // in base 10 we need to check with a tolerance as per floating point representation problems
         BOOST_CHECK_CLOSE(real10[i], computed10[i], 1e-13);
     }
-    // We check the construcion throws
+    // We check the construction throws
     BOOST_CHECK_THROW(van_der_corput{1u}, std::invalid_argument);
     // We check here the prime number utility of PaGMO (TODO: move somewhere else?)
     BOOST_CHECK_THROW(detail::prime(1700u), std::invalid_argument);

@@ -109,7 +109,7 @@ individuals_group_t fair_replace::replace(const individuals_group_t &inds, const
     assert(n_migr <= mig_size);
 
     // NOTE: currently this replacement policy can handle:
-    // - single-ojective (un)constrained optimisation,
+    // - single-objective (un)constrained optimisation,
     // - multiobjective unconstrained optimisation.
     // We already checked above that we are not in an MO
     // constrained case.

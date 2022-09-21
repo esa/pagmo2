@@ -69,7 +69,7 @@ PAGMO_DLL_PUBLIC unsigned ipopt_internal_test();
  *
  * This class is a user-defined algorithm (UDA) that wraps the Ipopt (Interior Point OPTimizer) solver,
  * a software package for large-scale nonlinear optimization. Ipopt is a powerful solver that
- * is able to handle robustly and efficiently constrained nonlinear opimization problems at high dimensionalities.
+ * is able to handle robustly and efficiently constrained nonlinear optimization problems at high dimensionalities.
  *
  * Ipopt supports only single-objective minimisation, and it requires the availability of the gradient in the
  * optimisation problem. If possible, for best results the Hessians should be provided as well (but Ipopt
@@ -83,7 +83,7 @@ PAGMO_DLL_PUBLIC unsigned ipopt_internal_test();
  * set_selection(population::size_type), set_replacement(const std::string &) and
  * set_replacement(population::size_type).
  *
- * Configuring the optimsation run
+ * Configuring the optimization run
  * -------------------------------
  *
  * Ipopt supports a large amount of options for the configuration of the optimisation run. The options

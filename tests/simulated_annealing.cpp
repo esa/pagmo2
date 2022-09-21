@@ -39,7 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
 #include <pagmo/population.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_evolve_test)
     // We check that the problem is checked to be suitable
     BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{zdt{}, 5u, 23u})), std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{inventory{}, 5u, 23u})), std::invalid_argument);
-    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{hock_schittkowsky_71{}, 5u, 23u})),
+    BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{hock_schittkowski_71{}, 5u, 23u})),
                       std::invalid_argument);
     BOOST_CHECK_THROW((simulated_annealing{}.evolve(population{rosenbrock{}})), std::invalid_argument);
 }

@@ -26,7 +26,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
-#define BOOST_TEST_MODULE hock_schittkowsky_test
+#define BOOST_TEST_MODULE hock_schittkowski_test
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
@@ -36,16 +36,16 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
 
-BOOST_AUTO_TEST_CASE(hock_schittkowsky_71_test)
+BOOST_AUTO_TEST_CASE(hock_schittkowski_71_test)
 {
     // Problem instantiation
-    problem p{hock_schittkowsky_71{}};
+    problem p{hock_schittkowski_71{}};
     // Pick a few reference points
     vector_double x1 = {1., 1., 1., 1.};
     vector_double x2 = {2., 2., 2., 2.};
@@ -68,19 +68,19 @@ BOOST_AUTO_TEST_CASE(hock_schittkowsky_71_test)
     BOOST_CHECK((sp[1] == sparsity_pattern{{0, 0}, {1, 1}, {2, 2}, {3, 3}}));
     BOOST_CHECK((sp[2] == sparsity_pattern{{1, 0}, {2, 0}, {2, 1}, {3, 0}, {3, 1}, {3, 2}}));
     // Name and extra info tests
-    BOOST_CHECK(p.get_name().find("Schittkowsky") != std::string::npos);
-    BOOST_CHECK(p.get_extra_info().find("Schittkowsky") != std::string::npos);
+    BOOST_CHECK(p.get_name().find("Schittkowski") != std::string::npos);
+    BOOST_CHECK(p.get_extra_info().find("Schittkowski") != std::string::npos);
     // Best known test
-    auto x_best = p.extract<hock_schittkowsky_71>()->best_known();
+    auto x_best = p.extract<hock_schittkowski_71>()->best_known();
     BOOST_CHECK_CLOSE(x_best[0], 1, 1e-13);
     BOOST_CHECK_CLOSE(x_best[1], 4.74299963, 1e-13);
     BOOST_CHECK_CLOSE(x_best[2], 3.82114998, 1e-13);
     BOOST_CHECK_CLOSE(x_best[3], 1.37940829, 1e-13);
 }
 
-BOOST_AUTO_TEST_CASE(hock_schittkowsky_71_serialization_test)
+BOOST_AUTO_TEST_CASE(hock_schittkowski_71_serialization_test)
 {
-    problem p{hock_schittkowsky_71{}};
+    problem p{hock_schittkowski_71{}};
     // Call objfun, grad and hess to increase
     // the internal counters.
     p.fitness({1., 1., 1., 1.});

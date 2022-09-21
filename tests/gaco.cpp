@@ -43,7 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/population.hpp>
 #include <pagmo/problems/cec2006.hpp>
 #include <pagmo/problems/golomb_ruler.hpp>
-#include <pagmo/problems/hock_schittkowsky_71.hpp>
+#include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/lennard_jones.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
 // Coverage tests: we make sure that the algorithm is tested in all the lines
 BOOST_AUTO_TEST_CASE(miscellaneous_tests)
 {
-    problem prob{hock_schittkowsky_71{}};
+    problem prob{hock_schittkowski_71{}};
     population population1{prob, 15u, 23u};
     prob.set_c_tol(1.0);
     gaco user_algo1{100u, 13u, 1.0, 1500.0, 0.01, 90u, 1u, 1000u, 1000u, 1000.0, false, 23u};

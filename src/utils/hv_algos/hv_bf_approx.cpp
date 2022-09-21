@@ -195,7 +195,7 @@ vector_double bf_approx::compute_bounding_box(const std::vector<vector_double> &
             }
         }
         if (flag) { // if given point was worse only in one dimension it's the potential candidate
-                    // for the bouding box reductor
+                    // for the bounding box reductor
             z[worse_dim_idx] = std::min(z[worse_dim_idx], points[idx][worse_dim_idx]); // reduce the bounding box
         }
     }

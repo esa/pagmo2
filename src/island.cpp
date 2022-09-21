@@ -147,7 +147,7 @@ boost::any default_wait_raii_getter()
 
 } // namespace
 
-// NOTE: the default implementation just returns a defcted boost::any, whose ctor and dtor
+// NOTE: the default implementation just returns a defected boost::any, whose ctor and dtor
 // will have no effect.
 std::function<boost::any()> wait_raii_getter = &default_wait_raii_getter;
 
@@ -725,7 +725,7 @@ algorithm island::get_algorithm() const
  *
  * @param algo the algorithm that will be copied into the island.
  *
- * @throws unspecified any exception thrown by threading primitives, memory allocation erros
+ * @throws unspecified any exception thrown by threading primitives, memory allocation errors
  * or the invoked copy constructor.
  */
 void island::set_algorithm(const algorithm &algo)

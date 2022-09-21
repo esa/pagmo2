@@ -195,7 +195,7 @@ population cmaes::evolve(population pop) const
     vector_double dumb(dim, 0.);
 
     // If the algorithm is called for the first time on this problem dimension / pop size or if m_memory is false we
-    // erease the memory of past calls
+    // erase the memory of past calls
     if ((newpop.size() != lam) || (static_cast<unsigned>(newpop[0].rows()) != dim) || (m_memory == false)) {
         sigma = m_sigma0;
         mean.resize(_(dim));
@@ -209,7 +209,7 @@ population cmaes::evolve(population pop) const
         // We define the starting B,D,C
         B = Eigen::MatrixXd::Identity(_(dim), _(dim)); // B defines the coordinate system
         D = Eigen::MatrixXd::Identity(_(dim), _(dim));
-        // diagonal D defines the scaling. By default this is the witdh of the box bounds.
+        // diagonal D defines the scaling. By default this is the width of the box bounds.
         // If this is too small... then 1e-6 is used
         for (decltype(dim) j = 0u; j < dim; ++j) {
             D(_(j), _(j)) = std::max((ub[j] - lb[j]), 1e-6);
@@ -273,9 +273,9 @@ population cmaes::evolve(population pop) const
         if (m_verbosity > 0u) {
             // Every m_verbosity generations print a log line
             if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                // The population flattness in chromosome
+                // The population flatness in chromosome
                 auto dx = (sigma * B * D * tmp).norm();
-                // The population flattness in fitness
+                // The population flatness in fitness
                 auto idx_b = pop.best_idx();
                 auto idx_w = pop.worst_idx();
                 auto df = std::abs(pop.get_f()[idx_b][0] - pop.get_f()[idx_w][0]);
@@ -370,7 +370,7 @@ population cmaes::evolve(population pop) const
                     Dinv(_(j), _(j)) = 1. / D(_(j), _(j));
                 }
                 invsqrtC = B * Dinv * B.transpose();
-            } // if eigendecomposition fails just skip it and keep pevious successful one.
+            } // if eigendecomposition fails just skip it and keep previous successful one.
         }
     } // end of generation loop
     if (m_verbosity) {

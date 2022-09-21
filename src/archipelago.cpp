@@ -531,7 +531,7 @@ void archipelago::push_back_impl(std::unique_ptr<island> &&new_island)
 
 // Get the index of an island.
 // This function will return the index of the island \p isl in the archipelago. If \p isl does
-// not belong to the archipelago, an error will be reaised.
+// not belong to the archipelago, an error will be raised.
 archipelago::size_type archipelago::get_island_idx(const island &isl) const
 {
     std::lock_guard<std::mutex> lock(m_idx_map_mutex);
@@ -782,7 +782,7 @@ std::pair<std::vector<archipelago::size_type>, vector_double> get_island_connect
 
 // Get the list of connection to the island at index i.
 // The returned value is made of two vectors of equal size:
-// - the indicies of the connecting islands,
+// - the indices of the connecting islands,
 // - the weights of the connections.
 // This function will take care of safely converting the topology
 // indices to island indices, if necessary.

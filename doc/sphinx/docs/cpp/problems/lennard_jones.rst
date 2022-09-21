@@ -13,7 +13,7 @@ Lennard Jones Cluster
 
 .. cpp:class:: lennard_jones
 
-   This is a box-constrained continuous single-objecive problem. It represents the minimization
+   This is a box-constrained continuous single-objective problem. It represents the minimization
    of the energy of a cluster of atoms assuming a Lennard-Jones potential between each pair.
    The complexity for computing the objective function scales with the square of the number of atoms.
   

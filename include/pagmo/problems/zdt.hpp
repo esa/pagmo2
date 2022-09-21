@@ -67,7 +67,7 @@ namespace pagmo
  *
  * ZDT1:
  *
- * This is a box-constrained continuous \f$n\f$-dimensional (\f$n\f$>1) multi-objecive problem.
+ * This is a box-constrained continuous \f$n\f$-dimensional (\f$n\f$>1) multi-objective problem.
  * \f[
  * \begin{array}{l}
  *  g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\
@@ -78,7 +78,7 @@ namespace pagmo
  *
  * ZDT2:
  *
- * This is a box-constrained continuous \f$n\f$-dimension multi-objecive problem.
+ * This is a box-constrained continuous \f$n\f$-dimension multi-objective problem.
  * \f[
  * \begin{array}{l}
  *      g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\
@@ -89,7 +89,7 @@ namespace pagmo
  *
  * ZDT3:
  *
- * This is a box-constrained continuous \f$n\f$-dimension multi-objecive problem.
+ * This is a box-constrained continuous \f$n\f$-dimension multi-objective problem.
  * \f[
  * \begin{array}{l}
  *      g\left(x\right) = 1 + 9 \left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right) \\
@@ -101,7 +101,7 @@ namespace pagmo
  *
  * ZDT4:
  *
- * This is a box-constrained continuous \f$n\f$-dimension multi-objecive problem.
+ * This is a box-constrained continuous \f$n\f$-dimension multi-objective problem.
  * \f[
  * \begin{array}{l}
  *      g\left(x\right) = 91 + \sum_{i=2}^{n} \left[x_i^2 - 10 \cos \left(4\pi x_i \right) \right] \\
@@ -113,12 +113,12 @@ namespace pagmo
  *
  * ZDT5
  *
- * This is a box-constrained integer \f$n\f$-dimension multi-objecive problem. The chromosome is
+ * This is a box-constrained integer \f$n\f$-dimension multi-objective problem. The chromosome is
  * a bitstring so that \f$x_i \in \left\{0,1\right\}\f$. Refer to the original paper for the formal definition.
  *
  * ZDT6
  *
- * This is a box-constrained continuous \f$n\f$--dimension multi-objecive problem.
+ * This is a box-constrained continuous \f$n\f$--dimension multi-objective problem.
  * \f[
  * \begin{array}{l}
  *      g\left(x\right) = 1 + 9 \left[\left(\sum_{i=2}^{n} x_i \right) / \left( n-1 \right)\right]^{0.25} \\

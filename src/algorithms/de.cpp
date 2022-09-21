@@ -84,7 +84,7 @@ population de::evolve(population pop) const
     const auto &ub = bounds.second;
     auto NP = pop.size();
     auto prob_f_dimension = prob.get_nf();
-    auto fevals0 = prob.get_fevals(); // disount for the already made fevals
+    auto fevals0 = prob.get_fevals(); // discount for the already made fevals
     unsigned count = 1u;              // regulates the screen output
 
     // PREAMBLE-------------------------------------------------------------------------------------------------
@@ -328,11 +328,11 @@ population de::evolve(population pop) const
                 best_idx = pop.best_idx();
                 worst_idx = pop.worst_idx();
                 dx = 0.;
-                // The population flattness in chromosome
+                // The population flatness in chromosome
                 for (decltype(dim) i = 0u; i < dim; ++i) {
                     dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
                 }
-                // The population flattness in fitness
+                // The population flatness in fitness
                 df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
                 // Every 50 lines print the column names
                 if (count % 50u == 1u) {

@@ -230,7 +230,7 @@ double hypervolume::compute(const vector_double &r_point, hv_algorithm &hv_algo)
 
 /// Compute exclusive contribution
 /**
- * Computes exclusive hypervolume for given indivdual.
+ * Computes exclusive hypervolume for given individual.
  *
  * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume
  * @param r_point fitness vector describing the reference point
@@ -259,7 +259,7 @@ double hypervolume::exclusive(unsigned p_idx, const vector_double &r_point, hv_a
 
 /// Compute exclusive contribution
 /**
- * Computes exclusive hypervolume for given indivdual.
+ * Computes exclusive hypervolume for given individual.
  * This methods chooses the hv_algorithm dynamically.
  *
  * @param p_idx index of the individual for whom we compute the exclusive contribution to the hypervolume

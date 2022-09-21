@@ -117,7 +117,7 @@ population nsga2::evolve(population pop) const
                                                + get_name() + " cannot deal with them.");
     }
     if (prob.get_nf() < 2u) {
-        pagmo_throw(std::invalid_argument, "This is a multiobjective algortihm, while number of objectives detected in "
+        pagmo_throw(std::invalid_argument, "This is a multiobjective algorithm, while number of objectives detected in "
                                                + prob.get_name() + " is " + std::to_string(prob.get_nf()));
     }
     if (NP < 5u || (NP % 4 != 0u)) {
@@ -176,7 +176,7 @@ population nsga2::evolve(population pop) const
         // At each generation we make a copy of the population into popnew
         population popnew(pop);
 
-        // We create some pseudo-random permutation of the poulation indexes
+        // We create some pseudo-random permutation of the population indexes
         std::shuffle(shuffle1.begin(), shuffle1.end(), m_e);
         std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
 
@@ -205,7 +205,7 @@ population nsga2::evolve(population pop) const
             }
         }
 
-        // 3 - We then loop thorugh all individuals with increment 4 to select two pairs of parents that will
+        // 3 - We then loop through all individuals with increment 4 to select two pairs of parents that will
         // each create 2 new offspring
         if (m_bfe) {
             // bfe is available:
@@ -254,8 +254,8 @@ population nsga2::evolve(population pop) const
 
             // at this point:
             // genes     is an ordered list of child inputs (not used again)
-            // poptemp   is a structured list of children   (no fitneeses)
-            // fitnesses is an ordered list of fitneeses
+            // poptemp   is a structured list of children   (no fitness)
+            // fitnesses is an ordered list of fitness
             for (decltype(poptemp.size()) i = 0; i < poptemp.size(); i++) {
                 // slice up the fitnesses into a chunks of length n_obj
                 auto start_pos = fitnesses.begin() + static_cast<std::vector<double>::difference_type>(i * n_obj);

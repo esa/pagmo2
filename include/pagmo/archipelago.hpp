@@ -98,7 +98,7 @@ enum class migration_type {
  * \endverbatim
  */
 enum class migrant_handling {
-    preserve, ///< Perserve migrants in the database.
+    preserve, ///< Preserve migrants in the database.
     evict     ///< Evict migrants from the database.
 };
 

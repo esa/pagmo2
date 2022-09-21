@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE(algorithm_construction_test)
     // having only the mandatory methods implemented
     algorithm algo_full{al_01{}};
     algorithm algo_minimal{al_02{}};
-    // We test that the optional methods are appropiately detected in the full case
+    // We test that the optional methods are appropriately detected in the full case
     BOOST_CHECK(algo_full.has_set_seed() == true);
     BOOST_CHECK(algo_full.has_set_verbosity() == true);
     BOOST_CHECK_NO_THROW(algo_full.set_seed(1u));
@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_CASE(algorithm_copy_assignment_test)
     algo.set_seed(1u);
     algo.set_verbosity(1u);
 
-    // We call the copy assignment opeator
+    // We call the copy assignment operator
     algorithm algo_copy{};
     algo_copy = algo;
     // We extract the user algorithm
@@ -317,7 +317,7 @@ BOOST_AUTO_TEST_CASE(algorithm_extract_is_test)
     BOOST_CHECK(user_algo->m_seed == 1u);
     BOOST_CHECK(user_algo->m_verbosity == 1u);
 
-    // We check that a non succesfull cast returns a null pointer
+    // We check that a non successful cast returns a null pointer
     BOOST_CHECK(!algo.extract<al_02>());
 
     // We check the is method
