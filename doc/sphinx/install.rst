@@ -116,7 +116,7 @@ You can download and install pagmo2 using the vcpkg dependency manager:
 
 Then you may direct cmake or msbuild to use the provided vcpkg toolchain file. Please visit
 the `vcpkg build system documentation
-<https://github.com/microsoft/vcpkg/blob/master/docs/users/integration.md>`_ for
+<https://github.com/microsoft/vcpkg>`_ for
 details.
 
 The pagmo2 port in vcpkg is kept up to date by Microsoft team members and community

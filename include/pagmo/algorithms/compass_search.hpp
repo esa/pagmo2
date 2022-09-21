@@ -88,8 +88,6 @@ namespace pagmo
  *    Kolda, Lewis, Torczon: 'Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods'
  *    published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003)
  *
- *    http://www.cs.wm.edu/~va/research/sirev.pdf
- *
  * \endverbatim
  *
  */
