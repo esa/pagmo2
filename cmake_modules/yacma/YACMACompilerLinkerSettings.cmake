@@ -112,6 +112,13 @@ if(NOT _YACMACompilerLinkerSettingsRun)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wsizeof-array-div)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wxor-used-as-pow)
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wfinal-dtor-non-final-class)
+        # New warnings in clang 11.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wpointer-to-int-cast)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wuninitialized-const-reference)
+        # New warnings in clang 13.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wunused-but-set-parameter)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wunused-but-set-variable)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wnull-pointer-subtraction)
         # NOTE: this is a new flag in Clang 13 which seems to give
         # incorrect warnings for UDLs.
         _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wno-reserved-identifier)
@@ -171,6 +178,12 @@ if(NOT _YACMACompilerLinkerSettingsRun)
             message(STATUS "Activating the '-Wno-maybe-uninitialized' workaround for GCC.")
             _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wno-maybe-uninitialized)
         endif()
+        # From GCC 10.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wmismatched-tags)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wredundant-tags)
+        # From GCC 12.
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Warray-compare)
+        _YACMA_CHECK_ENABLE_DEBUG_CXX_FLAG(-Wmissing-requires)
     endif()
 
     # MSVC setup.
