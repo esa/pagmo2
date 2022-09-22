@@ -62,12 +62,24 @@ else()
     set(PAGMO_WITH_FORK_ISLAND NO)
 endif()
 
+# Threading setup.
+# NOTE: do it before checking for the presence of pthread_atfork(),
+# since we need to know if we are using pthreads.
+include(YACMAThreadingSetup)
+
+# If the fork() system call is supported and we are using pthreads,
+# check if the pthread_atfork() function is available. This is used
+# to clean up problematic global variables (such as the task queue
+# cache) when a process is forked.
+if(PAGMO_HAVE_FORK_SYSCALL AND CMAKE_USE_PTHREADS_INIT)
+    set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}")
+    CHECK_CXX_SYMBOL_EXISTS(pthread_atfork "pthread.h" PAGMO_HAVE_PTHREAD_ATFORK)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+endif()
+
 # Initial setup of compiler flags.
 include(YACMACompilerLinkerSettings)
 include(CheckCXXCompilerFlag)
-
-# Threading setup.
-include(YACMAThreadingSetup)
 
 # NOTE: on Unix systems, the correct library installation path
 # could be something other than just "lib", such as "lib64",

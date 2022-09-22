@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 @PAGMO_ENABLE_IPOPT@
 @PAGMO_ENABLE_FORK_ISLAND@
 @PAGMO_STATIC_BUILD@
+#cmakedefine PAGMO_HAVE_PTHREAD_ATFORK
 // clang-format on
 // End of defines instantiated by CMake.
 

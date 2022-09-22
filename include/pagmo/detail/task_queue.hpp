@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DETAIL_TASK_QUEUE_HPP
 #define PAGMO_DETAIL_TASK_QUEUE_HPP
 
+#include <atomic>
 #include <condition_variable>
 #include <future>
 #include <mutex>
@@ -60,11 +61,22 @@ struct PAGMO_DLL_PUBLIC task_queue {
         return enqueue_impl(task_type(std::forward<F>(f)));
     }
 
+    void wait_all();
+
     // Data members.
-    bool m_stop;
+    bool m_stop = false;
+    // NOTE: if this flag is set to false,
+    // it means that no task is currently
+    // being executed. Note that the opposite is not
+    // true, i.e., the flag could be true
+    // without any running task.
+    std::atomic<bool> m_task_maybe_running = false;
     std::condition_variable m_cond;
     std::mutex m_mutex;
     std::queue<task_type> m_tasks;
+    // NOTE: it's **important** that this comes last,
+    // so that when the thread starts all other
+    // members have been inited.
     std::thread m_thread;
 };
 
