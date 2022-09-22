@@ -58,7 +58,7 @@ Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
 
    .. cpp:function:: void set_verbosity(unsigned level)
 
-      Sets the algorithm verbosity: sets the verbosity level of the screen ouput and of the log returned by ``get_log()``. *level* can be: 
+      Sets the algorithm verbosity: sets the verbosity level of the screen output and of the log returned by ``get_log()``. *level* can be: 
       - 0: no verbosity.
       - >0: will print and log one line each *level* generations.
       Example (verbosity 1, where Gen, is the generation number, Fevals the number of function evaluations used; also, the ideal point of the current population follows cropped to its 5th component):

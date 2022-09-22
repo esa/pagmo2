@@ -1,113 +1,733 @@
- <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+ 
+<!DOCTYPE html>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generic utilities &mdash; pagmo 2.18.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Generic utilities &#8212; pagmo 2.18.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Type traits and enums" href="type_traits.html" />
     <link rel="prev" title="Genetic Operators" href="../utils/genetic_operators.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-</head>
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pagmo
-          </a>
-              <div class="version">
-                2.18.0
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Generic utilities</a></li>
-<li class="toctree-l3"><a class="reference internal" href="type_traits.html">Type traits and enums</a></li>
-<li class="toctree-l3"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="utility_classes.html">Utility classes</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
-</ul>
+    
+    <div class="container-fluid" id="banner"></div>
 
-        </div>
-      </div>
-    </nav>
+    
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">pagmo</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-      <li>Generic utilities</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/docs/cpp/miscellanea/generic.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../install.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../quickstart.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../overview.html">
+   Capabilities
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tutorials/cpp_tut.html">
+   C++ tutorial
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">
+     Preliminaries
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">
+     Writing your first optimisation problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/evolving_a_population.html">
+     Evolving a population
+    </a>
+   </li>
   </ul>
-  <hr/>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../cpp_docs.html">
+   C++ API documentation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../types.html">
+     Types
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problem.html">
+     Problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithm.html">
+     Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../population.html">
+     Population
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../island.html">
+     Island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../archipelago.html">
+     Archipelago
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../bfe.html">
+     Batch fitness evaluator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topology.html">
+     Topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policy.html">
+     Replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policy.html">
+     Selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/null.html">
+     Null algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/bee_colony.html">
+     Artificial Bee Colony
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/cmaes.html">
+     Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/compass_search.html">
+     Compass Search
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/de.html">
+     Differential Evolution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/de1220.html">
+     Self-adaptive Differential Evolution (DE 1220 aka pDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/gaco.html">
+     Extended Ant Colony Optimization (gaco)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/gwo.html">
+     Grey Wolf Optimizer (gwo)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/ihs.html">
+     Improved Harmony Search (IHS)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/ipopt.html">
+     Ipopt
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/maco.html">
+     Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/moead.html">
+     Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/mbh.html">
+     Monotonic Basin Hopping (MBH) - Generalized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/cstrs_self_adaptive.html">
+     Self-adaptive constraints handling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nlopt.html">
+     NLopt solvers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nsga2.html">
+     Non dominated sorting genetic algorithm (NSGA-II)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nspso.html">
+     Non dominated sorting particle swarm optimization(NSPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/pso.html">
+     Particle Swarm Optimization (PSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/pso_gen.html">
+     Particle Swarm Optimization Generational (GPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sade.html">
+     Self-adaptive Differential Evolution (jDE and iDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sea.html">
+     (N+1)-ES Simple Evolutionary Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sga.html">
+     Simple Genetic Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/simulated_annealing.html">
+     Simulated Annealing (Corana’s version)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/xnes.html">
+     Exponential Natural Evolution Strategies (xNES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/null.html">
+     Null problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/rosenbrock.html">
+     Rosenbrock
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/rastrigin.html">
+     Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/schwefel.html">
+     Schwefel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/ackley.html">
+     Ackley
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/golomb_ruler.html">
+     Optimal Golomb Ruler
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/griewank.html">
+     Griewank
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/lennard_jones.html">
+     Lennard Jones Cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/zdt.html">
+     ZDT test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/dtlz.html">
+     DTLZ test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/hock_schittkowski_71.html">
+     Hock Schittkowsky No.71
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/inventory.html">
+     News-vendor problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/luksan_vlcek1.html">
+     Luksan Vlcek 1
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/minlp_rastrigin.html">
+     MINLP Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/translate.html">
+     Translate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/decompose.html">
+     Decompose
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2006.html">
+     CEC 2006 Problem Suite (single-objective, constrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2009.html">
+     CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2013.html">
+     CEC 2013 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2014.html">
+     CEC 2014 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/unconstrain.html">
+     Unconstrain
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/wfg.html">
+     WFG problem test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/thread_island.html">
+     Thread island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/fork_island.html">
+     Fork island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/default_bfe.html">
+     Default BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/thread_bfe.html">
+     Multithreaded BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/member_bfe.html">
+     Member function BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/unconnected.html">
+     Unconnected topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/fully_connected.html">
+     Fully connected
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/base_bgl_topology.html">
+     Base BGL topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/ring.html">
+     Ring
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/free_form.html">
+     Free-form topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policies/fair_replace.html">
+     Fair replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policies/select_best.html">
+     Best selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/multi_objective.html">
+     Multi-objective optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/constrained.html">
+     Constrained optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/discrepancy.html">
+     Low-discrepancy sequences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/hypervolume.html">
+     Hypervolumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/gradient_and_hessians.html">
+     Utilities for gradient and hessians
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/genetic_operators.html">
+     Genetic Operators
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Generic utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="type_traits.html">
+     Type traits and enums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="exceptions.html">
+     Exceptions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="utility_classes.html">
+     Utility classes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../credits.html">
+   Credits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../changelog.html">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/esa/pagmo2"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/esa/pagmo2/issues/new?title=Issue%20on%20page%20%2Fdocs/cpp/miscellanea/generic.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../../_sources/docs/cpp/miscellanea/generic.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Generic utilities</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
   <section id="generic-utilities">
-<span id="cpp-generic-utilities"></span><h1>Generic utilities<a class="headerlink" href="#generic-utilities" title="Permalink to this headline"></a></h1>
+<span id="cpp-generic-utilities"></span><h1>Generic utilities<a class="headerlink" href="#generic-utilities" title="Permalink to this headline">#</a></h1>
 <p>A number of utilities to compute quantities that are of general relevance.</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng">
-<span id="_CPPv3I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a7d1780bc1d772db23368fab974907041"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">uniform_real_from_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lb</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ub</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="pagmo::uniform_real_from_range::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo23uniform_real_from_rangeEddR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a7d1780bc1d772db23368fab974907041"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">uniform_real_from_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lb</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ub</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="pagmo::uniform_real_from_range::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo23uniform_real_from_rangeEdddR3Rng" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Generate a random real number within some lower and upper bounds. </p>
 <p>This function will create a random real number within a half-open range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math notranslate nohighlight">\( x \)</span> will be such that <span class="math notranslate nohighlight">\(lb \le x &lt; ub\)</span>. If <span class="math notranslate nohighlight">\(lb = ub\)</span>, then <span class="math notranslate nohighlight">\(lb\)</span> is returned.</p>
 <p>Example:</p>
-<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::mt19937 r_engine(32u);
+<p><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>std::mt19937 r_engine(32u);
 auto x = uniform_real_from_range(3,5,r_engine); // a random real in the [3, 5) range.
 auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
 </pre></div>
@@ -122,7 +742,7 @@ auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>std::invalid_argument</strong> – if:<ul class="simple">
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if:<ul class="simple">
 <li><p>the bounds are not finite,</p></li>
 <li><p><span class="math notranslate nohighlight">\( lb &gt; ub \)</span>,</p></li>
 <li><p><span class="math notranslate nohighlight">\( ub - lb \)</span> is larger than an implementation-defined value.</p></li>
@@ -138,11 +758,11 @@ auto x = uniform_real_from_range(2,2,r_engine); // the value 2.
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng">
-<span id="_CPPv3I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">uniform_integral_from_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lb</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ub</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="pagmo::uniform_integral_from_range::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span id="_CPPv2I0EN5pagmo27uniform_integral_from_rangeEddR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">uniform_integral_from_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">lb</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ub</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="pagmo::uniform_integral_from_range::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo27uniform_integral_from_rangeEdddR3Rng" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Generate a random integral number within some lower and upper bounds. </p>
 <p>This function will create a random integral number within a closed range. If both the lower and upper bounds are finite numbers, then the generated value <span class="math notranslate nohighlight">\( x \)</span> will be such that <span class="math notranslate nohighlight">\(lb \le x \le ub\)</span>.</p>
 <p>Example:</p>
-<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::mt19937 r_engine(32u);
+<p><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>std::mt19937 r_engine(32u);
 auto x = uniform_integral_from_range(3,5,r_engine); // one of [3, 4, 5].
 auto x = uniform_integral_from_range(2,2,r_engine); // the value 2.
 </pre></div>
@@ -159,7 +779,7 @@ the following may happen:</p>
 <li><p>the conversion of the randomly-generated <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span></code> integer back to <code class="docutils literal notranslate"><span class="pre">double</span></code> may yield an
 inexact result.</p></li>
 </ul>
-<p>In pratice, on modern mainstream computer architectures, this function will produce uniformly-distributed
+<p>In practice, on modern mainstream computer architectures, this function will produce uniformly-distributed
 integral values as long as the absolute values of the bounds do not exceed <span class="math notranslate nohighlight">\(2^{53}\)</span>.</p>
 </div>
 <dl class="field-list simple">
@@ -171,7 +791,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>std::invalid_argument</strong> – if:<ul class="simple">
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if:<ul class="simple">
 <li><p>the bounds are not finite,</p></li>
 <li><p><span class="math notranslate nohighlight">\( lb &gt; ub \)</span>,</p></li>
 <li><p><span class="math notranslate nohighlight">\( lb \)</span> and/or <span class="math notranslate nohighlight">\( ub \)</span> are not integral values,</p></li>
@@ -188,7 +808,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng">
-<span id="_CPPv3I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span id="_CPPv2I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a3144677b95721d3681fb691d11bd45ea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">random_decision_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prob</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="pagmo::random_decision_vector::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span id="_CPPv2I0EN5pagmo22random_decision_vectorERK7problemR3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a3144677b95721d3681fb691d11bd45ea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">random_decision_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prob</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="pagmo::random_decision_vector::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo22random_decision_vectorE13vector_doubleRK7problemR3Rng" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Generate a random decision vector compatible with a problem. </p>
 <p>This function will generate a decision vector whose values are randomly chosen with uniform probability within the input problem’s bounds.</p>
 <p>For the continuous part of the decision vector, the values will be generated via <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a>.</p>
@@ -201,7 +821,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a <a class="reference internal" href="../types.html#namespacepagmo_1aa47db4f2f521bce4a25701ce21f2fb58"><span class="std std-ref">pagmo::vector_double</span></a> containing a random decision vector </p>
@@ -212,7 +832,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng">
-<span id="_CPPv3I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span id="_CPPv2I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a68ddd098cb45b699ce96c45c957fb564"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">batch_random_decision_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prob</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="pagmo::batch_random_decision_vector::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span id="_CPPv2I0EN5pagmo28batch_random_decision_vectorERK7problemN13vector_double9size_typeER3Rng"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rng</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacepagmo_1a68ddd098cb45b699ce96c45c957fb564"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">batch_random_decision_vector</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">prob</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="pagmo::batch_random_decision_vector::Rng"><span class="n"><span class="pre">Rng</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r_engine</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo28batch_random_decision_vectorE13vector_doubleRK7problemN13vector_double9size_typeER3Rng" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Generate a batch of random decision vectors compatible with a problem. </p>
 <p>This function will generate <code class="docutils literal notranslate"><span class="pre">n</span></code> decision vectors whose values are randomly chosen with uniform probability within the input problem’s bounds. The decision vectors are laid out contiguously in the return value: for a problem with dimension <span class="math notranslate nohighlight">\( d \)</span>, the first decision vector in the return value occupies the index range <span class="math notranslate nohighlight">\( \left[0, d\right) \)</span>, the second decision vector occupies the range <span class="math notranslate nohighlight">\( \left[d, 2d\right) \)</span>, and so on.</p>
 <p>For the continuous parts of the decision vectors, the values will be generated via <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a>.</p>
@@ -227,8 +847,8 @@ integral values as long as the absolute values of the bounds do not exceed <span
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>std::overflow_error</strong> – in case of (unlikely) overflow errors. </p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">overflow_error</span></span></span> – in case of (unlikely) overflow errors. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <a class="reference internal" href="#namespacepagmo_1a7d1780bc1d772db23368fab974907041"><span class="std std-ref">pagmo::uniform_real_from_range()</span></a> or <a class="reference internal" href="#namespacepagmo_1aacad1286479228cf85ba3fa910b730d3"><span class="std std-ref">pagmo::uniform_integral_from_range()</span></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns</dt>
@@ -240,14 +860,14 @@ integral values as long as the absolute values of the bounds do not exceed <span
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE">
-<span id="_CPPv3N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">binomial_coefficient</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="_CPPv2N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE"></span><span id="pagmo::binomial_coefficient__vector_double::size_type.vector_double::size_type"></span><span class="target" id="namespacepagmo_1a415fd7f63bed6ba35d9bee7a596f940c"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">binomial_coefficient</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span>, <a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo20binomial_coefficientEN13vector_double9size_typeEN13vector_double9size_typeE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Binomial coefficient. </p>
 <p>An implementation of the binomial coefficient using gamma functions </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> – first parameter <span class="math notranslate nohighlight">\(n\)</span> </p></li>
-<li><p><strong>k</strong> – second paramater <span class="math notranslate nohighlight">\(k\)</span> </p></li>
+<li><p><strong>k</strong> – second parameter <span class="math notranslate nohighlight">\(k\)</span> </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -259,10 +879,10 @@ integral values as long as the absolute values of the bounds do not exceed <span
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE">
-<span id="_CPPv3N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="pagmo::kNN__std::vector:vector_double:CR.std::vector:vector_double:::size_type"></span><span class="target" id="namespacepagmo_1ad7e6b9ff576ce4db63c4a64397cc6895"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">kNN</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="_CPPv2N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE"></span><span id="pagmo::kNN__std::vector:vector_double:CR.std::vector:vector_double:::size_type"></span><span class="target" id="namespacepagmo_1ad7e6b9ff576ce4db63c4a64397cc6895"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">kNN</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3kNNERKNSt6vectorI13vector_doubleEENSt6vectorI13vector_doubleE9size_typeE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>K-Nearest Neighbours. </p>
 <p>Computes the indexes of the k nearest neighbours (euclidean distance) to each of the input points. The algorithm complexity (naive implementation) is <span class="math notranslate nohighlight">\( O(MN^2)\)</span> where <span class="math notranslate nohighlight">\(N\)</span> is the number of points and <span class="math notranslate nohighlight">\(M\)</span> their dimensionality</p>
-<p>Example: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>auto res = kNN({{1, 1}, {2, 2}, {3.1, 3.1}, {5, 5}}, 2u);
+<p>Example: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>auto res = kNN({{1, 1}, {2, 2}, {3.1, 3.1}, {5, 5}}, 2u);
 </pre></div>
 </div>
 </p>
@@ -274,7 +894,7 @@ integral values as long as the absolute values of the bounds do not exceed <span
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>std::invalid_argument</strong> – If the points do not all have the same dimension. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – If the points do not all have the same dimension. </p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>An <code class="docutils literal notranslate"><span class="pre">std::vector&lt;std::vector&lt;population::size_type&gt;</span> <span class="pre">&gt;</span> </code> containing the indexes of the k nearest neighbours sorted by distance </p>
@@ -285,34 +905,50 @@ integral values as long as the absolute values of the bounds do not exceed <span
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../utils/genetic_operators.html" class="btn btn-neutral float-left" title="Genetic Operators" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="type_traits.html" class="btn btn-neutral float-right" title="Type traits and enums" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../utils/genetic_operators.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Genetic Operators</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="type_traits.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Type traits and enums</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By pagmo development team<br/>
+  
+      &copy; Copyright 2017-2021, pagmo development team.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
 
-</body>
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
 </html>

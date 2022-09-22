@@ -1,139 +1,741 @@
- <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+ 
+<!DOCTYPE html>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Translate &mdash; pagmo 2.18.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Translate &#8212; pagmo 2.18.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Decompose" href="decompose.html" />
     <link rel="prev" title="MINLP Rastrigin" href="minlp_rastrigin.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-</head>
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pagmo
-          </a>
-              <div class="version">
-                2.18.0
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="null.html">Null problem</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rosenbrock.html">Rosenbrock</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rastrigin.html">Rastrigin</a></li>
-<li class="toctree-l3"><a class="reference internal" href="schwefel.html">Schwefel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ackley.html">Ackley</a></li>
-<li class="toctree-l3"><a class="reference internal" href="golomb_ruler.html">Optimal Golomb Ruler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="griewank.html">Griewank</a></li>
-<li class="toctree-l3"><a class="reference internal" href="lennard_jones.html">Lennard Jones Cluster</a></li>
-<li class="toctree-l3"><a class="reference internal" href="zdt.html">ZDT test suite</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dtlz.html">DTLZ test suite</a></li>
-<li class="toctree-l3"><a class="reference internal" href="hock_schittkowsky_71.html">Hock Schittkowsky No.71</a></li>
-<li class="toctree-l3"><a class="reference internal" href="inventory.html">News-vendor problem</a></li>
-<li class="toctree-l3"><a class="reference internal" href="luksan_vlcek1.html">Luksan Vlcek 1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="minlp_rastrigin.html">MINLP Rastrigin</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Translate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="decompose.html">Decompose</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cec2006.html">CEC 2006 Problem Suite (single-objective, constrained)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cec2009.html">CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cec2013.html">CEC 2013 Problem Suite (box-bound, single objective)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cec2014.html">CEC 2014 Problem Suite (box-bound, single objective)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="unconstrain.html">Unconstrain</a></li>
-<li class="toctree-l3"><a class="reference internal" href="wfg.html">WFG problem test suite</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
-</ul>
+    
+    <div class="container-fluid" id="banner"></div>
 
-        </div>
-      </div>
-    </nav>
+    
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">pagmo</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-      <li>Translate</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/docs/cpp/problems/translate.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../install.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../quickstart.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../overview.html">
+   Capabilities
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tutorials/cpp_tut.html">
+   C++ tutorial
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">
+     Preliminaries
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">
+     Writing your first optimisation problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/evolving_a_population.html">
+     Evolving a population
+    </a>
+   </li>
   </ul>
-  <hr/>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../cpp_docs.html">
+   C++ API documentation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../types.html">
+     Types
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problem.html">
+     Problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithm.html">
+     Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../population.html">
+     Population
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../island.html">
+     Island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../archipelago.html">
+     Archipelago
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../bfe.html">
+     Batch fitness evaluator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topology.html">
+     Topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policy.html">
+     Replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policy.html">
+     Selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/null.html">
+     Null algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/bee_colony.html">
+     Artificial Bee Colony
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/cmaes.html">
+     Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/compass_search.html">
+     Compass Search
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/de.html">
+     Differential Evolution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/de1220.html">
+     Self-adaptive Differential Evolution (DE 1220 aka pDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/gaco.html">
+     Extended Ant Colony Optimization (gaco)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/gwo.html">
+     Grey Wolf Optimizer (gwo)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/ihs.html">
+     Improved Harmony Search (IHS)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/ipopt.html">
+     Ipopt
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/maco.html">
+     Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/moead.html">
+     Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/mbh.html">
+     Monotonic Basin Hopping (MBH) - Generalized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/cstrs_self_adaptive.html">
+     Self-adaptive constraints handling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nlopt.html">
+     NLopt solvers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nsga2.html">
+     Non dominated sorting genetic algorithm (NSGA-II)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nspso.html">
+     Non dominated sorting particle swarm optimization(NSPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/pso.html">
+     Particle Swarm Optimization (PSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/pso_gen.html">
+     Particle Swarm Optimization Generational (GPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sade.html">
+     Self-adaptive Differential Evolution (jDE and iDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sea.html">
+     (N+1)-ES Simple Evolutionary Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sga.html">
+     Simple Genetic Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/simulated_annealing.html">
+     Simulated Annealing (Corana’s version)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/xnes.html">
+     Exponential Natural Evolution Strategies (xNES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="null.html">
+     Null problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="rosenbrock.html">
+     Rosenbrock
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="rastrigin.html">
+     Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="schwefel.html">
+     Schwefel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ackley.html">
+     Ackley
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="golomb_ruler.html">
+     Optimal Golomb Ruler
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="griewank.html">
+     Griewank
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="lennard_jones.html">
+     Lennard Jones Cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="zdt.html">
+     ZDT test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="dtlz.html">
+     DTLZ test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="hock_schittkowski_71.html">
+     Hock Schittkowsky No.71
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="inventory.html">
+     News-vendor problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="luksan_vlcek1.html">
+     Luksan Vlcek 1
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="minlp_rastrigin.html">
+     MINLP Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Translate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="decompose.html">
+     Decompose
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cec2006.html">
+     CEC 2006 Problem Suite (single-objective, constrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cec2009.html">
+     CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cec2013.html">
+     CEC 2013 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cec2014.html">
+     CEC 2014 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="unconstrain.html">
+     Unconstrain
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="wfg.html">
+     WFG problem test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/thread_island.html">
+     Thread island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/fork_island.html">
+     Fork island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/default_bfe.html">
+     Default BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/thread_bfe.html">
+     Multithreaded BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/member_bfe.html">
+     Member function BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/unconnected.html">
+     Unconnected topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/fully_connected.html">
+     Fully connected
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/base_bgl_topology.html">
+     Base BGL topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/ring.html">
+     Ring
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/free_form.html">
+     Free-form topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policies/fair_replace.html">
+     Fair replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policies/select_best.html">
+     Best selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/multi_objective.html">
+     Multi-objective optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/constrained.html">
+     Constrained optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/discrepancy.html">
+     Low-discrepancy sequences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/hypervolume.html">
+     Hypervolumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/gradient_and_hessians.html">
+     Utilities for gradient and hessians
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/genetic_operators.html">
+     Genetic Operators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/generic.html">
+     Generic utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/type_traits.html">
+     Type traits and enums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/exceptions.html">
+     Exceptions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/utility_classes.html">
+     Utility classes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../credits.html">
+   Credits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../changelog.html">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/esa/pagmo2"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/esa/pagmo2/issues/new?title=Issue%20on%20page%20%2Fdocs/cpp/problems/translate.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../../_sources/docs/cpp/problems/translate.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Translate</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
   <section id="translate">
-<h1>Translate<a class="headerlink" href="#translate" title="Permalink to this headline"></a></h1>
+<h1>Translate<a class="headerlink" href="#translate" title="Permalink to this headline">#</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9translateE">
-<span id="_CPPv3N5pagmo9translateE"></span><span id="_CPPv2N5pagmo9translateE"></span><span id="pagmo::translate"></span><span class="target" id="classpagmo_1_1translate"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo9translateE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo9translateE"></span><span id="_CPPv2N5pagmo9translateE"></span><span id="pagmo::translate"></span><span class="target" id="classpagmo_1_1translate"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo9translateE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>The translate meta-problem. </p>
 <p>This meta-problem translates the whole search space of an input problem by a fixed translation vector. <a class="reference internal" href="#classpagmo_1_1translate"><span class="std std-ref">pagmo::translate</span></a> objects are user-defined problems that can be used in the definition of a <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9translate9translateEv">
-<span id="_CPPv3N5pagmo9translate9translateEv"></span><span id="_CPPv2N5pagmo9translate9translateEv"></span><span id="pagmo::translate::translate"></span><span class="target" id="classpagmo_1_1translate_1a12fdc156f59b6dc0f0a8e2f136a3b998"></span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate9translateEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo9translate9translateEv"></span><span id="_CPPv2N5pagmo9translate9translateEv"></span><span id="pagmo::translate::translate"></span><span class="target" id="classpagmo_1_1translate_1a12fdc156f59b6dc0f0a8e2f136a3b998"></span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate9translateEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The constructor will initialize a non-translated default-constructed <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double">
-<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="pagmo::translate::translate::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1translate_1ad70bb341ef4fcaed71d03a07b255f31d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="pagmo::translate::translate::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="pagmo::translate::translate::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1translate_1ad70bb341ef4fcaed71d03a07b255f31d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">translate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="pagmo::translate::translate::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo9translate9translateERR1TRK13vector_double" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Constructor from problem and translation vector. </p>
 <p>Wraps a user-defined problem so that its fitness , bounds, etc. will be shifted by a translation vector.</p>
 <div class="admonition note">
@@ -149,8 +751,8 @@
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>std::invalid_argument</strong> – if the length of <code class="docutils literal notranslate"><span class="pre">translation</span></code> is not equal to the problem dimension <span class="math notranslate nohighlight">\( n_x\)</span>. </p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by the <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> constructor. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the length of <code class="docutils literal notranslate"><span class="pre">translation</span></code> is not equal to the problem dimension <span class="math notranslate nohighlight">\( n_x\)</span>. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> constructor. </p></li>
 </ul>
 </dd>
 </dl>
@@ -158,7 +760,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo9translate7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate7fitnessERK13vector_double"></span><span id="pagmo::translate::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1a6f0a98f5545aaad0e5f9ae79584f1634"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7fitnessERK13vector_double" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate7fitnessERK13vector_double"></span><span id="pagmo::translate::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1a6f0a98f5545aaad0e5f9ae79584f1634"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7fitnessERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Fitness. </p>
 <p>The fitness computation is forwarded to the inner UDP, after the translation of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <dl class="field-list simple">
@@ -166,7 +768,7 @@
 <dd class="field-odd"><p><strong>x</strong> – the decision vector.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a5969da5bb800845eda3101ce1cfa053f"><span class="std std-ref">problem::fitness()</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a5969da5bb800845eda3101ce1cfa053f"><span class="std std-ref">problem::fitness()</span></a>. </p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
@@ -176,7 +778,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate13batch_fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo9translate13batch_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate13batch_fitnessERK13vector_double"></span><span id="pagmo::translate::batch_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1afe782c6d57d081d046541cd671a9d688"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batch_fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate13batch_fitnessERK13vector_double" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate13batch_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate13batch_fitnessERK13vector_double"></span><span id="pagmo::translate::batch_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1afe782c6d57d081d046541cd671a9d688"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batch_fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate13batch_fitnessERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Batch fitness. </p>
 <p>The batch fitness computation is forwarded to the inner UDP, after the translation of <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
 <dl class="field-list simple">
@@ -184,7 +786,7 @@
 <dd class="field-odd"><p><strong>xs</strong> – the input decision vectors.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by memory errors in standard containers, threading primitives, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1aa73f9fac0a8b273bad8185ddbb738f8f"><span class="std std-ref">problem::batch_fitness()</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by memory errors in standard containers, threading primitives, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1aa73f9fac0a8b273bad8185ddbb738f8f"><span class="std std-ref">problem::batch_fitness()</span></a>. </p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the fitnesses of <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
@@ -194,23 +796,23 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17has_batch_fitnessEv">
-<span id="_CPPv3NK5pagmo9translate17has_batch_fitnessEv"></span><span id="_CPPv2NK5pagmo9translate17has_batch_fitnessEv"></span><span id="pagmo::translate::has_batch_fitnessC"></span><span class="target" id="classpagmo_1_1translate_1acaee97533cb1780e60a1de8e1fd9bf6d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_batch_fitness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17has_batch_fitnessEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate17has_batch_fitnessEv"></span><span id="_CPPv2NK5pagmo9translate17has_batch_fitnessEv"></span><span id="pagmo::translate::has_batch_fitnessC"></span><span class="target" id="classpagmo_1_1translate_1acaee97533cb1780e60a1de8e1fd9bf6d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_batch_fitness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17has_batch_fitnessEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Check if the inner problem can compute fitnesses in batch mode. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the output of the <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1acaee97533cb1780e60a1de8e1fd9bf6d"><span class="std std-ref"><span class="pre">has_batch_fitness()</span></span></a></code> member function invoked by the inner problem. </p>
+<dd class="field-odd"><p>the output of the <code class="docutils literal notranslate"><span class="pre">has_batch_fitness()</span></code> member function invoked by the inner problem. </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate10get_boundsEv">
-<span id="_CPPv3NK5pagmo9translate10get_boundsEv"></span><span id="_CPPv2NK5pagmo9translate10get_boundsEv"></span><span id="pagmo::translate::get_boundsC"></span><span class="target" id="classpagmo_1_1translate_1a57cbe9656d04f37fb8b199168d50e19c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_bounds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate10get_boundsEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate10get_boundsEv"></span><span id="_CPPv2NK5pagmo9translate10get_boundsEv"></span><span id="pagmo::translate::get_boundsC"></span><span class="target" id="classpagmo_1_1translate_1a57cbe9656d04f37fb8b199168d50e19c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_bounds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate10get_boundsEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>The box-bounds returned by this method are the translated box-bounds of the inner UDP.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a63956ae17409319bba96f8683967311b"><span class="std std-ref">problem::get_bounds()</span></a>. </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a63956ae17409319bba96f8683967311b"><span class="std std-ref">problem::get_bounds()</span></a>. </p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the lower and upper bounds for each of the decision vector components.</p>
@@ -220,7 +822,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate8get_nobjEv">
-<span id="_CPPv3NK5pagmo9translate8get_nobjEv"></span><span id="_CPPv2NK5pagmo9translate8get_nobjEv"></span><span id="pagmo::translate::get_nobjC"></span><span class="target" id="classpagmo_1_1translate_1a6ef8be609202ad93bb05ad9ebd443dab"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nobj</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8get_nobjEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate8get_nobjEv"></span><span id="_CPPv2NK5pagmo9translate8get_nobjEv"></span><span id="pagmo::translate::get_nobjC"></span><span class="target" id="classpagmo_1_1translate_1a6ef8be609202ad93bb05ad9ebd443dab"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nobj</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8get_nobjEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Number of objectives. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -231,7 +833,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate7get_necEv">
-<span id="_CPPv3NK5pagmo9translate7get_necEv"></span><span id="_CPPv2NK5pagmo9translate7get_necEv"></span><span id="pagmo::translate::get_necC"></span><span class="target" id="classpagmo_1_1translate_1aa32e748c0ab0041047ff1579ad1a4f7d"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nec</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_necEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate7get_necEv"></span><span id="_CPPv2NK5pagmo9translate7get_necEv"></span><span id="pagmo::translate::get_necC"></span><span class="target" id="classpagmo_1_1translate_1aa32e748c0ab0041047ff1579ad1a4f7d"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nec</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_necEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Equality constraint dimension. </p>
 <p>Returns the number of equality constraints of the inner problem.</p>
 <dl class="field-list simple">
@@ -243,7 +845,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate7get_nicEv">
-<span id="_CPPv3NK5pagmo9translate7get_nicEv"></span><span id="_CPPv2NK5pagmo9translate7get_nicEv"></span><span id="pagmo::translate::get_nicC"></span><span class="target" id="classpagmo_1_1translate_1a0cd1d8acdec031ed3207a5b547ff423d"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_nicEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate7get_nicEv"></span><span id="_CPPv2NK5pagmo9translate7get_nicEv"></span><span id="pagmo::translate::get_nicC"></span><span class="target" id="classpagmo_1_1translate_1a0cd1d8acdec031ed3207a5b547ff423d"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_nicEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Inequality constraint dimension. </p>
 <p>Returns the number of inequality constraints of the inner problem.</p>
 <dl class="field-list simple">
@@ -255,7 +857,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate7get_nixEv">
-<span id="_CPPv3NK5pagmo9translate7get_nixEv"></span><span id="_CPPv2NK5pagmo9translate7get_nixEv"></span><span id="pagmo::translate::get_nixC"></span><span class="target" id="classpagmo_1_1translate_1a4ab2186da73f89fb1e48f671d2d676f1"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_nixEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate7get_nixEv"></span><span id="_CPPv2NK5pagmo9translate7get_nixEv"></span><span id="pagmo::translate::get_nixC"></span><span class="target" id="classpagmo_1_1translate_1a4ab2186da73f89fb1e48f671d2d676f1"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate7get_nixEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Integer dimension. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -266,9 +868,9 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate12has_gradientEv">
-<span id="_CPPv3NK5pagmo9translate12has_gradientEv"></span><span id="_CPPv2NK5pagmo9translate12has_gradientEv"></span><span id="pagmo::translate::has_gradientC"></span><span class="target" id="classpagmo_1_1translate_1a6897e3618b5b67ba3db8d05f1f027744"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_gradientEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate12has_gradientEv"></span><span id="_CPPv2NK5pagmo9translate12has_gradientEv"></span><span id="pagmo::translate::has_gradientC"></span><span class="target" id="classpagmo_1_1translate_1a6897e3618b5b67ba3db8d05f1f027744"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_gradientEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Checks if the inner problem has gradients. </p>
-<p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a6897e3618b5b67ba3db8d05f1f027744"><span class="std std-ref"><span class="pre">has_gradient()</span></span></a></code> computation is forwarded to the inner problem.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">has_gradient()</span></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the gradient in the inner problem. </p>
@@ -278,7 +880,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate8gradientERK13vector_double">
-<span id="_CPPv3NK5pagmo9translate8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate8gradientERK13vector_double"></span><span id="pagmo::translate::gradient__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1a6b30b636047caec8d4335bc04efd1426"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gradient</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8gradientERK13vector_double" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate8gradientERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate8gradientERK13vector_double"></span><span id="pagmo::translate::gradient__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1a6b30b636047caec8d4335bc04efd1426"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gradient</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8gradientERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Gradients. </p>
 <p>The gradients computation is forwarded to the inner problem, after the translation of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <dl class="field-list simple">
@@ -286,7 +888,7 @@
 <dd class="field-odd"><p><strong>x</strong> – the decision vector.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by memory errors in standard containers, or by <code class="docutils literal notranslate"><a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref"><span class="pre">problem::gradient()</span></span></a></code>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by memory errors in standard containers, or by <code class="docutils literal notranslate"><a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a6b32562f79be8440f9d1b493c3f33869"><span class="std std-ref"><span class="pre">problem::gradient()</span></span></a></code>. </p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the gradient of the fitness function.</p>
@@ -296,9 +898,9 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate21has_gradient_sparsityEv">
-<span id="_CPPv3NK5pagmo9translate21has_gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate21has_gradient_sparsityEv"></span><span id="pagmo::translate::has_gradient_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1ae80bdb88858e008dd06191c7682a8475"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate21has_gradient_sparsityEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate21has_gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate21has_gradient_sparsityEv"></span><span id="pagmo::translate::has_gradient_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1ae80bdb88858e008dd06191c7682a8475"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate21has_gradient_sparsityEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Checks if the inner problem has gradient sparisty implemented. </p>
-<p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1ae80bdb88858e008dd06191c7682a8475"><span class="std std-ref"><span class="pre">has_gradient_sparsity()</span></span></a></code> computation is forwarded to the inner problem.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">has_gradient_sparsity()</span></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the gradient sparisty in the inner problem. </p>
@@ -308,7 +910,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17gradient_sparsityEv">
-<span id="_CPPv3NK5pagmo9translate17gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate17gradient_sparsityEv"></span><span id="pagmo::translate::gradient_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1a9642bee5dcea46bb3932d8eae7bc0522"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="n"><span class="pre">sparsity_pattern</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gradient_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17gradient_sparsityEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate17gradient_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate17gradient_sparsityEv"></span><span id="pagmo::translate::gradient_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1a9642bee5dcea46bb3932d8eae7bc0522"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="n"><span class="pre">sparsity_pattern</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gradient_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17gradient_sparsityEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Gradient sparsity. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">gradient_sparsity</span></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
@@ -320,9 +922,9 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate12has_hessiansEv">
-<span id="_CPPv3NK5pagmo9translate12has_hessiansEv"></span><span id="_CPPv2NK5pagmo9translate12has_hessiansEv"></span><span id="pagmo::translate::has_hessiansC"></span><span class="target" id="classpagmo_1_1translate_1a02c67bd09eb2b74b52d2ba0856d07eb0"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_hessiansEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate12has_hessiansEv"></span><span id="_CPPv2NK5pagmo9translate12has_hessiansEv"></span><span id="pagmo::translate::has_hessiansC"></span><span class="target" id="classpagmo_1_1translate_1a02c67bd09eb2b74b52d2ba0856d07eb0"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_hessiansEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Checks if the inner problem has hessians. </p>
-<p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a02c67bd09eb2b74b52d2ba0856d07eb0"><span class="std std-ref"><span class="pre">has_hessians()</span></span></a></code> computation is forwarded to the inner problem.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">has_hessians()</span></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the hessians in the inner problem. </p>
@@ -332,7 +934,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate8hessiansERK13vector_double">
-<span id="_CPPv3NK5pagmo9translate8hessiansERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate8hessiansERK13vector_double"></span><span id="pagmo::translate::hessians__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1aa55e75fde69a2a3e250cf21fa66cbae9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hessians</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8hessiansERK13vector_double" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate8hessiansERK13vector_double"></span><span id="_CPPv2NK5pagmo9translate8hessiansERK13vector_double"></span><span id="pagmo::translate::hessians__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1translate_1aa55e75fde69a2a3e250cf21fa66cbae9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hessians</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8hessiansERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Hessians. </p>
 <p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1aa55e75fde69a2a3e250cf21fa66cbae9"><span class="std std-ref"><span class="pre">hessians()</span></span></a></code> computation is forwarded to the inner problem, after the translation of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 <dl class="field-list simple">
@@ -340,7 +942,7 @@
 <dd class="field-odd"><p><strong>x</strong> – the decision vector.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ae3df9979b1dfccb61910b6a2c9ed83c4"><span class="std std-ref">problem::hessians()</span></a>. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ae3df9979b1dfccb61910b6a2c9ed83c4"><span class="std std-ref">problem::hessians()</span></a>. </p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the hessians of the fitness function computed at <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
@@ -350,9 +952,9 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate21has_hessians_sparsityEv">
-<span id="_CPPv3NK5pagmo9translate21has_hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate21has_hessians_sparsityEv"></span><span id="pagmo::translate::has_hessians_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1af3dbbfb0c05dac819e0346a552308839"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate21has_hessians_sparsityEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate21has_hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate21has_hessians_sparsityEv"></span><span id="pagmo::translate::has_hessians_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1af3dbbfb0c05dac819e0346a552308839"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate21has_hessians_sparsityEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Checks if the inner problem has hessians sparisty implemented. </p>
-<p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1af3dbbfb0c05dac819e0346a552308839"><span class="std std-ref"><span class="pre">has_hessians_sparsity()</span></span></a></code> computation is forwarded to the inner problem.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">has_hessians_sparsity()</span></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>a flag signalling the availability of the hessians sparisty in the inner problem. </p>
@@ -362,7 +964,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17hessians_sparsityEv">
-<span id="_CPPv3NK5pagmo9translate17hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate17hessians_sparsityEv"></span><span id="pagmo::translate::hessians_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1a31fda495e3f85b8d70ce3a56eb6b018f"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="n"><span class="pre">sparsity_pattern</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hessians_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17hessians_sparsityEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate17hessians_sparsityEv"></span><span id="_CPPv2NK5pagmo9translate17hessians_sparsityEv"></span><span id="pagmo::translate::hessians_sparsityC"></span><span class="target" id="classpagmo_1_1translate_1a31fda495e3f85b8d70ce3a56eb6b018f"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo16sparsity_patternE" title="pagmo::sparsity_pattern"><span class="n"><span class="pre">sparsity_pattern</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hessians_sparsity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17hessians_sparsityEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Hessians sparsity. </p>
 <p>The <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a31fda495e3f85b8d70ce3a56eb6b018f"><span class="std std-ref"><span class="pre">hessians_sparsity()</span></span></a></code> computation is forwarded to the inner problem.</p>
 <dl class="field-list simple">
@@ -374,19 +976,19 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate12has_set_seedEv">
-<span id="_CPPv3NK5pagmo9translate12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9translate12has_set_seedEv"></span><span id="pagmo::translate::has_set_seedC"></span><span class="target" id="classpagmo_1_1translate_1a7735bd50b35b5b227ef9978008261c0a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_set_seedEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a7735bd50b35b5b227ef9978008261c0a"><span class="std std-ref"><span class="pre">has_set_seed()</span></span></a></code> of the inner problem. </p>
-<p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1a7735bd50b35b5b227ef9978008261c0a"><span class="std std-ref"><span class="pre">has_set_seed()</span></span></a></code> of the inner problem.</p>
+<span id="_CPPv3NK5pagmo9translate12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9translate12has_set_seedEv"></span><span id="pagmo::translate::has_set_seedC"></span><span class="target" id="classpagmo_1_1translate_1a7735bd50b35b5b227ef9978008261c0a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate12has_set_seedEv" title="Permalink to this definition">#</a><br /></dt>
+<dd><p>Calls <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> of the inner problem. </p>
+<p>Calls the method <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> of the inner problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a flag signalling wether the inner problem is stochastic. </p>
+<dd class="field-odd"><p>a flag signalling whether the inner problem is stochastic. </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9translate8set_seedEj">
-<span id="_CPPv3N5pagmo9translate8set_seedEj"></span><span id="_CPPv2N5pagmo9translate8set_seedEj"></span><span id="pagmo::translate::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate8set_seedEj" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo9translate8set_seedEj"></span><span id="_CPPv2N5pagmo9translate8set_seedEj"></span><span id="pagmo::translate::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate8set_seedEj" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem. </p>
 <p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem.</p>
 <dl class="field-list simple">
@@ -394,19 +996,19 @@
 <dd class="field-odd"><p><strong>seed</strong> – seed to be set.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1translate_1aaaa7393e0446fa1a2e14e2b0ed01ec8b"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem. </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate8get_nameEv">
-<span id="_CPPv3NK5pagmo9translate8get_nameEv"></span><span id="_CPPv2NK5pagmo9translate8get_nameEv"></span><span id="pagmo::translate::get_nameC"></span><span class="target" id="classpagmo_1_1translate_1a93fdfc4edd4c48d61ddc01423a289a40"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8get_nameEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate8get_nameEv"></span><span id="_CPPv2NK5pagmo9translate8get_nameEv"></span><span id="pagmo::translate::get_nameC"></span><span class="target" id="classpagmo_1_1translate_1a93fdfc4edd4c48d61ddc01423a289a40"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate8get_nameEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Problem name. </p>
 <p>This method will add <code class="docutils literal notranslate"><span class="pre">[translated]</span></code> to the name provided by the inner problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by <code class="docutils literal notranslate"><a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a2ff5b65d95677c3bf6eb4a37a58dec32"><span class="std std-ref"><span class="pre">problem::get_name()</span></span></a></code> or memory errors in standard classes. </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <code class="docutils literal notranslate"><a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a2ff5b65d95677c3bf6eb4a37a58dec32"><span class="std std-ref"><span class="pre">problem::get_name()</span></span></a></code> or memory errors in standard classes. </p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a string containing the problem name.</p>
@@ -416,12 +1018,12 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo9translate14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9translate14get_extra_infoEv"></span><span id="pagmo::translate::get_extra_infoC"></span><span class="target" id="classpagmo_1_1translate_1a6175b32f23cf3025111559c7cd67e113"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9translate14get_extra_infoEv"></span><span id="pagmo::translate::get_extra_infoC"></span><span class="target" id="classpagmo_1_1translate_1a6175b32f23cf3025111559c7cd67e113"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate14get_extra_infoEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>This method will append a description of the translation vector to the extra info provided by the inner problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ae38075a0d96d2873d93e25283f461a07"><span class="std std-ref">problem::get_extra_info()</span></a>, the public interface of <code class="docutils literal notranslate"><span class="pre">std::ostringstream</span></code> or memory errors in standard classes. </p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ae38075a0d96d2873d93e25283f461a07"><span class="std std-ref">problem::get_extra_info()</span></a>, the public interface of <code class="docutils literal notranslate"><span class="pre">std::ostringstream</span></code> or memory errors in standard classes. </p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a string containing extra info on the problem.</p>
@@ -431,7 +1033,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate15get_translationEv">
-<span id="_CPPv3NK5pagmo9translate15get_translationEv"></span><span id="_CPPv2NK5pagmo9translate15get_translationEv"></span><span id="pagmo::translate::get_translationC"></span><span class="target" id="classpagmo_1_1translate_1aee2dbbe2253998783027a4c558091707"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_translation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate15get_translationEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate15get_translationEv"></span><span id="_CPPv2NK5pagmo9translate15get_translationEv"></span><span id="pagmo::translate::get_translationC"></span><span class="target" id="classpagmo_1_1translate_1aee2dbbe2253998783027a4c558091707"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_translation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate15get_translationEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Get the translation vector. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -442,7 +1044,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo9translate17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9translate17get_thread_safetyEv"></span><span id="pagmo::translate::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1translate_1ac9c29ddf424c68af95ef00e7a01a60d2"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17get_thread_safetyEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9translate17get_thread_safetyEv"></span><span id="pagmo::translate::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1translate_1ac9c29ddf424c68af95ef00e7a01a60d2"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17get_thread_safetyEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Problem’s thread safety level. </p>
 <p>The thread safety of a meta-problem is defined by the thread safety of the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <dl class="field-list simple">
@@ -454,7 +1056,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9translate17get_inner_problemEv">
-<span id="_CPPv3NK5pagmo9translate17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo9translate17get_inner_problemEv"></span><span id="pagmo::translate::get_inner_problemC"></span><span class="target" id="classpagmo_1_1translate_1a10ede4f438bbad743dbf118b44161a85"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17get_inner_problemEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo9translate17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo9translate17get_inner_problemEv"></span><span id="pagmo::translate::get_inner_problemC"></span><span class="target" id="classpagmo_1_1translate_1a10ede4f438bbad743dbf118b44161a85"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9translate17get_inner_problemEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a const reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <dl class="field-list simple">
@@ -466,7 +1068,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9translate17get_inner_problemEv">
-<span id="_CPPv3N5pagmo9translate17get_inner_problemEv"></span><span id="_CPPv2N5pagmo9translate17get_inner_problemEv"></span><span id="pagmo::translate::get_inner_problem"></span><span class="target" id="classpagmo_1_1translate_1a8f258f7f6c7e065429dea4e11846f339"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate17get_inner_problemEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo9translate17get_inner_problemEv"></span><span id="_CPPv2N5pagmo9translate17get_inner_problemEv"></span><span id="pagmo::translate::get_inner_problem"></span><span class="target" id="classpagmo_1_1translate_1a8f258f7f6c7e065429dea4e11846f339"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9translate17get_inner_problemEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <div class="admonition note">
@@ -488,34 +1090,50 @@ non-const methods on the internal <a class="reference internal" href="../problem
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="minlp_rastrigin.html" class="btn btn-neutral float-left" title="MINLP Rastrigin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="decompose.html" class="btn btn-neutral float-right" title="Decompose" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="minlp_rastrigin.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">MINLP Rastrigin</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="decompose.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Decompose</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By pagmo development team<br/>
+  
+      &copy; Copyright 2017-2021, pagmo development team.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
 
-</body>
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
 </html>

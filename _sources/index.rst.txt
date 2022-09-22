@@ -31,7 +31,7 @@ around the idea of providing a unified interface to optimization
 algorithms and problems, and to
 make their deployment in massively parallel environments easy.
 
-Efficient implementantions of bio-inspired and evolutionary algorithms
+Efficient implementations of bio-inspired and evolutionary algorithms
 are sided to state-of-the-art optimization algorithms
 (Simplex Methods, SQP methods,  interior points methods, ...)
 and can be easily mixed (also with your newly-invented algorithms)

@@ -20,7 +20,7 @@ i.e., your *population*.
 After following the :ref:`installation guide <install>`,
 you will be able to compile and run
 C++ pagmo programs. The following example shows the use with no
-multithreading of an algoritmic evolution:
+multithreading of an algorithmic evolution:
 
 .. literalinclude:: ../../../../../tutorials/nsga2_example.cpp
    :language: c++

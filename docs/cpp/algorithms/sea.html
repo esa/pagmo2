@@ -1,127 +1,727 @@
- <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+ 
+<!DOCTYPE html>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>(N+1)-ES Simple Evolutionary Algorithm &mdash; pagmo 2.18.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>(N+1)-ES Simple Evolutionary Algorithm &#8212; pagmo 2.18.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Simple Genetic Algorithm" href="sga.html" />
     <link rel="prev" title="Self-adaptive Differential Evolution (jDE and iDE)" href="sade.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-</head>
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pagmo
-          </a>
-              <div class="version">
-                2.18.0
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="null.html">Null algorithm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="bee_colony.html">Artificial Bee Colony</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cmaes.html">Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="compass_search.html">Compass Search</a></li>
-<li class="toctree-l3"><a class="reference internal" href="de.html">Differential Evolution</a></li>
-<li class="toctree-l3"><a class="reference internal" href="de1220.html">Self-adaptive Differential Evolution (DE 1220 aka pDE)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gaco.html">Extended Ant Colony Optimization (gaco)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (gwo)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ihs.html">Improved Harmony Search (IHS)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ipopt.html">Ipopt</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maco.html">Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="moead.html">Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mbh.html">Monotonic Basin Hopping (MBH) - Generalized</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cstrs_self_adaptive.html">Self-adaptive constraints handling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nlopt.html">NLopt solvers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nsga2.html">Non dominated sorting genetic algorithm (NSGA-II)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="nspso.html">Non dominated sorting particle swarm optimization(NSPSO)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pso.html">Particle Swarm Optimization (PSO)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pso_gen.html">Particle Swarm Optimization Generational (GPSO)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sade.html">Self-adaptive Differential Evolution (jDE and iDE)</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">(N+1)-ES Simple Evolutionary Algorithm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sga.html">Simple Genetic Algorithm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="simulated_annealing.html">Simulated Annealing (Corana’s version)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="xnes.html">Exponential Natural Evolution Strategies (xNES)</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
-</ul>
+    
+    <div class="container-fluid" id="banner"></div>
 
-        </div>
-      </div>
-    </nav>
+    
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">pagmo</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-      <li>(N+1)-ES Simple Evolutionary Algorithm</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/docs/cpp/algorithms/sea.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../install.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../quickstart.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../overview.html">
+   Capabilities
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tutorials/cpp_tut.html">
+   C++ tutorial
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">
+     Preliminaries
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">
+     Writing your first optimisation problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/evolving_a_population.html">
+     Evolving a population
+    </a>
+   </li>
   </ul>
-  <hr/>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../cpp_docs.html">
+   C++ API documentation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../types.html">
+     Types
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problem.html">
+     Problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithm.html">
+     Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../population.html">
+     Population
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../island.html">
+     Island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../archipelago.html">
+     Archipelago
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../bfe.html">
+     Batch fitness evaluator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topology.html">
+     Topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policy.html">
+     Replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policy.html">
+     Selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="null.html">
+     Null algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="bee_colony.html">
+     Artificial Bee Colony
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cmaes.html">
+     Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="compass_search.html">
+     Compass Search
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="de.html">
+     Differential Evolution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="de1220.html">
+     Self-adaptive Differential Evolution (DE 1220 aka pDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gaco.html">
+     Extended Ant Colony Optimization (gaco)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gwo.html">
+     Grey Wolf Optimizer (gwo)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ihs.html">
+     Improved Harmony Search (IHS)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ipopt.html">
+     Ipopt
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="maco.html">
+     Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="moead.html">
+     Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="mbh.html">
+     Monotonic Basin Hopping (MBH) - Generalized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cstrs_self_adaptive.html">
+     Self-adaptive constraints handling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="nlopt.html">
+     NLopt solvers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="nsga2.html">
+     Non dominated sorting genetic algorithm (NSGA-II)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="nspso.html">
+     Non dominated sorting particle swarm optimization(NSPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pso.html">
+     Particle Swarm Optimization (PSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pso_gen.html">
+     Particle Swarm Optimization Generational (GPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sade.html">
+     Self-adaptive Differential Evolution (jDE and iDE)
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     (N+1)-ES Simple Evolutionary Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sga.html">
+     Simple Genetic Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="simulated_annealing.html">
+     Simulated Annealing (Corana’s version)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="xnes.html">
+     Exponential Natural Evolution Strategies (xNES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/null.html">
+     Null problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/rosenbrock.html">
+     Rosenbrock
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/rastrigin.html">
+     Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/schwefel.html">
+     Schwefel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/ackley.html">
+     Ackley
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/golomb_ruler.html">
+     Optimal Golomb Ruler
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/griewank.html">
+     Griewank
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/lennard_jones.html">
+     Lennard Jones Cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/zdt.html">
+     ZDT test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/dtlz.html">
+     DTLZ test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/hock_schittkowski_71.html">
+     Hock Schittkowsky No.71
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/inventory.html">
+     News-vendor problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/luksan_vlcek1.html">
+     Luksan Vlcek 1
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/minlp_rastrigin.html">
+     MINLP Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/translate.html">
+     Translate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/decompose.html">
+     Decompose
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2006.html">
+     CEC 2006 Problem Suite (single-objective, constrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2009.html">
+     CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2013.html">
+     CEC 2013 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2014.html">
+     CEC 2014 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/unconstrain.html">
+     Unconstrain
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/wfg.html">
+     WFG problem test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/thread_island.html">
+     Thread island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/fork_island.html">
+     Fork island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/default_bfe.html">
+     Default BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/thread_bfe.html">
+     Multithreaded BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/member_bfe.html">
+     Member function BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/unconnected.html">
+     Unconnected topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/fully_connected.html">
+     Fully connected
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/base_bgl_topology.html">
+     Base BGL topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/ring.html">
+     Ring
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/free_form.html">
+     Free-form topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policies/fair_replace.html">
+     Fair replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policies/select_best.html">
+     Best selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/multi_objective.html">
+     Multi-objective optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/constrained.html">
+     Constrained optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/discrepancy.html">
+     Low-discrepancy sequences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/hypervolume.html">
+     Hypervolumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/gradient_and_hessians.html">
+     Utilities for gradient and hessians
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/genetic_operators.html">
+     Genetic Operators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/generic.html">
+     Generic utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/type_traits.html">
+     Type traits and enums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/exceptions.html">
+     Exceptions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/utility_classes.html">
+     Utility classes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../credits.html">
+   Credits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../changelog.html">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/esa/pagmo2"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/esa/pagmo2/issues/new?title=Issue%20on%20page%20%2Fdocs/cpp/algorithms/sea.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../../_sources/docs/cpp/algorithms/sea.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>(N+1)-ES Simple Evolutionary Algorithm</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
   <section id="n-1-es-simple-evolutionary-algorithm">
-<h1>(N+1)-ES Simple Evolutionary Algorithm<a class="headerlink" href="#n-1-es-simple-evolutionary-algorithm" title="Permalink to this headline"></a></h1>
+<h1>(N+1)-ES Simple Evolutionary Algorithm<a class="headerlink" href="#n-1-es-simple-evolutionary-algorithm" title="Permalink to this headline">#</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3seaE">
-<span id="_CPPv3N5pagmo3seaE"></span><span id="_CPPv2N5pagmo3seaE"></span><span id="pagmo::sea"></span><span class="target" id="classpagmo_1_1sea"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sea</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3seaE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo3seaE"></span><span id="_CPPv2N5pagmo3seaE"></span><span id="pagmo::sea"></span><span class="target" id="classpagmo_1_1sea"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sea</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3seaE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>(N+1)-ES Simple Evolutionary Algorithm </p>
 <p><img alt="../../../_images/sea.png" src="../../../_images/sea.png" /></p>
 <p>Evolutionary strategies date back to the mid 1960s when P. Bienert, I. Rechenberg, and H.-P. Schwefel at the Technical University of Berlin, Germany, developed the first bionics-inspired schemes for evolving optimal shapes of minimal drag bodies in a wind tunnel using Darwin’s evolution principle.</p>
@@ -152,13 +752,13 @@ constrained or stochastic optimization</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sea13log_line_typeE">
-<span id="_CPPv3N5pagmo3sea13log_line_typeE"></span><span id="_CPPv2N5pagmo3sea13log_line_typeE"></span><span id="pagmo::sea::log_line_type"></span><span class="target" id="classpagmo_1_1sea_1a457c3ab7e6d7231fc246ababd04b66a9"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo3sea13log_line_typeE"></span><span id="_CPPv2N5pagmo3sea13log_line_typeE"></span><span id="pagmo::sea::log_line_type"></span><span class="target" id="classpagmo_1_1sea_1a457c3ab7e6d7231fc246ababd04b66a9"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Single entry of the log (gen, fevals, best, improvement, mutations) </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sea8log_typeE">
-<span id="_CPPv3N5pagmo3sea8log_typeE"></span><span id="_CPPv2N5pagmo3sea8log_typeE"></span><span id="pagmo::sea::log_type"></span><span class="target" id="classpagmo_1_1sea_1a65a18f8ef53a2338d1b0015c6e43c785"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="pagmo::sea::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sea8log_typeE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo3sea8log_typeE"></span><span id="_CPPv2N5pagmo3sea8log_typeE"></span><span id="pagmo::sea::log_type"></span><span class="target" id="classpagmo_1_1sea_1a65a18f8ef53a2338d1b0015c6e43c785"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo3sea13log_line_typeE" title="pagmo::sea::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3sea8log_typeE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -167,7 +767,7 @@ constrained or stochastic optimization</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sea3seaEjj">
-<span id="_CPPv3N5pagmo3sea3seaEjj"></span><span id="_CPPv2N5pagmo3sea3seaEjj"></span><span id="pagmo::sea::sea__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1sea_1a35b7a8cd5ffa2e5247e6b64bff3ee048"></span><span class="sig-name descname"><span class="n"><span class="pre">sea</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea3seaEjj" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo3sea3seaEjj"></span><span id="_CPPv2N5pagmo3sea3seaEjj"></span><span id="pagmo::sea::sea__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1sea_1a35b7a8cd5ffa2e5247e6b64bff3ee048"></span><span class="sig-name descname"><span class="n"><span class="pre">sea</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gen</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">random_device</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">next</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea3seaEjj" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs sea</p>
 <dl class="field-list simple">
@@ -182,14 +782,14 @@ constrained or stochastic optimization</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sea6evolveE10population">
-<span id="_CPPv3NK5pagmo3sea6evolveE10population"></span><span id="_CPPv2NK5pagmo3sea6evolveE10population"></span><span id="pagmo::sea::evolve__populationC"></span><span class="target" id="classpagmo_1_1sea_1af10e7cff90ec2c4d121a24ad2c32d2c7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea6evolveE10population" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea6evolveE10population"></span><span id="_CPPv2NK5pagmo3sea6evolveE10population"></span><span id="pagmo::sea::evolve__populationC"></span><span class="target" id="classpagmo_1_1sea_1af10e7cff90ec2c4d121a24ad2c32d2c7"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea6evolveE10population" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Algorithm evolve method. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>pop</strong> – population to be evolved </p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>std::invalid_argument</strong> – if the problem is multi-objective or constrained </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the problem is multi-objective or constrained </p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>evolved population </p>
@@ -199,7 +799,7 @@ constrained or stochastic optimization</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sea13set_verbosityEj">
-<span id="_CPPv3N5pagmo3sea13set_verbosityEj"></span><span id="_CPPv2N5pagmo3sea13set_verbosityEj"></span><span id="pagmo::sea::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1sea_1a68cb8bf7c3d8ca1340481768cd7e7c1e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea13set_verbosityEj" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo3sea13set_verbosityEj"></span><span id="_CPPv2N5pagmo3sea13set_verbosityEj"></span><span id="pagmo::sea::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1sea_1a68cb8bf7c3d8ca1340481768cd7e7c1e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea13set_verbosityEj" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1sea_1a8529341cb72492b1e196976a231e6a75"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -207,7 +807,7 @@ constrained or stochastic optimization</p>
 <li><p>&gt;1: will print and log one line each <code class="docutils literal notranslate"><span class="pre">level</span></code> generations.</p></li>
 </ul>
 </p>
-<p>Example (verbosity 1): <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>Gen:        Fevals:          Best:   Improvement:     Mutations:
+<p>Example (verbosity 1): <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Gen:        Fevals:          Best:   Improvement:     Mutations:
 632           3797        1464.31        51.0203              1
 633           3803        1463.23        13.4503              1
 635           3815        1562.02        31.0434              3
@@ -225,7 +825,7 @@ constrained or stochastic optimization</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sea13get_verbosityEv">
-<span id="_CPPv3NK5pagmo3sea13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3sea13get_verbosityEv"></span><span id="pagmo::sea::get_verbosityC"></span><span class="target" id="classpagmo_1_1sea_1a491217b8da164734bfb167c710726430"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea13get_verbosityEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea13get_verbosityEv"></span><span id="_CPPv2NK5pagmo3sea13get_verbosityEv"></span><span id="pagmo::sea::get_verbosityC"></span><span class="target" id="classpagmo_1_1sea_1a491217b8da164734bfb167c710726430"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea13get_verbosityEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -236,7 +836,7 @@ constrained or stochastic optimization</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo3sea8set_seedEj">
-<span id="_CPPv3N5pagmo3sea8set_seedEj"></span><span id="_CPPv2N5pagmo3sea8set_seedEj"></span><span id="pagmo::sea::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sea_1acc57548b6c44730c0e653dfbdbe60505"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea8set_seedEj" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo3sea8set_seedEj"></span><span id="_CPPv2N5pagmo3sea8set_seedEj"></span><span id="pagmo::sea::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1sea_1acc57548b6c44730c0e653dfbdbe60505"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo3sea8set_seedEj" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Sets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -247,7 +847,7 @@ constrained or stochastic optimization</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sea8get_seedEv">
-<span id="_CPPv3NK5pagmo3sea8get_seedEv"></span><span id="_CPPv2NK5pagmo3sea8get_seedEv"></span><span id="pagmo::sea::get_seedC"></span><span class="target" id="classpagmo_1_1sea_1aa3b7441c8a0690c4e727aaa0f5b2bd98"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_seedEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea8get_seedEv"></span><span id="_CPPv2NK5pagmo3sea8get_seedEv"></span><span id="pagmo::sea::get_seedC"></span><span class="target" id="classpagmo_1_1sea_1aa3b7441c8a0690c4e727aaa0f5b2bd98"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_seedEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Gets the seed. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -258,7 +858,7 @@ constrained or stochastic optimization</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sea8get_nameEv">
-<span id="_CPPv3NK5pagmo3sea8get_nameEv"></span><span id="_CPPv2NK5pagmo3sea8get_nameEv"></span><span id="pagmo::sea::get_nameC"></span><span class="target" id="classpagmo_1_1sea_1ae776b2b673a432eec781ec91836f2a25"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_nameEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea8get_nameEv"></span><span id="_CPPv2NK5pagmo3sea8get_nameEv"></span><span id="pagmo::sea::get_nameC"></span><span class="target" id="classpagmo_1_1sea_1ae776b2b673a432eec781ec91836f2a25"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea8get_nameEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -270,7 +870,7 @@ constrained or stochastic optimization</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sea14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo3sea14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3sea14get_extra_infoEv"></span><span id="pagmo::sea::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sea_1a9eb697445b8f79b06725add45c780f06"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo3sea14get_extra_infoEv"></span><span id="pagmo::sea::get_extra_infoC"></span><span class="target" id="classpagmo_1_1sea_1a9eb697445b8f79b06725add45c780f06"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea14get_extra_infoEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
@@ -282,7 +882,7 @@ constrained or stochastic optimization</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo3sea7get_logEv">
-<span id="_CPPv3NK5pagmo3sea7get_logEv"></span><span id="_CPPv2NK5pagmo3sea7get_logEv"></span><span id="pagmo::sea::get_logC"></span><span class="target" id="classpagmo_1_1sea_1a8529341cb72492b1e196976a231e6a75"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3sea8log_typeE" title="pagmo::sea::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea7get_logEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo3sea7get_logEv"></span><span id="_CPPv2NK5pagmo3sea7get_logEv"></span><span id="pagmo::sea::get_logC"></span><span class="target" id="classpagmo_1_1sea_1a8529341cb72492b1e196976a231e6a75"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo3sea8log_typeE" title="pagmo::sea::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo3sea7get_logEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Get log. </p>
 <p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1sea_1a457c3ab7e6d7231fc246ababd04b66a9"><span class="std std-ref">sea::log_line_type</span></a> containing: Gen, Fevals, Best, Improvement, Mutations as described in <a class="reference internal" href="#classpagmo_1_1sea_1a68cb8bf7c3d8ca1340481768cd7e7c1e"><span class="std std-ref">sea::set_verbosity</span></a> </p>
 <dl class="field-list simple">
@@ -298,34 +898,50 @@ constrained or stochastic optimization</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="sade.html" class="btn btn-neutral float-left" title="Self-adaptive Differential Evolution (jDE and iDE)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="sga.html" class="btn btn-neutral float-right" title="Simple Genetic Algorithm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="sade.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Self-adaptive Differential Evolution (jDE and iDE)</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="sga.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Simple Genetic Algorithm</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By pagmo development team<br/>
+  
+      &copy; Copyright 2017-2021, pagmo development team.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
 
-</body>
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
 </html>

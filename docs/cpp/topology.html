@@ -1,122 +1,788 @@
- <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+ 
+<!DOCTYPE html>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Topology &mdash; pagmo 2.18.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Topology &#8212; pagmo 2.18.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Replacement policy" href="r_policy.html" />
     <link rel="prev" title="Batch fitness evaluator" href="bfe.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-</head>
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> pagmo
-          </a>
-              <div class="version">
-                2.18.0
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Capabilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/cpp_tut.html">C++ tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="cpp_docs.html">C++ API documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="cpp_docs.html#core-classes">Core classes</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="types.html">Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="problem.html">Problem</a></li>
-<li class="toctree-l3"><a class="reference internal" href="algorithm.html">Algorithm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="population.html">Population</a></li>
-<li class="toctree-l3"><a class="reference internal" href="island.html">Island</a></li>
-<li class="toctree-l3"><a class="reference internal" href="archipelago.html">Archipelago</a></li>
-<li class="toctree-l3"><a class="reference internal" href="bfe.html">Batch fitness evaluator</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Topology</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#types">Types</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#associated-type-traits">Associated type traits</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="r_policy.html">Replacement policy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="s_policy.html">Selection policy</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-problems">Implemented problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-islands">Implemented islands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#utilities">Utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpp_docs.html#miscellanea">Miscellanea</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../credits.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
-</ul>
+    
+    <div class="container-fluid" id="banner"></div>
 
-        </div>
-      </div>
-    </nav>
+    
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">pagmo</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="cpp_docs.html">C++ API documentation</a> &raquo;</li>
-      <li>Topology</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/docs/cpp/topology.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../install.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../quickstart.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../overview.html">
+   Capabilities
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="tutorials/cpp_tut.html">
+   C++ tutorial
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/cpp_tut_preliminaries.html">
+     Preliminaries
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/cpp_tut_first_problem.html">
+     Writing your first optimisation problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/evolving_a_population.html">
+     Evolving a population
+    </a>
+   </li>
   </ul>
-  <hr/>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="cpp_docs.html">
+   C++ API documentation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="types.html">
+     Types
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problem.html">
+     Problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithm.html">
+     Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="population.html">
+     Population
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="island.html">
+     Island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="archipelago.html">
+     Archipelago
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="bfe.html">
+     Batch fitness evaluator
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="r_policy.html">
+     Replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="s_policy.html">
+     Selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/null.html">
+     Null algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/bee_colony.html">
+     Artificial Bee Colony
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/cmaes.html">
+     Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/compass_search.html">
+     Compass Search
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/de.html">
+     Differential Evolution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/de1220.html">
+     Self-adaptive Differential Evolution (DE 1220 aka pDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/gaco.html">
+     Extended Ant Colony Optimization (gaco)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/gwo.html">
+     Grey Wolf Optimizer (gwo)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/ihs.html">
+     Improved Harmony Search (IHS)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/ipopt.html">
+     Ipopt
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/maco.html">
+     Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/moead.html">
+     Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/mbh.html">
+     Monotonic Basin Hopping (MBH) - Generalized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/cstrs_self_adaptive.html">
+     Self-adaptive constraints handling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/nlopt.html">
+     NLopt solvers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/nsga2.html">
+     Non dominated sorting genetic algorithm (NSGA-II)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/nspso.html">
+     Non dominated sorting particle swarm optimization(NSPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/pso.html">
+     Particle Swarm Optimization (PSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/pso_gen.html">
+     Particle Swarm Optimization Generational (GPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/sade.html">
+     Self-adaptive Differential Evolution (jDE and iDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/sea.html">
+     (N+1)-ES Simple Evolutionary Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/sga.html">
+     Simple Genetic Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/simulated_annealing.html">
+     Simulated Annealing (Corana’s version)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="algorithms/xnes.html">
+     Exponential Natural Evolution Strategies (xNES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/null.html">
+     Null problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/rosenbrock.html">
+     Rosenbrock
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/rastrigin.html">
+     Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/schwefel.html">
+     Schwefel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/ackley.html">
+     Ackley
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/golomb_ruler.html">
+     Optimal Golomb Ruler
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/griewank.html">
+     Griewank
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/lennard_jones.html">
+     Lennard Jones Cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/zdt.html">
+     ZDT test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/dtlz.html">
+     DTLZ test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/hock_schittkowski_71.html">
+     Hock Schittkowsky No.71
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/inventory.html">
+     News-vendor problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/luksan_vlcek1.html">
+     Luksan Vlcek 1
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/minlp_rastrigin.html">
+     MINLP Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/translate.html">
+     Translate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/decompose.html">
+     Decompose
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/cec2006.html">
+     CEC 2006 Problem Suite (single-objective, constrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/cec2009.html">
+     CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/cec2013.html">
+     CEC 2013 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/cec2014.html">
+     CEC 2014 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/unconstrain.html">
+     Unconstrain
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="problems/wfg.html">
+     WFG problem test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="islands/thread_island.html">
+     Thread island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="islands/fork_island.html">
+     Fork island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="batch_evaluators/default_bfe.html">
+     Default BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="batch_evaluators/thread_bfe.html">
+     Multithreaded BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="batch_evaluators/member_bfe.html">
+     Member function BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="topologies/unconnected.html">
+     Unconnected topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="topologies/fully_connected.html">
+     Fully connected
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="topologies/base_bgl_topology.html">
+     Base BGL topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="topologies/ring.html">
+     Ring
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="topologies/free_form.html">
+     Free-form topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="r_policies/fair_replace.html">
+     Fair replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="s_policies/select_best.html">
+     Best selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="utils/multi_objective.html">
+     Multi-objective optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="utils/constrained.html">
+     Constrained optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="utils/discrepancy.html">
+     Low-discrepancy sequences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="utils/hypervolume.html">
+     Hypervolumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="utils/gradient_and_hessians.html">
+     Utilities for gradient and hessians
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="utils/genetic_operators.html">
+     Genetic Operators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="miscellanea/generic.html">
+     Generic utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="miscellanea/type_traits.html">
+     Type traits and enums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="miscellanea/exceptions.html">
+     Exceptions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="miscellanea/utility_classes.html">
+     Utility classes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../credits.html">
+   Credits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../changelog.html">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/esa/pagmo2"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/esa/pagmo2/issues/new?title=Issue%20on%20page%20%2Fdocs/cpp/topology.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/docs/cpp/topology.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#types">
+   Types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#functions">
+   Functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#associated-type-traits">
+   Associated type traits
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Topology</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#types">
+   Types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#functions">
+   Functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#associated-type-traits">
+   Associated type traits
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
   <section id="topology">
-<h1>Topology<a class="headerlink" href="#topology" title="Permalink to this headline"></a></h1>
+<h1>Topology<a class="headerlink" href="#topology" title="Permalink to this headline">#</a></h1>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 2.11.</span></p>
 </div>
 <p><em>#include &lt;pagmo/topology.hpp&gt;</em></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topologyE">
-<span id="_CPPv3N5pagmo8topologyE"></span><span id="_CPPv2N5pagmo8topologyE"></span><span id="pagmo::topology"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo8topologyE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topologyE"></span><span id="_CPPv2N5pagmo8topologyE"></span><span id="pagmo::topology"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo8topologyE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>In the jargon of pagmo, a topology is an object that represents connections among
 <a class="reference internal" href="island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">islands</span></code></a> in an <a class="reference internal" href="archipelago.html#_CPPv4N5pagmo11archipelagoE" title="pagmo::archipelago"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">archipelago</span></code></a>.
 In essence, a topology is a <em>weighted directed graph</em> in which</p>
@@ -179,48 +845,48 @@ Any other operation will result in undefined behaviour.</p>
 </div>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topology8topologyEv">
-<span id="_CPPv3N5pagmo8topology8topologyEv"></span><span id="_CPPv2N5pagmo8topology8topologyEv"></span><span id="pagmo::topology::topology"></span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology8topologyEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topology8topologyEv"></span><span id="_CPPv2N5pagmo8topology8topologyEv"></span><span id="pagmo::topology::topology"></span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology8topologyEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Default constructor.</p>
 <p>The default constructor will initialize a <a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> containing an
 <a class="reference internal" href="topologies/unconnected.html#_CPPv4N5pagmo11unconnectedE" title="pagmo::unconnected"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">unconnected</span></code></a> topology.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception raised by the constructor from a generic UDT.</p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception raised by the constructor from a generic UDT.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topology8topologyERK8topology">
-<span id="_CPPv3N5pagmo8topology8topologyERK8topology"></span><span id="_CPPv2N5pagmo8topology8topologyERK8topology"></span><span id="pagmo::topology::topology__topologyCR"></span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo8topology8topologyERK8topology" title="pagmo::topology::topology"><span class="n"><span class="pre">topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology8topologyERK8topology" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topology8topologyERK8topology"></span><span id="_CPPv2N5pagmo8topology8topologyERK8topology"></span><span id="pagmo::topology::topology__topologyCR"></span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo8topology8topologyERK8topology" title="pagmo::topology::topology"><span class="n"><span class="pre">topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology8topologyERK8topology" title="Permalink to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topology8topologyERR8topology">
-<span id="_CPPv3N5pagmo8topology8topologyERR8topology"></span><span id="_CPPv2N5pagmo8topology8topologyERR8topology"></span><span id="pagmo::topology::topology__topologyRR"></span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo8topology8topologyERR8topology" title="pagmo::topology::topology"><span class="n"><span class="pre">topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo8topology8topologyERR8topology" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topology8topologyERR8topology"></span><span id="_CPPv2N5pagmo8topology8topologyERR8topology"></span><span id="pagmo::topology::topology__topologyRR"></span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo8topology8topologyERR8topology" title="pagmo::topology::topology"><span class="n"><span class="pre">topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo8topology8topologyERR8topology" title="Permalink to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topologyaSERK8topology">
-<span id="_CPPv3N5pagmo8topologyaSERK8topology"></span><span id="_CPPv2N5pagmo8topologyaSERK8topology"></span><span id="pagmo::topology::assign-operator__topologyCR"></span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topologyaSERK8topology" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topologyaSERK8topology"></span><span id="_CPPv2N5pagmo8topologyaSERK8topology"></span><span id="pagmo::topology::assign-operator__topologyCR"></span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topologyaSERK8topology" title="Permalink to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topologyaSERR8topology">
-<span id="_CPPv3N5pagmo8topologyaSERR8topology"></span><span id="_CPPv2N5pagmo8topologyaSERR8topology"></span><span id="pagmo::topology::assign-operator__topologyRR"></span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo8topologyaSERR8topology" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topologyaSERR8topology"></span><span id="_CPPv2N5pagmo8topologyaSERR8topology"></span><span id="pagmo::topology::assign-operator__topologyRR"></span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo8topologyaSERR8topology" title="Permalink to this definition">#</a><br /></dt>
 <dd><p><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> is copy/move constructible, and copy/move assignable.
 Copy construction/assignment will perform deep copies, move operations will leave the moved-from object in
 a state which is destructible and assignable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – when performing copy operations, any exception raised by the UDT upon copying, or by memory allocation failures.</p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – when performing copy operations, any exception raised by the UDT upon copying, or by memory allocation failures.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo8topology8topologyERR1T">
-<span id="_CPPv3I0EN5pagmo8topology8topologyERR1T"></span><span id="_CPPv2I0EN5pagmo8topology8topologyERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo8topology8topologyERR1T" title="pagmo::topology::topology::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo8topology8topologyERR1T" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo8topology8topologyERR1T"></span><span id="_CPPv2I0EN5pagmo8topology8topologyERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">topology</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo8topology8topologyERR1T" title="pagmo::topology::topology::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo8topology8topologyERR1T" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Generic constructor from a UDT.</p>
 <p>This constructor participates in overload resolution only if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference
 and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> and if it satisfies <a class="reference internal" href="#_CPPv4I0EN5pagmo6is_udtE" title="pagmo::is_udt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udt</span></code></a>.</p>
@@ -231,14 +897,14 @@ and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo8top
 <dd class="field-odd"><p><strong>x</strong> – the input UDT.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the public API of the UDT, or by memory allocation failures.</p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the public API of the UDT, or by memory allocation failures.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo8topologyaSER8topologyRR1T">
-<span id="_CPPv3I0EN5pagmo8topologyaSERR1T"></span><span id="_CPPv2I0EN5pagmo8topologyaSERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo8topologyaSER8topologyRR1T" title="pagmo::topology::operator=::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo8topologyaSER8topologyRR1T" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo8topologyaSERR1T"></span><span id="_CPPv2I0EN5pagmo8topologyaSERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN5pagmo8topologyaSER8topologyRR1T" title="pagmo::topology::operator=::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN5pagmo8topologyaSER8topologyRR1T" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Generic assignment operator from a UDT.</p>
 <p>This operator participates in overload resolution only if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference
 and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> and if it satisfies <a class="reference internal" href="#_CPPv4I0EN5pagmo6is_udtE" title="pagmo::is_udt"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udt</span></code></a>.</p>
@@ -252,19 +918,19 @@ and then move-assigning the result to <em>this</em>.</p>
 <dd class="field-even"><p>a reference to <em>this</em>.</p>
 </dd>
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the generic constructor from a UDT.</p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the generic constructor from a UDT.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0ENK5pagmo8topology7extractEPK1Tv">
-<span id="_CPPv3I0ENK5pagmo8topology7extractEv"></span><span id="_CPPv2I0ENK5pagmo8topology7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK5pagmo8topology7extractEPK1Tv" title="pagmo::topology::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo8topology7extractEPK1Tv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0ENK5pagmo8topology7extractEv"></span><span id="_CPPv2I0ENK5pagmo8topology7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK5pagmo8topology7extractEPK1Tv" title="pagmo::topology::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo8topology7extractEPK1Tv" title="Permalink to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo8topology7extractEP1Tv">
-<span id="_CPPv3I0EN5pagmo8topology7extractEv"></span><span id="_CPPv2I0EN5pagmo8topology7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0EN5pagmo8topology7extractEP1Tv" title="pagmo::topology::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo8topology7extractEP1Tv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo8topology7extractEv"></span><span id="_CPPv2I0EN5pagmo8topology7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><a class="reference internal" href="#_CPPv4I0EN5pagmo8topology7extractEP1Tv" title="pagmo::topology::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo8topology7extractEP1Tv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Extract a (const) pointer to the internal UDT instance.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">T</span></code> is the type of the UDT currently stored within this object, then this function
 will return a (const) pointer to the internal UDT instance. Otherwise, <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> will be returned.</p>
@@ -285,7 +951,7 @@ through this function is undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0ENK5pagmo8topology2isEbv">
-<span id="_CPPv3I0ENK5pagmo8topology2isEv"></span><span id="_CPPv2I0ENK5pagmo8topology2isEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo8topology2isEbv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0ENK5pagmo8topology2isEv"></span><span id="_CPPv2I0ENK5pagmo8topology2isEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo8topology2isEbv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Check the type of the UDT.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -296,7 +962,7 @@ through this function is undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo8topology15get_connectionsENSt6size_tE">
-<span id="_CPPv3NK5pagmo8topology15get_connectionsENSt6size_tE"></span><span id="_CPPv2NK5pagmo8topology15get_connectionsENSt6size_tE"></span><span id="pagmo::topology::get_connections__std::sC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_connections</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology15get_connectionsENSt6size_tE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo8topology15get_connectionsENSt6size_tE"></span><span id="_CPPv2NK5pagmo8topology15get_connectionsENSt6size_tE"></span><span id="pagmo::topology::get_connections__std::sC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_connections</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology15get_connectionsENSt6size_tE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Get the connections to a vertex.</p>
 <p>This function will invoke the <code class="docutils literal notranslate"><span class="pre">get_connections()</span></code> member function of the UDT, which is expected to return
 a pair of vectors containing respectively:</p>
@@ -315,9 +981,9 @@ edge towards <em>n</em> exists),</p></li>
 </dd>
 <dt class="field-odd">Throws</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>std::invalid_argument</strong> – if the sizes of the returned vectors differ, or if any element of the second
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the sizes of the returned vectors differ, or if any element of the second
 vector is not in the <span class="math notranslate nohighlight">\([0.,1.]\)</span> range.</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_connections()</span></code> member function of the UDT.</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_connections()</span></code> member function of the UDT.</p></li>
 </ul>
 </dd>
 </dl>
@@ -325,20 +991,20 @@ vector is not in the <span class="math notranslate nohighlight">\([0.,1.]\)</spa
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topology9push_backEv">
-<span id="_CPPv3N5pagmo8topology9push_backEv"></span><span id="_CPPv2N5pagmo8topology9push_backEv"></span><span id="pagmo::topology::push_back"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology9push_backEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topology9push_backEv"></span><span id="_CPPv2N5pagmo8topology9push_backEv"></span><span id="pagmo::topology::push_back"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology9push_backEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Add a vertex.</p>
 <p>This member function will invoke the <code class="docutils literal notranslate"><span class="pre">push_back()</span></code> member function of the UDT, which is expected to add a new vertex to the
 topology, assigning it the next available index and establishing connections to other vertices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">push_back()</span></code> member function of the UDT.</p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">push_back()</span></code> member function of the UDT.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topology9push_backEj">
-<span id="_CPPv3N5pagmo8topology9push_backEj"></span><span id="_CPPv2N5pagmo8topology9push_backEj"></span><span id="pagmo::topology::push_back__unsigned"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology9push_backEj" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topology9push_backEj"></span><span id="_CPPv2N5pagmo8topology9push_backEj"></span><span id="pagmo::topology::push_back__unsigned"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">push_back</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology9push_backEj" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Add multiple vertices.</p>
 <p>This member function will call <a class="reference internal" href="#_CPPv4N5pagmo8topology9push_backEv" title="pagmo::topology::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a> <em>n</em> times.</p>
 <dl class="field-list simple">
@@ -346,14 +1012,14 @@ topology, assigning it the next available index and establishing connections to 
 <dd class="field-odd"><p><strong>n</strong> – the number of times <a class="reference internal" href="#_CPPv4N5pagmo8topology9push_backEv" title="pagmo::topology::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a> will be called.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by <a class="reference internal" href="#_CPPv4N5pagmo8topology9push_backEv" title="pagmo::topology::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a>.</p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <a class="reference internal" href="#_CPPv4N5pagmo8topology9push_backEv" title="pagmo::topology::push_back"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">push_back()</span></code></a>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo8topology6to_bglEv">
-<span id="_CPPv3NK5pagmo8topology6to_bglEv"></span><span id="_CPPv2NK5pagmo8topology6to_bglEv"></span><span id="pagmo::topology::to_bglC"></span><a class="reference internal" href="#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><span class="n"><span class="pre">bgl_graph_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_bgl</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology6to_bglEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo8topology6to_bglEv"></span><span id="_CPPv2NK5pagmo8topology6to_bglEv"></span><span id="pagmo::topology::to_bglC"></span><a class="reference internal" href="#_CPPv4N5pagmo11bgl_graph_tE" title="pagmo::bgl_graph_t"><span class="n"><span class="pre">bgl_graph_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_bgl</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology6to_bglEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>
@@ -369,8 +1035,8 @@ Graph Library).</p>
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference internal" href="miscellanea/exceptions.html#_CPPv4N5pagmo21not_implemented_errorE" title="pagmo::not_implemented_error"><strong>not_implemented_error</strong></a> – if the UDT does not satisfy <a class="reference internal" href="#_CPPv4I0EN5pagmo10has_to_bglE" title="pagmo::has_to_bgl"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_to_bgl</span></code></a>.</p></li>
-<li><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">to_bgl()</span></code> member function of the UDT.</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="miscellanea/exceptions.html#_CPPv4N5pagmo21not_implemented_errorE" title="pagmo::not_implemented_error"><span class="n">not_implemented_error</span></a></span></span> – if the UDT does not satisfy <a class="reference internal" href="#_CPPv4I0EN5pagmo10has_to_bglE" title="pagmo::has_to_bgl"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_to_bgl</span></code></a>.</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">to_bgl()</span></code> member function of the UDT.</p></li>
 </ul>
 </dd>
 </dl>
@@ -378,7 +1044,7 @@ Graph Library).</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo8topology8get_nameEv">
-<span id="_CPPv3NK5pagmo8topology8get_nameEv"></span><span id="_CPPv2NK5pagmo8topology8get_nameEv"></span><span id="pagmo::topology::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology8get_nameEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo8topology8get_nameEv"></span><span id="_CPPv2NK5pagmo8topology8get_nameEv"></span><span id="pagmo::topology::get_nameC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology8get_nameEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Get the name of this topology.</p>
 <p>If the UDT satisfies <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4I0EN5pagmo8has_nameE" title="pagmo::has_name"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_name</span></code></a>, then this member function will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> member function.
 Otherwise, an implementation-defined name based on the type of the UDT will be returned.</p>
@@ -387,14 +1053,14 @@ Otherwise, an implementation-defined name based on the type of the UDT will be r
 <dd class="field-odd"><p>the name of this topology.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by copying an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> object.</p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by copying an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> object.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo8topology14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo8topology14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo8topology14get_extra_infoEv"></span><span id="pagmo::topology::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology14get_extra_infoEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo8topology14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo8topology14get_extra_infoEv"></span><span id="pagmo::topology::get_extra_infoC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology14get_extra_infoEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Extra info for this topology.</p>
 <p>If the UDT satisfies <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4I0EN5pagmo14has_extra_infoE" title="pagmo::has_extra_info"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::has_extra_info</span></code></a>, then this member function will return the output of its
 <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> member function. Otherwise, an empty string will be returned.</p>
@@ -403,14 +1069,14 @@ Otherwise, an implementation-defined name based on the type of the UDT will be r
 <dd class="field-odd"><p>extra info about the UDT.</p>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> member function of the UDT, or by copying an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> object.</p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> member function of the UDT, or by copying an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> object.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo8topology8is_validEv">
-<span id="_CPPv3NK5pagmo8topology8is_validEv"></span><span id="_CPPv2NK5pagmo8topology8is_validEv"></span><span id="pagmo::topology::is_validC"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology8is_validEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo8topology8is_validEv"></span><span id="_CPPv2NK5pagmo8topology8is_validEv"></span><span id="pagmo::topology::is_validC"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology8is_validEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Check if this topology is in a valid state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -421,7 +1087,7 @@ Otherwise, an implementation-defined name based on the type of the UDT will be r
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo8topology14get_type_indexEv">
-<span id="_CPPv3NK5pagmo8topology14get_type_indexEv"></span><span id="_CPPv2NK5pagmo8topology14get_type_indexEv"></span><span id="pagmo::topology::get_type_indexC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_type_index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology14get_type_indexEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo8topology14get_type_indexEv"></span><span id="_CPPv2NK5pagmo8topology14get_type_indexEv"></span><span id="pagmo::topology::get_type_indexC"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_type_index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology14get_type_indexEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>
@@ -438,12 +1104,12 @@ instance.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo8topology7get_ptrEv">
-<span id="_CPPv3NK5pagmo8topology7get_ptrEv"></span><span id="_CPPv2NK5pagmo8topology7get_ptrEv"></span><span id="pagmo::topology::get_ptrC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology7get_ptrEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK5pagmo8topology7get_ptrEv"></span><span id="_CPPv2NK5pagmo8topology7get_ptrEv"></span><span id="pagmo::topology::get_ptrC"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo8topology7get_ptrEv" title="Permalink to this definition">#</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8topology7get_ptrEv">
-<span id="_CPPv3N5pagmo8topology7get_ptrEv"></span><span id="_CPPv2N5pagmo8topology7get_ptrEv"></span><span id="pagmo::topology::get_ptr"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology7get_ptrEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8topology7get_ptrEv"></span><span id="_CPPv2N5pagmo8topology7get_ptrEv"></span><span id="pagmo::topology::get_ptr"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo8topology7get_ptrEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>
@@ -474,10 +1140,10 @@ methods on the internal UDT instance. Assigning a new UDT via this pointer is un
 </dd></dl>
 
 <section id="types">
-<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline"></a></h2>
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">#</a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11bgl_graph_tE">
-<span id="_CPPv3N5pagmo11bgl_graph_tE"></span><span id="_CPPv2N5pagmo11bgl_graph_tE"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bgl_graph_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">adjacency_list</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vecS</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vecS</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bidirectionalS</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">no_property</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">no_property</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">listS</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5pagmo11bgl_graph_tE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo11bgl_graph_tE"></span><span id="_CPPv2N5pagmo11bgl_graph_tE"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bgl_graph_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">adjacency_list</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vecS</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vecS</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">bidirectionalS</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">no_property</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">no_property</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">listS</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5pagmo11bgl_graph_tE" title="Permalink to this definition">#</a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>
@@ -494,10 +1160,10 @@ of the topology as a weighted directed graph.</p>
 
 </section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h2>
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">#</a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmolsERNSt7ostreamERK8topology">
-<span id="_CPPv3N5pagmolsERNSt7ostreamERK8topology"></span><span id="_CPPv2N5pagmolsERNSt7ostreamERK8topology"></span><span id="pagmo::lshift-operator__osR.topologyCR"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmolsERNSt7ostreamERK8topology" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmolsERNSt7ostreamERK8topology"></span><span id="_CPPv2N5pagmolsERNSt7ostreamERK8topology"></span><span id="pagmo::lshift-operator__osR.topologyCR"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><span class="n"><span class="pre">topology</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">t</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmolsERNSt7ostreamERK8topology" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Stream insertion operator.</p>
 <p>This function will direct to <em>os</em> a human-readable representation of the input
 <a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a> <em>t</em>.</p>
@@ -512,17 +1178,17 @@ of the topology as a weighted directed graph.</p>
 <dd class="field-even"><p>a reference to <em>os</em>.</p>
 </dd>
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception thrown by querying various properties of the topology and directing them to <em>os</em>.</p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by querying various properties of the topology and directing them to <em>os</em>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
 <section id="associated-type-traits">
-<h2>Associated type traits<a class="headerlink" href="#associated-type-traits" title="Permalink to this headline"></a></h2>
+<h2>Associated type traits<a class="headerlink" href="#associated-type-traits" title="Permalink to this headline">#</a></h2>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo19has_get_connectionsE">
-<span id="_CPPv3I0EN5pagmo19has_get_connectionsE"></span><span id="_CPPv2I0EN5pagmo19has_get_connectionsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_get_connections</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo19has_get_connectionsE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo19has_get_connectionsE"></span><span id="_CPPv2I0EN5pagmo19has_get_connectionsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_get_connections</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo19has_get_connectionsE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>The <a class="reference internal" href="#_CPPv4N5pagmo19has_get_connections5valueE" title="pagmo::has_get_connections::value"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">value</span></code></a> of this type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if
 <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a member function with signature:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">vector_double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get_connections</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
@@ -532,7 +1198,7 @@ of the topology as a weighted directed graph.</p>
 <a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a>.</p>
 <dl class="cpp member">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19has_get_connections5valueE">
-<span id="_CPPv3N5pagmo19has_get_connections5valueE"></span><span id="_CPPv2N5pagmo19has_get_connections5valueE"></span><span id="pagmo::has_get_connections::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo19has_get_connections5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo19has_get_connections5valueE"></span><span id="_CPPv2N5pagmo19has_get_connections5valueE"></span><span id="pagmo::has_get_connections::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo19has_get_connections5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>The value of the type trait.</p>
 </dd></dl>
 
@@ -540,7 +1206,7 @@ of the topology as a weighted directed graph.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo13has_push_backE">
-<span id="_CPPv3I0EN5pagmo13has_push_backE"></span><span id="_CPPv2I0EN5pagmo13has_push_backE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_push_back</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo13has_push_backE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo13has_push_backE"></span><span id="_CPPv2I0EN5pagmo13has_push_backE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_push_back</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo13has_push_backE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>The <a class="reference internal" href="#_CPPv4N5pagmo13has_push_back5valueE" title="pagmo::has_push_back::value"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">value</span></code></a> of this type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if
 <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a member function with signature:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">push_back</span><span class="p">();</span><span class="w"></span>
@@ -550,7 +1216,7 @@ of the topology as a weighted directed graph.</p>
 <a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a>.</p>
 <dl class="cpp member">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13has_push_back5valueE">
-<span id="_CPPv3N5pagmo13has_push_back5valueE"></span><span id="_CPPv2N5pagmo13has_push_back5valueE"></span><span id="pagmo::has_push_back::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13has_push_back5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo13has_push_back5valueE"></span><span id="_CPPv2N5pagmo13has_push_back5valueE"></span><span id="pagmo::has_push_back::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13has_push_back5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>The value of the type trait.</p>
 </dd></dl>
 
@@ -558,7 +1224,7 @@ of the topology as a weighted directed graph.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo10has_to_bglE">
-<span id="_CPPv3I0EN5pagmo10has_to_bglE"></span><span id="_CPPv2I0EN5pagmo10has_to_bglE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_to_bgl</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo10has_to_bglE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo10has_to_bglE"></span><span id="_CPPv2I0EN5pagmo10has_to_bglE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_to_bgl</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo10has_to_bglE" title="Permalink to this definition">#</a><br /></dt>
 <dd><div class="versionadded">
 <p><span class="versionmodified added">New in version 2.15.</span></p>
 </div>
@@ -571,7 +1237,7 @@ of the topology as a weighted directed graph.</p>
 for the definition of a <a class="reference internal" href="#_CPPv4N5pagmo8topologyE" title="pagmo::topology"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">topology</span></code></a>.</p>
 <dl class="cpp member">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10has_to_bgl5valueE">
-<span id="_CPPv3N5pagmo10has_to_bgl5valueE"></span><span id="_CPPv2N5pagmo10has_to_bgl5valueE"></span><span id="pagmo::has_to_bgl::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10has_to_bgl5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo10has_to_bgl5valueE"></span><span id="_CPPv2N5pagmo10has_to_bgl5valueE"></span><span id="pagmo::has_to_bgl::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo10has_to_bgl5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>The value of the type trait.</p>
 </dd></dl>
 
@@ -579,7 +1245,7 @@ for the definition of a <a class="reference internal" href="#_CPPv4N5pagmo8topol
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo6is_udtE">
-<span id="_CPPv3I0EN5pagmo6is_udtE"></span><span id="_CPPv2I0EN5pagmo6is_udtE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_udt</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo6is_udtE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6is_udtE"></span><span id="_CPPv2I0EN5pagmo6is_udtE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_udt</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo6is_udtE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>This type trait detects if <code class="docutils literal notranslate"><span class="pre">T</span></code> is a user-defined topology (or UDT).</p>
 <p>Specifically, the <a class="reference internal" href="#_CPPv4N5pagmo6is_udt5valueE" title="pagmo::is_udt::value"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">value</span></code></a> of this type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if:</p>
 <ul class="simple">
@@ -590,7 +1256,7 @@ for the definition of a <a class="reference internal" href="#_CPPv4N5pagmo8topol
 </ul>
 <dl class="cpp member">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6is_udt5valueE">
-<span id="_CPPv3N5pagmo6is_udt5valueE"></span><span id="_CPPv2N5pagmo6is_udt5valueE"></span><span id="pagmo::is_udt::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6is_udt5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo6is_udt5valueE"></span><span id="_CPPv2N5pagmo6is_udt5valueE"></span><span id="pagmo::is_udt::value__bC"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6is_udt5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>The value of the type trait.</p>
 </dd></dl>
 
@@ -600,34 +1266,50 @@ for the definition of a <a class="reference internal" href="#_CPPv4N5pagmo8topol
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="bfe.html" class="btn btn-neutral float-left" title="Batch fitness evaluator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="r_policy.html" class="btn btn-neutral float-right" title="Replacement policy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="bfe.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Batch fitness evaluator</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="r_policy.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Replacement policy</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By pagmo development team<br/>
+  
+      &copy; Copyright 2017-2021, pagmo development team.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
 
-</body>
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
 </html>

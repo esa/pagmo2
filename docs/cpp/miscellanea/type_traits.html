@@ -1,106 +1,726 @@
- <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+ 
+<!DOCTYPE html>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Type traits and enums &mdash; pagmo 2.18.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Type traits and enums &#8212; pagmo 2.18.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Exceptions" href="exceptions.html" />
     <link rel="prev" title="Generic utilities" href="generic.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-</head>
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pagmo
-          </a>
-              <div class="version">
-                2.18.0
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="generic.html">Generic utilities</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Type traits and enums</a></li>
-<li class="toctree-l3"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="utility_classes.html">Utility classes</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
-</ul>
+    
+    <div class="container-fluid" id="banner"></div>
 
-        </div>
-      </div>
-    </nav>
+    
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">pagmo</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-      <li>Type traits and enums</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/docs/cpp/miscellanea/type_traits.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../install.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../quickstart.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../overview.html">
+   Capabilities
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tutorials/cpp_tut.html">
+   C++ tutorial
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">
+     Preliminaries
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">
+     Writing your first optimisation problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/evolving_a_population.html">
+     Evolving a population
+    </a>
+   </li>
   </ul>
-  <hr/>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../cpp_docs.html">
+   C++ API documentation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../types.html">
+     Types
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problem.html">
+     Problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithm.html">
+     Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../population.html">
+     Population
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../island.html">
+     Island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../archipelago.html">
+     Archipelago
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../bfe.html">
+     Batch fitness evaluator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topology.html">
+     Topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policy.html">
+     Replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policy.html">
+     Selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/null.html">
+     Null algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/bee_colony.html">
+     Artificial Bee Colony
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/cmaes.html">
+     Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/compass_search.html">
+     Compass Search
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/de.html">
+     Differential Evolution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/de1220.html">
+     Self-adaptive Differential Evolution (DE 1220 aka pDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/gaco.html">
+     Extended Ant Colony Optimization (gaco)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/gwo.html">
+     Grey Wolf Optimizer (gwo)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/ihs.html">
+     Improved Harmony Search (IHS)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/ipopt.html">
+     Ipopt
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/maco.html">
+     Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/moead.html">
+     Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/mbh.html">
+     Monotonic Basin Hopping (MBH) - Generalized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/cstrs_self_adaptive.html">
+     Self-adaptive constraints handling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nlopt.html">
+     NLopt solvers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nsga2.html">
+     Non dominated sorting genetic algorithm (NSGA-II)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nspso.html">
+     Non dominated sorting particle swarm optimization(NSPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/pso.html">
+     Particle Swarm Optimization (PSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/pso_gen.html">
+     Particle Swarm Optimization Generational (GPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sade.html">
+     Self-adaptive Differential Evolution (jDE and iDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sea.html">
+     (N+1)-ES Simple Evolutionary Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sga.html">
+     Simple Genetic Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/simulated_annealing.html">
+     Simulated Annealing (Corana’s version)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/xnes.html">
+     Exponential Natural Evolution Strategies (xNES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/null.html">
+     Null problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/rosenbrock.html">
+     Rosenbrock
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/rastrigin.html">
+     Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/schwefel.html">
+     Schwefel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/ackley.html">
+     Ackley
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/golomb_ruler.html">
+     Optimal Golomb Ruler
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/griewank.html">
+     Griewank
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/lennard_jones.html">
+     Lennard Jones Cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/zdt.html">
+     ZDT test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/dtlz.html">
+     DTLZ test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/hock_schittkowski_71.html">
+     Hock Schittkowsky No.71
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/inventory.html">
+     News-vendor problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/luksan_vlcek1.html">
+     Luksan Vlcek 1
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/minlp_rastrigin.html">
+     MINLP Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/translate.html">
+     Translate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/decompose.html">
+     Decompose
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2006.html">
+     CEC 2006 Problem Suite (single-objective, constrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2009.html">
+     CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2013.html">
+     CEC 2013 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2014.html">
+     CEC 2014 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/unconstrain.html">
+     Unconstrain
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/wfg.html">
+     WFG problem test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/thread_island.html">
+     Thread island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/fork_island.html">
+     Fork island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/default_bfe.html">
+     Default BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/thread_bfe.html">
+     Multithreaded BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/member_bfe.html">
+     Member function BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/unconnected.html">
+     Unconnected topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/fully_connected.html">
+     Fully connected
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/base_bgl_topology.html">
+     Base BGL topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/ring.html">
+     Ring
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/free_form.html">
+     Free-form topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policies/fair_replace.html">
+     Fair replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policies/select_best.html">
+     Best selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/multi_objective.html">
+     Multi-objective optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/constrained.html">
+     Constrained optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/discrepancy.html">
+     Low-discrepancy sequences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/hypervolume.html">
+     Hypervolumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/gradient_and_hessians.html">
+     Utilities for gradient and hessians
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../utils/genetic_operators.html">
+     Genetic Operators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="generic.html">
+     Generic utilities
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Type traits and enums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="exceptions.html">
+     Exceptions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="utility_classes.html">
+     Utility classes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../credits.html">
+   Credits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../changelog.html">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/esa/pagmo2"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/esa/pagmo2/issues/new?title=Issue%20on%20page%20%2Fdocs/cpp/miscellanea/type_traits.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../../_sources/docs/cpp/miscellanea/type_traits.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Type traits and enums</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
   <section id="type-traits-and-enums">
-<span id="cpp-type-traits"></span><h1>Type traits and enums<a class="headerlink" href="#type-traits-and-enums" title="Permalink to this headline"></a></h1>
+<span id="cpp-type-traits"></span><h1>Type traits and enums<a class="headerlink" href="#type-traits-and-enums" title="Permalink to this headline">#</a></h1>
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13thread_safetyE">
-<span id="_CPPv3N5pagmo13thread_safetyE"></span><span id="_CPPv2N5pagmo13thread_safetyE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thread_safety</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_safetyE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo13thread_safetyE"></span><span id="_CPPv2N5pagmo13thread_safetyE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thread_safety</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_safetyE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>This enum defines a set of values that can be used to specify
 the thread safety level of an object.</p>
 <p>Most of the user-defined classes
@@ -120,19 +740,19 @@ thread safety level.</p>
 &lt; <a class="reference internal" href="#_CPPv4N5pagmo13thread_safety8constantE" title="pagmo::thread_safety::constant"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">constant</span></code></a>.</p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13thread_safety4noneE">
-<span id="_CPPv3N5pagmo13thread_safety4noneE"></span><span id="_CPPv2N5pagmo13thread_safety4noneE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">none</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_safety4noneE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo13thread_safety4noneE"></span><span id="_CPPv2N5pagmo13thread_safety4noneE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">none</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_safety4noneE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>No thread safety: concurrent operations on distinct objects are unsafe.</p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13thread_safety5basicE">
-<span id="_CPPv3N5pagmo13thread_safety5basicE"></span><span id="_CPPv2N5pagmo13thread_safety5basicE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">basic</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_safety5basicE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo13thread_safety5basicE"></span><span id="_CPPv2N5pagmo13thread_safety5basicE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">basic</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_safety5basicE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Basic thread safety: concurrent operations on distinct objects are safe.</p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo13thread_safety8constantE">
-<span id="_CPPv3N5pagmo13thread_safety8constantE"></span><span id="_CPPv2N5pagmo13thread_safety8constantE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">constant</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_safety8constantE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo13thread_safety8constantE"></span><span id="_CPPv2N5pagmo13thread_safety8constantE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">constant</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo13thread_safety8constantE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Constant thread safety: constant (i.e., read-only) concurrent operations
 on the same object are safe.</p>
 </dd></dl>
@@ -141,7 +761,7 @@ on the same object are safe.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmolsERNSt7ostreamE13thread_safety">
-<span id="_CPPv3N5pagmolsERNSt7ostreamE13thread_safety"></span><span id="_CPPv2N5pagmolsERNSt7ostreamE13thread_safety"></span><span id="pagmo::lshift-operator__osR.thread_safety"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <a class="reference internal" href="#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ts</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmolsERNSt7ostreamE13thread_safety" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmolsERNSt7ostreamE13thread_safety"></span><span id="_CPPv2N5pagmolsERNSt7ostreamE13thread_safety"></span><span id="pagmo::lshift-operator__osR.thread_safety"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">os</span></span>, <a class="reference internal" href="#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ts</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmolsERNSt7ostreamE13thread_safety" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Stream operator for <a class="reference internal" href="#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><code class="xref cpp cpp-enum docutils literal notranslate"><span class="pre">thread_safety</span></code></a>. It will direct to the stream <em>os</em>
 a human-readable representation of <em>ts</em>.</p>
 <dl class="field-list simple">
@@ -155,14 +775,14 @@ a human-readable representation of <em>ts</em>.</p>
 <dd class="field-even"><p>a reference to <em>os</em>.</p>
 </dd>
 <dt class="field-odd">Throws</dt>
-<dd class="field-odd"><p><strong>unspecified</strong> – any exception raised by the public interface of <code class="docutils literal notranslate"><span class="pre">std::ostream</span></code>.</p>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception raised by the public interface of <code class="docutils literal notranslate"><span class="pre">std::ostream</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo6is_udpE">
-<span id="_CPPv3I0EN5pagmo6is_udpE"></span><span id="_CPPv2I0EN5pagmo6is_udpE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1is__udp"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_udp</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo6is_udpE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6is_udpE"></span><span id="_CPPv2I0EN5pagmo6is_udpE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1is__udp"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_udp</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo6is_udpE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect user-defined problems (UDP). </p>
 <p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__fitness"><span class="std std-ref">pagmo::has_fitness</span></a> and <a class="reference internal" href="#classpagmo_1_1has__bounds"><span class="std std-ref">pagmo::has_bounds</span></a> type traits.</p>
 <p>Types satisfying this type trait can be used as user-defined problems (UDP) in <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
@@ -170,7 +790,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6is_udp5valueE">
-<span id="_CPPv3N5pagmo6is_udp5valueE"></span><span id="_CPPv2N5pagmo6is_udp5valueE"></span><span id="pagmo::is_udp::value__b"></span><span class="target" id="classpagmo_1_1is__udp_1aa16258192ccb50661808d4f9665f6991"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo6is_udp5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo6is_udp5valueE"></span><span id="_CPPv2N5pagmo6is_udp5valueE"></span><span id="pagmo::is_udp::value__b"></span><span class="target" id="classpagmo_1_1is__udp_1aa16258192ccb50661808d4f9665f6991"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo6is_udp5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -179,7 +799,7 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo6is_udaE">
-<span id="_CPPv3I0EN5pagmo6is_udaE"></span><span id="_CPPv2I0EN5pagmo6is_udaE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1is__uda"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_uda</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo6is_udaE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6is_udaE"></span><span id="_CPPv2I0EN5pagmo6is_udaE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1is__uda"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_uda</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo6is_udaE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect user-defined algorithms (UDA). </p>
 <p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__evolve"><span class="std std-ref">pagmo::has_evolve</span></a> type trait.</p>
 <p>Types satisfying this type trait can be used as user-defined algorithms (UDA) in <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. </p>
@@ -187,7 +807,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6is_uda5valueE">
-<span id="_CPPv3N5pagmo6is_uda5valueE"></span><span id="_CPPv2N5pagmo6is_uda5valueE"></span><span id="pagmo::is_uda::value__bC"></span><span class="target" id="classpagmo_1_1is__uda_1a61dec3c0599b94e627d02b3a46920c7f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo6is_uda5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo6is_uda5valueE"></span><span id="_CPPv2N5pagmo6is_uda5valueE"></span><span id="pagmo::is_uda::value__bC"></span><span class="target" id="classpagmo_1_1is__uda_1a61dec3c0599b94e627d02b3a46920c7f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo6is_uda5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -196,9 +816,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo11has_fitnessE">
-<span id="_CPPv3I0EN5pagmo11has_fitnessE"></span><span id="_CPPv2I0EN5pagmo11has_fitnessE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__fitness"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_fitness</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo11has_fitnessE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo11has_fitnessE"></span><span id="_CPPv2I0EN5pagmo11has_fitnessE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__fitness"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_fitness</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo11has_fitnessE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>vector_double fitness(const vector_double &amp;) const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>vector_double fitness(const vector_double &amp;) const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -206,7 +826,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11has_fitness5valueE">
-<span id="_CPPv3N5pagmo11has_fitness5valueE"></span><span id="_CPPv2N5pagmo11has_fitness5valueE"></span><span id="pagmo::has_fitness::value__b"></span><span class="target" id="classpagmo_1_1has__fitness_1a4e3289df0d4d3c2462f9ae2c12f86297"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo11has_fitness5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo11has_fitness5valueE"></span><span id="_CPPv2N5pagmo11has_fitness5valueE"></span><span id="pagmo::has_fitness::value__b"></span><span class="target" id="classpagmo_1_1has__fitness_1a4e3289df0d4d3c2462f9ae2c12f86297"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo11has_fitness5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -215,9 +835,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo10has_boundsE">
-<span id="_CPPv3I0EN5pagmo10has_boundsE"></span><span id="_CPPv2I0EN5pagmo10has_boundsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__bounds"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_bounds</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo10has_boundsE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo10has_boundsE"></span><span id="_CPPv2I0EN5pagmo10has_boundsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__bounds"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_bounds</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo10has_boundsE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::pair&lt;vector_double, vector_double&gt; get_bounds() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>std::pair&lt;vector_double, vector_double&gt; get_bounds() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -225,7 +845,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10has_bounds5valueE">
-<span id="_CPPv3N5pagmo10has_bounds5valueE"></span><span id="_CPPv2N5pagmo10has_bounds5valueE"></span><span id="pagmo::has_bounds::value__b"></span><span class="target" id="classpagmo_1_1has__bounds_1a0ae70e17e6027a23fda3079ca472c614"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo10has_bounds5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo10has_bounds5valueE"></span><span id="_CPPv2N5pagmo10has_bounds5valueE"></span><span id="pagmo::has_bounds::value__b"></span><span class="target" id="classpagmo_1_1has__bounds_1a0ae70e17e6027a23fda3079ca472c614"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo10has_bounds5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -234,9 +854,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo17has_e_constraintsE">
-<span id="_CPPv3I0EN5pagmo17has_e_constraintsE"></span><span id="_CPPv2I0EN5pagmo17has_e_constraintsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__e__constraints"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_e_constraints</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo17has_e_constraintsE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo17has_e_constraintsE"></span><span id="_CPPv2I0EN5pagmo17has_e_constraintsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__e__constraints"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_e_constraints</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo17has_e_constraintsE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">get_nec()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nec() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nec() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">get_nec()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -244,7 +864,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo17has_e_constraints5valueE">
-<span id="_CPPv3N5pagmo17has_e_constraints5valueE"></span><span id="_CPPv2N5pagmo17has_e_constraints5valueE"></span><span id="pagmo::has_e_constraints::value__b"></span><span class="target" id="classpagmo_1_1has__e__constraints_1a4e0c2e65f5b73ed6649cf46235465e1e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo17has_e_constraints5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo17has_e_constraints5valueE"></span><span id="_CPPv2N5pagmo17has_e_constraints5valueE"></span><span id="pagmo::has_e_constraints::value__b"></span><span class="target" id="classpagmo_1_1has__e__constraints_1a4e0c2e65f5b73ed6649cf46235465e1e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo17has_e_constraints5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -253,9 +873,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo17has_i_constraintsE">
-<span id="_CPPv3I0EN5pagmo17has_i_constraintsE"></span><span id="_CPPv2I0EN5pagmo17has_i_constraintsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__i__constraints"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_i_constraints</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo17has_i_constraintsE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo17has_i_constraintsE"></span><span id="_CPPv2I0EN5pagmo17has_i_constraintsE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__i__constraints"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_i_constraints</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo17has_i_constraintsE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">get_nic()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nic() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nic() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">get_nic()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -263,7 +883,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo17has_i_constraints5valueE">
-<span id="_CPPv3N5pagmo17has_i_constraints5valueE"></span><span id="_CPPv2N5pagmo17has_i_constraints5valueE"></span><span id="pagmo::has_i_constraints::value__b"></span><span class="target" id="classpagmo_1_1has__i__constraints_1ac55a9299cabd5968e865ca1f991be3ac"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo17has_i_constraints5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo17has_i_constraints5valueE"></span><span id="_CPPv2N5pagmo17has_i_constraints5valueE"></span><span id="pagmo::has_i_constraints::value__b"></span><span class="target" id="classpagmo_1_1has__i__constraints_1ac55a9299cabd5968e865ca1f991be3ac"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo17has_i_constraints5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -272,9 +892,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo16has_integer_partE">
-<span id="_CPPv3I0EN5pagmo16has_integer_partE"></span><span id="_CPPv2I0EN5pagmo16has_integer_partE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__integer__part"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_integer_part</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo16has_integer_partE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo16has_integer_partE"></span><span id="_CPPv2I0EN5pagmo16has_integer_partE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__integer__part"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_integer_part</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo16has_integer_partE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">get_nix()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nix() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nix() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">get_nix()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -282,7 +902,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo16has_integer_part5valueE">
-<span id="_CPPv3N5pagmo16has_integer_part5valueE"></span><span id="_CPPv2N5pagmo16has_integer_part5valueE"></span><span id="pagmo::has_integer_part::value__b"></span><span class="target" id="classpagmo_1_1has__integer__part_1a75a2fcbb2b26740529d65bb73363e20e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo16has_integer_part5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo16has_integer_part5valueE"></span><span id="_CPPv2N5pagmo16has_integer_part5valueE"></span><span id="pagmo::has_integer_part::value__b"></span><span class="target" id="classpagmo_1_1has__integer__part_1a75a2fcbb2b26740529d65bb73363e20e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo16has_integer_part5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -291,9 +911,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo8has_nameE">
-<span id="_CPPv3I0EN5pagmo8has_nameE"></span><span id="_CPPv2I0EN5pagmo8has_nameE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__name"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_name</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo8has_nameE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo8has_nameE"></span><span id="_CPPv2I0EN5pagmo8has_nameE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__name"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_name</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo8has_nameE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::string get_name() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>std::string get_name() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
@@ -301,7 +921,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo8has_name5valueE">
-<span id="_CPPv3N5pagmo8has_name5valueE"></span><span id="_CPPv2N5pagmo8has_name5valueE"></span><span id="pagmo::has_name::value__bC"></span><span class="target" id="classpagmo_1_1has__name_1ad6dec4c03dfe2947a30535d89fdf2d02"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo8has_name5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo8has_name5valueE"></span><span id="_CPPv2N5pagmo8has_name5valueE"></span><span id="pagmo::has_name::value__bC"></span><span class="target" id="classpagmo_1_1has__name_1ad6dec4c03dfe2947a30535d89fdf2d02"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo8has_name5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -310,9 +930,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo14has_extra_infoE">
-<span id="_CPPv3I0EN5pagmo14has_extra_infoE"></span><span id="_CPPv2I0EN5pagmo14has_extra_infoE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__extra__info"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_extra_info</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo14has_extra_infoE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo14has_extra_infoE"></span><span id="_CPPv2I0EN5pagmo14has_extra_infoE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__extra__info"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_extra_info</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo14has_extra_infoE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::string get_extra_info() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>std::string get_extra_info() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
@@ -320,7 +940,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14has_extra_info5valueE">
-<span id="_CPPv3N5pagmo14has_extra_info5valueE"></span><span id="_CPPv2N5pagmo14has_extra_info5valueE"></span><span id="pagmo::has_extra_info::value__bC"></span><span class="target" id="classpagmo_1_1has__extra__info_1abf8c33bdf88ad2a91d2b5e2ef6085fa3"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo14has_extra_info5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo14has_extra_info5valueE"></span><span id="_CPPv2N5pagmo14has_extra_info5valueE"></span><span id="pagmo::has_extra_info::value__bC"></span><span class="target" id="classpagmo_1_1has__extra__info_1abf8c33bdf88ad2a91d2b5e2ef6085fa3"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo14has_extra_info5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -329,9 +949,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo21has_get_thread_safetyE">
-<span id="_CPPv3I0EN5pagmo21has_get_thread_safetyE"></span><span id="_CPPv2I0EN5pagmo21has_get_thread_safetyE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__get__thread__safety"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_get_thread_safety</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21has_get_thread_safetyE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21has_get_thread_safetyE"></span><span id="_CPPv2I0EN5pagmo21has_get_thread_safetyE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__get__thread__safety"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_get_thread_safety</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21has_get_thread_safetyE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>pagmo::thread_safety get_thread_safety() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pagmo::thread_safety get_thread_safety() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
@@ -339,7 +959,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo21has_get_thread_safety5valueE">
-<span id="_CPPv3N5pagmo21has_get_thread_safety5valueE"></span><span id="_CPPv2N5pagmo21has_get_thread_safety5valueE"></span><span id="pagmo::has_get_thread_safety::value__bC"></span><span class="target" id="classpagmo_1_1has__get__thread__safety_1ad6a0398459d9431e74938d8d6a94a22b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21has_get_thread_safety5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo21has_get_thread_safety5valueE"></span><span id="_CPPv2N5pagmo21has_get_thread_safety5valueE"></span><span id="pagmo::has_get_thread_safety::value__bC"></span><span class="target" id="classpagmo_1_1has__get__thread__safety_1ad6a0398459d9431e74938d8d6a94a22b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21has_get_thread_safety5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -348,9 +968,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo12has_gradientE">
-<span id="_CPPv3I0EN5pagmo12has_gradientE"></span><span id="_CPPv2I0EN5pagmo12has_gradientE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__gradient"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo12has_gradientE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo12has_gradientE"></span><span id="_CPPv2I0EN5pagmo12has_gradientE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__gradient"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo12has_gradientE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">gradient()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>vector_double gradient(const vector_double &amp;) const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>vector_double gradient(const vector_double &amp;) const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">gradient()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -358,7 +978,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo12has_gradient5valueE">
-<span id="_CPPv3N5pagmo12has_gradient5valueE"></span><span id="_CPPv2N5pagmo12has_gradient5valueE"></span><span id="pagmo::has_gradient::value__b"></span><span class="target" id="classpagmo_1_1has__gradient_1a83a8f2e4d4a86f0db6125a6b84c4f857"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo12has_gradient5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo12has_gradient5valueE"></span><span id="_CPPv2N5pagmo12has_gradient5valueE"></span><span id="pagmo::has_gradient::value__b"></span><span class="target" id="classpagmo_1_1has__gradient_1a83a8f2e4d4a86f0db6125a6b84c4f857"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo12has_gradient5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -367,9 +987,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo21override_has_gradientE">
-<span id="_CPPv3I0EN5pagmo21override_has_gradientE"></span><span id="_CPPv2I0EN5pagmo21override_has_gradientE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__gradient"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">override_has_gradient</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21override_has_gradientE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21override_has_gradientE"></span><span id="_CPPv2I0EN5pagmo21override_has_gradientE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__gradient"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override_has_gradient</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21override_has_gradientE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">has_gradient()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>bool has_gradient() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bool has_gradient() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">has_gradient()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -377,7 +997,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo21override_has_gradient5valueE">
-<span id="_CPPv3N5pagmo21override_has_gradient5valueE"></span><span id="_CPPv2N5pagmo21override_has_gradient5valueE"></span><span id="pagmo::override_has_gradient::value__b"></span><span class="target" id="classpagmo_1_1override__has__gradient_1a319472f191fee84bcc15563cbc390301"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21override_has_gradient5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo21override_has_gradient5valueE"></span><span id="_CPPv2N5pagmo21override_has_gradient5valueE"></span><span id="pagmo::override_has_gradient::value__b"></span><span class="target" id="classpagmo_1_1override__has__gradient_1a319472f191fee84bcc15563cbc390301"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21override_has_gradient5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -386,9 +1006,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo21has_gradient_sparsityE">
-<span id="_CPPv3I0EN5pagmo21has_gradient_sparsityE"></span><span id="_CPPv2I0EN5pagmo21has_gradient_sparsityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__gradient__sparsity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient_sparsity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21has_gradient_sparsityE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21has_gradient_sparsityE"></span><span id="_CPPv2I0EN5pagmo21has_gradient_sparsityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__gradient__sparsity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_gradient_sparsity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21has_gradient_sparsityE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">gradient_sparsity()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>sparsity_pattern gradient_sparsity() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>sparsity_pattern gradient_sparsity() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">gradient_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -396,7 +1016,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo21has_gradient_sparsity5valueE">
-<span id="_CPPv3N5pagmo21has_gradient_sparsity5valueE"></span><span id="_CPPv2N5pagmo21has_gradient_sparsity5valueE"></span><span id="pagmo::has_gradient_sparsity::value__b"></span><span class="target" id="classpagmo_1_1has__gradient__sparsity_1ac55088d3bfa53dba1d61b61363044239"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21has_gradient_sparsity5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo21has_gradient_sparsity5valueE"></span><span id="_CPPv2N5pagmo21has_gradient_sparsity5valueE"></span><span id="pagmo::has_gradient_sparsity::value__b"></span><span class="target" id="classpagmo_1_1has__gradient__sparsity_1ac55088d3bfa53dba1d61b61363044239"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21has_gradient_sparsity5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -405,9 +1025,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo30override_has_gradient_sparsityE">
-<span id="_CPPv3I0EN5pagmo30override_has_gradient_sparsityE"></span><span id="_CPPv2I0EN5pagmo30override_has_gradient_sparsityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__gradient__sparsity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">override_has_gradient_sparsity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo30override_has_gradient_sparsityE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo30override_has_gradient_sparsityE"></span><span id="_CPPv2I0EN5pagmo30override_has_gradient_sparsityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__gradient__sparsity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override_has_gradient_sparsity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo30override_has_gradient_sparsityE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">has_gradient_sparsity()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>bool has_gradient_sparsity() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bool has_gradient_sparsity() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">has_gradient_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -415,7 +1035,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo30override_has_gradient_sparsity5valueE">
-<span id="_CPPv3N5pagmo30override_has_gradient_sparsity5valueE"></span><span id="_CPPv2N5pagmo30override_has_gradient_sparsity5valueE"></span><span id="pagmo::override_has_gradient_sparsity::value__b"></span><span class="target" id="classpagmo_1_1override__has__gradient__sparsity_1a5bd3ff0b0a5e6c6e7bc579d42cc822ff"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo30override_has_gradient_sparsity5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo30override_has_gradient_sparsity5valueE"></span><span id="_CPPv2N5pagmo30override_has_gradient_sparsity5valueE"></span><span id="pagmo::override_has_gradient_sparsity::value__b"></span><span class="target" id="classpagmo_1_1override__has__gradient__sparsity_1a5bd3ff0b0a5e6c6e7bc579d42cc822ff"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo30override_has_gradient_sparsity5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -424,9 +1044,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo12has_hessiansE">
-<span id="_CPPv3I0EN5pagmo12has_hessiansE"></span><span id="_CPPv2I0EN5pagmo12has_hessiansE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__hessians"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo12has_hessiansE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo12has_hessiansE"></span><span id="_CPPv2I0EN5pagmo12has_hessiansE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__hessians"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo12has_hessiansE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">hessians()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::vector&lt;vector_double&gt; hessians(const vector_double &amp;) const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>std::vector&lt;vector_double&gt; hessians(const vector_double &amp;) const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">hessians()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -434,7 +1054,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo12has_hessians5valueE">
-<span id="_CPPv3N5pagmo12has_hessians5valueE"></span><span id="_CPPv2N5pagmo12has_hessians5valueE"></span><span id="pagmo::has_hessians::value__b"></span><span class="target" id="classpagmo_1_1has__hessians_1a3e11c0e9817a485d884b8ed73ec2cd51"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo12has_hessians5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo12has_hessians5valueE"></span><span id="_CPPv2N5pagmo12has_hessians5valueE"></span><span id="pagmo::has_hessians::value__b"></span><span class="target" id="classpagmo_1_1has__hessians_1a3e11c0e9817a485d884b8ed73ec2cd51"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo12has_hessians5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -443,9 +1063,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo21override_has_hessiansE">
-<span id="_CPPv3I0EN5pagmo21override_has_hessiansE"></span><span id="_CPPv2I0EN5pagmo21override_has_hessiansE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__hessians"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">override_has_hessians</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21override_has_hessiansE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21override_has_hessiansE"></span><span id="_CPPv2I0EN5pagmo21override_has_hessiansE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__hessians"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override_has_hessians</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21override_has_hessiansE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">has_hessians()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>bool has_hessians() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bool has_hessians() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">has_hessians()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -453,7 +1073,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo21override_has_hessians5valueE">
-<span id="_CPPv3N5pagmo21override_has_hessians5valueE"></span><span id="_CPPv2N5pagmo21override_has_hessians5valueE"></span><span id="pagmo::override_has_hessians::value__b"></span><span class="target" id="classpagmo_1_1override__has__hessians_1adbe7695bb55b983138a7197ee1b36353"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21override_has_hessians5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo21override_has_hessians5valueE"></span><span id="_CPPv2N5pagmo21override_has_hessians5valueE"></span><span id="pagmo::override_has_hessians::value__b"></span><span class="target" id="classpagmo_1_1override__has__hessians_1adbe7695bb55b983138a7197ee1b36353"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21override_has_hessians5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -462,9 +1082,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo21has_hessians_sparsityE">
-<span id="_CPPv3I0EN5pagmo21has_hessians_sparsityE"></span><span id="_CPPv2I0EN5pagmo21has_hessians_sparsityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__hessians__sparsity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians_sparsity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21has_hessians_sparsityE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21has_hessians_sparsityE"></span><span id="_CPPv2I0EN5pagmo21has_hessians_sparsityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__hessians__sparsity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_hessians_sparsity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21has_hessians_sparsityE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">hessians_sparsity()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::vector&lt;sparsity_pattern&gt; hessians_sparsity() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>std::vector&lt;sparsity_pattern&gt; hessians_sparsity() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">hessians_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -472,7 +1092,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo21has_hessians_sparsity5valueE">
-<span id="_CPPv3N5pagmo21has_hessians_sparsity5valueE"></span><span id="_CPPv2N5pagmo21has_hessians_sparsity5valueE"></span><span id="pagmo::has_hessians_sparsity::value__b"></span><span class="target" id="classpagmo_1_1has__hessians__sparsity_1a3476ce64827501ab95671d8a2d632b9f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21has_hessians_sparsity5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo21has_hessians_sparsity5valueE"></span><span id="_CPPv2N5pagmo21has_hessians_sparsity5valueE"></span><span id="pagmo::has_hessians_sparsity::value__b"></span><span class="target" id="classpagmo_1_1has__hessians__sparsity_1a3476ce64827501ab95671d8a2d632b9f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21has_hessians_sparsity5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -481,9 +1101,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo30override_has_hessians_sparsityE">
-<span id="_CPPv3I0EN5pagmo30override_has_hessians_sparsityE"></span><span id="_CPPv2I0EN5pagmo30override_has_hessians_sparsityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__hessians__sparsity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">override_has_hessians_sparsity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo30override_has_hessians_sparsityE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo30override_has_hessians_sparsityE"></span><span id="_CPPv2I0EN5pagmo30override_has_hessians_sparsityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__hessians__sparsity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override_has_hessians_sparsity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo30override_has_hessians_sparsityE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">has_hessians_sparsity()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>bool has_hessians_sparsity() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bool has_hessians_sparsity() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">has_hessians_sparsity()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -491,7 +1111,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo30override_has_hessians_sparsity5valueE">
-<span id="_CPPv3N5pagmo30override_has_hessians_sparsity5valueE"></span><span id="_CPPv2N5pagmo30override_has_hessians_sparsity5valueE"></span><span id="pagmo::override_has_hessians_sparsity::value__b"></span><span class="target" id="classpagmo_1_1override__has__hessians__sparsity_1a51dca82e18f3a0154ee7da61a4d89290"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo30override_has_hessians_sparsity5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo30override_has_hessians_sparsity5valueE"></span><span id="_CPPv2N5pagmo30override_has_hessians_sparsity5valueE"></span><span id="pagmo::override_has_hessians_sparsity::value__b"></span><span class="target" id="classpagmo_1_1override__has__hessians__sparsity_1a51dca82e18f3a0154ee7da61a4d89290"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo30override_has_hessians_sparsity5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -500,9 +1120,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo17has_set_verbosityE">
-<span id="_CPPv3I0EN5pagmo17has_set_verbosityE"></span><span id="_CPPv2I0EN5pagmo17has_set_verbosityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__set__verbosity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_set_verbosity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo17has_set_verbosityE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo17has_set_verbosityE"></span><span id="_CPPv2I0EN5pagmo17has_set_verbosityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__set__verbosity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_verbosity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo17has_set_verbosityE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>void set_verbosity(unsigned);
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>void set_verbosity(unsigned);
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
@@ -510,7 +1130,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo17has_set_verbosity5valueE">
-<span id="_CPPv3N5pagmo17has_set_verbosity5valueE"></span><span id="_CPPv2N5pagmo17has_set_verbosity5valueE"></span><span id="pagmo::has_set_verbosity::value__bC"></span><span class="target" id="classpagmo_1_1has__set__verbosity_1a48c31642f4a3304c5aa29c5d8e8ad8dd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo17has_set_verbosity5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo17has_set_verbosity5valueE"></span><span id="_CPPv2N5pagmo17has_set_verbosity5valueE"></span><span id="pagmo::has_set_verbosity::value__bC"></span><span class="target" id="classpagmo_1_1has__set__verbosity_1a48c31642f4a3304c5aa29c5d8e8ad8dd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo17has_set_verbosity5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -519,9 +1139,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo26override_has_set_verbosityE">
-<span id="_CPPv3I0EN5pagmo26override_has_set_verbosityE"></span><span id="_CPPv2I0EN5pagmo26override_has_set_verbosityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__set__verbosity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">override_has_set_verbosity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo26override_has_set_verbosityE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo26override_has_set_verbosityE"></span><span id="_CPPv2I0EN5pagmo26override_has_set_verbosityE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__set__verbosity"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override_has_set_verbosity</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo26override_has_set_verbosityE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>bool has_set_verbosity() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bool has_set_verbosity() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
@@ -529,7 +1149,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo26override_has_set_verbosity5valueE">
-<span id="_CPPv3N5pagmo26override_has_set_verbosity5valueE"></span><span id="_CPPv2N5pagmo26override_has_set_verbosity5valueE"></span><span id="pagmo::override_has_set_verbosity::value__bC"></span><span class="target" id="classpagmo_1_1override__has__set__verbosity_1ac5ad7bf6b0c1bc39f0cb70eb7740b082"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo26override_has_set_verbosity5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo26override_has_set_verbosity5valueE"></span><span id="_CPPv2N5pagmo26override_has_set_verbosity5valueE"></span><span id="pagmo::override_has_set_verbosity::value__bC"></span><span class="target" id="classpagmo_1_1override__has__set__verbosity_1ac5ad7bf6b0c1bc39f0cb70eb7740b082"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo26override_has_set_verbosity5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -538,9 +1158,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo10has_evolveE">
-<span id="_CPPv3I0EN5pagmo10has_evolveE"></span><span id="_CPPv2I0EN5pagmo10has_evolveE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__evolve"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_evolve</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo10has_evolveE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo10has_evolveE"></span><span id="_CPPv2I0EN5pagmo10has_evolveE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__evolve"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_evolve</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo10has_evolveE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>population evolve(const population &amp;) const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>population evolve(const population &amp;) const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method is part of the interface for the definition of an algorithm (see <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
@@ -548,7 +1168,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo10has_evolve5valueE">
-<span id="_CPPv3N5pagmo10has_evolve5valueE"></span><span id="_CPPv2N5pagmo10has_evolve5valueE"></span><span id="pagmo::has_evolve::value__bC"></span><span class="target" id="classpagmo_1_1has__evolve_1a6cec6c21792a681b117b68bf90f29319"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo10has_evolve5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo10has_evolve5valueE"></span><span id="_CPPv2N5pagmo10has_evolve5valueE"></span><span id="pagmo::has_evolve::value__bC"></span><span class="target" id="classpagmo_1_1has__evolve_1a6cec6c21792a681b117b68bf90f29319"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo10has_evolve5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -557,9 +1177,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo12has_get_nobjE">
-<span id="_CPPv3I0EN5pagmo12has_get_nobjE"></span><span id="_CPPv2I0EN5pagmo12has_get_nobjE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__get__nobj"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_get_nobj</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo12has_get_nobjE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo12has_get_nobjE"></span><span id="_CPPv2I0EN5pagmo12has_get_nobjE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__get__nobj"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_get_nobj</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo12has_get_nobjE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">get_nobj()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nobj() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>vector_double::size_type get_nobj() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">get_nobj()</span></code> method is part of the interface for the definition of a problem (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>). </p>
@@ -567,7 +1187,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo12has_get_nobj5valueE">
-<span id="_CPPv3N5pagmo12has_get_nobj5valueE"></span><span id="_CPPv2N5pagmo12has_get_nobj5valueE"></span><span id="pagmo::has_get_nobj::value__b"></span><span class="target" id="classpagmo_1_1has__get__nobj_1aea045411b1b37f57824fcc9751f36ec9"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo12has_get_nobj5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo12has_get_nobj5valueE"></span><span id="_CPPv2N5pagmo12has_get_nobj5valueE"></span><span id="pagmo::has_get_nobj::value__b"></span><span class="target" id="classpagmo_1_1has__get__nobj_1aea045411b1b37f57824fcc9751f36ec9"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo12has_get_nobj5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -576,9 +1196,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo12has_set_seedE">
-<span id="_CPPv3I0EN5pagmo12has_set_seedE"></span><span id="_CPPv2I0EN5pagmo12has_set_seedE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__set__seed"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo12has_set_seedE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo12has_set_seedE"></span><span id="_CPPv2I0EN5pagmo12has_set_seedE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__set__seed"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo12has_set_seedE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>void set_seed(unsigned);
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>void set_seed(unsigned);
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
@@ -586,7 +1206,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo12has_set_seed5valueE">
-<span id="_CPPv3N5pagmo12has_set_seed5valueE"></span><span id="_CPPv2N5pagmo12has_set_seed5valueE"></span><span id="pagmo::has_set_seed::value__bC"></span><span class="target" id="classpagmo_1_1has__set__seed_1a5015031b15def7ea1cb070f066326b5b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo12has_set_seed5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo12has_set_seed5valueE"></span><span id="_CPPv2N5pagmo12has_set_seed5valueE"></span><span id="pagmo::has_set_seed::value__bC"></span><span class="target" id="classpagmo_1_1has__set__seed_1a5015031b15def7ea1cb070f066326b5b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo12has_set_seed5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -595,9 +1215,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo21override_has_set_seedE">
-<span id="_CPPv3I0EN5pagmo21override_has_set_seedE"></span><span id="_CPPv2I0EN5pagmo21override_has_set_seedE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__set__seed"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">override_has_set_seed</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21override_has_set_seedE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo21override_has_set_seedE"></span><span id="_CPPv2I0EN5pagmo21override_has_set_seedE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1override__has__set__seed"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override_has_set_seed</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo21override_has_set_seedE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>bool has_set_seed() const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bool has_set_seed() const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code> method is part of the interface for the definition of problems and algorithms (see <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> and <a class="reference internal" href="../algorithm.html#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>). </p>
@@ -605,7 +1225,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo21override_has_set_seed5valueE">
-<span id="_CPPv3N5pagmo21override_has_set_seed5valueE"></span><span id="_CPPv2N5pagmo21override_has_set_seed5valueE"></span><span id="pagmo::override_has_set_seed::value__bC"></span><span class="target" id="classpagmo_1_1override__has__set__seed_1ab3ad473209bdeaa95ed2cc531181303f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21override_has_set_seed5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo21override_has_set_seed5valueE"></span><span id="_CPPv2N5pagmo21override_has_set_seed5valueE"></span><span id="pagmo::override_has_set_seed::value__bC"></span><span class="target" id="classpagmo_1_1override__has__set__seed_1ab3ad473209bdeaa95ed2cc531181303f"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo21override_has_set_seed5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -614,9 +1234,9 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo14has_run_evolveE">
-<span id="_CPPv3I0EN5pagmo14has_run_evolveE"></span><span id="_CPPv2I0EN5pagmo14has_run_evolveE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__run__evolve"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">has_run_evolve</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo14has_run_evolveE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo14has_run_evolveE"></span><span id="_CPPv2I0EN5pagmo14has_run_evolveE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1has__run__evolve"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_run_evolve</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo14has_run_evolveE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method. </p>
-<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>void run_evolve(island &amp;) const;
+<p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> provides a method with the following signature: <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>void run_evolve(island &amp;) const;
 </pre></div>
 </div>
  The <code class="docutils literal notranslate"><span class="pre">run_evolve()</span></code> method is part of the interface for the definition of an island (see <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>). </p>
@@ -624,7 +1244,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14has_run_evolve5valueE">
-<span id="_CPPv3N5pagmo14has_run_evolve5valueE"></span><span id="_CPPv2N5pagmo14has_run_evolve5valueE"></span><span id="pagmo::has_run_evolve::value__bC"></span><span class="target" id="classpagmo_1_1has__run__evolve_1a1ab55080366e240f0d0ae51f8fffbea6"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo14has_run_evolve5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo14has_run_evolve5valueE"></span><span id="_CPPv2N5pagmo14has_run_evolve5valueE"></span><span id="pagmo::has_run_evolve::value__bC"></span><span class="target" id="classpagmo_1_1has__run__evolve_1a1ab55080366e240f0d0ae51f8fffbea6"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo14has_run_evolve5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -633,7 +1253,7 @@ a human-readable representation of <em>ts</em>.</p>
 
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo6is_udiE">
-<span id="_CPPv3I0EN5pagmo6is_udiE"></span><span id="_CPPv2I0EN5pagmo6is_udiE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1is__udi"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is_udi</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo6is_udiE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN5pagmo6is_udiE"></span><span id="_CPPv2I0EN5pagmo6is_udiE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1is__udi"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_udi</span></span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo6is_udiE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Detect user-defined islands (UDI). </p>
 <p>This type trait will be <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> is not cv/reference qualified, it is destructible, default, copy and move constructible, and if it satisfies the <a class="reference internal" href="#classpagmo_1_1has__run__evolve"><span class="std std-ref">pagmo::has_run_evolve</span></a> type trait.</p>
 <p>Types satisfying this type trait can be used as user-defined islands (UDI) in <a class="reference internal" href="../island.html#classpagmo_1_1island"><span class="std std-ref">pagmo::island</span></a>. </p>
@@ -641,7 +1261,7 @@ a human-readable representation of <em>ts</em>.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6is_udi5valueE">
-<span id="_CPPv3N5pagmo6is_udi5valueE"></span><span id="_CPPv2N5pagmo6is_udi5valueE"></span><span id="pagmo::is_udi::value__bC"></span><span class="target" id="classpagmo_1_1is__udi_1adfbf0ddd235f015ad003ba73e6f5d190"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo6is_udi5valueE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo6is_udi5valueE"></span><span id="_CPPv2N5pagmo6is_udi5valueE"></span><span id="pagmo::is_udi::value__bC"></span><span class="target" id="classpagmo_1_1is__udi_1adfbf0ddd235f015ad003ba73e6f5d190"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">implementation_defined</span></span><a class="headerlink" href="#_CPPv4N5pagmo6is_udi5valueE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Value of the type trait. </p>
 </dd></dl>
 
@@ -651,34 +1271,50 @@ a human-readable representation of <em>ts</em>.</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="generic.html" class="btn btn-neutral float-left" title="Generic utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="exceptions.html" class="btn btn-neutral float-right" title="Exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="generic.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Generic utilities</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="exceptions.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Exceptions</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By pagmo development team<br/>
+  
+      &copy; Copyright 2017-2021, pagmo development team.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
 
-</body>
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
 </html>

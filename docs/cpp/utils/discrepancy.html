@@ -1,115 +1,733 @@
- <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+ 
+<!DOCTYPE html>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Low-discrepancy sequences &mdash; pagmo 2.18.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Low-discrepancy sequences &#8212; pagmo 2.18.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Hypervolumes" href="hypervolume.html" />
     <link rel="prev" title="Constrained optimization utilities" href="constrained.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-</head>
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> pagmo
-          </a>
-              <div class="version">
-                2.18.0
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#core-classes">Core classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-algorithms">Implemented algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-problems">Implemented problems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-islands">Implemented islands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-batch-evaluators">Implemented batch evaluators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-topologies">Implemented topologies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-replacement-policies">Implemented replacement policies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#implemented-selection-policies">Implemented selection policies</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../cpp_docs.html#utilities">Utilities</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="multi_objective.html">Multi-objective optimization utilities</a></li>
-<li class="toctree-l3"><a class="reference internal" href="constrained.html">Constrained optimization utilities</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Low-discrepancy sequences</a></li>
-<li class="toctree-l3"><a class="reference internal" href="hypervolume.html">Hypervolumes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gradient_and_hessians.html">Utilities for gradient and hessians</a></li>
-<li class="toctree-l3"><a class="reference internal" href="genetic_operators.html">Genetic Operators</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../cpp_docs.html#miscellanea">Miscellanea</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
-</ul>
+    
+    <div class="container-fluid" id="banner"></div>
 
-        </div>
-      </div>
-    </nav>
+    
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">pagmo</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../cpp_docs.html">C++ API documentation</a> &raquo;</li>
-      <li>Low-discrepancy sequences</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/docs/cpp/utils/discrepancy.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../install.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../quickstart.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../overview.html">
+   Capabilities
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tutorials/cpp_tut.html">
+   C++ tutorial
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">
+     Preliminaries
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">
+     Writing your first optimisation problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tutorials/evolving_a_population.html">
+     Evolving a population
+    </a>
+   </li>
   </ul>
-  <hr/>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../cpp_docs.html">
+   C++ API documentation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../types.html">
+     Types
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problem.html">
+     Problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithm.html">
+     Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../population.html">
+     Population
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../island.html">
+     Island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../archipelago.html">
+     Archipelago
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../bfe.html">
+     Batch fitness evaluator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topology.html">
+     Topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policy.html">
+     Replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policy.html">
+     Selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/null.html">
+     Null algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/bee_colony.html">
+     Artificial Bee Colony
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/cmaes.html">
+     Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/compass_search.html">
+     Compass Search
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/de.html">
+     Differential Evolution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/de1220.html">
+     Self-adaptive Differential Evolution (DE 1220 aka pDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/gaco.html">
+     Extended Ant Colony Optimization (gaco)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/gwo.html">
+     Grey Wolf Optimizer (gwo)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/ihs.html">
+     Improved Harmony Search (IHS)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/ipopt.html">
+     Ipopt
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/maco.html">
+     Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/moead.html">
+     Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/mbh.html">
+     Monotonic Basin Hopping (MBH) - Generalized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/cstrs_self_adaptive.html">
+     Self-adaptive constraints handling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nlopt.html">
+     NLopt solvers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nsga2.html">
+     Non dominated sorting genetic algorithm (NSGA-II)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/nspso.html">
+     Non dominated sorting particle swarm optimization(NSPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/pso.html">
+     Particle Swarm Optimization (PSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/pso_gen.html">
+     Particle Swarm Optimization Generational (GPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sade.html">
+     Self-adaptive Differential Evolution (jDE and iDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sea.html">
+     (N+1)-ES Simple Evolutionary Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/sga.html">
+     Simple Genetic Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/simulated_annealing.html">
+     Simulated Annealing (Corana’s version)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../algorithms/xnes.html">
+     Exponential Natural Evolution Strategies (xNES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/null.html">
+     Null problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/rosenbrock.html">
+     Rosenbrock
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/rastrigin.html">
+     Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/schwefel.html">
+     Schwefel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/ackley.html">
+     Ackley
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/golomb_ruler.html">
+     Optimal Golomb Ruler
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/griewank.html">
+     Griewank
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/lennard_jones.html">
+     Lennard Jones Cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/zdt.html">
+     ZDT test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/dtlz.html">
+     DTLZ test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/hock_schittkowski_71.html">
+     Hock Schittkowsky No.71
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/inventory.html">
+     News-vendor problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/luksan_vlcek1.html">
+     Luksan Vlcek 1
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/minlp_rastrigin.html">
+     MINLP Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/translate.html">
+     Translate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/decompose.html">
+     Decompose
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2006.html">
+     CEC 2006 Problem Suite (single-objective, constrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2009.html">
+     CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2013.html">
+     CEC 2013 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/cec2014.html">
+     CEC 2014 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/unconstrain.html">
+     Unconstrain
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../problems/wfg.html">
+     WFG problem test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/thread_island.html">
+     Thread island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../islands/fork_island.html">
+     Fork island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/default_bfe.html">
+     Default BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/thread_bfe.html">
+     Multithreaded BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../batch_evaluators/member_bfe.html">
+     Member function BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/unconnected.html">
+     Unconnected topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/fully_connected.html">
+     Fully connected
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/base_bgl_topology.html">
+     Base BGL topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/ring.html">
+     Ring
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../topologies/free_form.html">
+     Free-form topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../r_policies/fair_replace.html">
+     Fair replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../s_policies/select_best.html">
+     Best selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="multi_objective.html">
+     Multi-objective optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="constrained.html">
+     Constrained optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Low-discrepancy sequences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="hypervolume.html">
+     Hypervolumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gradient_and_hessians.html">
+     Utilities for gradient and hessians
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="genetic_operators.html">
+     Genetic Operators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/generic.html">
+     Generic utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/type_traits.html">
+     Type traits and enums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/exceptions.html">
+     Exceptions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../miscellanea/utility_classes.html">
+     Utility classes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../credits.html">
+   Credits
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../changelog.html">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/esa/pagmo2"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/esa/pagmo2/issues/new?title=Issue%20on%20page%20%2Fdocs/cpp/utils/discrepancy.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../../_sources/docs/cpp/utils/discrepancy.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Low-discrepancy sequences</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
   <section id="low-discrepancy-sequences">
-<span id="cpp-low-discrepancy-utils"></span><h1>Low-discrepancy sequences<a class="headerlink" href="#low-discrepancy-sequences" title="Permalink to this headline"></a></h1>
+<span id="cpp-low-discrepancy-utils"></span><h1>Low-discrepancy sequences<a class="headerlink" href="#low-discrepancy-sequences" title="Permalink to this headline">#</a></h1>
 <p>A number of utilities to generate and use low- discrepancy sequences</p>
 <hr class="docutils" />
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE">
-<span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1ad505eb4f7f0f7022c7e789ec0cc6cb25"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sample_from_simplex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="_CPPv2N5pagmo19sample_from_simplexENSt6vectorIdEE"></span><span id="pagmo::sample_from_simplex__std::vector:double:"></span><span class="target" id="namespacepagmo_1ad505eb4f7f0f7022c7e789ec0cc6cb25"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sample_from_simplex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo19sample_from_simplexENSt6vectorIdEE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Sample from a simplex. </p>
 <p>Samples a point on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex from a <span class="math notranslate nohighlight">\(n-1\)</span> dimensional point</p>
 <p>In order to generate a uniform distribution on a simplex, that is to sample a <span class="math notranslate nohighlight">\(n\)</span>-dimensional point <span class="math notranslate nohighlight">\(\mathbf x\)</span> such that <span class="math notranslate nohighlight">\(\sum_{i=1}^{n} x_i = 1\)</span> one can follow the following approach: take <span class="math notranslate nohighlight">\(n-1\)</span> random numbers from the interval (0,1)(0,1), then add a 0 and 1 to get a list of <span class="math notranslate nohighlight">\(n+1\)</span> numbers. Sort the list and record the differences between two consecutive elements. This creates a list of <span class="math notranslate nohighlight">\(n\)</span> number that, by construction, will sum up to 1. Moreover this sampling is uniform. As an example the following code would generate points distributed on a <span class="math notranslate nohighlight">\(n\)</span> dimensional simplex:</p>
-<p><div class="highlight-unparsed notranslate"><div class="highlight"><pre><span></span>std::vector&lt;std::vector&lt;double&gt;&gt; points_on_a_simplex;
+<p><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>std::vector&lt;std::vector&lt;double&gt;&gt; points_on_a_simplex;
 halton ld_rng(n-1);
 for (auto i = 0u; i &lt; 100u; ++i) {
      points_on_a_simplex.push_back(project_to_simplex(ld_rng()));
@@ -125,8 +743,8 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 </dd>
 <dt class="field-even">Throws</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>std::invalid_argument</strong> – if the input vector elements are not in [0,1] </p></li>
-<li><p><strong>std::invalid_argument</strong> – if the input vector has size 0 or 1.</p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the input vector elements are not in [0,1] </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the input vector has size 0 or 1.</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns</dt>
@@ -138,25 +756,34 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 <hr class="docutils" />
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14van_der_corputE">
-<span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">van_der_corput</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo14van_der_corputE"></span><span id="_CPPv2N5pagmo14van_der_corputE"></span><span id="pagmo::van_der_corput"></span><span class="target" id="classpagmo_1_1van__der__corput"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">van_der_corput</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Van der Corput sequence. </p>
-<p>A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput. It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …). A positive integer <span class="math notranslate nohighlight">\(n \ge 1\)</span> is represented, in the base <span class="math notranslate nohighlight">\(b\)</span> by: <div class="math notranslate nohighlight">
-\[ n = \sum_{i=0}^{L-1}d_i(n) b^i, \]</div>
- where <span class="math notranslate nohighlight">\(L\)</span> is the number of digits needed. The <span class="math notranslate nohighlight">\(n\)</span>-th number in a van der Corput sequence is thus defined as: <div class="math notranslate nohighlight">
-\[ g_n=\sum_{i=0}^{L-1}d_i(n) b^{-i-1}. \]</div>
+<p>A Van der Corput sequence is the simplest one-dimensional low-discrepancy sequence over the unit interval; it was first described in 1935 by the Dutch mathematician Johannes van der Corput. It is constructed by reversing the base representation of the sequence of natural number (1, 2, 3, …). A positive integer <span class="math notranslate nohighlight">\(n \ge 1\)</span> is represented, in the base <span class="math notranslate nohighlight">\(b\)</span> by:  <div class="math notranslate nohighlight">
+\[
+n = \sum_{i=0}^{L-1}d_i(n) b^i,
+\]</div>
+ where <span class="math notranslate nohighlight">\(L\)</span> is the number of digits needed. The <span class="math notranslate nohighlight">\(n\)</span>-th number in a van der Corput sequence is thus defined as:  <div class="math notranslate nohighlight">
+\[
+g_n=\sum_{i=0}^{L-1}d_i(n) b^{-i-1}.
+\]</div>
 </p>
 <p>so that, for example, if <span class="math notranslate nohighlight">\(b = 10\)</span>:</p>
-<p><span class="math notranslate nohighlight">\( seq = \{ 0, \tfrac{1}{10}, \tfrac{2}{10}, \tfrac{3}{10}, \tfrac{4}{10}, \tfrac{5}{10}, \tfrac{6}{10}, \tfrac{7}{10}, \tfrac{8}{10}, \tfrac{9}{10}, \tfrac{1}{100}, \tfrac{11}{100}, \tfrac{21}{100}, \tfrac{31}{100}, \tfrac{41}{100}, \tfrac{51}{100}, \tfrac{61}{100}, \tfrac{71}{100}, \tfrac{81}{100}, \tfrac{91}{100}, \tfrac{2}{100}, \tfrac{12}{100}, \tfrac{22}{100}, \tfrac{32}{100}, \ldots \} \,\)</span></p>
+<p><span class="math notranslate nohighlight">\( seq = \{ 0, \tfrac{1}{10}, \tfrac{2}{10}, \tfrac{3}{10}, \tfrac{4}{10}, \tfrac{5}{10}, \tfrac{6}{10},
+\tfrac{7}{10}, \tfrac{8}{10}, \tfrac{9}{10}, \tfrac{1}{100}, \tfrac{11}{100}, \tfrac{21}{100},
+\tfrac{31}{100}, \tfrac{41}{100}, \tfrac{51}{100}, \tfrac{61}{100}, \tfrac{71}{100}, \tfrac{81}{100},
+\tfrac{91}{100}, \tfrac{2}{100}, \tfrac{12}{100}, \tfrac{22}{100}, \tfrac{32}{100}, \ldots \} \,\)</span></p>
 <p>or, if <span class="math notranslate nohighlight">\(b = 2\)</span>:</p>
-<p><span class="math notranslate nohighlight">\( seq = \{0, \tfrac{1}{2}, \tfrac{1}{4}, \tfrac{3}{4}, \tfrac{1}{8}, \tfrac{5}{8}, \tfrac{3}{8}, \tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16}, \tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \)</span></p>
+<p><span class="math notranslate nohighlight">\( seq = \{0, \tfrac{1}{2}, \tfrac{1}{4}, \tfrac{3}{4}, \tfrac{1}{8}, \tfrac{5}{8}, \tfrac{3}{8},
+\tfrac{7}{8}, \tfrac{1}{16}, \tfrac{9}{16}, \tfrac{5}{16}, \tfrac{13}{16}, \tfrac{3}{16}, \tfrac{11}{16},
+\tfrac{7}{16}, \tfrac{15}{16}, \ldots.\} \)</span></p>
 <p>See: <a class="reference external" href="https://en.wikipedia.org/wiki/Van_der_Corput_sequence">https://en.wikipedia.org/wiki/Van_der_Corput_sequence</a> </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14van_der_corput14van_der_corputEjj">
-<span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1van__der__corput_1a7f9a4fe158d8a6085d517efa253215b3"></span><span class="sig-name descname"><span class="n"><span class="pre">van_der_corput</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="_CPPv2N5pagmo14van_der_corput14van_der_corputEjj"></span><span id="pagmo::van_der_corput::van_der_corput__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1van__der__corput_1a7f9a4fe158d8a6085d517efa253215b3"></span><span class="sig-name descname"><span class="n"><span class="pre">van_der_corput</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corput14van_der_corputEjj" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
-<p>Consruct a van der Corput lowp-discrepancy sequence with base <code class="docutils literal notranslate"><span class="pre">b</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
+<p>Construct a van der Corput lowp-discrepancy sequence with base <code class="docutils literal notranslate"><span class="pre">b</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -165,14 +792,14 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>std::invalid_argument</strong> – if the base is 0u or 1u </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the base is 0u or 1u </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14van_der_corputclEv">
-<span id="_CPPv3N5pagmo14van_der_corputclEv"></span><span id="_CPPv2N5pagmo14van_der_corputclEv"></span><span id="pagmo::van_der_corput::call-operator"></span><span class="target" id="classpagmo_1_1van__der__corput_1aaecfe69bc116abbc57524053dea0dc37"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputclEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo14van_der_corputclEv"></span><span id="_CPPv2N5pagmo14van_der_corputclEv"></span><span id="pagmo::van_der_corput::call-operator"></span><span class="target" id="classpagmo_1_1van__der__corput_1aaecfe69bc116abbc57524053dea0dc37"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14van_der_corputclEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -187,29 +814,33 @@ See: Donald B. Rubin, The Bayesian bootstrap Ann. Statist. 9, 1981, 130-134. </p
 <hr class="docutils" />
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6haltonE">
-<span id="_CPPv3N5pagmo6haltonE"></span><span id="_CPPv2N5pagmo6haltonE"></span><span id="pagmo::halton"></span><span class="target" id="classpagmo_1_1halton"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">halton</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6haltonE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo6haltonE"></span><span id="_CPPv2N5pagmo6haltonE"></span><span id="pagmo::halton"></span><span class="target" id="classpagmo_1_1halton"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">halton</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo6haltonE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Halton sequence. </p>
 <p>The Halton sequence is, essentially, a generalization of the van der Corput sequence to higher dimensions. It considers, along each dimension, a van der Corput sequence referred to co-prime numbers. Here, by default, we consider the sequence of all prime numbers starting from 2, 3, 5, …… so that, for example, for <code class="docutils literal notranslate"><span class="pre">dim</span></code> equal two the following sequence is generated:</p>
 <p><div class="math notranslate nohighlight">
-\[ seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac 19\right), \left(\frac 18, \frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\} \]</div>
+\[
+seq = \left\{ (0, 0), \left(\frac 12, \frac 13\right), \left(\frac 14, \frac 23\right), \left(\frac 34, \frac
+19\right), \left(\frac 18,
+\frac 49\right), \left(\frac 58, \frac 79\right), \left(\frac 38, \frac 29\right), ... \right\}
+\]</div>
 </p>
 <p>
 See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_sequence">https://en.wikipedia.org/wiki/Halton_sequence</a> </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n</strong> – selects which element of the sequence to return </p></li>
-<li><p><strong>dim</strong> – dimensions of the returned point</p></li>
-</ul>
+<dt class="field-odd">Param n</dt>
+<dd class="field-odd"><p>selects which element of the sequence to return </p>
+</dd>
+<dt class="field-even">Param dim</dt>
+<dd class="field-even"><p>dimensions of the returned point</p>
 </dd>
 </dl>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6halton6haltonEjj">
-<span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1halton_1a8a4191db38a1d6f5b04e8ff67569071e"></span><span class="sig-name descname"><span class="n"><span class="pre">halton</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo6halton6haltonEjj"></span><span id="_CPPv2N5pagmo6halton6haltonEjj"></span><span id="pagmo::halton::halton__unsigned.unsigned"></span><span class="target" id="classpagmo_1_1halton_1a8a4191db38a1d6f5b04e8ff67569071e"></span><span class="sig-name descname"><span class="n"><span class="pre">halton</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2u</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0u</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6halton6haltonEjj" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Constructor from base and starting element. </p>
-<p>Consruct a Halton low-discrepancy sequence with dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
+<p>Construct a Halton low-discrepancy sequence with dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code> and starting element position <code class="docutils literal notranslate"><span class="pre">n</span></code> </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -218,14 +849,14 @@ See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_se
 </ul>
 </dd>
 <dt class="field-even">Throws</dt>
-<dd class="field-even"><p><strong>unspecified</strong> – all exceptions thrown by <a class="reference internal" href="#classpagmo_1_1van__der__corput"><span class="std std-ref">pagmo::van_der_corput</span></a> </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – all exceptions thrown by <a class="reference internal" href="#classpagmo_1_1van__der__corput"><span class="std std-ref">pagmo::van_der_corput</span></a> </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo6haltonclEv">
-<span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1a31c261865209656bfa3330b938862276"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N5pagmo6haltonclEv"></span><span id="_CPPv2N5pagmo6haltonclEv"></span><span id="pagmo::halton::call-operator"></span><span class="target" id="classpagmo_1_1halton_1a31c261865209656bfa3330b938862276"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo6haltonclEv" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Returns the next number in the sequence. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -240,34 +871,50 @@ See: <a class="reference external" href="https://en.wikipedia.org/wiki/Halton_se
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="constrained.html" class="btn btn-neutral float-left" title="Constrained optimization utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="hypervolume.html" class="btn btn-neutral float-right" title="Hypervolumes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="constrained.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Constrained optimization utilities</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="hypervolume.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Hypervolumes</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By pagmo development team<br/>
+  
+      &copy; Copyright 2017-2021, pagmo development team.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
 
-</body>
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
 </html>

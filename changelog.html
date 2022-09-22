@@ -1,212 +1,1568 @@
- <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+ 
+<!DOCTYPE html>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; pagmo 2.18.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Changelog &#8212; pagmo 2.18.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <link rel="shortcut icon" href="_static/logo_favico.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Credits" href="credits.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
-</head>
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pagmo
-          </a>
-              <div class="version">
-                2.18.0
-              </div>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Capabilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">C++ tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs/cpp/cpp_docs.html">C++ API documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="credits.html">Credits</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id2">2.18.0 (2021-08-03)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#new">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#changes">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fix">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">2.17.0 (2021-03-05)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id4">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">2.16.1 (2020-12-22)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id8">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id9">2.16.0 (2020-09-25)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id10">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id11">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id12">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id13">2.15.0 (2020-04-02)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id14">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id15">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id16">2.14.0 (2020-03-04)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id17">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id18">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id19">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id20">2.13.0 (2020-01-10)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id21">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id22">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id23">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id24">2.12.0 (2019-12-18)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id25">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id26">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id27">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id28">2.11.4 (2019-09-29)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id29">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id30">2.11.3 (2019-09-09)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id31">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id32">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id33">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id34">2.11.2 (2019-08-21)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id35">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id36">2.11.1 (2019-08-09)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id37">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id38">2.11 (2019-08-07)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id39">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id40">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id41">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id42">2.10 (2019-01-02)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id43">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id44">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id45">2.9 (2018-08-31)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id46">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id47">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id48">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id49">2.8 (2018-07-12)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id50">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id51">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id52">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id53">2.7 (2018-04-13)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id54">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id55">Changes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id56">2.6 (2017-11-18)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id57">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id58">2.5 (2017-11-12)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id59">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id60">2.4 (2017-06-09)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id61">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id62">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id63">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id64">2.3 (2017-05-19)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id65">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id66">Fix</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id67">2.2 (2017-05-12)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id68">New</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id69">Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id70">Fix</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+    
+    <div class="container-fluid" id="banner"></div>
 
-        </div>
-      </div>
-    </nav>
+    
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">pagmo</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Changelog</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
-      </li>
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="install.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="quickstart.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="overview.html">
+   Capabilities
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="docs/cpp/tutorials/cpp_tut.html">
+   C++ tutorial
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/tutorials/cpp_tut_preliminaries.html">
+     Preliminaries
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/tutorials/cpp_tut_first_problem.html">
+     Writing your first optimisation problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/tutorials/evolving_a_population.html">
+     Evolving a population
+    </a>
+   </li>
   </ul>
-  <hr/>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="docs/cpp/cpp_docs.html">
+   C++ API documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/types.html">
+     Types
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problem.html">
+     Problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithm.html">
+     Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/population.html">
+     Population
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/island.html">
+     Island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/archipelago.html">
+     Archipelago
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/bfe.html">
+     Batch fitness evaluator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/topology.html">
+     Topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/r_policy.html">
+     Replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/s_policy.html">
+     Selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/null.html">
+     Null algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/bee_colony.html">
+     Artificial Bee Colony
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/cmaes.html">
+     Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/compass_search.html">
+     Compass Search
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/de.html">
+     Differential Evolution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/de1220.html">
+     Self-adaptive Differential Evolution (DE 1220 aka pDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/gaco.html">
+     Extended Ant Colony Optimization (gaco)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/gwo.html">
+     Grey Wolf Optimizer (gwo)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/ihs.html">
+     Improved Harmony Search (IHS)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/ipopt.html">
+     Ipopt
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/maco.html">
+     Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/moead.html">
+     Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/mbh.html">
+     Monotonic Basin Hopping (MBH) - Generalized
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/cstrs_self_adaptive.html">
+     Self-adaptive constraints handling
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/nlopt.html">
+     NLopt solvers
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/nsga2.html">
+     Non dominated sorting genetic algorithm (NSGA-II)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/nspso.html">
+     Non dominated sorting particle swarm optimization(NSPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/pso.html">
+     Particle Swarm Optimization (PSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/pso_gen.html">
+     Particle Swarm Optimization Generational (GPSO)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/sade.html">
+     Self-adaptive Differential Evolution (jDE and iDE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/sea.html">
+     (N+1)-ES Simple Evolutionary Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/sga.html">
+     Simple Genetic Algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/simulated_annealing.html">
+     Simulated Annealing (Corana’s version)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/algorithms/xnes.html">
+     Exponential Natural Evolution Strategies (xNES)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/null.html">
+     Null problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/rosenbrock.html">
+     Rosenbrock
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/rastrigin.html">
+     Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/schwefel.html">
+     Schwefel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/ackley.html">
+     Ackley
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/golomb_ruler.html">
+     Optimal Golomb Ruler
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/griewank.html">
+     Griewank
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/lennard_jones.html">
+     Lennard Jones Cluster
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/zdt.html">
+     ZDT test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/dtlz.html">
+     DTLZ test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/hock_schittkowski_71.html">
+     Hock Schittkowsky No.71
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/inventory.html">
+     News-vendor problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/luksan_vlcek1.html">
+     Luksan Vlcek 1
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/minlp_rastrigin.html">
+     MINLP Rastrigin
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/translate.html">
+     Translate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/decompose.html">
+     Decompose
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/cec2006.html">
+     CEC 2006 Problem Suite (single-objective, constrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/cec2009.html">
+     CEC 2009 Problem Suite (multi-objective, constrained and unconstrained)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/cec2013.html">
+     CEC 2013 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/cec2014.html">
+     CEC 2014 Problem Suite (box-bound, single objective)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/unconstrain.html">
+     Unconstrain
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/problems/wfg.html">
+     WFG problem test suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/islands/thread_island.html">
+     Thread island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/islands/fork_island.html">
+     Fork island
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/batch_evaluators/default_bfe.html">
+     Default BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/batch_evaluators/thread_bfe.html">
+     Multithreaded BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/batch_evaluators/member_bfe.html">
+     Member function BFE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/topologies/unconnected.html">
+     Unconnected topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/topologies/fully_connected.html">
+     Fully connected
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/topologies/base_bgl_topology.html">
+     Base BGL topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/topologies/ring.html">
+     Ring
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/topologies/free_form.html">
+     Free-form topology
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/r_policies/fair_replace.html">
+     Fair replacement policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/s_policies/select_best.html">
+     Best selection policy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/utils/multi_objective.html">
+     Multi-objective optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/utils/constrained.html">
+     Constrained optimization utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/utils/discrepancy.html">
+     Low-discrepancy sequences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/utils/hypervolume.html">
+     Hypervolumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/utils/gradient_and_hessians.html">
+     Utilities for gradient and hessians
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/utils/genetic_operators.html">
+     Genetic Operators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/miscellanea/generic.html">
+     Generic utilities
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/miscellanea/type_traits.html">
+     Type traits and enums
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/miscellanea/exceptions.html">
+     Exceptions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/cpp/miscellanea/utility_classes.html">
+     Utility classes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="credits.html">
+   Credits
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/esa/pagmo2"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/esa/pagmo2/issues/new?title=Issue%20on%20page%20%2Fchangelog.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/changelog.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   2.18.0 (2021-08-03)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#new">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changes">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fix">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   2.17.0 (2021-03-05)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   2.16.1 (2020-12-22)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id9">
+   2.16.0 (2020-09-25)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id11">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id12">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id13">
+   2.15.0 (2020-04-02)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id14">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id15">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id16">
+   2.14.0 (2020-03-04)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id17">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id18">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id19">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id20">
+   2.13.0 (2020-01-10)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id21">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id22">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id23">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id24">
+   2.12.0 (2019-12-18)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id25">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id26">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id27">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id28">
+   2.11.4 (2019-09-29)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id29">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id30">
+   2.11.3 (2019-09-09)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id31">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id32">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id33">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id34">
+   2.11.2 (2019-08-21)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id35">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id36">
+   2.11.1 (2019-08-09)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id37">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id38">
+   2.11 (2019-08-07)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id39">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id40">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id41">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id42">
+   2.10 (2019-01-02)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id43">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id44">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id45">
+   2.9 (2018-08-31)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id46">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id47">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id48">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id49">
+   2.8 (2018-07-12)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id50">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id51">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id52">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id53">
+   2.7 (2018-04-13)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id54">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id55">
+     Changes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id56">
+   2.6 (2017-11-18)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id57">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id58">
+   2.5 (2017-11-12)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id59">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id60">
+   2.4 (2017-06-09)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id61">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id62">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id63">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id64">
+   2.3 (2017-05-19)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id65">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id66">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id67">
+   2.2 (2017-05-12)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id68">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id69">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id70">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Changelog</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   2.18.0 (2021-08-03)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#new">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changes">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fix">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   2.17.0 (2021-03-05)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   2.16.1 (2020-12-22)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id7">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id8">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id9">
+   2.16.0 (2020-09-25)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id11">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id12">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id13">
+   2.15.0 (2020-04-02)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id14">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id15">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id16">
+   2.14.0 (2020-03-04)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id17">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id18">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id19">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id20">
+   2.13.0 (2020-01-10)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id21">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id22">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id23">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id24">
+   2.12.0 (2019-12-18)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id25">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id26">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id27">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id28">
+   2.11.4 (2019-09-29)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id29">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id30">
+   2.11.3 (2019-09-09)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id31">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id32">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id33">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id34">
+   2.11.2 (2019-08-21)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id35">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id36">
+   2.11.1 (2019-08-09)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id37">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id38">
+   2.11 (2019-08-07)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id39">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id40">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id41">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id42">
+   2.10 (2019-01-02)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id43">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id44">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id45">
+   2.9 (2018-08-31)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id46">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id47">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id48">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id49">
+   2.8 (2018-07-12)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id50">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id51">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id52">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id53">
+   2.7 (2018-04-13)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id54">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id55">
+     Changes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id56">
+   2.6 (2017-11-18)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id57">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id58">
+   2.5 (2017-11-12)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id59">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id60">
+   2.4 (2017-06-09)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id61">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id62">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id63">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id64">
+   2.3 (2017-05-19)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id65">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id66">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id67">
+   2.2 (2017-05-12)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id68">
+     New
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id69">
+     Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id70">
+     Fix
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
   <section id="changelog">
-<span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline"></a></h1>
+<span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">#</a></h1>
 <section id="id2">
-<h2>2.18.0 (2021-08-03)<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h2>
+<h2>2.18.0 (2021-08-03)<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
 <section id="new">
-<h3>New<a class="headerlink" href="#new" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#new" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>pagmo now officially supports 64-bit ARM and PowerPC processors
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/481">#481</a>).</p></li>
 </ul>
 </section>
 <section id="changes">
-<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#changes" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>pagmo’s build system now honours the <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_LIBDIR</span></code>
 setting on Linux to determine the library installation path
@@ -217,7 +1573,7 @@ serialisation functions
 </ul>
 </section>
 <section id="fix">
-<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#fix" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Do not force the static runtime on MSVC when building pagmo
 as a static library
@@ -226,9 +1582,9 @@ as a static library
 </section>
 </section>
 <section id="id3">
-<h2>2.17.0 (2021-03-05)<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h2>
+<h2>2.17.0 (2021-03-05)<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
 <section id="id4">
-<h3>Fix<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Enable support in the build system for the latest
 TBB version (oneTBB)
@@ -237,23 +1593,23 @@ TBB version (oneTBB)
 </section>
 </section>
 <section id="id5">
-<h2>2.16.1 (2020-12-22)<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h2>
+<h2>2.16.1 (2020-12-22)<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
 <section id="id6">
-<h3>New<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>The pagmo conda package now enables Ipopt on Windows
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/460">#460</a>).</p></li>
 </ul>
 </section>
 <section id="id7">
-<h3>Changes<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>pagmo now requires CMake &gt;= 3.8
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/458">#458</a>).</p></li>
 </ul>
 </section>
 <section id="id8">
-<h3>Fix<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Various build system fixes/improvements
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/460">#460</a>,
@@ -264,9 +1620,9 @@ TBB version (oneTBB)
 </section>
 </section>
 <section id="id9">
-<h2>2.16.0 (2020-09-25)<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h2>
+<h2>2.16.0 (2020-09-25)<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h2>
 <section id="id10">
-<h3>New<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>pagmo can now be built as a static library
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/426">#426</a>).</p></li>
@@ -278,7 +1634,7 @@ a thread pool
 </ul>
 </section>
 <section id="id11">
-<h3>Changes<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>NLopt support in pagmo now requires version 2.6 or greater
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/451">#451</a>).</p></li>
@@ -297,7 +1653,7 @@ of the type-erased classes
 </ul>
 </section>
 <section id="id12">
-<h3>Fix<a class="headerlink" href="#id12" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Various build system fixes/improvements
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/451">#451</a>).</p></li>
@@ -316,9 +1672,9 @@ in <a class="reference internal" href="docs/cpp/population.html#_CPPv4N5pagmo10p
 </section>
 </section>
 <section id="id13">
-<h2>2.15.0 (2020-04-02)<a class="headerlink" href="#id13" title="Permalink to this headline"></a></h2>
+<h2>2.15.0 (2020-04-02)<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h2>
 <section id="id14">
-<h3>New<a class="headerlink" href="#id14" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id14" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>The type-erased wrappers now have additional member functions
 to interact at runtime with the contained user-defined objects.
@@ -340,7 +1696,7 @@ a conversion function to a Boost graph object
 </ul>
 </section>
 <section id="id15">
-<h3>Fix<a class="headerlink" href="#id15" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id15" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Introduce a workaround for an issue present on some
 compiler/standard library combinations, where
@@ -357,9 +1713,9 @@ between <code class="docutils literal notranslate"><span class="pre">dlopen()</s
 </section>
 </section>
 <section id="id16">
-<h2>2.14.0 (2020-03-04)<a class="headerlink" href="#id16" title="Permalink to this headline"></a></h2>
+<h2>2.14.0 (2020-03-04)<a class="headerlink" href="#id16" title="Permalink to this headline">#</a></h2>
 <section id="id17">
-<h3>New<a class="headerlink" href="#id17" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id17" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p><strong>IMPORTANT</strong>: pygmo has been split off into
 a separate project. Please see the
@@ -374,7 +1730,7 @@ of an archipelago
 </ul>
 </section>
 <section id="id18">
-<h3>Changes<a class="headerlink" href="#id18" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id18" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Various performance improvements for the
 Pareto dominance utilities
@@ -382,7 +1738,7 @@ Pareto dominance utilities
 </ul>
 </section>
 <section id="id19">
-<h3>Fix<a class="headerlink" href="#id19" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id19" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix an error message in the CEC2009 test suite
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/402">#402</a>).</p></li>
@@ -390,9 +1746,9 @@ Pareto dominance utilities
 </section>
 </section>
 <section id="id20">
-<h2>2.13.0 (2020-01-10)<a class="headerlink" href="#id20" title="Permalink to this headline"></a></h2>
+<h2>2.13.0 (2020-01-10)<a class="headerlink" href="#id20" title="Permalink to this headline">#</a></h2>
 <section id="id21">
-<h3>New<a class="headerlink" href="#id21" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id21" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>The batch fitness evaluation functionality has been completed
 on the Python side. This includes 2 new batch fitness evaluation
@@ -407,7 +1763,7 @@ Python exception
 </ul>
 </section>
 <section id="id22">
-<h3>Changes<a class="headerlink" href="#id22" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id22" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p><strong>BREAKING</strong>: as anticipated, Python 2 support has been
 removed from pygmo. pygmo now requires Python 3.4
@@ -423,7 +1779,7 @@ pagmo library
 </ul>
 </section>
 <section id="id23">
-<h3>Fix<a class="headerlink" href="#id23" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id23" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix a bug in the hypervolume utilities when
 NaNs are encountered
@@ -437,9 +1793,9 @@ recent Boost versions
 </section>
 </section>
 <section id="id24">
-<h2>2.12.0 (2019-12-18)<a class="headerlink" href="#id24" title="Permalink to this headline"></a></h2>
+<h2>2.12.0 (2019-12-18)<a class="headerlink" href="#id24" title="Permalink to this headline">#</a></h2>
 <section id="id25">
-<h3>New<a class="headerlink" href="#id25" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id25" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>The <a class="reference internal" href="docs/cpp/algorithms/pso_gen.html#_CPPv4N5pagmo7pso_genE" title="pagmo::pso_gen"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::pso_gen</span></code></a> algorithm can now use the
 batch fitness evaluation scheme
@@ -452,7 +1808,7 @@ ant colony optimizer (MHACO)
 </ul>
 </section>
 <section id="id26">
-<h3>Changes<a class="headerlink" href="#id26" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id26" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p><strong>BREAKING</strong>: the mechanism for managing the
 interaction of an <code class="xref py py-class docutils literal notranslate"><span class="pre">ipyparallel_island</span></code>
@@ -462,7 +1818,7 @@ to the documentation for details
 </ul>
 </section>
 <section id="id27">
-<h3>Fix<a class="headerlink" href="#id27" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id27" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix a missing <code class="docutils literal notranslate"><span class="pre">inline</span></code> and a few wrong include files in the
 serialization header
@@ -477,9 +1833,9 @@ serialization header
 </section>
 </section>
 <section id="id28">
-<h2>2.11.4 (2019-09-29)<a class="headerlink" href="#id28" title="Permalink to this headline"></a></h2>
+<h2>2.11.4 (2019-09-29)<a class="headerlink" href="#id28" title="Permalink to this headline">#</a></h2>
 <section id="id29">
-<h3>Fix<a class="headerlink" href="#id29" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id29" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix an indexing bug in the <a class="reference internal" href="docs/cpp/algorithms/pso_gen.html#_CPPv4N5pagmo7pso_genE" title="pagmo::pso_gen"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::pso_gen</span></code></a> algorithm
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/349">#349</a>).</p></li>
@@ -490,16 +1846,16 @@ serialization header
 </section>
 </section>
 <section id="id30">
-<h2>2.11.3 (2019-09-09)<a class="headerlink" href="#id30" title="Permalink to this headline"></a></h2>
+<h2>2.11.3 (2019-09-09)<a class="headerlink" href="#id30" title="Permalink to this headline">#</a></h2>
 <section id="id31">
-<h3>New<a class="headerlink" href="#id31" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id31" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">pygmo.archipelago.push_back()</span></code> now also accepts <code class="xref py py-class docutils literal notranslate"><span class="pre">island</span></code>
 objects as input arguments (<a class="reference external" href="https://github.com/esa/pagmo2/pull/342">#342</a>).</p></li>
 </ul>
 </section>
 <section id="id32">
-<h3>Changes<a class="headerlink" href="#id32" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id32" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p><strong>BREAKING</strong>: the machinery for the translation between C++ and Python
 of vectors of unsigned integral types (e.g., sparsity patterns, individual
@@ -510,7 +1866,7 @@ cases). Previously, pagmo would accept also signed integral dtypes
 </ul>
 </section>
 <section id="id33">
-<h3>Fix<a class="headerlink" href="#id33" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id33" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Various improvements, fixes and cleanups in the translation of
 C++ vectors to/from Python
@@ -522,9 +1878,9 @@ C++ vectors to/from Python
 </section>
 </section>
 <section id="id34">
-<h2>2.11.2 (2019-08-21)<a class="headerlink" href="#id34" title="Permalink to this headline"></a></h2>
+<h2>2.11.2 (2019-08-21)<a class="headerlink" href="#id34" title="Permalink to this headline">#</a></h2>
 <section id="id35">
-<h3>Fix<a class="headerlink" href="#id35" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id35" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix the MinGW pip builds (<a class="reference external" href="https://github.com/esa/pagmo2/pull/338">#338</a>).</p></li>
 <li><p>Fix the default value for the NSGA2 <code class="docutils literal notranslate"><span class="pre">eta_m</span></code> parameter in the Python exposition (<a class="reference external" href="https://github.com/esa/pagmo2/pull/338">#338</a>).</p></li>
@@ -532,9 +1888,9 @@ C++ vectors to/from Python
 </section>
 </section>
 <section id="id36">
-<h2>2.11.1 (2019-08-09)<a class="headerlink" href="#id36" title="Permalink to this headline"></a></h2>
+<h2>2.11.1 (2019-08-09)<a class="headerlink" href="#id36" title="Permalink to this headline">#</a></h2>
 <section id="id37">
-<h3>Fix<a class="headerlink" href="#id37" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id37" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix a migration issue when multi-objective problems are involved (<a class="reference external" href="https://github.com/esa/pagmo2/pull/334">#334</a>).</p></li>
 <li><p>Various docstring fixes (<a class="reference external" href="https://github.com/esa/pagmo2/pull/334">#334</a>).</p></li>
@@ -542,9 +1898,9 @@ C++ vectors to/from Python
 </section>
 </section>
 <section id="id38">
-<h2>2.11 (2019-08-07)<a class="headerlink" href="#id38" title="Permalink to this headline"></a></h2>
+<h2>2.11 (2019-08-07)<a class="headerlink" href="#id38" title="Permalink to this headline">#</a></h2>
 <section id="id39">
-<h3>New<a class="headerlink" href="#id39" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id39" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>NSGA2 can optionally use the batch fitness evaluation framework
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/308">#308</a>).</p></li>
@@ -565,7 +1921,7 @@ C++ vectors to/from Python
 </ul>
 </section>
 <section id="id40">
-<h3>Changes<a class="headerlink" href="#id40" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id40" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Various improvements to the MinGW pip packages: the toolchain
 and the dependencies have
@@ -593,7 +1949,7 @@ This change makes the behaviour of pygmo consistent with the behaviour of pagmo 
 </ul>
 </section>
 <section id="id41">
-<h3>Fix<a class="headerlink" href="#id41" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id41" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix a bug in pygmo’s plotting utils (<a class="reference external" href="https://github.com/esa/pagmo2/pull/330">#330</a>).</p></li>
 <li><p>Fix a bug in PSO’s error handling (<a class="reference external" href="https://github.com/esa/pagmo2/pull/323">#323</a>).</p></li>
@@ -617,9 +1973,9 @@ population/algorithm (<a class="reference external" href="https://github.com/esa
 </section>
 </section>
 <section id="id42">
-<h2>2.10 (2019-01-02)<a class="headerlink" href="#id42" title="Permalink to this headline"></a></h2>
+<h2>2.10 (2019-01-02)<a class="headerlink" href="#id42" title="Permalink to this headline">#</a></h2>
 <section id="id43">
-<h3>New<a class="headerlink" href="#id43" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id43" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Enable the <code class="docutils literal notranslate"><span class="pre">py27m</span></code> build variant for the manylinux packages (<a class="reference external" href="https://github.com/esa/pagmo2/pull/239">#239</a>).</p></li>
 <li><p>It is now possible to select a serialization backend other than cloudpickle. The other available
@@ -633,7 +1989,7 @@ without knowing the exact type of the object being extracted.</p></li>
 </ul>
 </section>
 <section id="id44">
-<h3>Fix<a class="headerlink" href="#id44" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id44" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Avoid linking pygmo to the Python library on OSX with clang. This may fix the <code class="docutils literal notranslate"><span class="pre">Fatal</span> <span class="pre">Python</span> <span class="pre">error:</span> <span class="pre">take_gil:</span> <span class="pre">NULL</span> <span class="pre">tstate</span></code>
 errors which are occasionally reported by users (<a class="reference external" href="https://github.com/esa/pagmo2/pull/230">#230</a>).</p></li>
@@ -647,9 +2003,9 @@ to serialization errors in problems/algorithms (<a class="reference external" hr
 </section>
 </section>
 <section id="id45">
-<h2>2.9 (2018-08-31)<a class="headerlink" href="#id45" title="Permalink to this headline"></a></h2>
+<h2>2.9 (2018-08-31)<a class="headerlink" href="#id45" title="Permalink to this headline">#</a></h2>
 <section id="id46">
-<h3>New<a class="headerlink" href="#id46" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id46" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Implement the UDI extraction functionality for <a class="reference internal" href="docs/cpp/island.html#_CPPv4N5pagmo6islandE" title="pagmo::island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">island</span></code></a> (<a class="reference external" href="https://github.com/esa/pagmo2/pull/207">#207</a>).</p></li>
 <li><p>Implement the <a class="reference internal" href="docs/cpp/islands/fork_island.html#_CPPv4N5pagmo11fork_islandE" title="pagmo::fork_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">fork_island</span></code></a> UDI (<a class="reference external" href="https://github.com/esa/pagmo2/pull/205">#205</a>).</p></li>
@@ -659,7 +2015,7 @@ to serialization errors in problems/algorithms (<a class="reference external" hr
 </ul>
 </section>
 <section id="id47">
-<h3>Changes<a class="headerlink" href="#id47" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id47" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>The build system now respects the <code class="docutils literal notranslate"><span class="pre">CMAKE_CXX_STANDARD</span></code> CMake setting (<a class="reference external" href="https://github.com/esa/pagmo2/pull/207">#207</a>).</p></li>
 <li><p>Ensure that, in <a class="reference internal" href="docs/cpp/islands/thread_island.html#_CPPv4N5pagmo13thread_islandE" title="pagmo::thread_island"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_island</span></code></a>, the algorithm used for the evolution replaces the original algorithm
@@ -668,7 +2024,7 @@ at the end of the evolution (<a class="reference external" href="https://github.
 </ul>
 </section>
 <section id="id48">
-<h3>Fix<a class="headerlink" href="#id48" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id48" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix a missing <code class="docutils literal notranslate"><span class="pre">inline</span></code> specifier (<a class="reference external" href="https://github.com/esa/pagmo2/pull/206">#206</a>).</p></li>
 <li><p>Fix a bunch of missing includes in <code class="docutils literal notranslate"><span class="pre">pagmo.hpp</span></code> (<a class="reference external" href="https://github.com/esa/pagmo2/pull/202">#202</a>).</p></li>
@@ -680,9 +2036,9 @@ at the end of the evolution (<a class="reference external" href="https://github.
 </section>
 </section>
 <section id="id49">
-<h2>2.8 (2018-07-12)<a class="headerlink" href="#id49" title="Permalink to this headline"></a></h2>
+<h2>2.8 (2018-07-12)<a class="headerlink" href="#id49" title="Permalink to this headline">#</a></h2>
 <section id="id50">
-<h3>New<a class="headerlink" href="#id50" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id50" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Implement the CEC2014 problem suite (<a class="reference external" href="https://github.com/esa/pagmo2/pull/188">#188</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/189">#189</a>).</p></li>
 <li><p>It is now possible to explicitly shut down the process pool of <code class="xref py py-class docutils literal notranslate"><span class="pre">mp_island</span></code> (<a class="reference external" href="https://github.com/esa/pagmo2/pull/187">#187</a>).</p></li>
@@ -692,7 +2048,7 @@ at the end of the evolution (<a class="reference external" href="https://github.
 </ul>
 </section>
 <section id="id51">
-<h3>Changes<a class="headerlink" href="#id51" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id51" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Update the copyright date to 2018 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/190">#190</a>).</p></li>
 <li><p><strong>BREAKING</strong>: user-defined islands in Python must now return the algorithm object used for the evolution in addition
@@ -702,7 +2058,7 @@ an evolution.</p></li>
 </ul>
 </section>
 <section id="id52">
-<h3>Fix<a class="headerlink" href="#id52" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id52" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix a compilation failure involving the IHS algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/192">#192</a>).</p></li>
 <li><p>Fix a bug in the Python exposition of the DE algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/183">#183</a>).</p></li>
@@ -713,9 +2069,9 @@ an evolution.</p></li>
 </section>
 </section>
 <section id="id53">
-<h2>2.7 (2018-04-13)<a class="headerlink" href="#id53" title="Permalink to this headline"></a></h2>
+<h2>2.7 (2018-04-13)<a class="headerlink" href="#id53" title="Permalink to this headline">#</a></h2>
 <section id="id54">
-<h3>New<a class="headerlink" href="#id54" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id54" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Implement the particle swarm optimization generational (GPSO) algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/161">#161</a>).</p></li>
 <li><p>Implement the exponential natural evolution strategies (xNES) algorithm (<a class="reference external" href="https://github.com/esa/pagmo2/pull/142">#142</a>).</p></li>
@@ -723,7 +2079,7 @@ an evolution.</p></li>
 </ul>
 </section>
 <section id="id55">
-<h3>Changes<a class="headerlink" href="#id55" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id55" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Update pygmo’s dependencies in the manylinux builds to the latest versions
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/144">#144</a>).</p></li>
@@ -731,9 +2087,9 @@ an evolution.</p></li>
 </section>
 </section>
 <section id="id56">
-<h2>2.6 (2017-11-18)<a class="headerlink" href="#id56" title="Permalink to this headline"></a></h2>
+<h2>2.6 (2017-11-18)<a class="headerlink" href="#id56" title="Permalink to this headline">#</a></h2>
 <section id="id57">
-<h3>Fix<a class="headerlink" href="#id57" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id57" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix a bug in NSGA2 when the bounds of the problem contain negative values (<a class="reference external" href="https://github.com/esa/pagmo2/pull/139">#139</a>).</p></li>
 <li><p>Various documentation fixes and improvements (<a class="reference external" href="https://github.com/esa/pagmo2/pull/139">#139</a>).</p></li>
@@ -741,9 +2097,9 @@ an evolution.</p></li>
 </section>
 </section>
 <section id="id58">
-<h2>2.5 (2017-11-12)<a class="headerlink" href="#id58" title="Permalink to this headline"></a></h2>
+<h2>2.5 (2017-11-12)<a class="headerlink" href="#id58" title="Permalink to this headline">#</a></h2>
 <section id="id59">
-<h3>Fix<a class="headerlink" href="#id59" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id59" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix meta-problems not forwarding the integer dimension (<a class="reference external" href="https://github.com/esa/pagmo2/pull/134">#134</a>).</p></li>
 <li><p>Various continuous integration fixes (<a class="reference external" href="https://github.com/esa/pagmo2/pull/134">#134</a>,
@@ -754,9 +2110,9 @@ an evolution.</p></li>
 </section>
 </section>
 <section id="id60">
-<h2>2.4 (2017-06-09)<a class="headerlink" href="#id60" title="Permalink to this headline"></a></h2>
+<h2>2.4 (2017-06-09)<a class="headerlink" href="#id60" title="Permalink to this headline">#</a></h2>
 <section id="id61">
-<h3>New<a class="headerlink" href="#id61" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id61" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Initial release of the pagmo/pygmo C++ software-development kit (SDK). The purpose of the SDK is to make the process
 of writing C++ extensions for pagmo/pygmo as easy as possible. The SDK is a beta-quality feature at this time,
@@ -766,7 +2122,7 @@ and ask there if you are interested in it (<a class="reference external" href="h
 </ul>
 </section>
 <section id="id62">
-<h3>Changes<a class="headerlink" href="#id62" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id62" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>pygmo now depends on pagmo, and it is now effectively a separate package. That is, in order to compile and install pygmo from
 source, you will need first to install the pagmo C++ headers. Users of pip/conda are <strong>not</strong> affected by this change (as
@@ -777,7 +2133,7 @@ must instead be specified in the definition of the UDP via the optional <code cl
 </ul>
 </section>
 <section id="id63">
-<h3>Fix<a class="headerlink" href="#id63" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id63" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Fix a bug in the plotting submodule (<a class="reference external" href="https://github.com/esa/pagmo2/pull/118">#118</a>).</p></li>
 <li><p>Various documentation fixes and improvements.</p></li>
@@ -785,16 +2141,16 @@ must instead be specified in the definition of the UDP via the optional <code cl
 </section>
 </section>
 <section id="id64">
-<h2>2.3 (2017-05-19)<a class="headerlink" href="#id64" title="Permalink to this headline"></a></h2>
+<h2>2.3 (2017-05-19)<a class="headerlink" href="#id64" title="Permalink to this headline">#</a></h2>
 <section id="id65">
-<h3>Changes<a class="headerlink" href="#id65" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id65" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Move from dill to cloudpickle as a serialization backend. This fixes various serialization issues reported in
 <a class="reference external" href="https://github.com/esa/pagmo2/issues/106">#106</a>.</p></li>
 </ul>
 </section>
 <section id="id66">
-<h3>Fix<a class="headerlink" href="#id66" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id66" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Various documentation fixes and improvements (<a class="reference external" href="https://github.com/esa/pagmo2/pull/103">#103</a>,
 <a class="reference external" href="https://github.com/esa/pagmo2/pull/104">#104</a>, <a class="reference external" href="https://github.com/esa/pagmo2/pull/107">#107</a>).</p></li>
@@ -802,9 +2158,9 @@ must instead be specified in the definition of the UDP via the optional <code cl
 </section>
 </section>
 <section id="id67">
-<h2>2.2 (2017-05-12)<a class="headerlink" href="#id67" title="Permalink to this headline"></a></h2>
+<h2>2.2 (2017-05-12)<a class="headerlink" href="#id67" title="Permalink to this headline">#</a></h2>
 <section id="id68">
-<h3>New<a class="headerlink" href="#id68" title="Permalink to this headline"></a></h3>
+<h3>New<a class="headerlink" href="#id68" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>New tutorials (Schwefel and constrained problems) <a class="reference external" href="https://github.com/esa/pagmo2/pull/91">(#91)</a>.</p></li>
 <li><p>Add support for <a class="reference external" href="https://projects.coin-or.org/Ipopt">Ipopt</a> <a class="reference external" href="https://github.com/esa/pagmo2/pull/92">(#92)</a>.</p></li>
@@ -812,7 +2168,7 @@ must instead be specified in the definition of the UDP via the optional <code cl
 </ul>
 </section>
 <section id="id69">
-<h3>Changes<a class="headerlink" href="#id69" title="Permalink to this headline"></a></h3>
+<h3>Changes<a class="headerlink" href="#id69" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Rename, fix and improve the implementation of various archipelago-related methods
 <a class="reference external" href="https://github.com/esa/pagmo2/issues/94">(#94)</a>.</p></li>
@@ -820,7 +2176,7 @@ must instead be specified in the definition of the UDP via the optional <code cl
 </ul>
 </section>
 <section id="id70">
-<h3>Fix<a class="headerlink" href="#id70" title="Permalink to this headline"></a></h3>
+<h3>Fix<a class="headerlink" href="#id70" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Various documentation fixes/improvements, headers sanitization, etc.</p></li>
 </ul>
@@ -829,33 +2185,43 @@ must instead be specified in the definition of the UDP via the optional <code cl
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="credits.html" class="btn btn-neutral float-left" title="Credits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2017-2021, pagmo development team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="credits.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Credits</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By pagmo development team<br/>
+  
+      &copy; Copyright 2017-2021, pagmo development team.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
 
-</body>
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
 </html>
