@@ -27,6 +27,7 @@ GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
 #include <algorithm>
+#include <iterator>
 #include <cmath>
 #include <deque>
 #include <limits>
@@ -128,26 +129,19 @@ double hv3d::compute(std::vector<vector_double> &points, const vector_double &r_
     T.insert(points[0]);
     A = std::abs((points[0][0] - r_point[0]) * (points[0][1] - r_point[1]));
 
-    std::multiset<vector_double>::iterator p;
-    std::multiset<vector_double>::iterator q;
     // for (std::vector<vector_double>::size_type idx = 1; idx < points.size(); ++idx) {
     for (decltype(points.size()) idx = 1u; idx < points.size(); ++idx) {
-        p = T.insert(points[idx]);
-        q = (p);
-        ++q;                      // setup q to be a successor of p
+        auto p = T.insert(points[idx]);
+        auto q = std::next(p);    // setup q to be a successor of p
         if ((*q)[1] <= (*p)[1]) { // current point is dominated
             T.erase(p);           // disregard the point from further calculation
         } else {
             V += A * std::abs(z3 - (*p)[2]);
             z3 = (*p)[2];
-            std::multiset<vector_double>::reverse_iterator rev_it(q);
-            ++rev_it;
-
-            std::multiset<vector_double>::reverse_iterator erase_begin(rev_it);
-            std::multiset<vector_double>::reverse_iterator rev_it_pred;
+            auto rev_it = std::make_reverse_iterator(q);
+            auto erase_begin = ++rev_it;
             while ((*rev_it)[1] >= (*p)[1]) {
-                rev_it_pred = rev_it;
-                ++rev_it_pred;
+                auto rev_it_pred = std::next(rev_it);
                 A -= std::abs(((*rev_it)[0] - (*rev_it_pred)[0]) * ((*rev_it)[1] - (*q)[1]));
                 ++rev_it;
             }
