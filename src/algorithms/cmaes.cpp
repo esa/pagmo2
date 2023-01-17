@@ -48,6 +48,10 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
+
 namespace pagmo
 {
 
@@ -316,7 +320,30 @@ population cmaes::evolve(population pop) const
             for (decltype(dim) j = 0u; j < dim; ++j) {
                 dumb[j] = newpop[i](_(j));
             }
-            pop.set_x(i, dumb);
+            if (!m_bfe) {
+                // bfe not available
+                pop.set_x(i, dumb);
+            }
+        }
+        if (m_bfe) {
+            // bfe is available:
+            vector_double decision_vectors(lam * dim);
+            vector_double::size_type pos = 0u;
+            for (decltype(lam) i = 0u; i < lam; ++i) {
+                for (decltype(dim) j = 0u; j < dim; ++j) {
+                    decision_vectors[pos] = newpop[i](_(j));
+                    ++pos;
+                }
+            }
+            // run bfe.
+            auto fitnesses = (*m_bfe)(prob, decision_vectors);
+
+            for (decltype(lam) i = 0u; i < lam; ++i) {
+                for (decltype(dim) j = 0u; j < dim; ++j) {
+                    dumb[j] = newpop[i](_(j));
+                }
+                pop.set_xf(i, dumb, {fitnesses[i]});
+            }
         }
         counteval += lam;
         // 4 - We extract the elite from this generation.
@@ -389,6 +416,12 @@ void cmaes::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the batch function evaluation scheme
+void cmaes::set_bfe(const bfe &b)
+{
+    m_bfe = b;
+}
+
 /// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
@@ -434,8 +467,8 @@ template <typename Archive>
 void cmaes::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_gen, m_cc, m_cs, m_c1, m_cmu, m_sigma0, m_ftol, m_xtol, m_memory, m_force_bounds, sigma, mean,
-                    variation, newpop, B, D, C, invsqrtC, pc, ps, counteval, eigeneval, m_e, m_seed, m_verbosity,
-                    m_log);
+                    variation, newpop, B, D, C, invsqrtC, pc, ps, counteval, eigeneval, m_e, m_seed, m_verbosity, m_log,
+                    m_bfe);
 }
 
 } // namespace pagmo
