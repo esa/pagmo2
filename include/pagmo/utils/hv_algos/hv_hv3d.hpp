@@ -59,7 +59,7 @@ public:
     /// Constructor
     /**
      * Constructor of the algorithm object.
-     * In the very first step, algorithm requires the inital set of points to be sorted ASCENDING in the third
+     * In the very first step, algorithm requires the initial set of points to be sorted ASCENDING in the third
      * dimension. If the input is already sorted, user can skip this step using "initial_sorting = false" option, saving
      * some extra time.
      *

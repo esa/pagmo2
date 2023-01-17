@@ -207,7 +207,7 @@ auto &get_task_queue_cache()
 // thread only, and the destruction of the other thread objects in the task queue cache leads to deadlocks.
 // In order to accomplish this, we register a callback via pthread_atfork() that will be called
 // by the child process immediately after fork(). The registration of the callback needs to be done
-// once per thread, hence we use a thread local std::once_flag in conjuction with the std::call_once()
+// once per thread, hence we use a thread local std::once_flag in conjunction with the std::call_once()
 // mechanism.
 
 // Per-thread flag to indicate that the fork() callback has been registered.

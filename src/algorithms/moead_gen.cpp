@@ -130,7 +130,7 @@ population moead_gen::evolve(population pop) const
         pagmo_throw(std::invalid_argument, get_name() + " cannot work on an empty population");
     }
     if (prob.get_nf() < 2u) {
-        pagmo_throw(std::invalid_argument, "This is a multiobjective algortihm, while number of objectives detected in "
+        pagmo_throw(std::invalid_argument, "This is a multiobjective algorithm, while number of objectives detected in "
                                                + prob.get_name() + " is " + std::to_string(prob.get_nf()));
     }
     if (prob.get_nc() != 0u) {
