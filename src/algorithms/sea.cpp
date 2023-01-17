@@ -121,7 +121,7 @@ population sea::evolve(population pop) const
                 best_idx = worst_idx;
             }
             worst_idx = pop.worst_idx();
-            // Logs and prints (verbosity mode 1: a line is added everytime the population is improved by the
+            // Logs and prints (verbosity mode 1: a line is added every time the population is improved by the
             // offspring)
             if (m_verbosity == 1u && improvement > 0.) {
                 // Prints on screen

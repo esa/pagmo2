@@ -80,7 +80,7 @@ double bf_approx::compute(std::vector<vector_double> &, const vector_double &) c
 
 /// Least contributor method
 /**
- * This method establishes the individual that contributes the least to the hypervolume (approximately withing given
+ * This method establishes the individual that contributes the least to the hypervolume (approximately within given
  * epsilon and delta).
  *
  * @param points vector of fitness_vectors for which the hypervolume is computed
@@ -96,7 +96,7 @@ unsigned long long bf_approx::least_contributor(std::vector<vector_double> &poin
 
 /// Greatest contributor method
 /**
- * This method establishes the individual that contributes the most to the hypervolume (approximately withing given
+ * This method establishes the individual that contributes the most to the hypervolume (approximately within given
  * epsilon and delta).
  *
  * @param points vector of fitness_vectors for which the hypervolume is computed
@@ -343,7 +343,7 @@ bool bf_approx::sample_successful(const std::vector<vector_double> &points, vect
  *   In such case, the other point is removed from the racing.
  *
  * - end_condition (function):
- *   Determines whether given extreme contributor guarantees be accurate withing provided epsilon error.
+ *   Determines whether given extreme contributor guarantees be accurate within provided epsilon error.
  *   The return value of the function is the ratio, stating the estimated error.
  */
 vector_double::size_type bf_approx::approx_extreme_contributor(
