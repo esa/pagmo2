@@ -33,5 +33,4 @@ workflows:
     jobs:
     - focal_gcc9_coverage
     - focal_gcc9_asan
-    - focal_gcc9_docs
     - ubuntu_arm64
