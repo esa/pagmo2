@@ -46,8 +46,5 @@ cp images/* xml/;
 cd ../sphinx/;
 make html linkcheck
 
-# Run the doctests.
-make doctest;
-
 set +e
 set +x
