@@ -417,6 +417,9 @@ void cmaes::set_seed(unsigned seed)
 }
 
 /// Sets the batch function evaluation scheme
+/**
+ * @param b batch function evaluation object
+ */
 void cmaes::set_bfe(const bfe &b)
 {
     m_bfe = b;

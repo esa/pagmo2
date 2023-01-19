@@ -3,6 +3,40 @@
 Changelog
 =========
 
+2.19.0 (2023-01-20)
+-------------------
+
+New
+~~~
+
+- Added batch fitness evaluation to cmaes algorithm
+  (`#520 <https://github.com/esa/pagmo2/pull/520>`__).
+
+- Added batch fitness evaluation to unconstrain problem 
+  (`#502 <https://github.com/esa/pagmo2/pull/502>`__).
+
+- Added batch fitness evaluation to a new MOEAD generational algorithm
+  (`#508 <https://github.com/esa/pagmo2/pull/508>`__).
+
+- Improve performance for the task_queue class by caching and re-using existing threads.
+  (`#512 <https://github.com/esa/pagmo2/pull/512>`__).
+
+
+Changes
+~~~~~~~
+
+- Several typos were fixed in docs and also class name. Notably
+  hock_schittkowsky.hpp becames hock_schittkowski.hpp and thus breaks backward compatibility
+  if that problem is needed.
+  (`#531 <https://github.com/esa/pagmo2/pull/531>`__, 
+  `#509 <https://github.com/esa/pagmo2/pull/509>`__).
+
+Fix
+~~~
+
+- A fix for the gaco algorithm that now throws if ``ker`` size is < 2.
+  (`#490 <https://github.com/esa/pagmo2/pull/490>`__).
+
 2.18.0 (2021-08-03)
 -------------------
 
