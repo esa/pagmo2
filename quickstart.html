@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Quick start &#8212; pagmo 2.18.0 documentation</title>
+    <title>Quick start &#8212; pagmo 2.19.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -69,7 +69,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      <h1 class="site-logo" id="site-title">pagmo 2.19.0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -759,54 +759,54 @@ title="Print to PDF"
 you will be able to compile and run your first C++ pagmo program:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">getting_started.cpp</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/algorithm.hpp&gt;</span><span class="cp"></span>
-<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/algorithms/sade.hpp&gt;</span><span class="cp"></span>
-<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/archipelago.hpp&gt;</span><span class="cp"></span>
-<span class="linenos"> 6</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
-<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/problems/schwefel.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/algorithm.hpp&gt;</span>
+<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/algorithms/sade.hpp&gt;</span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/archipelago.hpp&gt;</span>
+<span class="linenos"> 6</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/problem.hpp&gt;</span>
+<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/problems/schwefel.hpp&gt;</span>
 <span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">pagmo</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">pagmo</span><span class="p">;</span>
 <span class="linenos">10</span>
-<span class="linenos">11</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
-<span class="linenos">12</span><span class="p">{</span><span class="w"></span>
+<span class="linenos">11</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="linenos">12</span><span class="p">{</span>
 <span class="linenos">13</span><span class="w">    </span><span class="c1">// 1 - Instantiate a pagmo problem constructing it from a UDP</span>
 <span class="linenos">14</span><span class="w">    </span><span class="c1">// (i.e., a user-defined problem, in this case the 30-dimensional</span>
 <span class="linenos">15</span><span class="w">    </span><span class="c1">// generalised Schwefel test function).</span>
-<span class="linenos">16</span><span class="w">    </span><span class="n">problem</span><span class="w"> </span><span class="n">prob</span><span class="p">{</span><span class="n">schwefel</span><span class="p">(</span><span class="mi">30</span><span class="p">)};</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">    </span><span class="n">problem</span><span class="w"> </span><span class="n">prob</span><span class="p">{</span><span class="n">schwefel</span><span class="p">(</span><span class="mi">30</span><span class="p">)};</span>
 <span class="linenos">17</span>
 <span class="linenos">18</span><span class="w">    </span><span class="c1">// 2 - Instantiate a pagmo algorithm (self-adaptive differential</span>
 <span class="linenos">19</span><span class="w">    </span><span class="c1">// evolution, 100 generations).</span>
-<span class="linenos">20</span><span class="w">    </span><span class="n">algorithm</span><span class="w"> </span><span class="n">algo</span><span class="p">{</span><span class="n">sade</span><span class="p">(</span><span class="mi">100</span><span class="p">)};</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">    </span><span class="n">algorithm</span><span class="w"> </span><span class="n">algo</span><span class="p">{</span><span class="n">sade</span><span class="p">(</span><span class="mi">100</span><span class="p">)};</span>
 <span class="linenos">21</span>
 <span class="linenos">22</span><span class="w">    </span><span class="c1">// 3 - Instantiate an archipelago with 16 islands having each 20 individuals.</span>
-<span class="linenos">23</span><span class="w">    </span><span class="n">archipelago</span><span class="w"> </span><span class="n">archi</span><span class="p">{</span><span class="mi">16u</span><span class="p">,</span><span class="w"> </span><span class="n">algo</span><span class="p">,</span><span class="w"> </span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="mi">20u</span><span class="p">};</span><span class="w"></span>
+<span class="linenos">23</span><span class="w">    </span><span class="n">archipelago</span><span class="w"> </span><span class="n">archi</span><span class="p">{</span><span class="mi">16u</span><span class="p">,</span><span class="w"> </span><span class="n">algo</span><span class="p">,</span><span class="w"> </span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="mi">20u</span><span class="p">};</span>
 <span class="linenos">24</span>
 <span class="linenos">25</span><span class="w">    </span><span class="c1">// 4 - Run the evolution in parallel on the 16 separate islands 10 times.</span>
-<span class="linenos">26</span><span class="w">    </span><span class="n">archi</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">26</span><span class="w">    </span><span class="n">archi</span><span class="p">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
 <span class="linenos">27</span>
 <span class="linenos">28</span><span class="w">    </span><span class="c1">// 5 - Wait for the evolutions to finish.</span>
-<span class="linenos">29</span><span class="w">    </span><span class="n">archi</span><span class="p">.</span><span class="n">wait_check</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">29</span><span class="w">    </span><span class="n">archi</span><span class="p">.</span><span class="n">wait_check</span><span class="p">();</span>
 <span class="linenos">30</span>
 <span class="linenos">31</span><span class="w">    </span><span class="c1">// 6 - Print the fitness of the best solution in each island.</span>
-<span class="linenos">32</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">isl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">archi</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">33</span><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">isl</span><span class="p">.</span><span class="n">get_population</span><span class="p">().</span><span class="n">champion_f</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">34</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="linenos">35</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">32</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">isl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">archi</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">33</span><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">isl</span><span class="p">.</span><span class="n">get_population</span><span class="p">().</span><span class="n">champion_f</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="linenos">34</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">35</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <p>Place it into a <code class="docutils literal notranslate"><span class="pre">getting_started.cpp</span></code> text file and compile it
 (for example) with:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++17 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>g++<span class="w"> </span>-O2<span class="w"> </span>-DNDEBUG<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>getting_started.cpp<span class="w"> </span>-pthread<span class="w"> </span>-lpagmo<span class="w"> </span>-lboost_serialization<span class="w"> </span>-ltbb
 </pre></div>
 </div>
 <p>If you installed pagmo in a non-standard path, such as the <code class="docutils literal notranslate"><span class="pre">.local</span></code> directory
 in your <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> on a Unix installation (e.g., <code class="docutils literal notranslate"><span class="pre">/home/username/.local</span></code>),
 the compiler will need assistance to locate the pagmo headers and libraries.
 E.g., you may need a command such as:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>g++ -O2 -DNDEBUG -std<span class="o">=</span>c++17 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -I /home/username/.local/include -L /home/username/.local/lib -Wl,-R/home/username/.local/lib
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>g++<span class="w"> </span>-O2<span class="w"> </span>-DNDEBUG<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>getting_started.cpp<span class="w"> </span>-pthread<span class="w"> </span>-lpagmo<span class="w"> </span>-lboost_serialization<span class="w"> </span>-ltbb<span class="w"> </span>-I<span class="w"> </span>/home/username/.local/include<span class="w"> </span>-L<span class="w"> </span>/home/username/.local/lib<span class="w"> </span>-Wl,-R/home/username/.local/lib
 </pre></div>
 </div>
 <p>If you installed pagmo with support for optional 3rd party libraries,
@@ -848,8 +848,8 @@ program presented earlier may look like this:</p>
 in the same directory, and create a <code class="docutils literal notranslate"><span class="pre">build</span></code> subdirectory. From
 the <code class="docutils literal notranslate"><span class="pre">build</span></code> subdirectory, execute these commands to produce
 the <code class="docutils literal notranslate"><span class="pre">getting_started</span></code> executable:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake ../ -DCMAKE_BUILD_TYPE<span class="o">=</span>Release
-<span class="gp">$ </span>cmake  --build .
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>../<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+<span class="gp">$ </span>cmake<span class="w">  </span>--build<span class="w"> </span>.
 </pre></div>
 </div>
 <p>Please refer to the <a class="reference external" href="https://cmake.org/documentation/">CMake documentation</a>

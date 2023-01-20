@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Writing your first optimisation problem &#8212; pagmo 2.18.0 documentation</title>
+    <title>Writing your first optimisation problem &#8212; pagmo 2.19.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -70,7 +70,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      <h1 class="site-logo" id="site-title">pagmo 2.19.0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
@@ -835,52 +835,52 @@ the box bounds. Let’s see how this is done
 for our simple example problem:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">first_udp_ver0.cpp</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
-<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;initializer_list&gt;</span><span class="cp"></span>
-<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cmath&gt;</span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;initializer_list&gt;</span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
 <span class="linenos"> 5</span>
-<span class="linenos"> 6</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/problem.hpp&gt;</span><span class="cp"></span>
-<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/types.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 6</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/problem.hpp&gt;</span>
+<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pagmo/types.hpp&gt;</span>
 <span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">pagmo</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">pagmo</span><span class="p">;</span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="c1">// Our simple example problem, version 0.</span>
-<span class="linenos">12</span><span class="k">struct</span><span class="w"> </span><span class="nc">problem_v0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">12</span><span class="k">struct</span><span class="w"> </span><span class="nc">problem_v0</span><span class="w"> </span><span class="p">{</span>
 <span class="linenos">13</span><span class="w">    </span><span class="c1">// Implementation of the objective function.</span>
-<span class="linenos">14</span><span class="w">    </span><span class="n">vector_double</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"></span>
-<span class="linenos">15</span><span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">16</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span><span class="w"></span>
-<span class="linenos">17</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">vector_double</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
+<span class="linenos">15</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">16</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span>
+<span class="linenos">17</span><span class="w">    </span><span class="p">}</span>
 <span class="linenos">18</span><span class="w">    </span><span class="c1">// Implementation of the box bounds.</span>
-<span class="linenos">19</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span><span class="w"> </span><span class="n">vector_double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get_bounds</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"></span>
-<span class="linenos">20</span><span class="w">    </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">21</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{{</span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">}};</span><span class="w"></span>
-<span class="linenos">22</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="linenos">23</span><span class="p">};</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span><span class="w"> </span><span class="n">vector_double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get_bounds</span><span class="p">()</span><span class="w"> </span><span class="k">const</span>
+<span class="linenos">20</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">21</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{{</span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">}};</span>
+<span class="linenos">22</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">23</span><span class="p">};</span>
 <span class="linenos">24</span>
-<span class="linenos">25</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
-<span class="linenos">26</span><span class="p">{</span><span class="w"></span>
+<span class="linenos">25</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="linenos">26</span><span class="p">{</span>
 <span class="linenos">27</span><span class="w">    </span><span class="c1">// Construct a pagmo::problem from our example problem.</span>
-<span class="linenos">28</span><span class="w">    </span><span class="n">problem</span><span class="w"> </span><span class="n">p</span><span class="p">{</span><span class="n">problem_v0</span><span class="p">{}};</span><span class="w"></span>
+<span class="linenos">28</span><span class="w">    </span><span class="n">problem</span><span class="w"> </span><span class="n">p</span><span class="p">{</span><span class="n">problem_v0</span><span class="p">{}};</span>
 <span class="linenos">29</span>
 <span class="linenos">30</span><span class="w">    </span><span class="c1">// Compute the value of the objective function</span>
 <span class="linenos">31</span><span class="w">    </span><span class="c1">// in the point (1, 2, 3, 4).</span>
-<span class="linenos">32</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">})[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">32</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">})[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 <span class="linenos">33</span>
 <span class="linenos">34</span><span class="w">    </span><span class="c1">// Fetch the lower/upper bounds for the first variable.</span>
-<span class="linenos">35</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Lower bounds: [&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_lb</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">36</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Upper bounds: [&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_ub</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">35</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Lower bounds: [&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_lb</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="linenos">36</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Upper bounds: [&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_ub</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">;</span>
 <span class="linenos">37</span>
 <span class="linenos">38</span><span class="w">    </span><span class="c1">// Print p to screen.</span>
-<span class="linenos">39</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">40</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">39</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="linenos">40</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <p>Let’s analyse this code.</p>
 <p>After the inclusion of the necessary header files, and a helpful</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">pagmo</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">pagmo</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>to reduce typing, we reach the definition
@@ -910,19 +910,19 @@ our optimisation problem does not have constraints yet,
 and thus the <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> implementation just returns
 a vector of size 1 whose only element is the value
 of the (single) objective function:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]};</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>The other mandatory function, <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code>, returns the
 box bounds of the problem as a <code class="docutils literal notranslate"><span class="pre">std::pair</span></code> of lower/upper
 bounds:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span><span class="w"> </span><span class="n">vector_double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get_bounds</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{{</span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">}};</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">vector_double</span><span class="p">,</span><span class="w"> </span><span class="n">vector_double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get_bounds</span><span class="p">()</span><span class="w"> </span><span class="k">const</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{{</span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">,</span><span class="w"> </span><span class="mf">1.</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">,</span><span class="w"> </span><span class="mf">5.</span><span class="p">}};</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>In addition to returning the box bounds, the <code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code>
@@ -937,7 +937,7 @@ via the sizes of the returned lower/upper bounds vectors
 we encounter the <code class="docutils literal notranslate"><span class="pre">main()</span></code> function. In the <code class="docutils literal notranslate"><span class="pre">main()</span></code>, the first
 thing we do is to construct a <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> from an
 instance of <code class="docutils literal notranslate"><span class="pre">problem_v0</span></code>:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">problem</span><span class="w"> </span><span class="n">p</span><span class="p">{</span><span class="n">problem_v0</span><span class="p">{}};</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">problem</span><span class="w"> </span><span class="n">p</span><span class="p">{</span><span class="n">problem_v0</span><span class="p">{}};</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> is pagmo’s
@@ -953,19 +953,19 @@ that useful), <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7
 functions to access the properties and capabilities of the UDP.
 We can, for instance, call the <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem7fitnessERK13vector_double" title="pagmo::problem::fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::fitness()</span></code></a>
 member function of <code class="docutils literal notranslate"><span class="pre">p</span></code> to invoke the fitness function of the UDP:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">})[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">})[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>We can also fetch the lower/upper box bounds of the UDP
 via the <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem6get_lbEv" title="pagmo::problem::get_lb"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::get_lb()</span></code></a> and
 <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem6get_ubEv" title="pagmo::problem::get_ub"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::get_ub()</span></code></a> member functions:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Fetch the lower/upper bounds for the first variable.</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Lower bounds: [&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_lb</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Upper bounds: [&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_ub</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Lower bounds: [&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_lb</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Upper bounds: [&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">get_ub</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;]</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Printing <code class="docutils literal notranslate"><span class="pre">p</span></code> to screen via</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>will produce a human-readable
@@ -1013,57 +1013,57 @@ objective function, also the value of the constraints for
 an input decision vector.</p></li>
 </ul>
 <p>Let us see the code:</p>
-<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- /home/circleci/project/tutorials/first_udp_ver0.cpp</span><span class="w"></span>
-<span class="gi">+++ /home/circleci/project/tutorials/first_udp_ver1.cpp</span><span class="w"></span>
-<span class="gu">@@ -8,12 +8,26 @@</span><span class="w"></span>
+<div class="highlight-udiff notranslate"><div class="highlight"><pre><span></span><span class="gd">--- /home/runner/work/pagmo2/pagmo2/tutorials/first_udp_ver0.cpp</span>
+<span class="gi">+++ /home/runner/work/pagmo2/pagmo2/tutorials/first_udp_ver1.cpp</span>
+<span class="gu">@@ -8,12 +8,26 @@</span>
 <span class="w"> </span>
-<span class="w"> </span>using namespace pagmo;<span class="w"></span>
+<span class="w"> </span>using namespace pagmo;
 <span class="w"> </span>
-<span class="gd">-// Our simple example problem, version 0.</span><span class="w"></span>
-<span class="gd">-struct problem_v0 {</span><span class="w"></span>
-<span class="gi">+// Our simple example problem, version 1.</span><span class="w"></span>
-<span class="gi">+struct problem_v1 {</span><span class="w"></span>
-<span class="gi">+    // Number of equality constraints.</span><span class="w"></span>
-<span class="gi">+    vector_double::size_type get_nec() const</span><span class="w"></span>
-<span class="gi">+    {</span><span class="w"></span>
-<span class="gi">+        return 1;</span><span class="w"></span>
-<span class="gi">+    }</span><span class="w"></span>
-<span class="gi">+    // Number of inequality constraints.</span><span class="w"></span>
-<span class="gi">+    vector_double::size_type get_nic() const</span><span class="w"></span>
-<span class="gi">+    {</span><span class="w"></span>
-<span class="gi">+        return 1;</span><span class="w"></span>
-<span class="gi">+    }</span><span class="w"></span>
-<span class="w"> </span>    // Implementation of the objective function.<span class="w"></span>
-<span class="w"> </span>    vector_double fitness(const vector_double &amp;dv) const<span class="w"></span>
-<span class="w"> </span>    {<span class="w"></span>
-<span class="gd">-        return {dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2]};</span><span class="w"></span>
-<span class="gi">+        return {</span><span class="w"></span>
-<span class="gi">+            dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2],                     // objfun</span><span class="w"></span>
-<span class="gi">+            dv[0] * dv[0] + dv[1] * dv[1] + dv[2] * dv[2] + dv[3] * dv[3] - 40., // equality con.</span><span class="w"></span>
-<span class="gi">+            25. - dv[0] * dv[1] * dv[2] * dv[3]                                  // inequality con.</span><span class="w"></span>
-<span class="gi">+        };</span><span class="w"></span>
-<span class="w"> </span>    }<span class="w"></span>
-<span class="w"> </span>    // Implementation of the box bounds.<span class="w"></span>
-<span class="w"> </span>    std::pair&lt;vector_double, vector_double&gt; get_bounds() const<span class="w"></span>
-<span class="gu">@@ -25,11 +39,14 @@</span><span class="w"></span>
-<span class="w"> </span>int main()<span class="w"></span>
-<span class="w"> </span>{<span class="w"></span>
-<span class="w"> </span>    // Construct a pagmo::problem from our example problem.<span class="w"></span>
-<span class="gd">-    problem p{problem_v0{}};</span><span class="w"></span>
-<span class="gi">+    problem p{problem_v1{}};</span><span class="w"></span>
+<span class="gd">-// Our simple example problem, version 0.</span>
+<span class="gd">-struct problem_v0 {</span>
+<span class="gi">+// Our simple example problem, version 1.</span>
+<span class="gi">+struct problem_v1 {</span>
+<span class="gi">+    // Number of equality constraints.</span>
+<span class="gi">+    vector_double::size_type get_nec() const</span>
+<span class="gi">+    {</span>
+<span class="gi">+        return 1;</span>
+<span class="gi">+    }</span>
+<span class="gi">+    // Number of inequality constraints.</span>
+<span class="gi">+    vector_double::size_type get_nic() const</span>
+<span class="gi">+    {</span>
+<span class="gi">+        return 1;</span>
+<span class="gi">+    }</span>
+<span class="w"> </span>    // Implementation of the objective function.
+<span class="w"> </span>    vector_double fitness(const vector_double &amp;dv) const
+<span class="w"> </span>    {
+<span class="gd">-        return {dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2]};</span>
+<span class="gi">+        return {</span>
+<span class="gi">+            dv[0] * dv[3] * (dv[0] + dv[1] + dv[2]) + dv[2],                     // objfun</span>
+<span class="gi">+            dv[0] * dv[0] + dv[1] * dv[1] + dv[2] * dv[2] + dv[3] * dv[3] - 40., // equality con.</span>
+<span class="gi">+            25. - dv[0] * dv[1] * dv[2] * dv[3]                                  // inequality con.</span>
+<span class="gi">+        };</span>
+<span class="w"> </span>    }
+<span class="w"> </span>    // Implementation of the box bounds.
+<span class="w"> </span>    std::pair&lt;vector_double, vector_double&gt; get_bounds() const
+<span class="gu">@@ -25,11 +39,14 @@</span>
+<span class="w"> </span>int main()
+<span class="w"> </span>{
+<span class="w"> </span>    // Construct a pagmo::problem from our example problem.
+<span class="gd">-    problem p{problem_v0{}};</span>
+<span class="gi">+    problem p{problem_v1{}};</span>
 <span class="w"> </span>
-<span class="gd">-    // Compute the value of the objective function</span><span class="w"></span>
-<span class="gd">-    // in the point (1, 2, 3, 4).</span><span class="w"></span>
-<span class="gd">-    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; p.fitness({1, 2, 3, 4})[0] &lt;&lt; &#39;\n&#39;;</span><span class="w"></span>
-<span class="gi">+    // Compute the value of the objective function, equality and</span><span class="w"></span>
-<span class="gi">+    // inequality constraints in the point (1, 2, 3, 4).</span><span class="w"></span>
-<span class="gi">+    const auto fv = p.fitness({1, 2, 3, 4});</span><span class="w"></span>
-<span class="gi">+    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; fv[0] &lt;&lt; &#39;\n&#39;;</span><span class="w"></span>
-<span class="gi">+    std::cout &lt;&lt; &quot;Value of the eq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[1] &lt;&lt; &#39;\n&#39;;</span><span class="w"></span>
-<span class="gi">+    std::cout &lt;&lt; &quot;Value of the ineq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[2] &lt;&lt; &#39;\n&#39;;</span><span class="w"></span>
+<span class="gd">-    // Compute the value of the objective function</span>
+<span class="gd">-    // in the point (1, 2, 3, 4).</span>
+<span class="gd">-    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; p.fitness({1, 2, 3, 4})[0] &lt;&lt; &#39;\n&#39;;</span>
+<span class="gi">+    // Compute the value of the objective function, equality and</span>
+<span class="gi">+    // inequality constraints in the point (1, 2, 3, 4).</span>
+<span class="gi">+    const auto fv = p.fitness({1, 2, 3, 4});</span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the objfun in (1, 2, 3, 4): &quot; &lt;&lt; fv[0] &lt;&lt; &#39;\n&#39;;</span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the eq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[1] &lt;&lt; &#39;\n&#39;;</span>
+<span class="gi">+    std::cout &lt;&lt; &quot;Value of the ineq. constraint in (1, 2, 3, 4): &quot; &lt;&lt; fv[2] &lt;&lt; &#39;\n&#39;;</span>
 <span class="w"> </span>
-<span class="w"> </span>    // Fetch the lower/upper bounds for the first variable.<span class="w"></span>
-<span class="w"> </span>    std::cout &lt;&lt; &quot;Lower bounds: [&quot; &lt;&lt; p.get_lb()[0] &lt;&lt; &quot;]\n&quot;;<span class="w"></span>
+<span class="w"> </span>    // Fetch the lower/upper bounds for the first variable.
+<span class="w"> </span>    std::cout &lt;&lt; &quot;Lower bounds: [&quot; &lt;&lt; p.get_lb()[0] &lt;&lt; &quot;]\n&quot;;
 </pre></div>
 </div>
 <p>In order to specify the type and number of constraints in our
@@ -1071,14 +1071,14 @@ optimisation problem, we have to implement the two member
 functions <code class="docutils literal notranslate"><span class="pre">get_nec()</span></code>, which returns the number of equality
 constraints, and <code class="docutils literal notranslate"><span class="pre">get_nic()</span></code>, which returns the number of
 inequality constraints:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span><span class="w"> </span><span class="nf">get_nec</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span><span class="w"> </span><span class="nf">get_nic</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span><span class="w"> </span><span class="nf">get_nec</span><span class="p">()</span><span class="w"> </span><span class="k">const</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">vector_double</span><span class="o">::</span><span class="n">size_type</span><span class="w"> </span><span class="nf">get_nic</span><span class="p">()</span><span class="w"> </span><span class="k">const</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Note that the number of (in)equality constraints is represented
@@ -1109,14 +1109,14 @@ inequality constraint,</p>
 <p>and thus the fitness function will have to return a vector
 with 3 values, which are, in order, the objective function,
 the equality constraint and the inequality constraint:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"></span>
-<span class="p">{</span><span class="w"></span>
-<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="nf">fitness</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dv</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w">                     </span><span class="c1">// objfun</span>
 <span class="w">      </span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">40.</span><span class="p">,</span><span class="w"> </span><span class="c1">// equality con.</span>
 <span class="w">      </span><span class="mf">25.</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w">                                  </span><span class="c1">// inequality con.</span>
-<span class="w">   </span><span class="p">};</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">   </span><span class="p">};</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Now we can create a <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> from our
@@ -1150,10 +1150,10 @@ implementation of our UDP:</p>
 function now produces a vector with three components:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Compute the value of the objective function, equality and</span>
 <span class="c1">// inequality constraints in the point (1, 2, 3, 4).</span>
-<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">fv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">});</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the eq. constraint in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the ineq. constraint in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">fv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">fitness</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">});</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the objfun in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the eq. constraint in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Value of the ineq. constraint in (1, 2, 3, 4): &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>

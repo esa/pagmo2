@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Installation &#8212; pagmo 2.18.0 documentation</title>
+    <title>Installation &#8212; pagmo 2.19.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -69,7 +69,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      <h1 class="site-logo" id="site-title">pagmo 2.19.0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -884,9 +884,9 @@ CMake support files.</p></li>
 </ul>
 <p>In order to install pagmo via conda, you just need to add <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>
 to the channels, and then we can immediately install pagmo:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda config --add channels conda-forge
-<span class="gp">$ </span>conda config --set channel_priority strict
-<span class="gp">$ </span>conda install pagmo pagmo-devel
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>conda-forge
+<span class="gp">$ </span>conda<span class="w"> </span>config<span class="w"> </span>--set<span class="w"> </span>channel_priority<span class="w"> </span>strict
+<span class="gp">$ </span>conda<span class="w"> </span>install<span class="w"> </span>pagmo<span class="w"> </span>pagmo-devel
 </pre></div>
 </div>
 <p>The conda packages for pagmo are maintained by the core development team,
@@ -902,7 +902,7 @@ recommended to use an AUR helper like
 <a class="reference external" href="https://aur.archlinux.org/packages/pikaur/">pikaur</a> for ease of installation.
 See the <a class="reference external" href="https://wiki.archlinux.org/index.php/AUR_helpers">AUR helpers</a> page on
 the Arch Linux wiki for more info.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>yay -S pagmo
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>yay<span class="w"> </span>-S<span class="w"> </span>pagmo
 </pre></div>
 </div>
 </section>
@@ -910,7 +910,7 @@ the Arch Linux wiki for more info.</p>
 <h3>FreeBSD<a class="headerlink" href="#freebsd" title="Permalink to this headline">#</a></h3>
 <p>A FreeBSD port via <a class="reference external" href="https://www.freebsd.org/doc/handbook/pkgng-intro.html">pkg</a> has been created for
 pagmo. In order to install pagmo using pkg, execute the following command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pkg install pagmo2
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pkg<span class="w"> </span>install<span class="w"> </span>pagmo2
 </pre></div>
 </div>
 </section>
@@ -918,17 +918,17 @@ pagmo. In order to install pagmo using pkg, execute the following command:</p>
 <h3>Homebrew<a class="headerlink" href="#homebrew" title="Permalink to this headline">#</a></h3>
 <p>A <a class="reference external" href="https://brew.sh/">Homebrew</a> recipe for pagmo is also available. In order to install
 pagmo on OSX with Homebrew, it is sufficient to execute the following command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew install pagmo
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew<span class="w"> </span>install<span class="w"> </span>pagmo
 </pre></div>
 </div>
 </section>
 <section id="vcpkg">
 <h3>vcpkg<a class="headerlink" href="#vcpkg" title="Permalink to this headline">#</a></h3>
 <p>You can download and install pagmo2 using the vcpkg dependency manager:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git clone https://github.com/Microsoft/vcpkg.git
-<span class="gp">$ </span><span class="nb">cd</span> vcpkg
-<span class="gp">$ </span>./bootstrap-vcpkg.sh    <span class="c1"># add -disableMetrics to opt out of telemetry</span>
-<span class="gp">$ </span>./vcpkg install pagmo2  <span class="c1"># or use pagmo2[nlopt] for the NLopt wrappers</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Microsoft/vcpkg.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>vcpkg
+<span class="gp">$ </span>./bootstrap-vcpkg.sh<span class="w">    </span><span class="c1"># add -disableMetrics to opt out of telemetry</span>
+<span class="gp">$ </span>./vcpkg<span class="w"> </span>install<span class="w"> </span>pagmo2<span class="w">  </span><span class="c1"># or use pagmo2[nlopt] for the NLopt wrappers</span>
 </pre></div>
 </div>
 <p>Then you may direct cmake or msbuild to use the provided vcpkg toolchain file. Please visit
@@ -946,7 +946,7 @@ download the pagmo source code from the
 <a class="reference external" href="https://github.com/esa/pagmo2/releases">GitHub release page</a>. Alternatively,
 and if you like living on the bleeding edge, you can get the very latest
 version of pagmo via <code class="docutils literal notranslate"><span class="pre">git</span></code>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git clone https://github.com/esa/pagmo2.git
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/esa/pagmo2.git
 </pre></div>
 </div>
 <p>We follow the usual PR-based development workflow, thus pagmo’s <code class="docutils literal notranslate"><span class="pre">master</span></code>
@@ -955,9 +955,9 @@ branch is normally kept in a working state.</p>
 source code, go to pagmo’s
 source tree, create a <code class="docutils literal notranslate"><span class="pre">build</span></code> directory and <code class="docutils literal notranslate"><span class="pre">cd</span></code> into it. E.g.,
 on a Unix-like system:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> /path/to/pagmo
-<span class="gp">$ </span>mkdir build
-<span class="gp">$ </span><span class="nb">cd</span> build
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>/path/to/pagmo
+<span class="gp">$ </span>mkdir<span class="w"> </span>build
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>build
 </pre></div>
 </div>
 <p>Once you are in the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory, you must configure your build
@@ -987,25 +987,25 @@ when looking for dependencies.</p></li>
 <p>Please consult <a class="reference external" href="https://cmake.org/cmake/help/latest/">CMake’s documentation</a>
 for more details about CMake’s variables and options.</p>
 <p>A typical CMake invocation for pagmo may look something like this:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake ../ -DPAGMO_BUILD_TESTS<span class="o">=</span>ON -DCMAKE_INSTALL_PREFIX<span class="o">=</span>~/.local
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>../<span class="w"> </span>-DPAGMO_BUILD_TESTS<span class="o">=</span>ON<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>~/.local
 </pre></div>
 </div>
 <p>That is, we build the test suite and we
 will be installing pagmo into our home directory into the <code class="docutils literal notranslate"><span class="pre">.local</span></code>
 subdirectory. If CMake runs without errors, we can then proceed to actually
 building pagmo:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake --build .
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>--build<span class="w"> </span>.
 </pre></div>
 </div>
 <p>This command will build the pagmo library and, if requested, the test suite.
 Next, we can install pagmo with the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake  --build . --target install
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w">  </span>--build<span class="w"> </span>.<span class="w"> </span>--target<span class="w"> </span>install
 </pre></div>
 </div>
 <p>This command will install the pagmo library and header files to
 the directory tree indicated by the <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> variable.</p>
 <p>If enabled, the test suite can be executed with the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake  --build . --target <span class="nb">test</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w">  </span>--build<span class="w"> </span>.<span class="w"> </span>--target<span class="w"> </span><span class="nb">test</span>
 </pre></div>
 </div>
 <div class="admonition note">

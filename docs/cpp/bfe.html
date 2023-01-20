@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Batch fitness evaluator &#8212; pagmo 2.18.0 documentation</title>
+    <title>Batch fitness evaluator &#8212; pagmo 2.19.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -70,7 +70,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">pagmo 2.18.0 documentation</h1>
+      <h1 class="site-logo" id="site-title">pagmo 2.19.0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -795,7 +795,7 @@ a user-defined batch fitness evaluator (UDBFE for short) which actually
 implements the fitness evaluation in batch mode. Users are free to either
 use one of the evaluators provided with pagmo, or to write their own UDBFE.</p>
 <p>Every UDBFE must be a callable with a signature equivalent to</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>UDBFEs receive in input a <a class="reference internal" href="problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">problem</span></code></a> and a batch of decision vectors
@@ -807,9 +807,9 @@ stored contiguously).</p>
 Note that pointers to plain C++ functions with an appropriate signature
 are UDBFEs, but lambda functions are not (as they currently are not default-constructible).</p>
 <p>UDBFEs can also implement the following (optional) member functions:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_name</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_extra_info</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
-<span class="n">thread_safety</span><span class="w"> </span><span class="nf">get_thread_safety</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_name</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_extra_info</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="n">thread_safety</span><span class="w"> </span><span class="nf">get_thread_safety</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>See the documentation of the corresponding member functions in this class for details on how the optional
@@ -868,7 +868,7 @@ a state which is destructible and assignable.</p>
 and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> and if it satisfies <a class="reference internal" href="#_CPPv4I0EN5pagmo8is_udbfeE" title="pagmo::is_udbfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udbfe</span></code></a>.</p>
 <p>Additionally, the constructor will also be enabled if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference and cv qualifiers, is a function type with
 the following signature</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The input parameter <em>x</em> will be perfectly forwarded to construct the internal UDBFE instance.</p>
@@ -890,7 +890,7 @@ the following signature</p>
 and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> and if it satisfies <a class="reference internal" href="#_CPPv4I0EN5pagmo8is_udbfeE" title="pagmo::is_udbfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_udbfe</span></code></a>.</p>
 <p>Additionally, the operator will also be enabled if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference and cv qualifiers,
 is a function type with the following signature</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vector_double</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector_double</span><span class="w"> </span><span class="o">&amp;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This operator will set the internal UDBFE to <em>x</em> by constructing a <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> from <em>x</em>,
