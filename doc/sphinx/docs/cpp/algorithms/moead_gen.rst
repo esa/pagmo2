@@ -1,5 +1,6 @@
-Multi-objective Evolutionary Algorithm by Decomposition (MOEA/D-DE)
+Multi-objective Evolutionary Algorithm by Decomposition Generational (GMOEA/D-DE)
 ===================================================================
 
-.. doxygenclass:: pagmo::moead
+.. doxygenclass:: pagmo::moead_gen
    :members:
+

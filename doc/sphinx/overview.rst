@@ -66,28 +66,29 @@ problems into single-objective ones.
 
 Heuristic Global Optimization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-========================================================== ========================================= =========================
-Common Name                                                Docs of the C++ class                     Capabilities
-========================================================== ========================================= =========================
-Extended Ant Colony Optimization (GACO)                    :cpp:class:`pagmo::gaco`                  S-CU-I
-Differential Evolution (DE)                                :cpp:class:`pagmo::de`                    S-U
-Self-adaptive DE (jDE and iDE)                             :cpp:class:`pagmo::sade`                  S-U
-Self-adaptive DE (de_1220 aka pDE)                         :cpp:class:`pagmo::de1220`                S-U
-Grey wolf optimizer (GWO)                                  :cpp:class:`pagmo::gwo`                   S-U
-Improved Harmony Search                                    :cpp:class:`pagmo::ihs`                   SM-CU-I
-Particle Swarm Optimization (PSO)                          :cpp:class:`pagmo::pso`                   S-U
-Particle Swarm Optimization Generational (GPSO)            :cpp:class:`pagmo::pso_gen`               S-U-sto
-(N+1)-ES Simple Evolutionary Algorithm                     :cpp:class:`pagmo::sea`                   S-U-sto
-Simple Genetic Algorithm                                   :cpp:class:`pagmo::sga`                   S-U-I-sto
-Corana's Simulated Annealing (SA)                          :cpp:class:`pagmo::simulated_annealing`   S-U
-Artificial Bee Colony (ABC)                                :cpp:class:`pagmo::bee_colony`            S-U
-Covariance Matrix Adaptation Evo. Strategy (CMA-ES)        :cpp:class:`pagmo::cmaes`                 S-U-sto
-Exponential Evolution Strategies (xNES)                    :cpp:class:`pagmo::xnes`                  S-U-sto
-Non-dominated Sorting GA (NSGA2)                           :cpp:class:`pagmo::nsga2`                 M-U-I
-Multi-objective EA with Decomposition (MOEA/D)             :cpp:class:`pagmo::moead`                 M-U
-Multi-objective Hypervolume-based ACO (MHACO)              :cpp:class:`pagmo::maco`                  M-U-I
-Non-dominated Sorting PSO (NSPSO)                          :cpp:class:`pagmo::nspso`                 M-U
-========================================================== ========================================= =========================
+============================================================ ========================================= =========================
+Common Name                                                  Docs of the C++ class                     Capabilities
+============================================================ ========================================= =========================
+Extended Ant Colony Optimization (GACO)                      :cpp:class:`pagmo::gaco`                  S-CU-I
+Differential Evolution (DE)                                  :cpp:class:`pagmo::de`                    S-U
+Self-adaptive DE (jDE and iDE)                               :cpp:class:`pagmo::sade`                  S-U
+Self-adaptive DE (de_1220 aka pDE)                           :cpp:class:`pagmo::de1220`                S-U
+Grey wolf optimizer (GWO)                                    :cpp:class:`pagmo::gwo`                   S-U
+Improved Harmony Search                                      :cpp:class:`pagmo::ihs`                   SM-CU-I
+Particle Swarm Optimization (PSO)                            :cpp:class:`pagmo::pso`                   S-U
+Particle Swarm Optimization Generational (GPSO)              :cpp:class:`pagmo::pso_gen`               S-U-sto
+(N+1)-ES Simple Evolutionary Algorithm                       :cpp:class:`pagmo::sea`                   S-U-sto
+Simple Genetic Algorithm                                     :cpp:class:`pagmo::sga`                   S-U-I-sto
+Corana's Simulated Annealing (SA)                            :cpp:class:`pagmo::simulated_annealing`   S-U
+Artificial Bee Colony (ABC)                                  :cpp:class:`pagmo::bee_colony`            S-U
+Covariance Matrix Adaptation Evo. Strategy (CMA-ES)          :cpp:class:`pagmo::cmaes`                 S-U-sto
+Exponential Evolution Strategies (xNES)                      :cpp:class:`pagmo::xnes`                  S-U-sto
+Non-dominated Sorting GA (NSGA2)                             :cpp:class:`pagmo::nsga2`                 M-U-I
+Multi-objective EA with Decomposition (MOEA/D)               :cpp:class:`pagmo::moead`                 M-U
+Multi-objective EA with Decomposition Generational (GMOEA/D) :cpp:class:`pagmo::moead_gen`             M-U
+Multi-objective Hypervolume-based ACO (MHACO)                :cpp:class:`pagmo::maco`                  M-U-I
+Non-dominated Sorting PSO (NSPSO)                            :cpp:class:`pagmo::nspso`                 M-U
+============================================================ ========================================= =========================
 
 Local optimization 
 ^^^^^^^^^^^^^^^^^^
