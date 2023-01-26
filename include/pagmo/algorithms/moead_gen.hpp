@@ -54,7 +54,13 @@ namespace pagmo
  * While this sacrifices the immediate sensitivity of the original MOEA/D-DE to changes in the population, it does allow for easy parallelizability.
  * This variant can employ a bfe to make several fitness evaluations simultaneously, and should be used for expensive fitness functions.
  *
- * See the MOEA/D-DE algorithm documentation for more details on the generic algorithm.
+ * \verbatim embed:rst:leading-asterisk
+ *
+ * .. seealso::
+ *
+ *    :cpp:class:`pagmo::moead` for the implementation of non-generational MOEA/D-DE
+ *
+ * \endverbatim
  */
 class PAGMO_DLL_PUBLIC moead_gen
 {
@@ -66,7 +72,7 @@ public:
 
     /// Constructor
     /**
-     * Constructs MOEA/D-DE
+     * Constructs Generational MOEA/D-DE
      *
      * @param gen number of generations
      * @param weight_generation method used to generate the weights, one of "grid", "low discrepancy" or "random"
@@ -166,7 +172,7 @@ public:
      */
     std::string get_name() const
     {
-        return "Generational MOEAD: MOEA/D - DE";
+        return "GMOEAD: Generational MOEA/D - DE";
     }
 
     // Extra info

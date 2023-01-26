@@ -38,6 +38,7 @@ Implemented algorithms
   algorithms/ipopt
   algorithms/maco
   algorithms/moead
+  algorithms/moead_gen
   algorithms/mbh
   algorithms/cstrs_self_adaptive
   algorithms/nlopt
