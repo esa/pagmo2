@@ -22,4 +22,4 @@ cmake `
     ..
 
 cmake --build . --config Release --target install
-ctest -VV --output-on-failure -j4
+ctest -VV --output-on-failure -j4 -C Release

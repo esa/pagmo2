@@ -21,7 +21,7 @@ function(ADD_PAGMO_TESTCASE arg1)
     target_compile_features(${arg1} PRIVATE cxx_std_17)
     set_property(TARGET ${arg1} PROPERTY CXX_EXTENSIONS NO)
     target_compile_definitions(${arg1} PRIVATE BOOST_ALLOW_DEPRECATED_HEADERS)
-    add_test(${arg1} ${arg1})
+    add_test(NAME ${arg1} COMMAND ${arg1})
 endfunction()
 
 # Tests requiring no dependencies (in alphabetical order)
