@@ -140,7 +140,7 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, migrant_handling);
 class PAGMO_DLL_PUBLIC archipelago
 {
     // Make friends with island.
-    friend class PAGMO_DLL_PUBLIC island;
+    friend class island;
 
     using container_t = std::vector<std::unique_ptr<island>>;
     using size_type_implementation = container_t::size_type;
