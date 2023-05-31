@@ -404,6 +404,7 @@ std::string moead_gen::get_extra_info() const
     stream(ss, "\n\tDistribution index: ", m_eta_m);
     stream(ss, "\n\tChance for diversity preservation: ", m_realb);
     stream(ss, "\n\tSeed: ", m_seed);
+    stream(ss, "\n\tOutfile: ", m_outfile);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
     return ss.str();
 }
