@@ -181,7 +181,7 @@ population moead_gen::evolve(population pop) const
         // 0a - custom logging of entire population at each gen
         if (m_outfile != ""){
             FILE *ostrm;
-            ostrm = fopen(m_outfile.c_str(), "w");
+            ostrm = fopen(m_outfile.c_str(), "a");
                 for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
                     vector_double pop_gen_x = pop.get_x()[i];
                     for (decltype(pop_gen_x.size()) j = 0u; j < pop_gen_x.size(); ++j) {
