@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <iostream>
 #include <string>
+#include <chrono>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -173,4 +174,36 @@ BOOST_AUTO_TEST_CASE(de_serialization_test)
         BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<4>(before_log[i]), std::get<4>(after_log[i]), 1e-8);
     }
+}
+
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test)
+{
+
+    std::chrono::steady_clock::time_point begin_1 = std::chrono::steady_clock::now();
+    population pop{rosenbrock{10u}, 40u, 23u};
+    de user_algo{1000000u, 0.7, 0.5, 2u, 1e-3, 1e-50, 23u};
+    user_algo.set_verbosity(1u);
+    user_algo.set_seed(23u);
+    user_algo.set_bfe(bfe{});
+    pop = user_algo.evolve(pop);
+    std::chrono::steady_clock::time_point end_1 = std::chrono::steady_clock::now();
+    BOOST_CHECK(user_algo.get_log().size() < 6000u);
+
+    std::chrono::steady_clock::time_point begin_2 = std::chrono::steady_clock::now();
+    population pop_2{rosenbrock{10u}, 40u, 23u};
+    de user_algo_2{1000000u, 0.7, 0.5, 2u, 1e-3, 1e-50, 23u};
+    user_algo_2.set_verbosity(1u);
+    pop_2 = user_algo_2.evolve(pop_2);
+    std::chrono::steady_clock::time_point end_2 = std::chrono::steady_clock::now();
+    BOOST_CHECK(user_algo_2.get_log().size() < 6000u);
+
+    BOOST_CHECK_EQUAL(pop.champion_f()[0], pop_2.champion_f()[0]);
+
+
+    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end_1 - begin_1).count()
+              << "[ms]" << std::endl;
+    
+    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end_2 - begin_2).count()
+              << "[ms]" << std::endl;
 }
