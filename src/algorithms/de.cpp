@@ -50,13 +50,13 @@ namespace pagmo
 
 vector_double de::mutate(const population &pop, population::size_type i, const vector_double &gbIter,
                          std::uniform_real_distribution<double> drng,
-                         std::uniform_int_distribution<vector_double::size_type> c_idx) const
+                         std::uniform_int_distribution<vector_double::size_type> c_idx,
+                         const std::vector<vector_double>& popold) const
 {
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
     auto dim = prob.get_nx();
     auto NP = pop.size();
-    auto popold = pop.get_x();
     std::vector<vector_double::size_type> r(5); // indexes of 5 selected population members
     vector_double tmp(dim);
 
@@ -313,7 +313,7 @@ population de::evolve(population pop) const
             // Start of the loop through the population
             for (decltype(NP) i = 0u; i < NP; ++i) {
 
-                auto tmp = mutate(pop, i, gbIter, drng, c_idx);
+                auto tmp = mutate(pop, i, gbIter, drng, c_idx, popold);
 
                 // Trial mutation now in tmp. force feasibility and see how good this choice really was.
                 // a) feasibility
@@ -350,7 +350,7 @@ population de::evolve(population pop) const
         
             for (decltype(NP) i = 0u; i < NP; ++i) {
 
-                auto tmp = mutate(pop, i, gbIter, drng, c_idx);
+                auto tmp = mutate(pop, i, gbIter, drng, c_idx, popold);
                 // Trial mutation now in tmp. force feasibility and see how good this choice really was.
                 // a) feasibility
                 // detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
