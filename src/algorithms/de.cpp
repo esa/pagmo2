@@ -137,7 +137,7 @@ population de::evolve(population pop) const
 
     // Main DE iterations
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-        
+
         if (m_bfe) {
             // bfe is available:
             vector_double trial(NP * dim);
@@ -158,7 +158,7 @@ population de::evolve(population pop) const
                     ++pos;
                 }
             }
-            
+
             vector_double tmp(dim);
             vector_double newfitness(prob_f_dimension);
             auto fitnesses = (*m_bfe)(prob, trial);
@@ -180,7 +180,7 @@ population de::evolve(population pop) const
             }
 
         } else {
-        
+
             for (decltype(NP) i = 0u; i < NP; ++i) {
 
                 auto tmp = mutate(pop, i, gbIter, drng, c_idx, popold);
@@ -257,12 +257,12 @@ population de::evolve(population pop) const
 vector_double de::mutate(const population &pop, population::size_type i, const vector_double &gbIter,
                          std::uniform_real_distribution<double> drng,
                          std::uniform_int_distribution<vector_double::size_type> c_idx,
-                         const std::vector<vector_double>& popold) const
+                         const std::vector<vector_double> &popold) const
 {
-    const auto &prob = pop.get_problem(); 
+    const auto &prob = pop.get_problem();
     auto dim = prob.get_nx();
     auto NP = pop.size();
-    
+
     std::vector<vector_double::size_type> r(5); // indexes of 5 selected population members
     vector_double tmp(dim);
 

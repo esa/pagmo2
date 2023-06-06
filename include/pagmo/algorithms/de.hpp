@@ -163,7 +163,7 @@ public:
         return m_gen;
     }
 
-     // Sets the bfe
+    // Sets the bfe
     void set_bfe(const bfe &b);
 
     /// Algorithm name
@@ -194,7 +194,7 @@ private:
     vector_double mutate(const population &pop, population::size_type i, const vector_double &gbIter,
                          std::uniform_real_distribution<double> drng,
                          std::uniform_int_distribution<vector_double::size_type> c_idx,
-                         const std::vector<vector_double>& popold) const;
+                         const std::vector<vector_double> &popold) const;
 
     void update_pop(population &pop, const vector_double &newfitness, population::size_type i,
                     std::vector<vector_double> &fit, vector_double &gbfit, vector_double &gbX,

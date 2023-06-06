@@ -32,7 +32,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <iostream>
 #include <string>
-#include <chrono>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -188,6 +187,6 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
     de user_algo_2{1000000u, 0.7, 0.5, 2u, 1e-3, 1e-50, 23u};
     user_algo_2.set_verbosity(1u);
     pop_2 = user_algo_2.evolve(pop_2);
-    
+
     BOOST_CHECK_EQUAL(pop.champion_f()[0], pop_2.champion_f()[0]);
 }
