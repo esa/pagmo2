@@ -45,18 +45,224 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
+
 namespace pagmo
 {
+de::de(unsigned gen, double F, double CR, unsigned variant, double ftol, double xtol, unsigned seed)
+    : m_gen(gen), m_F(F), m_CR(CR), m_variant(variant), m_Ftol(ftol), m_xtol(xtol), m_e(seed), m_seed(seed),
+      m_verbosity(0u), m_log()
+{
+    if (variant < 1u || variant > 10u) {
+        pagmo_throw(std::invalid_argument,
+                    "The Differential Evolution variant must be in [1, .., 10], while a value of "
+                        + std::to_string(variant) + " was detected.");
+    }
+    if (CR < 0. || F < 0. || CR > 1. || F > 1.) {
+        pagmo_throw(std::invalid_argument, "The F and CR parameters must be in the [0,1] range");
+    }
+}
+
+/// Algorithm evolve method
+/**
+ *
+ * Evolves the population for a maximum number of generations, until one of
+ * tolerances set on the population flatness (x_tol, f_tol) are met.
+ *
+ * @param pop population to be evolved
+ * @return evolved population
+ * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
+ * @throws std::invalid_argument if the population size is not at least 5
+ */
+population de::evolve(population pop) const
+{
+    // We store some useful variables
+    const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
+                                          // allowed
+    auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
+    const auto bounds = prob.get_bounds();
+    const auto &lb = bounds.first;
+    const auto &ub = bounds.second;
+    auto NP = pop.size();
+    auto prob_f_dimension = prob.get_nf();
+    auto fevals0 = prob.get_fevals(); // discount for the already made fevals
+    unsigned count = 1u;              // regulates the screen output
+
+    // PREAMBLE-------------------------------------------------------------------------------------------------
+    // We start by checking that the problem is suitable for this
+    // particular algorithm.
+    if (prob.get_nc() != 0u) {
+        pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
+                                               + get_name() + " cannot deal with them");
+    }
+    if (prob_f_dimension != 1u) {
+        pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
+                                               + get_name() + " cannot deal with them");
+    }
+    if (prob.is_stochastic()) {
+        pagmo_throw(std::invalid_argument,
+                    "The problem appears to be stochastic " + get_name() + " cannot deal with it");
+    }
+    // Get out if there is nothing to do.
+    if (m_gen == 0u) {
+        return pop;
+    }
+    if (pop.size() < 5u) {
+        pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
+                                               + std::to_string(pop.size()) + " detected");
+    }
+    // ---------------------------------------------------------------------------------------------------------
+
+    // No throws, all valid: we clear the logs
+    m_log.clear();
+
+    std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
+    std::uniform_int_distribution<vector_double::size_type> c_idx(
+        0u, dim - 1u); // to generate a random index for the chromosome
+
+    // We extract from pop the chromosomes and fitness associated
+    auto popold = pop.get_x();
+    auto fit = pop.get_f();
+    auto popnew = popold;
+
+    // Initialise the global bests
+    auto best_idx = pop.best_idx();
+    vector_double::size_type worst_idx = 0u;
+    auto gbX = popnew[best_idx];
+    auto gbfit = fit[best_idx];
+    // the best decision vector of a generation
+    auto gbIter = gbX;
+
+    // Main DE iterations
+    for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+        
+        if (m_bfe) {
+            // bfe is available:
+            vector_double trial(NP * dim);
+            decltype(trial.size()) pos = 0u;
+
+            // Start of the loop through the population
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+
+                auto tmp = mutate(pop, i, gbIter, drng, c_idx, popold);
+
+                // Trial mutation now in tmp. force feasibility and see how good this choice really was.
+                // a) feasibility
+                // detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
+                detail::force_bounds_random(tmp, lb, ub, m_e);
+
+                for (decltype(tmp.size()) ii = 0u; ii < tmp.size(); ++ii) {
+                    trial[pos] = tmp[ii];
+                    ++pos;
+                }
+            }
+            
+            vector_double tmp(dim);
+            vector_double newfitness(prob_f_dimension);
+            auto fitnesses = (*m_bfe)(prob, trial);
+            decltype(tmp.size()) pos_dim = 0u;
+            decltype(newfitness.size()) pos_fit = 0u;
+
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                for (decltype(dim) ii_dim = 0u; ii_dim < dim; ++ii_dim) {
+                    tmp[ii_dim] = trial[pos_dim];
+                    ++pos_dim;
+                }
+
+                for (decltype(prob_f_dimension) ii_f = 0u; ii_f < prob_f_dimension; ++ii_f) {
+                    newfitness[ii_f] = fitnesses[pos_fit];
+                    ++pos_fit;
+                }
+
+                update_pop(pop, newfitness, i, fit, gbfit, gbX, popnew, popold, tmp);
+            }
+
+        } else {
+        
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+
+                auto tmp = mutate(pop, i, gbIter, drng, c_idx, popold);
+                // Trial mutation now in tmp. force feasibility and see how good this choice really was.
+                // a) feasibility
+                // detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
+                detail::force_bounds_random(tmp, lb, ub, m_e);
+                // b) how good?
+                auto newfitness = prob.fitness(tmp); /* Evaluates tmp[] */
+
+                update_pop(pop, newfitness, i, fit, gbfit, gbX, popnew, popold, tmp);
+            } // End of one generation
+        }
+
+        /* Save best population member of current iteration */
+        gbIter = gbX;
+        /* swap population arrays. New generation becomes old one */
+        std::swap(popold, popnew);
+
+        // Check the exit conditions
+        double dx = 0., df = 0.;
+        best_idx = pop.best_idx();
+        worst_idx = pop.worst_idx();
+        for (decltype(dim) i = 0u; i < dim; ++i) {
+            dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
+        }
+        if (dx < m_xtol) {
+            if (m_verbosity > 0u) {
+                std::cout << "Exit condition -- xtol < " << m_xtol << '\n';
+            }
+            return pop;
+        }
+
+        df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
+        if (df < m_Ftol) {
+            if (m_verbosity > 0u) {
+                std::cout << "Exit condition -- ftol < " << m_Ftol << '\n';
+            }
+            return pop;
+        }
+
+        // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
+        if (m_verbosity > 0u) {
+            // Every m_verbosity generations print a log line
+            if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                best_idx = pop.best_idx();
+                worst_idx = pop.worst_idx();
+                dx = 0.;
+                // The population flatness in chromosome
+                for (decltype(dim) i = 0u; i < dim; ++i) {
+                    dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
+                }
+                // The population flatness in fitness
+                df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
+                // Every 50 lines print the column names
+                if (count % 50u == 1u) {
+                    print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15),
+                          "dx:", std::setw(15), "df:", '\n');
+                }
+                print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
+                      pop.get_f()[best_idx][0], std::setw(15), dx, std::setw(15), df, '\n');
+                ++count;
+                // Logs
+                m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], dx, df);
+            }
+        }
+    } // end main DE iterations
+    if (m_verbosity) {
+        std::cout << "Exit condition -- generations = " << m_gen << '\n';
+    }
+    return pop;
+}
 
 vector_double de::mutate(const population &pop, population::size_type i, const vector_double &gbIter,
                          std::uniform_real_distribution<double> drng,
                          std::uniform_int_distribution<vector_double::size_type> c_idx,
                          const std::vector<vector_double>& popold) const
 {
-    const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                          // allowed
+    const auto &prob = pop.get_problem(); 
     auto dim = prob.get_nx();
     auto NP = pop.size();
+    
     std::vector<vector_double::size_type> r(5); // indexes of 5 selected population members
     vector_double tmp(dim);
 
@@ -216,211 +422,6 @@ void de::update_pop(population &pop, const vector_double &newfitness, population
     }
 }
 
-de::de(unsigned gen, double F, double CR, unsigned variant, double ftol, double xtol, unsigned seed)
-    : m_gen(gen), m_F(F), m_CR(CR), m_variant(variant), m_Ftol(ftol), m_xtol(xtol), m_e(seed), m_seed(seed),
-      m_verbosity(0u), m_log()
-{
-    if (variant < 1u || variant > 10u) {
-        pagmo_throw(std::invalid_argument,
-                    "The Differential Evolution variant must be in [1, .., 10], while a value of "
-                        + std::to_string(variant) + " was detected.");
-    }
-    if (CR < 0. || F < 0. || CR > 1. || F > 1.) {
-        pagmo_throw(std::invalid_argument, "The F and CR parameters must be in the [0,1] range");
-    }
-}
-
-/// Algorithm evolve method
-/**
- *
- * Evolves the population for a maximum number of generations, until one of
- * tolerances set on the population flatness (x_tol, f_tol) are met.
- *
- * @param pop population to be evolved
- * @return evolved population
- * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
- * @throws std::invalid_argument if the population size is not at least 5
- */
-population de::evolve(population pop) const
-{
-    // We store some useful variables
-    const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
-                                          // allowed
-    auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
-    const auto bounds = prob.get_bounds();
-    const auto &lb = bounds.first;
-    const auto &ub = bounds.second;
-    auto NP = pop.size();
-    auto prob_f_dimension = prob.get_nf();
-    auto fevals0 = prob.get_fevals(); // discount for the already made fevals
-    unsigned count = 1u;              // regulates the screen output
-
-    // PREAMBLE-------------------------------------------------------------------------------------------------
-    // We start by checking that the problem is suitable for this
-    // particular algorithm.
-    if (prob.get_nc() != 0u) {
-        pagmo_throw(std::invalid_argument, "Non linear constraints detected in " + prob.get_name() + " instance. "
-                                               + get_name() + " cannot deal with them");
-    }
-    if (prob_f_dimension != 1u) {
-        pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
-                                               + get_name() + " cannot deal with them");
-    }
-    if (prob.is_stochastic()) {
-        pagmo_throw(std::invalid_argument,
-                    "The problem appears to be stochastic " + get_name() + " cannot deal with it");
-    }
-    // Get out if there is nothing to do.
-    if (m_gen == 0u) {
-        return pop;
-    }
-    if (pop.size() < 5u) {
-        pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
-                                               + std::to_string(pop.size()) + " detected");
-    }
-    // ---------------------------------------------------------------------------------------------------------
-
-    // No throws, all valid: we clear the logs
-    m_log.clear();
-
-    std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
-    std::uniform_int_distribution<vector_double::size_type> c_idx(
-        0u, dim - 1u); // to generate a random index for the chromosome
-
-    // We extract from pop the chromosomes and fitness associated
-    auto popold = pop.get_x();
-    auto fit = pop.get_f();
-    auto popnew = popold;
-
-    // Initialise the global bests
-    auto best_idx = pop.best_idx();
-    vector_double::size_type worst_idx = 0u;
-    auto gbX = popnew[best_idx];
-    auto gbfit = fit[best_idx];
-    // the best decision vector of a generation
-    auto gbIter = gbX;
-
-
-
-    // Main DE iterations
-    for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-        
-        if (m_bfe) {
-            // bfe is available:
-            vector_double trial(NP * dim);
-            decltype(trial.size()) pos = 0u;
-
-            // Start of the loop through the population
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-
-                auto tmp = mutate(pop, i, gbIter, drng, c_idx, popold);
-
-                // Trial mutation now in tmp. force feasibility and see how good this choice really was.
-                // a) feasibility
-                // detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
-                detail::force_bounds_random(tmp, lb, ub, m_e);
-
-                for (decltype(tmp.size()) ii = 0u; ii < tmp.size(); ++ii) {
-                    trial[pos] = tmp[ii];
-                    ++pos;
-                }
-            }
-            
-            vector_double tmp(dim);
-            vector_double newfitness(prob_f_dimension);
-            auto fitnesses = (*m_bfe)(prob, trial);
-            decltype(tmp.size()) pos_dim = 0u;
-            decltype(newfitness.size()) pos_fit = 0u;
-
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-                for (decltype(dim) ii_dim = 0u; ii_dim < dim; ++ii_dim) {
-                    tmp[ii_dim] = trial[pos_dim];
-                    ++pos_dim;
-                }
-
-                for (decltype(prob_f_dimension) ii_f = 0u; ii_f < prob_f_dimension; ++ii_f) {
-                    newfitness[ii_f] = fitnesses[pos_fit];
-                    ++pos_fit;
-                }
-
-                update_pop(pop, newfitness, i, fit, gbfit, gbX, popnew, popold, tmp);
-            }
-
-        } else {
-        
-            for (decltype(NP) i = 0u; i < NP; ++i) {
-
-                auto tmp = mutate(pop, i, gbIter, drng, c_idx, popold);
-                // Trial mutation now in tmp. force feasibility and see how good this choice really was.
-                // a) feasibility
-                // detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
-                detail::force_bounds_random(tmp, lb, ub, m_e);
-                // b) how good?
-                auto newfitness = prob.fitness(tmp); /* Evaluates tmp[] */
-
-                update_pop(pop, newfitness, i, fit, gbfit, gbX, popnew, popold, tmp);
-            } // End of one generation
-        }
-
-        /* Save best population member of current iteration */
-        gbIter = gbX;
-        /* swap population arrays. New generation becomes old one */
-        std::swap(popold, popnew);
-
-        // Check the exit conditions
-        double dx = 0., df = 0.;
-        best_idx = pop.best_idx();
-        worst_idx = pop.worst_idx();
-        for (decltype(dim) i = 0u; i < dim; ++i) {
-            dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
-        }
-        if (dx < m_xtol) {
-            if (m_verbosity > 0u) {
-                std::cout << "Exit condition -- xtol < " << m_xtol << '\n';
-            }
-            return pop;
-        }
-
-        df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-        if (df < m_Ftol) {
-            if (m_verbosity > 0u) {
-                std::cout << "Exit condition -- ftol < " << m_Ftol << '\n';
-            }
-            return pop;
-        }
-
-        // Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
-        if (m_verbosity > 0u) {
-            // Every m_verbosity generations print a log line
-            if (gen % m_verbosity == 1u || m_verbosity == 1u) {
-                best_idx = pop.best_idx();
-                worst_idx = pop.worst_idx();
-                dx = 0.;
-                // The population flatness in chromosome
-                for (decltype(dim) i = 0u; i < dim; ++i) {
-                    dx += std::abs(pop.get_x()[worst_idx][i] - pop.get_x()[best_idx][i]);
-                }
-                // The population flatness in fitness
-                df = std::abs(pop.get_f()[worst_idx][0] - pop.get_f()[best_idx][0]);
-                // Every 50 lines print the column names
-                if (count % 50u == 1u) {
-                    print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:", std::setw(15), "Best:", std::setw(15),
-                          "dx:", std::setw(15), "df:", '\n');
-                }
-                print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0, std::setw(15),
-                      pop.get_f()[best_idx][0], std::setw(15), dx, std::setw(15), df, '\n');
-                ++count;
-                // Logs
-                m_log.emplace_back(gen, prob.get_fevals() - fevals0, pop.get_f()[best_idx][0], dx, df);
-            }
-        }
-    } // end main DE iterations
-    if (m_verbosity) {
-        std::cout << "Exit condition -- generations = " << m_gen << '\n';
-    }
-    return pop;
-}
-
 /// Sets the seed
 /**
  * @param seed the seed controlling the algorithm stochastic behaviour
@@ -458,7 +459,7 @@ std::string de::get_extra_info() const
 template <typename Archive>
 void de::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, m_gen, m_F, m_CR, m_variant, m_Ftol, m_xtol, m_e, m_seed, m_verbosity, m_log);
+    detail::archive(ar, m_gen, m_F, m_CR, m_variant, m_Ftol, m_xtol, m_e, m_seed, m_verbosity, m_log, m_bfe);
 }
 
 } // namespace pagmo
