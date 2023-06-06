@@ -22,7 +22,7 @@ message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
 enable_testing()
 
 # Build option: enable the test suite.
-option(PAGMO_BUILD_TESTS "Build the test suite." ON)
+option(PAGMO_BUILD_TESTS "Build the test suite." OFF)
 
 # Build option: enable the benchmarks.
 option(PAGMO_BUILD_BENCHMARKS "Build the benchmarks." OFF)
