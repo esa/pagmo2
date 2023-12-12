@@ -496,6 +496,7 @@ void cec2014::weierstrass_func(const double *x, double *f, const unsigned nx, co
 
     unsigned i, j, k_max;
     double sum, sum2, a, b;
+    sum2 = 0.0;
     a = 0.5;
     b = 3.0;
     k_max = 20;
@@ -1295,6 +1296,7 @@ void cec2014::oszfunc(const double *x, double *xosz, const unsigned nx) const
     unsigned i;
     int sx;
     double c1, c2, xx;
+    xx = 0.0;
     for (i = 0; i < nx; i++) {
         if (i == 0 || i == nx - 1) {
             if (x[i] != 0) {
