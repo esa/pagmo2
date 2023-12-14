@@ -19,8 +19,9 @@ class PAGMO_DLL_PUBLIC nsga3{
               double eta_c = 30.0, double m = 0.01,
               double eta_m = 20.0, unsigned seed = pagmo::random_device::next());
         population evolve(population) const;
+        void generate_uniform_reference_points(size_t nobjs, size_t divisions);
     private:
-        unsigned gen;
+        unsigned ngen;
         double cr;      // crossover
         double eta_c;   // eta crossover
         double m;       // mutation
