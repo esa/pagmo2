@@ -23,17 +23,13 @@ nsga3::nsga3(unsigned gen, double cr, double eta_c, double m, double eta_m, unsi
     // Validate ctor args
 }
 
-void nsga3::generate_uniform_reference_points(size_t nobjs, size_t divisions){
-    (void)nobjs;
-    (void)divisions;
+std::vector<ReferencePoint> nsga3::generate_uniform_reference_points(size_t nobjs, size_t divisions){
     ReferencePoint rp(nobjs);
-    rp[0] = rp[1] = rp[2] = 0.0;
-    // WIP: Move to class
-    auto points = generate_reference_point_level(rp, divisions, 0, divisions);
-    for(const auto& p: points){
-        std::cout << p << std::endl;
+    if(!refpoints.empty()){
+        refpoints.clear();
     }
-    std::cout << "points: " << points.size() << std::endl;
+    refpoints = generate_reference_point_level(rp, divisions, 0, divisions);
+    return refpoints;
 }
 
 population nsga3::evolve(population pop) const{

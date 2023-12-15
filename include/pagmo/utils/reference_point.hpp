@@ -20,16 +20,14 @@ class PAGMO_DLL_PUBLIC ReferencePoint{
     public:
         ReferencePoint(size_t nobj);
         ~ReferencePoint();
-        size_t dim();
+        size_t dim() const;
         double& operator[](int);
         friend PAGMO_DLL_PUBLIC std::ostream& operator<<(std::ostream& ostr, const ReferencePoint& rp);
     protected:
         std::vector<double> coeffs;
 };
 
-// def gen_refs_recursive(ref, nobj, left, total, depth):
 std::vector<ReferencePoint> generate_reference_point_level(
-    //std::vector<ReferencePoint>& points,
     ReferencePoint& rp,
     size_t remain,
     size_t level,

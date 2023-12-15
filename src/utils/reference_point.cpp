@@ -9,6 +9,7 @@ namespace pagmo{
 
 ReferencePoint::ReferencePoint(size_t nobjs){
     coeffs.resize(nobjs);
+    std::fill(coeffs.begin(), coeffs.end(), 0.0);
 }
 
 ReferencePoint::~ReferencePoint(){
@@ -19,7 +20,7 @@ double& ReferencePoint::operator[](int idx){
     return coeffs[idx];
 }
 
-size_t ReferencePoint::dim(){
+size_t ReferencePoint::dim() const{
     return coeffs.size();
 }
 
@@ -32,7 +33,6 @@ std::ostream& operator<<(std::ostream& ostr, const ReferencePoint& rp){
     return ostr;
 }
 
-// Make T<nobjs, total>
 std::vector<ReferencePoint> generate_reference_point_level(
     ReferencePoint& rp,
     size_t remain,
