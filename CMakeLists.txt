@@ -286,9 +286,6 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/type_name.cpp"
 )
 
-set_property(SOURCE src/problems/cec2013.cpp
-             PROPERTY SKIP_UNITY_BUILD_INCLUSION ON)
-
 # Optional and platform-dependent bits.
 if(PAGMO_WITH_FORK_ISLAND)
     set(PAGMO_SRC_FILES
