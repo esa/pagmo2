@@ -33,7 +33,10 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <pagmo/algorithm.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
@@ -159,6 +162,10 @@ public:
     {
         return m_gen;
     }
+
+    // Sets the bfe
+    void set_bfe(const bfe &b);
+
     /// Algorithm name
     /**
      * One of the optional methods of any user-defined algorithm (UDA).
@@ -184,6 +191,16 @@ public:
     }
 
 private:
+    vector_double mutate(const population &pop, population::size_type i, const vector_double &gbIter,
+                         std::uniform_real_distribution<double> drng,
+                         std::uniform_int_distribution<vector_double::size_type> c_idx,
+                         const std::vector<vector_double> &popold) const;
+
+    void update_pop(population &pop, const vector_double &newfitness, population::size_type i,
+                    std::vector<vector_double> &fit, vector_double &gbfit, vector_double &gbX,
+                    std::vector<vector_double> &popnew, const std::vector<vector_double> &popold,
+                    const vector_double &tmp) const;
+
     // Object serialization
     friend class boost::serialization::access;
     template <typename Archive>
@@ -199,6 +216,7 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    boost::optional<bfe> m_bfe;
 };
 
 } // namespace pagmo
