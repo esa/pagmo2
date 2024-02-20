@@ -93,7 +93,7 @@ public:
     moead_gen(unsigned gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
           population::size_type neighbours = 20u, double CR = 1.0, double F = 0.5, double eta_m = 20.,
           double realb = 0.9, unsigned limit = 2u, bool preserve_diversity = true,
-          unsigned seed = pagmo::random_device::next());
+          unsigned seed = pagmo::random_device::next(), std::string outfile = "");
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -213,6 +213,7 @@ private:
     bool m_preserve_diversity;
     mutable detail::random_engine_type m_e;
     unsigned m_seed;
+    std::string m_outfile;
     unsigned m_verbosity;
     mutable log_type m_log;
     boost::optional<bfe> m_bfe;
