@@ -11,6 +11,7 @@
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/reference_point.hpp>
+#include <pagmo/utils/multi_objective.hpp>  // gaussian_elimination
 
 using namespace pagmo;
 
@@ -60,4 +61,46 @@ BOOST_AUTO_TEST_CASE(nsga3_verify_uniform_reference_points){
         }
         BOOST_CHECK_CLOSE(p_sum, 1.0, 1e-8);
     }
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_test_translate_objectives){
+    std::cout << "-==: nsga3_test_translate_objectives :==-\n";
+    dtlz udp{1u, 10u, 3u};
+    population pop{udp, 52u, 23u};
+    nsga3 nsga3_alg{10u, 0.95, 10., 0.01, 50., 32u};
+
+    pop = nsga3_alg.evolve(pop);
+    auto p0_obj = pop.get_f();
+    std::cout << "-==: nsga3_test_translate_objectives  pre translation :==-\n";
+    for(size_t i=0; i < p0_obj.size(); i++){
+        std::for_each(p0_obj[i].begin(), p0_obj[i].end(), [](const auto& elem){std::cout << elem << " "; });
+        std::cout << std::endl;
+    }
+    auto translated_objectives = nsga3_alg.translate_objectives(pop);
+    std::cout << "-==: nsga3_test_translate_objectives  post translation :==-\n";
+    for(size_t i=0; i < translated_objectives.size(); i++){
+        std::for_each(translated_objectives[i].begin(), translated_objectives[i].end(), [](const auto& elem){std::cout << elem << " "; });
+        std::cout << std::endl;
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_gaussian_elimination){
+    // Verify correctness of simple system
+    std::vector<std::vector<double>> A(3);
+    std::vector<double> b = {1.0, 1.0, 1.0};
+
+    A[0] = {-1, 1, 2};
+    A[1] = {2, 0, -3};
+    A[2] = {5, 1, -2};
+
+    std::vector<double> x = gaussian_elimination(A, b);
+    BOOST_CHECK_CLOSE(x[0], -0.4, 1e-8);
+    BOOST_CHECK_CLOSE(x[1],  1.8, 1e-8);
+    BOOST_CHECK_CLOSE(x[2], -0.6, 1e-8);
+    std::for_each(x.begin(), x.end(), [](const auto& i){std::cout << i << " ";});
+    std::cout << std::endl;
+
+    // Verify graceful error on ill-condition
+    A[0][0] = 0.0;
+    BOOST_CHECK_THROW(gaussian_elimination(A, b), std::invalid_argument);
 }

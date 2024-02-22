@@ -21,6 +21,8 @@ class PAGMO_DLL_PUBLIC nsga3{
               double eta_m = 20.0, unsigned seed = pagmo::random_device::next());
         population evolve(population) const;
         std::vector<ReferencePoint> generate_uniform_reference_points(size_t nobjs, size_t divisions);
+        std::vector<std::vector<double>> translate_objectives(population);
+        std::vector<size_t> extreme_points(population, std::vector<std::vector<pop_size_t>>);
     private:
         unsigned ngen;
         double cr;      // crossover
