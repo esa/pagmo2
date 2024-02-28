@@ -50,24 +50,80 @@ std::vector<std::vector<double>> nsga3::translate_objectives(population pop){
 }
 
 // fronts arg is NDS return type
-std::vector<size_t> extreme_points(population pop, std::vector<std::vector<pop_size_t>> &fronts){
-    (void)pop;
-    (void)fronts;
+std::vector<size_t> nsga3::find_extreme_points(population pop,
+                                               std::vector<std::vector<pop_size_t>> &fronts,
+                                               std::vector<std::vector<double>> &translated_objs){
     std::vector<size_t> points;
+    size_t nobj = pop.get_problem().get_nobj();
 
-    /* pop has get_problem(); problem has get_nobj()
-    const problem &get_problem() const
-    {
-        return m_prob;
-    }
-    */
-    for(size_t i=0; i<pop.size(); i++){
-        ;
+    for(size_t i=0; i<nobj; i++){
+        std::vector<double> weights(nobj, 1e-6);
+        weights[i] = 1.0;
+        double min_asf = std::numeric_limits<double>::max();
+        double min_individual = fronts[0].size();
+        // Only first front need be considered for extremes
+        for(size_t ind=0; ind<fronts[0].size(); ind++){
+            // Calculate ASF value for translated objectives
+            double asf = achievement(translated_objs[fronts[0][ind]], weights);
+            if(asf < min_asf){
+                min_asf = asf;
+                min_individual = fronts[0][ind];
+            }
+        }
+        points.push_back(min_individual);
     }
 
     return points;
 }
 
+std::vector<double> nsga3::find_intercepts(population pop, std::vector<size_t> &ext_points,
+                                           std::vector<std::vector<double>> &translated_objs){
+    /*  1. Check duplicate extreme points
+     *  2. A = translated objectives of extreme points;  b = [1,1,...] to n_objs
+     *  3. Solve Ax = b via Gaussian Elimination
+     *  4. Return reciprocals as intercepts
+     */
+
+    size_t n_obj = pop.get_problem().get_nobj();
+    std::vector<double> b(n_obj, 1.0);
+    std::vector<std::vector<double>> A;
+
+    for(size_t i=0; i<ext_points.size(); i++){
+        A.push_back(translated_objs[ext_points[i]]);
+    }
+
+    // Ax = b
+    std::vector<double> x = gaussian_elimination(A, b);
+
+    // Express as intercepts, 1/x
+    std::vector<double> intercepts(n_obj, 1.0);
+    for(size_t i=0; i<intercepts.size(); i++){
+        intercepts[i] = 1.0/x[i];
+    }
+
+    return intercepts;
+}
+
+//  Equation 4: Note
+std::vector<std::vector<double>> nsga3::normalize_objectives(std::vector<std::vector<double>> &translated_objs,
+                                                      std::vector<double> &intercepts){
+    /*  Algorithm 2, step 7 and Equation 4
+     *  Note that Objectives and therefore intercepts
+     *  are already translated by ideal point.
+     */
+
+    size_t objs = translated_objs[1].size();
+    std::vector<std::vector<double>> norm_objs(translated_objs.size(), std::vector<double>(objs));
+
+    for(size_t i=0; i<translated_objs.size(); i++){
+        for(size_t obj=0; obj<objs; obj++){
+            double intercept_or_eps = std::max(intercepts[obj], std::numeric_limits<double>::epsilon());
+            norm_objs[i][obj] = translated_objs[i][obj]/intercept_or_eps;
+        }
+    }
+
+    return norm_objs;
+}
 
 population nsga3::evolve(population pop) const{
     const auto &prob = pop.get_problem();
@@ -118,7 +174,8 @@ population nsga3::evolve(population pop) const{
         std::cout << "p0.size(): " << p0.size() << std::endl;
         std::cout << "pop: ";
         for(size_t i=0; i < p0.size(); i++){
-            std::for_each(p0[i].begin(), p0[i].end(), [](const auto& elem){std::cout << elem << " "; });
+            std::cout << i << "\t";
+            std::for_each(p0[i].begin(), p0[i].end(), [](const auto& elem){std::cout << elem << ", "; });
             std::cout << std::endl;
         }
         std::vector<double> p_ideal = ideal(p0);

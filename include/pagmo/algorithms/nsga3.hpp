@@ -22,7 +22,9 @@ class PAGMO_DLL_PUBLIC nsga3{
         population evolve(population) const;
         std::vector<ReferencePoint> generate_uniform_reference_points(size_t nobjs, size_t divisions);
         std::vector<std::vector<double>> translate_objectives(population);
-        std::vector<size_t> extreme_points(population, std::vector<std::vector<pop_size_t>>);
+        std::vector<size_t> find_extreme_points(population, std::vector<std::vector<pop_size_t>> &, std::vector<std::vector<double>> &);
+        std::vector<double> find_intercepts(population, std::vector<size_t> &, std::vector<std::vector<double>> &);
+        std::vector<std::vector<double>> normalize_objectives(std::vector<std::vector<double>> &, std::vector<double> &);
     private:
         unsigned ngen;
         double cr;      // crossover

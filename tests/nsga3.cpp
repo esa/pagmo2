@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_translate_objectives){
     }
 }
 
-BOOST_AUTO_TEST_CASE(nsga3_gaussian_elimination){
+BOOST_AUTO_TEST_CASE(nsga3_test_gaussian_elimination){
     // Verify correctness of simple system
     std::vector<std::vector<double>> A(3);
     std::vector<double> b = {1.0, 1.0, 1.0};
@@ -103,4 +103,55 @@ BOOST_AUTO_TEST_CASE(nsga3_gaussian_elimination){
     // Verify graceful error on ill-condition
     A[0][0] = 0.0;
     BOOST_CHECK_THROW(gaussian_elimination(A, b), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_test_find_extreme_points){
+    dtlz udp{1u, 10u, 3u};
+    population pop{udp, 52u, 23u};
+    nsga3 nsga3_alg{10u, 0.95, 10., 0.01, 50., 32u};
+
+    pop = nsga3_alg.evolve(pop);
+    auto translated_objectives = nsga3_alg.translate_objectives(pop);
+    auto fnds_res = fast_non_dominated_sorting(pop.get_f());
+    auto fronts = std::get<0>(fnds_res);
+    auto ext_points = nsga3_alg.find_extreme_points(pop, fronts, translated_objectives);
+
+    std::cout << "-==: extreme points :==-\n";
+    std::for_each(ext_points.begin(), ext_points.end(), [](const auto& elem){std::cout << elem << " "; });
+    std::cout << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_test_find_intercepts){
+    dtlz udp{1u, 10u, 3u};
+    population pop{udp, 52u, 23u};
+    nsga3 nsga3_alg{10u, 0.95, 10., 0.01, 50., 32u};
+
+    pop = nsga3_alg.evolve(pop);
+    auto translated_objectives = nsga3_alg.translate_objectives(pop);
+    auto fnds_res = fast_non_dominated_sorting(pop.get_f());
+    auto fronts = std::get<0>(fnds_res);
+    auto ext_points = nsga3_alg.find_extreme_points(pop, fronts, translated_objectives);
+
+    auto intercepts = nsga3_alg.find_intercepts(pop, ext_points, translated_objectives);
+    std::cout << "-==: intercepts :==-\n";
+    std::for_each(intercepts.begin(), intercepts.end(), [](const auto& elem){std::cout << elem << " "; });
+    std::cout << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_test_normalize_objectives){
+    dtlz udp{1u, 10u, 3u};
+    population pop{udp, 52u, 23u};
+    nsga3 nsga3_alg{10u, 0.95, 10., 0.01, 50., 32u};
+
+    pop = nsga3_alg.evolve(pop);
+    auto translated_objectives = nsga3_alg.translate_objectives(pop);
+    auto fnds_res = fast_non_dominated_sorting(pop.get_f());
+    auto fronts = std::get<0>(fnds_res);
+    auto ext_points = nsga3_alg.find_extreme_points(pop, fronts, translated_objectives);
+    auto intercepts = nsga3_alg.find_intercepts(pop, ext_points, translated_objectives);
+    auto norm_objs = nsga3_alg.normalize_objectives(translated_objectives, intercepts);
+    for(const auto &obj_f: norm_objs){
+        std::for_each(obj_f.begin(), obj_f.end(), [](const auto& elem){std::cout << elem << " "; });
+        std::cout << std::endl;
+    }
 }
