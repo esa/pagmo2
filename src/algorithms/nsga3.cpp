@@ -125,7 +125,7 @@ std::vector<std::vector<double>> nsga3::normalize_objectives(std::vector<std::ve
     return norm_objs;
 }
 
-population nsga3::evolve(population pop) const{
+population nsga3::evolve(population &pop) const{
     const auto &prob = pop.get_problem();
     const auto bounds = prob.get_bounds();
     auto dim_i = prob.get_nix();
@@ -212,6 +212,85 @@ population nsga3::evolve(population pop) const{
     }
 
     return pop;
+}
+/*  Selects members of a population for survival into the next generation
+ *  arguments:
+ *    population Q: The combined parent and offspring populations
+ *                  of size 2*N_pop
+ *    size_t N_pop: The target population size to return
+ *
+ */
+std::vector<size_t> nsga3::selection(population &Q, size_t N_pop){
+
+    std::vector<size_t> next(N_pop);
+    size_t last_front = 0;
+    size_t next_size = 0;
+    size_t nobj = Q.get_problem().get_nobj();
+
+    fnds_return_type nds = fast_non_dominated_sorting(Q.get_f());
+    auto fronts = std::get<0>(nds);
+    /*
+    std::for_each(fronts[0].begin(), fronts[0].end(), [](const auto& elem){std::cout << elem << " "; });
+    std::cout << std::endl;
+    std::for_each(fronts[1].begin(), fronts[1].end(), [](const auto& elem){std::cout << elem << " "; });
+    std::cout << std::endl;
+    std::for_each(fronts[2].begin(), fronts[2].end(), [](const auto& elem){std::cout << elem << " "; });
+    std::cout << std::endl;
+    std::for_each(fronts[3].begin(), fronts[3].end(), [](const auto& elem){std::cout << elem << " "; });
+    std::cout << std::endl;
+    std::for_each(fronts[4].begin(), fronts[4].end(), [](const auto& elem){std::cout << elem << " "; });
+    std::cout << std::endl;
+    */
+
+    while(next_size < N_pop){
+        next_size += fronts[last_front++].size();
+    }
+    fronts.erase(fronts.begin() + last_front, fronts.end());
+
+    /*  This won't work: need to build a
+     *  temp map of points with size equal
+     *  to N_pop, return this and then assign
+     *  in caller with below.
+     *
+    population::size_type idx = 0;
+    for(const auto &front: fronts){
+        for(size_t i=0; i<front.size(); i++){
+            next.set_x(idx++, Q_x[front[i]]);
+            //next.push_back(Q_x[front[i]]);
+        }
+    }*/
+
+    for(const auto &front: fronts){
+        for(size_t i=0; i<front.size(); i++){
+            next.push_back(front[i]);
+        }
+    }
+
+    if(next.size() == N_pop){
+        return next;
+    }
+
+    auto translated_objectives = translate_objectives(Q);
+    auto ext_points = find_extreme_points(Q, fronts, translated_objectives);
+    auto intercepts = find_intercepts(Q, ext_points, translated_objectives);
+    auto norm_objs = normalize_objectives(translated_objectives, intercepts);
+    std::vector<ReferencePoint> rps = generate_uniform_reference_points(nobj, 12 /* parameter */);
+    associate_with_reference_points(rps, norm_objs, fronts);
+
+    //std::vector<vector_double> Q_x = Q.get_x();
+    while(next.size() < N_pop){
+        size_t min_rp_idx = identify_niche_point(rps);
+        int selected_idx = rps[min_rp_idx].select_member();
+        if(selected_idx < 0){
+            rps.erase(rps.begin() + min_rp_idx);
+        }else{
+            rps[min_rp_idx].increment_members();
+            rps[min_rp_idx].remove_candidate(selected_idx);
+            next.push_back(selected_idx);
+        }
+    }
+
+    return next;
 }
 
 }

@@ -221,6 +221,10 @@ PAGMO_DLL_PUBLIC vector_double gaussian_elimination(std::vector<std::vector<doub
 // Achievement Scalarization Function
 PAGMO_DLL_PUBLIC double achievement(const vector_double &, const vector_double &);
 
+// Perpendicular distance to reference point vectors
+PAGMO_DLL_PUBLIC double perpendicular_distance(const std::vector<double> &, const std::vector<double> &);
+
+
 } // namespace pagmo
 
 #endif

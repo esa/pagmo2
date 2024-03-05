@@ -686,4 +686,19 @@ double achievement(const vector_double &objs, const vector_double &weights){
     return max_ratio;
 }
 
+/* Distance from objective point to perpendicular intersection with reference point vector */
+double perpendicular_distance(const std::vector<double> &ref_point, const std::vector<double> &obj_point){
+    double num = 0.0, denom = 0.0, sq_dist = 0.0;
+    for(size_t i=0; i<ref_point.size(); i++){
+        num += ref_point[i]*obj_point[i];
+        denom += ref_point[i]*ref_point[i];
+    }
+    double coeff = num/denom;
+    for(size_t i=0; i<ref_point.size(); i++){
+        double term = coeff*ref_point[i] - obj_point[i];
+        sq_dist += term*term;
+    }
+    return std::sqrt(sq_dist);
+}
+
 } // namespace pagmo
