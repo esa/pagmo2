@@ -254,3 +254,35 @@ BOOST_AUTO_TEST_CASE(moead_serialization_test)
         }
     }
 }
+
+BOOST_AUTO_TEST_CASE(moead_initial_population_not_respecting_bounds_throw_test)
+{
+    // We test that the algorithm throws if the initial population does not respect the bounds
+    problem prob{zdt{1u, 30u}};
+    population pop{prob, 40u, 23u};
+    algorithm algo{moead{10u, "grid", "tchebycheff", 10u, 0.9, 0.5, 20., 0.9, 2u, true, 23u}};
+    auto dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] - 1.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(algo.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().second[0] + 2.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(algo.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(algo.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::infinity();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(algo.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] + prob.get_bounds().second[0] / 2.0;
+    pop.set_x(0, dv);
+    BOOST_CHECK_NO_THROW(algo.evolve(pop));
+}

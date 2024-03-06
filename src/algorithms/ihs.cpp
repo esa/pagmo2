@@ -77,6 +77,7 @@ population ihs::evolve(population pop) const
     // We store some useful properties
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
+    auto NP = pop.size();
     auto dim = prob.get_nx();
     auto int_dim = prob.get_nix();
     const auto bounds = prob.get_bounds();
@@ -90,7 +91,7 @@ population ihs::evolve(population pop) const
     if (m_gen == 0u) {
         return pop;
     }
-    if (!pop.size()) {
+    if (!NP) {
         pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
     }
     if (prob.get_nc() != 0u && prob.get_nobj() > 1u) {
@@ -102,6 +103,26 @@ population ihs::evolve(population pop) const
         pagmo_throw(std::invalid_argument,
                     "The problem appears to be stochastic " + get_name() + " cannot deal with it");
     }
+    // Verify all decision variables respect the bounds
+    for (decltype(NP) i = 0u; i < NP; ++i) {
+        for (decltype(dim) j = 0u; j < dim; ++j) {
+            double x = pop.get_x()[i][j];
+            if (std::isnan(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to NaN" + std::to_string(x));
+            }
+
+            if (std::isinf(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to infinity" + std::to_string(x));
+            }
+
+            if (x < bounds.first[j] || x > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                       + " out of bounds: " + std::to_string(x));
+            }
+        }
+    }
     // ---------------------------------------------------------------------------------------------------------
 
     // No throws, all valid: we clear the logs
@@ -112,7 +133,7 @@ population ihs::evolve(population pop) const
         lu_diff[i] = ub[i] - lb[i];
     }
     // Distributions used
-    std::uniform_int_distribution<decltype(pop.size())> uni_int(0, pop.size() - 1u); // to pick an individual
+    std::uniform_int_distribution<decltype(NP)> uni_int(0, NP - 1u); // to pick an individual
     std::uniform_real_distribution<double> drng(0., 1.);                             // to generate a number in [0, 1)
 
     // Used for parameter control
@@ -120,7 +141,7 @@ population ihs::evolve(population pop) const
 
     // Declarations
     vector_double new_x(dim, 0.);
-    std::vector<vector_double::size_type> best_idxs(pop.size());
+    std::vector<vector_double::size_type> best_idxs(NP);
 
     // Main loop
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
@@ -185,10 +206,10 @@ population ihs::evolve(population pop) const
             // we augment the list with the new fitness
             fitnesses.push_back(new_f);
             // select the best pop.size() individuals
-            best_idxs = select_best_N_mo(fitnesses, pop.size());
+            best_idxs = select_best_N_mo(fitnesses, NP);
             // define the new population
-            for (population::size_type i = 0u; i < pop.size(); ++i) {
-                if (best_idxs[i] == pop.size()) { // this is the new guy
+            for (population::size_type i = 0u; i < NP; ++i) {
+                if (best_idxs[i] == NP) { // this is the new guy
                     pop.set_xf(i, new_x, new_f);
                 } else { // these were already in the pop somewhere
                     pop.set_xf(i, pop.get_x()[best_idxs[i]], pop.get_f()[best_idxs[i]]);

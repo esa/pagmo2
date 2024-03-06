@@ -184,3 +184,35 @@ BOOST_AUTO_TEST_CASE(serialization_test)
         BOOST_CHECK_CLOSE(std::get<5>(before_log[i]), std::get<5>(after_log[i]), 1e-8);
     }
 }
+
+BOOST_AUTO_TEST_CASE(pso_initial_population_not_respecting_bounds_throw_test)
+{
+    // We test that the algorithm throws if the initial population does not respect the bounds
+    problem prob{rosenbrock{25u}};
+    population pop{prob, 5u, 23u};
+    algorithm uda1{pso{500u, 0.79, 2., 2., 0.1, 5u, 2u, 4u, false, 23u}};
+    auto dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] - 1.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(uda1.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().second[0] + 2.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(uda1.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(uda1.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::infinity();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(uda1.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] + prob.get_bounds().second[0] / 2.0;
+    pop.set_x(0, dv);
+    BOOST_CHECK_NO_THROW(uda1.evolve(pop));
+}

@@ -381,3 +381,34 @@ BOOST_AUTO_TEST_CASE(nlopt_loc_opt)
     algo.evolve(pop);
     BOOST_CHECK(algo.extract<nlopt>()->get_last_opt_result() >= 0);
 }
+
+BOOST_AUTO_TEST_CASE(nlopt_initial_population_not_respecting_bounds_throw_test)
+{
+    // We test that the algorithm throws if the initial population does not respect the bounds
+    auto pop = population{hs71{}, 1};
+    auto a = nlopt{"slsqp"};
+    auto dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] - 1.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(nlopt.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().second[0] + 2.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(nlopt.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(nlopt.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::infinity();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(nlopt.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] + prob.get_bounds().second[0] / 2.0;
+    pop.set_x(0, dv);
+    BOOST_CHECK_NO_THROW(nlopt.evolve(pop));
+}
