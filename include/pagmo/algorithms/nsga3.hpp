@@ -19,13 +19,13 @@ class PAGMO_DLL_PUBLIC nsga3{
         nsga3(unsigned gen = 1u, double cr = 1.0,
               double eta_c = 30.0, double m = 0.01,
               double eta_m = 20.0, unsigned seed = pagmo::random_device::next());
-        population evolve(population &) const;
+        population evolve(population &);
         std::vector<size_t> selection(population &, size_t);
         std::vector<ReferencePoint> generate_uniform_reference_points(size_t nobjs, size_t divisions);
-        std::vector<std::vector<double>> translate_objectives(population);
-        std::vector<size_t> find_extreme_points(population, std::vector<std::vector<pop_size_t>> &, std::vector<std::vector<double>> &);
-        std::vector<double> find_intercepts(population, std::vector<size_t> &, std::vector<std::vector<double>> &);
-        std::vector<std::vector<double>> normalize_objectives(std::vector<std::vector<double>> &, std::vector<double> &);
+        std::vector<std::vector<double>> translate_objectives(population) const;
+        std::vector<size_t> find_extreme_points(population, std::vector<std::vector<pop_size_t>> &, std::vector<std::vector<double>> &) const;
+        std::vector<double> find_intercepts(population, std::vector<size_t> &, std::vector<std::vector<double>> &) const;
+        std::vector<std::vector<double>> normalize_objectives(std::vector<std::vector<double>> &, std::vector<double> &) const;
     private:
         unsigned ngen;
         double cr;      // crossover

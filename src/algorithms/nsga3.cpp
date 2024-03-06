@@ -11,6 +11,9 @@
 #include <vector>
 
 #include <pagmo/algorithms/nsga3.hpp>
+#include <pagmo/types.hpp>
+#include <pagmo/utils/generic.hpp>
+#include <pagmo/utils/genetic_operators.hpp>
 #include <pagmo/utils/multi_objective.hpp>  // fast_non_dominated_sorting
 #include <pagmo/utils/reference_point.hpp>  // ReferencePoint
 
@@ -34,7 +37,7 @@ std::vector<ReferencePoint> nsga3::generate_uniform_reference_points(size_t nobj
 }
 
 
-std::vector<std::vector<double>> nsga3::translate_objectives(population pop){
+std::vector<std::vector<double>> nsga3::translate_objectives(population pop) const{
     size_t NP = pop.size();
     auto objs = pop.get_f();
     std::vector<double> p_ideal = ideal(objs);
@@ -52,7 +55,7 @@ std::vector<std::vector<double>> nsga3::translate_objectives(population pop){
 // fronts arg is NDS return type
 std::vector<size_t> nsga3::find_extreme_points(population pop,
                                                std::vector<std::vector<pop_size_t>> &fronts,
-                                               std::vector<std::vector<double>> &translated_objs){
+                                               std::vector<std::vector<double>> &translated_objs) const{
     std::vector<size_t> points;
     size_t nobj = pop.get_problem().get_nobj();
 
@@ -77,7 +80,7 @@ std::vector<size_t> nsga3::find_extreme_points(population pop,
 }
 
 std::vector<double> nsga3::find_intercepts(population pop, std::vector<size_t> &ext_points,
-                                           std::vector<std::vector<double>> &translated_objs){
+                                           std::vector<std::vector<double>> &translated_objs) const{
     /*  1. Check duplicate extreme points
      *  2. A = translated objectives of extreme points;  b = [1,1,...] to n_objs
      *  3. Solve Ax = b via Gaussian Elimination
@@ -106,7 +109,7 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<size_t> &
 
 //  Equation 4: Note
 std::vector<std::vector<double>> nsga3::normalize_objectives(std::vector<std::vector<double>> &translated_objs,
-                                                      std::vector<double> &intercepts){
+                                                      std::vector<double> &intercepts) const{
     /*  Algorithm 2, step 7 and Equation 4
      *  Note that Objectives and therefore intercepts
      *  are already translated by ideal point.
@@ -125,7 +128,7 @@ std::vector<std::vector<double>> nsga3::normalize_objectives(std::vector<std::ve
     return norm_objs;
 }
 
-population nsga3::evolve(population &pop) const{
+population nsga3::evolve(population &pop){
     const auto &prob = pop.get_problem();
     const auto bounds = prob.get_bounds();
     auto dim_i = prob.get_nix();
@@ -148,11 +151,12 @@ population nsga3::evolve(population &pop) const{
      */
 
     std::vector<vector_double::size_type> best_idx(NP), shuffle1(NP), shuffle2(NP);
-    //vector_double::size_type parent1_idx, parent2_idx;
-    //std::pair<vector_double, vector_double> children;
+    vector_double::size_type parent1_idx, parent2_idx;
+    std::pair<vector_double, vector_double> children;
 
     (void)best_idx;
 
+    // Initialise population indices
     std::iota(shuffle1.begin(), shuffle1.end(), vector_double::size_type(0));
     std::iota(shuffle2.begin(), shuffle2.end(), vector_double::size_type(0));
 
@@ -167,6 +171,88 @@ population nsga3::evolve(population &pop) const{
         // Permute population indices
         std::shuffle(shuffle1.begin(), shuffle1.end(), reng);
         std::shuffle(shuffle2.begin(), shuffle2.end(), reng);
+
+        /*  1. Generate offspring population Q_t
+         *  2. R = P_t U Q_t
+         *  3. P_t+1 = selection(R)
+         */
+
+        std::cout << "fevals: " << prob.get_fevals() << std::endl;
+        std::vector<double> p_ideal = ideal(pop.get_f());
+        std::vector<double> p_nadir = nadir(pop.get_f());
+        std::cout << "ideal: ";
+        std::for_each(p_ideal.begin(), p_ideal.end(), [](const auto& elem){std::cout << elem << " ";});
+        std::cout << std::endl;
+        std::cout << "nadir: ";
+        std::for_each(p_nadir.begin(), p_nadir.end(), [](const auto& elem){std::cout << elem << " ";});
+        std::cout << std::endl;
+
+        auto fnds_res = fast_non_dominated_sorting(pop.get_f());
+        auto nd_fronts = std::get<0>(fnds_res);  // Non-dominated fronts
+        auto nd_rank = std::get<3>(fnds_res);
+        vector_double pop_cd(NP);         // crowding distances of the whole population
+                                          //
+        for (const auto &front_idxs : nd_fronts) {
+            if (front_idxs.size() == 1u) { // handles the case where the front has collapsed to one point
+                pop_cd[front_idxs[0]] = std::numeric_limits<double>::infinity();
+            } else {
+                if (front_idxs.size() == 2u) { // handles the case where the front has collapsed to one point
+                    pop_cd[front_idxs[0]] = std::numeric_limits<double>::infinity();
+                    pop_cd[front_idxs[1]] = std::numeric_limits<double>::infinity();
+                } else {
+                    std::vector<vector_double> front;
+                    for (auto idx : front_idxs) {
+                        front.push_back(pop.get_f()[idx]);
+                    }
+                    auto cd = crowding_distance(front);
+                    for (decltype(cd.size()) i = 0u; i < cd.size(); ++i) {
+                        pop_cd[front_idxs[i]] = cd[i];
+                    }
+                }
+            }
+        }
+
+        for (decltype(NP) i = 0u; i < NP; i += 4) {
+            // We create two offsprings using the shuffled list 1
+            parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], nd_rank, pop_cd, reng);
+            parent2_idx = detail::mo_tournament_selection_impl(shuffle1[i + 2], shuffle1[i + 3], nd_rank, pop_cd, reng);
+            children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                                                  cr, eta_c, reng);
+            detail::polynomial_mutation_impl(children.first, bounds, dim_i, m, eta_m, reng);
+            detail::polynomial_mutation_impl(children.second, bounds, dim_i, m, eta_m, reng);
+            // we use prob to evaluate the fitness so
+            // that its feval counter is correctly updated
+            auto f1 = prob.fitness(children.first);
+            auto f2 = prob.fitness(children.second);
+            popnew.push_back(children.first, f1);
+            popnew.push_back(children.second, f2);
+
+            // We repeat with the shuffled list 2
+            parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1], nd_rank, pop_cd, reng);
+            parent2_idx = detail::mo_tournament_selection_impl(shuffle2[i + 2], shuffle2[i + 3], nd_rank, pop_cd, reng);
+            children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
+                                                  cr, eta_c, reng);
+            detail::polynomial_mutation_impl(children.first, bounds, dim_i, m, eta_m, reng);
+            detail::polynomial_mutation_impl(children.second, bounds, dim_i, m, eta_m, reng);
+            // we use prob to evaluate the fitness so
+            // that its feval counter is correctly updated
+            f1 = prob.fitness(children.first);
+            f2 = prob.fitness(children.second);
+            popnew.push_back(children.first, f1);
+            popnew.push_back(children.second, f2);
+        } // popnew now contains 2NP individuals
+
+        std::vector<size_t> pop_next = selection(popnew, NP);
+        //for(size_t i=0; i<pop_next.size(); i++){
+        //    std::cout << "pop_next[" << i << "] = " << pop_next[i] << std::endl;
+        //}
+        for(population::size_type i = 0; i<NP; ++i){
+            pop.set_xf(i, popnew.get_x()[pop_next[i]], popnew.get_f()[pop_next[i]]);
+        }
+
+        /*
+        auto fnds_res = fast_non_dominated_sorting(pop.get_f());
+        auto ndf = std::get<0>(fnds_res);  // Non-dominated fronts
         std::for_each(shuffle1.begin(), shuffle1.end(), [](const auto& elem){std::cout << elem << " "; });
         std::cout << std::endl;
 
@@ -204,7 +290,7 @@ population nsga3::evolve(population &pop) const{
         std::cout << std::endl;
         std::for_each(nds0[4].begin(), nds0[4].end(), [](const auto& elem){std::cout << elem << " "; });
         std::cout << std::endl;
-
+        */
         //std::cout << std::to_string(nds0[0][0]) << std::endl;
         //std::cout << nds1;
         //std::cout << nds2;
@@ -222,7 +308,7 @@ population nsga3::evolve(population &pop) const{
  */
 std::vector<size_t> nsga3::selection(population &Q, size_t N_pop){
 
-    std::vector<size_t> next(N_pop);
+    std::vector<size_t> next;
     size_t last_front = 0;
     size_t next_size = 0;
     size_t nobj = Q.get_problem().get_nobj();
@@ -260,9 +346,9 @@ std::vector<size_t> nsga3::selection(population &Q, size_t N_pop){
         }
     }*/
 
-    for(const auto &front: fronts){
-        for(size_t i=0; i<front.size(); i++){
-            next.push_back(front[i]);
+    for(size_t f=0; f<fronts.size()-1; f++){
+        for(size_t i=0; i<fronts[f].size(); i++){
+            next.push_back(fronts[f][i]);
         }
     }
 
