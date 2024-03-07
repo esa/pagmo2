@@ -29,9 +29,9 @@ size_t ReferencePoint::dim() const{
 
 std::ostream& operator<<(std::ostream& ostr, const ReferencePoint& rp){
     std::ostringstream oss;
-    oss << "(";
+    oss << "[";
     std::copy(rp.coeffs.begin(), rp.coeffs.end()-1, std::ostream_iterator<double>(oss, ", ") );
-    oss << rp.coeffs.back() << ")";
+    oss << rp.coeffs.back() << "]";
     ostr << oss.str();
     return ostr;
 }

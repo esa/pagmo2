@@ -19,9 +19,10 @@ class PAGMO_DLL_PUBLIC nsga3{
         nsga3(unsigned gen = 1u, double cr = 1.0,
               double eta_c = 30.0, double m = 0.01,
               double eta_m = 20.0, unsigned seed = pagmo::random_device::next());
-        population evolve(population &);
-        std::vector<size_t> selection(population &, size_t);
-        std::vector<ReferencePoint> generate_uniform_reference_points(size_t nobjs, size_t divisions);
+        std::string get_name() const{ return "NSGA-III:"; }
+        population evolve(population &) const;
+        std::vector<size_t> selection(population &, size_t) const;
+        std::vector<ReferencePoint> generate_uniform_reference_points(size_t nobjs, size_t divisions) const;
         std::vector<std::vector<double>> translate_objectives(population) const;
         std::vector<size_t> find_extreme_points(population, std::vector<std::vector<pop_size_t>> &, std::vector<std::vector<double>> &) const;
         std::vector<double> find_intercepts(population, std::vector<size_t> &, std::vector<std::vector<double>> &) const;
@@ -34,7 +35,9 @@ class PAGMO_DLL_PUBLIC nsga3{
         double eta_m;   // eta mutation
         unsigned seed;  // Seed for PRNG initialisation
         mutable detail::random_engine_type reng;  // Defaults to std::mt19937
-        std::vector<ReferencePoint> refpoints;
+        mutable std::vector<ReferencePoint> refpoints;
+        template <typename Archive>
+        void serialize(Archive &, unsigned int);
 };
 
 }  // namespace pagmo
