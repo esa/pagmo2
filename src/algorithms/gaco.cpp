@@ -114,6 +114,7 @@ population gaco::evolve(population pop) const
     auto n_x = prob.get_nx(); // This getter does not return a const reference but a copy of the number of
     // all the variables
     auto pop_size = pop.size(); // Population size
+    auto bounds = prob.get_bounds(); // Bounds of the problem
     unsigned count_screen = 1u; // regulates the screen output
 
     // Note that the number of equality and inequality constraints has to be set up manually in the problem
@@ -166,6 +167,26 @@ population gaco::evolve(population pop) const
     if (n_obj != 1u) {
         pagmo_throw(std::invalid_argument, "Multiple objectives detected in " + prob.get_name() + " instance. "
                                                + get_name() + " cannot deal with them");
+    }
+    // Verify all decision variables respect the bounds
+    for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
+        for (decltype(n_x) j = 0u; j < n_x; ++j) {
+            double x = pop.get_x()[i][j];
+            if (std::isnan(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to NaN" + std::to_string(x));
+            }
+
+            if (std::isinf(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to infinity" + std::to_string(x));
+            }
+
+            if (x < bounds.first[j] || x > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                       + " out of bounds: " + std::to_string(x));
+            }
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------------

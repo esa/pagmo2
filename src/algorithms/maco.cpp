@@ -100,6 +100,7 @@ population maco::evolve(population pop) const
     const auto &prob = pop.get_problem();
     auto n_x = prob.get_nx();
     auto pop_size = pop.size();
+    auto bounds = prob.get_bounds();
     unsigned count_screen = 1u;       // regulates the screen output
     auto fevals0 = prob.get_fevals(); // discount for the already made fevals
     auto n_f = prob.get_nf();         // n_f=prob.get_nobj()+prob.get_nec()+prob.get_nic()
@@ -147,6 +148,26 @@ population maco::evolve(population pop) const
     if (prob.get_nf() < 2u) {
         pagmo_throw(std::invalid_argument, "This is a multiobjective algorithm, while number of objectives detected in "
                                                + prob.get_name() + " is " + std::to_string(prob.get_nf()));
+    }
+    // Verify all decision variables respect the bounds
+    for (decltype(pop_size) i = 0u; i < pop_size; ++i) {
+        for (decltype(n_x) j = 0u; j < n_x; ++j) {
+            double x = pop.get_x()[i][j];
+            if (std::isnan(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to NaN" + std::to_string(x));
+            }
+
+            if (std::isinf(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to infinity" + std::to_string(x));
+            }
+
+            if (x < bounds.first[j] || x > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                       + " out of bounds: " + std::to_string(x));
+            }
+        }
     }
     // ---------------------------------------------------------------------------------------------------------
 

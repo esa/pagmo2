@@ -97,6 +97,7 @@ population simulated_annealing::evolve(population pop) const
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
     auto dim = prob.get_nx();             // not const as used type for counters
+    auto NP = pop.size();
     const auto bounds = prob.get_bounds();
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
@@ -117,8 +118,28 @@ population simulated_annealing::evolve(population pop) const
         pagmo_throw(std::invalid_argument,
                     "The problem appears to be stochastic " + get_name() + " cannot deal with it");
     }
-    if (!pop.size()) {
+    if (!NP) {
         pagmo_throw(std::invalid_argument, get_name() + " does not work on an empty population");
+    }
+    // Verify all decision variables respect the bounds
+    for (decltype(NP) i = 0u; i < NP; ++i) {
+        for (decltype(dim) j = 0u; j < dim; ++j) {
+            double x = pop.get_x()[i][j];
+            if (std::isnan(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to NaN" + std::to_string(x));
+            }
+
+            if (std::isinf(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to infinity" + std::to_string(x));
+            }
+
+            if (x < bounds.first[j] || x > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                       + " out of bounds: " + std::to_string(x));
+            }
+        }
     }
     // ---------------------------------------------------------------------------------------------------------
 

@@ -78,6 +78,7 @@ population compass_search::evolve(population pop) const
     // We store some useful variables
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
+    auto NP = pop.size();
     auto dim = prob.get_nx();             // This getter does not return a const reference but a copy
     const auto bounds = prob.get_bounds();
     const auto &lb = bounds.first;
@@ -104,6 +105,26 @@ population compass_search::evolve(population pop) const
     // Get out if there is nothing to do.
     if (m_max_fevals == 0u) {
         return pop;
+    }
+    // Verify all decision variables respect the bounds
+    for (decltype(NP) i = 0u; i < NP; ++i) {
+        for (decltype(dim) j = 0u; j < dim; ++j) {
+            double x = pop.get_x()[i][j];
+            if (std::isnan(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to NaN" + std::to_string(x));
+            }
+
+            if (std::isinf(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to infinity" + std::to_string(x));
+            }
+
+            if (x < bounds.first[j] || x > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                       + " out of bounds: " + std::to_string(x));
+            }
+        }
     }
     // ---------------------------------------------------------------------------------------------------------
 

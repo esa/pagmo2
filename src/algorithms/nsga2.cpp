@@ -96,6 +96,7 @@ population nsga2::evolve(population pop) const
     const auto bounds = pop.get_problem().get_bounds();
     auto dim_i = pop.get_problem().get_nix(); // integer dimension
     auto NP = pop.size();
+    auto dim = prob.get_nx(); // This getter does not return a const reference but a copy
 
     auto fevals0 = prob.get_fevals(); // discount for the fevals already made
     unsigned count = 1u;              // regulates the screen output
@@ -125,6 +126,26 @@ population nsga2::evolve(population pop) const
                     "for NSGA-II at least 5 individuals in the population are needed and the "
                     "population size must be a multiple of 4. Detected input population size is: "
                         + std::to_string(NP));
+    }
+    // Verify all decision variables respect the bounds
+    for (decltype(NP) i = 0u; i < NP; ++i) {
+        for (decltype(dim) j = 0u; j < dim; ++j) {
+            double x = pop.get_x()[i][j];
+            if (std::isnan(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to NaN" + std::to_string(x));
+            }
+
+            if (std::isinf(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to infinity" + std::to_string(x));
+            }
+
+            if (x < bounds.first[j] || x > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                       + " out of bounds: " + std::to_string(x));
+            }
+        }
     }
     // ---------------------------------------------------------------------------------------------------------
 

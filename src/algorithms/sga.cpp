@@ -185,6 +185,7 @@ population sga::evolve(population pop) const
 {
     const auto &prob = pop.get_problem();
     auto dim_i = prob.get_nix();
+    auto dim = prob.get_nx();
     const auto bounds = prob.get_bounds();
     auto NP = pop.size();
     auto fevals0 = prob.get_fevals(); // fevals already made
@@ -217,6 +218,26 @@ population sga::evolve(population pop) const
     // Get out if there is nothing to do.
     if (m_gen == 0u) {
         return pop;
+    }
+    // Verify all decision variables respect the bounds
+    for (decltype(NP) i = 0u; i < NP; ++i) {
+        for (decltype(dim) j = 0u; j < dim; ++j) {
+            double x = pop.get_x()[i][j];
+            if (std::isnan(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to NaN" + std::to_string(x));
+            }
+
+            if (std::isinf(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to infinity" + std::to_string(x));
+            }
+
+            if (x < bounds.first[j] || x > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                       + " out of bounds: " + std::to_string(x));
+            }
+        }
     }
     // ---------------------------------------------------------------------------------------------------------
 
