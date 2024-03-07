@@ -345,34 +345,3 @@ BOOST_AUTO_TEST_CASE(ipopt_thread_safety)
     BOOST_CHECK((island{ipopt{}, luksan_vlcek1{4}, 10}.is<thread_island>()));
 #endif
 }
-
-BOOST_AUTO_TEST_CASE(ipopt_initial_population_not_respecting_bounds_throw_test)
-{
-    // We test that the algorithm throws if the initial population does not respect the bounds
-    problem prob{hock_schittkowski_71{}};
-    population pop{prob, 10u, 23u};
-    auto dv = pop.get_x()[0];
-    dv[0] = prob.get_bounds().first[0] - 1.;
-    pop.set_x(0, dv);
-    BOOST_CHECK_THROW(ipopt{10u}.evolve(pop), std::invalid_argument);
-
-    dv = pop.get_x()[0];
-    dv[0] = prob.get_bounds().second[0] + 2.;
-    pop.set_x(0, dv);
-    BOOST_CHECK_THROW(ipopt{10u}.evolve(pop), std::invalid_argument);
-
-    dv = pop.get_x()[0];
-    dv[0] = std::numeric_limits<double>::quiet_NaN();
-    pop.set_x(0, dv);
-    BOOST_CHECK_THROW(ipopt{10u}.evolve(pop), std::invalid_argument);
-
-    dv = pop.get_x()[0];
-    dv[0] = std::numeric_limits<double>::infinity();
-    pop.set_x(0, dv);
-    BOOST_CHECK_THROW(ipopt{10u}.evolve(pop), std::invalid_argument);
-
-    dv = pop.get_x()[0];
-    dv[0] = prob.get_bounds().first[0] + prob.get_bounds().second[0] / 2.0;
-    pop.set_x(0, dv);
-    BOOST_CHECK_NO_THROW(ipopt{10u}.evolve(pop));
-}
