@@ -28,19 +28,19 @@ namespace pagmo{
 nsga3::nsga3(unsigned gen, double cr, double eta_c, double m, double eta_m, size_t divisions, unsigned seed)
         : ngen(gen), cr(cr), eta_c(eta_c), m(m), eta_m(eta_m), divisions(divisions), seed(seed), reng(seed){
     // Validate ctor args
-    if(cr >= 1. || cr < 0.){
-        pagmo_throw(std::invalid_argument, "The crossover probability must be in the range [0,1], while a value of "
+    if(cr < 0.0 || cr > 1.0){
+        pagmo_throw(std::invalid_argument, "The crossover probability must be in the range [0, 1], while a value of "
                                            + std::to_string(cr) + " was detected");
     }
-    if(m < 0. || m > 1.){
-        pagmo_throw(std::invalid_argument, "The mutation probability must be in the range [0,1], while a value of "
+    if(m < 0.0 || m > 1.0){
+        pagmo_throw(std::invalid_argument, "The mutation probability must be in the range [0, 1], while a value of "
                                            + std::to_string(m) + " was detected");
     }
-    if(eta_c < 1. || eta_c > 100.){
+    if(eta_c < 1.0 || eta_c > 100.0){
         pagmo_throw(std::invalid_argument, "The distribution index for crossover must be in the range [1, 100], "
                                            "while a value of " + std::to_string(eta_c) + " was detected");
     }
-    if(eta_m < 1. || eta_m > 100.){
+    if(eta_m < 1.0 || eta_m > 100.0){
         pagmo_throw(std::invalid_argument, "The distribution index for mutation must be in [1, 100], "
                                            "while a value of " + std::to_string(eta_m) + " was detected");
     }
@@ -111,23 +111,45 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<size_t> &
      *  2. A = translated objectives of extreme points;  b = [1,1,...] to n_objs
      *  3. Solve Ax = b via Gaussian Elimination
      *  4. Return reciprocals as intercepts
+     *  NB Duplicate ext_points (singular matrix) and
+     *  negative intercepts fall back to nadir values.
      */
 
     size_t n_obj = pop.get_problem().get_nobj();
     std::vector<double> b(n_obj, 1.0);
+    std::vector<double> intercepts(n_obj, 1.0);
     std::vector<std::vector<double>> A;
+    bool fallback_to_worst = false;
 
-    for(size_t i=0; i<ext_points.size(); i++){
-        A.push_back(translated_objs[ext_points[i]]);
+    for(size_t p=0; !fallback_to_worst && p<ext_points.size()-1; p++){
+        for(size_t q=p+1; !fallback_to_worst && q<ext_points.size(); q++){
+            fallback_to_worst = (ext_points[p] == ext_points[q]);
+        }
     }
 
-    // Ax = b
-    std::vector<double> x = gaussian_elimination(A, b);
+    if(!fallback_to_worst){
+        for(size_t i=0; i<ext_points.size(); i++){
+            A.push_back(translated_objs[ext_points[i]]);
+        }
 
-    // Express as intercepts, 1/x
-    std::vector<double> intercepts(n_obj, 1.0);
-    for(size_t i=0; i<intercepts.size(); i++){
-        intercepts[i] = 1.0/x[i];
+        // Ax = b
+        std::vector<double> x = gaussian_elimination(A, b);
+
+        // Express as intercepts, 1/x
+        for(size_t i=0; i<intercepts.size(); i++){
+            intercepts[i] = 1.0/x[i];
+            if(x[i] < 0.0){
+                fallback_to_worst = true;
+                break;
+            }
+        }
+    }
+
+    if(fallback_to_worst){
+        for(size_t i=0; i<intercepts.size(); i++){
+            std::vector<double> v_nadir = nadir(pop.get_f());
+            intercepts[i] = v_nadir[i];
+        }
     }
 
     return intercepts;
