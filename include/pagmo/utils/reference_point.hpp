@@ -7,6 +7,7 @@
 #define PAGMO_UTILS_REFERENCE_POINT
 
 #include <iostream>
+#include <optional>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -31,9 +32,9 @@ class PAGMO_DLL_PUBLIC ReferencePoint{
         void remove_candidate(size_t index);
         size_t candidate_count() const{ return candidates.size(); }
         std::vector<double> get_coeffs(){ return coeffs; }
-        int nearest_candidate() const;
-        int random_candidate() const;
-        int select_member() const;
+        std::optional<size_t> nearest_candidate() const;
+        std::optional<size_t> random_candidate() const;
+        std::optional<size_t> select_member() const;
     protected:
         std::vector<double> coeffs{0};
         size_t nmembers{0};

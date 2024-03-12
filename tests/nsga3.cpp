@@ -3,11 +3,13 @@
 #include <iostream>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga3.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problems/dtlz.hpp>
+#include <pagmo/problems/zdt.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/reference_point.hpp>
@@ -22,9 +24,10 @@ BOOST_AUTO_TEST_CASE(nsga3_instance){
 BOOST_AUTO_TEST_CASE(nsga3_evolve_population){
     dtlz udp{1u, 10u, 3u};
 
-    population pop1{udp, 52u, 23u};
+    population pop1{udp, 92u, 23u};
 
-    nsga3 user_algo1{10u, 0.95, 10., 0.01, 50., 32u};
+    //nsga3 user_algo1{10u, 0.95, 10., 0.01, 50., 32u};
+    nsga3 user_algo1{4000, 1.0, 30., 0.01, 20., 12u, 32u};
     pop1 = user_algo1.evolve(pop1);
 };
 
@@ -41,6 +44,7 @@ BOOST_AUTO_TEST_CASE(nsga3_verify_uniform_reference_points){
      *  2. Verify coefficients sum to 1.0
      */
 
+    double close_distance = 1e-8;
     nsga3 n = nsga3();
     auto rp_3_12 = n.generate_uniform_reference_points(3, 12);
     BOOST_CHECK_EQUAL(rp_3_12.size(), 91);
@@ -59,7 +63,7 @@ BOOST_AUTO_TEST_CASE(nsga3_verify_uniform_reference_points){
         for(size_t idx=0; idx<p.dim(); idx++){
             p_sum += p[idx];
         }
-        BOOST_CHECK_CLOSE(p_sum, 1.0, 1e-8);
+        BOOST_CHECK_CLOSE(p_sum, 1.0, close_distance);
     }
 }
 
@@ -153,5 +157,49 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_objectives){
     for(const auto &obj_f: norm_objs){
         std::for_each(obj_f.begin(), obj_f.end(), [](const auto& elem){std::cout << elem << " "; });
         std::cout << std::endl;
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_test_associate_reference_points){
+    nsga3 n{10u, 0.95, 10., 0.01, 50., 32u};
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_serialization_test){
+    double close_distance = 1e-8;
+    problem prob{zdt{1u, 30u}};
+    population pop{prob, 40u, 23u};
+    algorithm algo{nsga3{10u, 1.00, 30., 0.01, 20, 12u, 32u}};
+    algo.set_verbosity(1u);
+    algo.set_seed(1234u);
+    pop = algo.evolve(pop);
+
+    // Store the string representation of p.
+    std::stringstream ss;
+    auto before_text = boost::lexical_cast<std::string>(algo);
+    auto before_log = algo.extract<nsga3>()->get_log();
+    // Now serialize, deserialize and compare the result.
+    {
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
+    }
+    // Reset the algorithm instance before deserialization
+    algo = algorithm{};
+    {
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> algo;
+    }
+    auto after_text = boost::lexical_cast<std::string>(algo);
+    auto after_log = algo.extract<nsga3>()->get_log();
+
+    BOOST_CHECK_EQUAL(before_text, after_text);
+    BOOST_CHECK(before_log == after_log);
+    BOOST_CHECK(before_log.size() > 0u);
+
+    for (auto i = 0u; i < before_log.size(); ++i) {
+        BOOST_CHECK_EQUAL(std::get<0>(before_log[i]), std::get<0>(after_log[i]));
+        BOOST_CHECK_EQUAL(std::get<1>(before_log[i]), std::get<1>(after_log[i]));
+        for (auto j = 0u; j < 2u; ++j) {
+            BOOST_CHECK_CLOSE(std::get<2>(before_log[i])[j], std::get<2>(after_log[i])[j], close_distance);
+        }
     }
 }

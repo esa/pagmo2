@@ -6,24 +6,49 @@
  */
 #include <algorithm>
 #include <iostream>
+#include <optional>
 #include <string>
 #include <tuple>
 #include <vector>
 
+#include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga3.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/genetic_operators.hpp>
 #include <pagmo/utils/multi_objective.hpp>  // fast_non_dominated_sorting
 #include <pagmo/utils/reference_point.hpp>  // ReferencePoint
+#include <pagmo/s11n.hpp>
+
+#include <boost/serialization/optional.hpp>
 
 
 namespace pagmo{
 
-nsga3::nsga3(unsigned gen, double cr, double eta_c, double m, double eta_m, unsigned seed)
-        : ngen(gen), cr(cr), eta_c(eta_c), m(m), eta_m(eta_m), seed(seed), reng(seed){
-    ;
+nsga3::nsga3(unsigned gen, double cr, double eta_c, double m, double eta_m, size_t divisions, unsigned seed)
+        : ngen(gen), cr(cr), eta_c(eta_c), m(m), eta_m(eta_m), divisions(divisions), seed(seed), reng(seed){
     // Validate ctor args
+    if(cr >= 1. || cr < 0.){
+        pagmo_throw(std::invalid_argument, "The crossover probability must be in the range [0,1], while a value of "
+                                           + std::to_string(cr) + " was detected");
+    }
+    if(m < 0. || m > 1.){
+        pagmo_throw(std::invalid_argument, "The mutation probability must be in the range [0,1], while a value of "
+                                           + std::to_string(m) + " was detected");
+    }
+    if(eta_c < 1. || eta_c > 100.){
+        pagmo_throw(std::invalid_argument, "The distribution index for crossover must be in the range [1, 100], "
+                                           "while a value of " + std::to_string(eta_c) + " was detected");
+    }
+    if(eta_m < 1. || eta_m > 100.){
+        pagmo_throw(std::invalid_argument, "The distribution index for mutation must be in [1, 100], "
+                                           "while a value of " + std::to_string(eta_m) + " was detected");
+    }
+    // See Deb. Section V, Table I
+    if(divisions < 1){
+        pagmo_throw(std::invalid_argument, "Invalid <divisions> argument: " + std::to_string(divisions) + ". "
+                                           "Number of reference point divisions per objective must be positive");
+    }
 }
 
 
@@ -39,11 +64,12 @@ std::vector<ReferencePoint> nsga3::generate_uniform_reference_points(size_t nobj
 
 std::vector<std::vector<double>> nsga3::translate_objectives(population pop) const{
     size_t NP = pop.size();
+    size_t nobj = pop.get_problem().get_nobj();
     auto objs = pop.get_f();
     std::vector<double> p_ideal = ideal(objs);
-    std::vector<std::vector<double>> translated_objs(NP, {0.0, 0.0, 0.0});
+    std::vector<std::vector<double>> translated_objs(NP, std::vector<double>(nobj));
 
-    for(size_t obj=0; obj<3; obj++){
+    for(size_t obj=0; obj<nobj; obj++){
         for(size_t i=0; i<NP; i++){
             translated_objs[i][obj] = objs[i][obj] - p_ideal[obj];
         }
@@ -107,7 +133,6 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<size_t> &
     return intercepts;
 }
 
-//  Equation 4: Note
 std::vector<std::vector<double>> nsga3::normalize_objectives(std::vector<std::vector<double>> &translated_objs,
                                                       std::vector<double> &intercepts) const{
     /*  Algorithm 2, step 7 and Equation 4
@@ -115,24 +140,27 @@ std::vector<std::vector<double>> nsga3::normalize_objectives(std::vector<std::ve
      *  are already translated by ideal point.
      */
 
-    size_t objs = translated_objs[1].size();
-    std::vector<std::vector<double>> norm_objs(translated_objs.size(), std::vector<double>(objs));
+    size_t nobj = translated_objs[1].size();
+    std::vector<std::vector<double>> norm_objs(translated_objs.size(), std::vector<double>(nobj));
 
     for(size_t i=0; i<translated_objs.size(); i++){
-        for(size_t obj=0; obj<objs; obj++){
-            double intercept_or_eps = std::max(intercepts[obj], std::numeric_limits<double>::epsilon());
-            norm_objs[i][obj] = translated_objs[i][obj]/intercept_or_eps;
+        for(size_t idx=0; idx<nobj; idx++){
+            double intercept_or_eps = std::max(intercepts[idx], std::numeric_limits<double>::epsilon());
+            norm_objs[i][idx] = translated_objs[i][idx]/intercept_or_eps;
         }
     }
 
     return norm_objs;
 }
 
-population nsga3::evolve(population &pop) const{
+population nsga3::evolve(population pop) const{
     const auto &prob = pop.get_problem();
     const auto bounds = prob.get_bounds();
+    const auto fevals0 = prob.get_fevals();
     auto dim_i = prob.get_nix();
     auto NP = pop.size();
+
+    m_log.clear();
 
     // Initialize the population
 
@@ -144,7 +172,7 @@ population nsga3::evolve(population &pop) const{
      *  - "Appropriate" population size and factors; NP >= num reference directions
      */
 
-    std::vector<vector_double::size_type> best_idx(NP), shuffle1(NP), shuffle2(NP);
+    std::vector<vector_double::size_type> shuffle1(NP), shuffle2(NP);
     std::pair<vector_double, vector_double> children;
 
     // Initialise population indices
@@ -163,8 +191,9 @@ population nsga3::evolve(population &pop) const{
          *  2. R = P_t U Q_t
          *  3. P_t+1 = selection(R)
          */
+        std::vector<double> p_ideal = ideal(pop.get_f());
 
-        if(gen % 500 == 0){
+        if(gen % 100 == 0){
             std::cout << "Generation: " << gen << "/" << ngen << "\n";
             std::cout << "fevals: " << prob.get_fevals() << "\n";
             std::vector<double> p_ideal = ideal(pop.get_f());
@@ -176,17 +205,20 @@ population nsga3::evolve(population &pop) const{
             std::cout << std::endl;
         }
         if(gen == ngen){
-            auto p0 = pop.get_f();
-            std::cout << "pop: ";
-            for(size_t i=0; i < p0.size(); i++){
-                std::cout << i << "\t[";
-                std::for_each(p0[i].begin(), p0[i].end(), [](const auto& elem){std::cout << elem << ", "; });
-                std::cout << "]" << std::endl;
+            using std::cout, std::endl;
+            auto p = pop.get_f();
+            std::cout << "obj" << p.size() << "_" << gen << " = [\n";
+            for(size_t i=0; i < p.size(); i++){
+                cout << "[" << p[i][0] << ", " << p[i][1] << ", " << p[i][2] << "],\n";
             }
+            cout << "]\n" << endl;
+        }
+        if(m_verbosity > 0u){
+            m_log.emplace_back(gen, prob.get_fevals() - fevals0, p_ideal);
         }
 
         // Offspring generation
-        for (decltype(NP) i = 0u; i < NP; i += 4) {
+        for (decltype(NP) i = 0; i < NP; i += 4) {
             // We create two offsprings using the shuffled list 1
             decltype(shuffle1) parents1;
             std::sample(shuffle1.begin(), shuffle1.end(), std::back_inserter(parents1),
@@ -217,12 +249,13 @@ population nsga3::evolve(population &pop) const{
 
         // Select NP individuals for next generation
         std::vector<size_t> pop_next = selection(popnew, NP);
-        for(population::size_type i = 0; i<NP; ++i){
+        for(population::size_type i = 0; i<NP; i++){
             pop.set_xf(i, popnew.get_x()[pop_next[i]], popnew.get_f()[pop_next[i]]);
         }
     }
     return pop;
 }
+
 /*  Selects members of a population for survival into the next generation
  *  arguments:
  *    population R: The combined parent and offspring populations
@@ -244,7 +277,6 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
     while(next_size < N_pop){
         next_size += fronts[last_front++].size();
     }
-    // Remove dominated fronts surplus to required N_pop
     fronts.erase(fronts.begin() + last_front, fronts.end());
 
     // Accept all members of first l-1 fronts
@@ -262,29 +294,19 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
     auto ext_points = find_extreme_points(R, fronts, translated_objectives);
     auto intercepts = find_intercepts(R, ext_points, translated_objectives);
     auto norm_objs = normalize_objectives(translated_objectives, intercepts);
-    std::vector<ReferencePoint> rps = generate_uniform_reference_points(nobj, 12 /* parameter */);
+    std::vector<ReferencePoint> rps = generate_uniform_reference_points(nobj, divisions);
     associate_with_reference_points(rps, norm_objs, fronts);
-
-    // For visualisation
-    /*
-    for(auto &rp: rps){
-        using std::cout, std::endl;
-        // std::for_each(rp.begin(), rp.end(), [](const auto& elem){std::cout << elem << " ";});
-        cout << "[" << rp[0] << ", " << rp[1] << ", " << rp[2] << "],\n";
-    }
-    std::cout << std::endl;
-    */
 
     // Apply RP selection to final front until N_pop reached
     while(next.size() < N_pop){
         size_t min_rp_idx = identify_niche_point(rps);
-        int selected_idx = rps[min_rp_idx].select_member();
-        if(selected_idx < 0){
-            rps.erase(rps.begin() + min_rp_idx);
-        }else{
+        std::optional<size_t> selected_idx = rps[min_rp_idx].select_member();
+        if(selected_idx.has_value()){
             rps[min_rp_idx].increment_members();
-            rps[min_rp_idx].remove_candidate(selected_idx);
-            next.push_back(selected_idx);
+            rps[min_rp_idx].remove_candidate(selected_idx.value());
+            next.push_back(selected_idx.value());
+        }else{
+            rps.erase(rps.begin() + min_rp_idx);
         }
     }
 
@@ -294,7 +316,9 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
 // Object serialization
 template <typename Archive>
 void nsga3::serialize(Archive &ar, unsigned int) {
-    detail::archive(ar, ngen, cr, eta_c, m, eta_m, seed);
+    detail::archive(ar, ngen, cr, eta_c, m, eta_m, seed, m_verbosity, m_log);
 }
 
 }  // namespace pagmo
+
+PAGMO_S11N_ALGORITHM_IMPLEMENT(pagmo::nsga3)

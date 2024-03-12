@@ -224,6 +224,15 @@ PAGMO_DLL_PUBLIC double achievement(const vector_double &, const vector_double &
 // Perpendicular distance to reference point vectors
 PAGMO_DLL_PUBLIC double perpendicular_distance(const std::vector<double> &, const std::vector<double> &);
 
+/* Choose single random element from vector container */
+template <class T>
+PAGMO_DLL_PUBLIC
+T choose_random_element(const std::vector<T> &container){
+    std::vector<T> choice;
+    std::sample(container.begin(), container.end(), std::back_inserter(choice),
+                1, std::mt19937{std::random_device{}()});
+    return choice[0];
+}
 
 } // namespace pagmo
 

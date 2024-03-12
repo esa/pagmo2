@@ -1,5 +1,6 @@
 #include <algorithm>  // sample
 #include <iterator>
+#include <optional>
 #include <random>     // mt19937
 #include <sstream>
 #include <string>
@@ -106,15 +107,12 @@ size_t identify_niche_point(std::vector<ReferencePoint> &rps){
         }
     }
     // Return a random element from the minimal set
-    std::vector<size_t> choice;
-    std::sample(minimal_set.begin(), minimal_set.end(), std::back_inserter(choice),
-                1, std::mt19937{std::random_device{}()});
-    return choice[0];
+    return choose_random_element<size_t>(minimal_set);
 }
 
 // Section IV.E
-int ReferencePoint::select_member() const{
-    int selected = -1;
+std::optional<size_t> ReferencePoint::select_member() const{
+    std::optional<size_t> selected = std::nullopt;
     if(candidate_count() != 0){
         if(member_count() == 0){  // Candidates but no members: rho == 0
             selected = nearest_candidate();
@@ -125,9 +123,9 @@ int ReferencePoint::select_member() const{
     return selected;
 }
 
-int ReferencePoint::nearest_candidate() const{
+std::optional<size_t> ReferencePoint::nearest_candidate() const{
     double min_dist = std::numeric_limits<double>::max();
-    int min_idx = -1;
+    std::optional<size_t> min_idx = std::nullopt;
     for(size_t idx=0; idx<candidates.size(); idx++){
         if(candidates[idx].second < min_dist){
             min_dist = candidates[idx].second;
@@ -137,14 +135,14 @@ int ReferencePoint::nearest_candidate() const{
     return min_idx;
 }
 
-int ReferencePoint::random_candidate() const{
+std::optional<size_t> ReferencePoint::random_candidate() const{
     if(candidates.empty()){
-        return -1;
+        return std::nullopt;
     }
     std::vector<std::pair<size_t, double>> choice;
     std::sample(candidates.begin(), candidates.end(), std::back_inserter(choice),
                 1, std::mt19937{std::random_device{}()});
-    return choice[0].first;
+    return choose_random_element<std::pair<size_t, double>>(candidates).first;
 }
 
 } // namespace pagmo
