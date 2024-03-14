@@ -230,7 +230,7 @@ PAGMO_DLL_PUBLIC
 T choose_random_element(const std::vector<T> &container){
     std::vector<T> choice;
     std::sample(container.begin(), container.end(), std::back_inserter(choice),
-                1, std::mt19937{std::random_device{}()});
+                1, std::mt19937{32u});
     return choice[0];
 }
 

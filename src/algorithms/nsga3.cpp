@@ -25,30 +25,33 @@
 
 namespace pagmo{
 
-nsga3::nsga3(unsigned gen, double cr, double eta_c, double m, double eta_m, size_t divisions, unsigned seed)
-        : ngen(gen), cr(cr), eta_c(eta_c), m(m), eta_m(eta_m), divisions(divisions), seed(seed), reng(seed){
+nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut,
+             size_t divisions, unsigned seed, bool use_memory)
+        : ngen(gen), cr(cr), eta_c(eta_c), mut(mut), eta_mut(eta_mut),
+          divisions(divisions), seed(seed), use_memory(use_memory), reng(seed){
     // Validate ctor args
     if(cr < 0.0 || cr > 1.0){
         pagmo_throw(std::invalid_argument, "The crossover probability must be in the range [0, 1], while a value of "
                                            + std::to_string(cr) + " was detected");
     }
-    if(m < 0.0 || m > 1.0){
+    if(mut < 0.0 || mut > 1.0){
         pagmo_throw(std::invalid_argument, "The mutation probability must be in the range [0, 1], while a value of "
-                                           + std::to_string(m) + " was detected");
+                                           + std::to_string(mut) + " was detected");
     }
     if(eta_c < 1.0 || eta_c > 100.0){
         pagmo_throw(std::invalid_argument, "The distribution index for crossover must be in the range [1, 100], "
                                            "while a value of " + std::to_string(eta_c) + " was detected");
     }
-    if(eta_m < 1.0 || eta_m > 100.0){
+    if(eta_mut < 1.0 || eta_mut > 100.0){
         pagmo_throw(std::invalid_argument, "The distribution index for mutation must be in [1, 100], "
-                                           "while a value of " + std::to_string(eta_m) + " was detected");
+                                           "while a value of " + std::to_string(eta_mut) + " was detected");
     }
     // See Deb. Section V, Table I
     if(divisions < 1){
         pagmo_throw(std::invalid_argument, "Invalid <divisions> argument: " + std::to_string(divisions) + ". "
                                            "Number of reference point divisions per objective must be positive");
     }
+
 }
 
 
@@ -66,7 +69,19 @@ std::vector<std::vector<double>> nsga3::translate_objectives(population pop) con
     size_t NP = pop.size();
     size_t nobj = pop.get_problem().get_nobj();
     auto objs = pop.get_f();
-    std::vector<double> p_ideal = ideal(objs);
+    std::vector<double> p_ideal;
+    if(has_memory()){
+        decltype(objs) combined{memory.v_ideal};
+        if(memory.v_ideal.size() != 0){  // i.e. not first gen
+            combined.insert(combined.end(), objs.begin(), objs.end());
+            p_ideal = ideal(combined);
+        }else{
+            p_ideal = ideal(objs);
+        }
+        memory.v_ideal = p_ideal;
+    }else{
+        p_ideal = ideal(objs);
+    }
     std::vector<std::vector<double>> translated_objs(NP, std::vector<double>(nobj));
 
     for(size_t obj=0; obj<nobj; obj++){
@@ -79,34 +94,54 @@ std::vector<std::vector<double>> nsga3::translate_objectives(population pop) con
 }
 
 // fronts arg is NDS return type
-std::vector<size_t> nsga3::find_extreme_points(population pop,
+std::vector<std::vector<double>> nsga3::find_extreme_points(population pop,
                                                std::vector<std::vector<pop_size_t>> &fronts,
                                                std::vector<std::vector<double>> &translated_objs) const{
-    std::vector<size_t> points;
+    std::vector<std::vector<double>> points;
     size_t nobj = pop.get_problem().get_nobj();
 
     for(size_t i=0; i<nobj; i++){
         std::vector<double> weights(nobj, 1e-6);
         weights[i] = 1.0;
         double min_asf = std::numeric_limits<double>::max();
-        double min_individual = fronts[0].size();
+        std::vector<double> min_obj{};
+
+        if(has_memory()){
+            if(memory.v_extreme.size() == 0){
+                for(size_t idx=0; idx<nobj ; idx++){
+                    memory.v_extreme.push_back(std::vector<double>(nobj, {}));
+                }
+            }else{
+                for(size_t p=0; p<memory.v_extreme.size(); p++){
+                    double asf = achievement(memory.v_extreme[p], weights);
+                    if(asf < min_asf){
+                        min_asf = asf;
+                        min_obj = memory.v_extreme[p];
+                    }
+                }
+            }
+        }
+
         // Only first front need be considered for extremes
         for(size_t ind=0; ind<fronts[0].size(); ind++){
             // Calculate ASF value for translated objectives
             double asf = achievement(translated_objs[fronts[0][ind]], weights);
             if(asf < min_asf){
                 min_asf = asf;
-                min_individual = fronts[0][ind];
+                min_obj = translated_objs[fronts[0][ind]];
             }
         }
-        points.push_back(min_individual);
+        points.push_back(std::vector<double>(min_obj));
+        if(has_memory()){
+            memory.v_extreme[i] = std::vector<double>(min_obj);
+        }
     }
+
 
     return points;
 }
 
-std::vector<double> nsga3::find_intercepts(population pop, std::vector<size_t> &ext_points,
-                                           std::vector<std::vector<double>> &translated_objs) const{
+std::vector<double> nsga3::find_intercepts(population pop, std::vector<std::vector<double>> &ext_points) const{
     /*  1. Check duplicate extreme points
      *  2. A = translated objectives of extreme points;  b = [1,1,...] to n_objs
      *  3. Solve Ax = b via Gaussian Elimination
@@ -119,17 +154,22 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<size_t> &
     std::vector<double> b(n_obj, 1.0);
     std::vector<double> intercepts(n_obj, 1.0);
     std::vector<std::vector<double>> A;
-    bool fallback_to_worst = false;
+    bool fallback_to_nadir = false;
 
-    for(size_t p=0; !fallback_to_worst && p<ext_points.size()-1; p++){
-        for(size_t q=p+1; !fallback_to_worst && q<ext_points.size(); q++){
-            fallback_to_worst = (ext_points[p] == ext_points[q]);
+    for(size_t p=0; !fallback_to_nadir && p<ext_points.size()-1; p++){
+        for(size_t q=p+1; !fallback_to_nadir && q<ext_points.size(); q++){
+            for(size_t r=0; r<n_obj; r++){
+                fallback_to_nadir = (ext_points[p][r] == ext_points[q][r]);
+                if(fallback_to_nadir){
+                    break;
+                }
+            }
         }
     }
 
-    if(!fallback_to_worst){
+    if(!fallback_to_nadir){
         for(size_t i=0; i<ext_points.size(); i++){
-            A.push_back(translated_objs[ext_points[i]]);
+            A.push_back(ext_points[i]);
         }
 
         // Ax = b
@@ -139,17 +179,28 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<size_t> &
         for(size_t i=0; i<intercepts.size(); i++){
             intercepts[i] = 1.0/x[i];
             if(x[i] < 0.0){
-                fallback_to_worst = true;
+                fallback_to_nadir = true;
                 break;
             }
         }
     }
 
-    if(fallback_to_worst){
+    if(fallback_to_nadir){
+        auto objs = pop.get_f();
+        std::vector<double> v_nadir;
+        if(has_memory()){
+            decltype(objs) combined{memory.v_nadir};
+            if(memory.v_nadir.size() != 0){
+                combined.insert(combined.end(), objs.begin(), objs.end());
+                v_nadir = nadir(combined);
+            }else{
+                v_nadir = nadir(objs);
+            }
+        }
         for(size_t i=0; i<intercepts.size(); i++){
-            std::vector<double> v_nadir = nadir(pop.get_f());
             intercepts[i] = v_nadir[i];
         }
+        memory.v_nadir = v_nadir;
     }
 
     return intercepts;
@@ -243,12 +294,11 @@ population nsga3::evolve(population pop) const{
         for (decltype(NP) i = 0; i < NP; i += 4) {
             // We create two offsprings using the shuffled list 1
             decltype(shuffle1) parents1;
-            std::sample(shuffle1.begin(), shuffle1.end(), std::back_inserter(parents1),
-                        2, std::mt19937{std::random_device{}()});
+            std::sample(shuffle1.begin(), shuffle1.end(), std::back_inserter(parents1), 2, std::mt19937{reng()});
             children = detail::sbx_crossover_impl(pop.get_x()[parents1[0]], pop.get_x()[parents1[1]], bounds, dim_i,
                                                   cr, eta_c, reng);
-            detail::polynomial_mutation_impl(children.first, bounds, dim_i, m, eta_m, reng);
-            detail::polynomial_mutation_impl(children.second, bounds, dim_i, m, eta_m, reng);
+            detail::polynomial_mutation_impl(children.first, bounds, dim_i, mut, eta_mut, reng);
+            detail::polynomial_mutation_impl(children.second, bounds, dim_i, mut, eta_mut, reng);
             // Evaluation via prob ensures feval counter is correctly updated
             auto f1 = prob.fitness(children.first);
             auto f2 = prob.fitness(children.second);
@@ -257,12 +307,11 @@ population nsga3::evolve(population pop) const{
 
             // Repeat with the shuffled list 2
             decltype(shuffle2) parents2;
-            std::sample(shuffle2.begin(), shuffle2.end(), std::back_inserter(parents2),
-                        2, std::mt19937{std::random_device{}()});
+            std::sample(shuffle2.begin(), shuffle2.end(), std::back_inserter(parents2), 2, std::mt19937{reng()});
             children = detail::sbx_crossover_impl(pop.get_x()[parents2[0]], pop.get_x()[parents2[1]], bounds, dim_i,
                                                   cr, eta_c, reng);
-            detail::polynomial_mutation_impl(children.first, bounds, dim_i, m, eta_m, reng);
-            detail::polynomial_mutation_impl(children.second, bounds, dim_i, m, eta_m, reng);
+            detail::polynomial_mutation_impl(children.first, bounds, dim_i, mut, eta_mut, reng);
+            detail::polynomial_mutation_impl(children.second, bounds, dim_i, mut, eta_mut, reng);
             f1 = prob.fitness(children.first);
             f2 = prob.fitness(children.second);
             popnew.push_back(children.first, f1);
@@ -314,7 +363,7 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
 
     auto translated_objectives = translate_objectives(R);
     auto ext_points = find_extreme_points(R, fronts, translated_objectives);
-    auto intercepts = find_intercepts(R, ext_points, translated_objectives);
+    auto intercepts = find_intercepts(R, ext_points);
     auto norm_objs = normalize_objectives(translated_objectives, intercepts);
     std::vector<ReferencePoint> rps = generate_uniform_reference_points(nobj, divisions);
     associate_with_reference_points(rps, norm_objs, fronts);
@@ -338,7 +387,7 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
 // Object serialization
 template <typename Archive>
 void nsga3::serialize(Archive &ar, unsigned int) {
-    detail::archive(ar, ngen, cr, eta_c, m, eta_m, seed, m_verbosity, m_log);
+    detail::archive(ar, ngen, cr, eta_c, mut, eta_mut, seed, m_verbosity, m_log);
 }
 
 }  // namespace pagmo

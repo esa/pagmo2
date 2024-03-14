@@ -139,9 +139,6 @@ std::optional<size_t> ReferencePoint::random_candidate() const{
     if(candidates.empty()){
         return std::nullopt;
     }
-    std::vector<std::pair<size_t, double>> choice;
-    std::sample(candidates.begin(), candidates.end(), std::back_inserter(choice),
-                1, std::mt19937{std::random_device{}()});
     return choose_random_element<std::pair<size_t, double>>(candidates).first;
 }
 

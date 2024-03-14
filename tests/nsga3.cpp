@@ -24,10 +24,12 @@ BOOST_AUTO_TEST_CASE(nsga3_instance){
 BOOST_AUTO_TEST_CASE(nsga3_evolve_population){
     dtlz udp{1u, 10u, 3u};
 
-    population pop1{udp, 92u, 23u};
+    population pop1{udp, 92u, 23u /*seed*/};
 
     //nsga3 user_algo1{10u, 0.95, 10., 0.01, 50., 32u};
-    nsga3 user_algo1{4000, 1.0, 30., 0.01, 20., 12u, 32u};
+    nsga3 user_algo1{600, 1.0, 30., 0.10, 20., 12u, 32u, false};
+    BOOST_CHECK(user_algo1.get_seed() == 32u);
+    user_algo1.set_verbosity(1u);
     pop1 = user_algo1.evolve(pop1);
 };
 
@@ -121,7 +123,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_find_extreme_points){
     auto ext_points = nsga3_alg.find_extreme_points(pop, fronts, translated_objectives);
 
     std::cout << "-==: extreme points :==-\n";
-    std::for_each(ext_points.begin(), ext_points.end(), [](const auto& elem){std::cout << elem << " "; });
+    //std::for_each(ext_points.begin(), ext_points.end(), [](const auto& elem){std::cout << elem << " "; });
     std::cout << std::endl;
 }
 
@@ -136,7 +138,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_find_intercepts){
     auto fronts = std::get<0>(fnds_res);
     auto ext_points = nsga3_alg.find_extreme_points(pop, fronts, translated_objectives);
 
-    auto intercepts = nsga3_alg.find_intercepts(pop, ext_points, translated_objectives);
+    auto intercepts = nsga3_alg.find_intercepts(pop, ext_points);
     std::cout << "-==: intercepts :==-\n";
     std::for_each(intercepts.begin(), intercepts.end(), [](const auto& elem){std::cout << elem << " "; });
     std::cout << std::endl;
@@ -152,7 +154,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_objectives){
     auto fnds_res = fast_non_dominated_sorting(pop.get_f());
     auto fronts = std::get<0>(fnds_res);
     auto ext_points = nsga3_alg.find_extreme_points(pop, fronts, translated_objectives);
-    auto intercepts = nsga3_alg.find_intercepts(pop, ext_points, translated_objectives);
+    auto intercepts = nsga3_alg.find_intercepts(pop, ext_points);
     auto norm_objs = nsga3_alg.normalize_objectives(translated_objectives, intercepts);
     for(const auto &obj_f: norm_objs){
         std::for_each(obj_f.begin(), obj_f.end(), [](const auto& elem){std::cout << elem << " "; });
