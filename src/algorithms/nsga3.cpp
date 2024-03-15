@@ -52,6 +52,11 @@ nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut,
                                            "Number of reference point divisions per objective must be positive");
     }
 
+    /*  Initialise the global pagmo::random_device with our seed.
+     *  This ensures the choose_random_element template function
+     *  makes deterministic choices using std::sample.
+     */
+    random_device::set_seed(seed);
 }
 
 

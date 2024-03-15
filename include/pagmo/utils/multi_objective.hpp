@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/discrepancy.hpp>
 #include <pagmo/utils/generic.hpp>
@@ -229,8 +230,7 @@ template <class T>
 PAGMO_DLL_PUBLIC
 T choose_random_element(const std::vector<T> &container){
     std::vector<T> choice;
-    std::sample(container.begin(), container.end(), std::back_inserter(choice),
-                1, std::mt19937{32u});
+    std::sample(container.begin(), container.end(), std::back_inserter(choice), 1, std::mt19937{random_device::next()});
     return choice[0];
 }
 
