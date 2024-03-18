@@ -142,4 +142,11 @@ std::optional<size_t> ReferencePoint::random_candidate() const{
     return choose_random_element<std::pair<size_t, double>>(candidates).first;
 }
 
+size_t n_choose_k(unsigned n, unsigned k){
+    if(k == 0){
+        return 1u;
+    }
+    return n*n_choose_k(n-1, k-1)/k;
+}
+
 } // namespace pagmo

@@ -56,6 +56,8 @@ void associate_with_reference_points(
 
 size_t identify_niche_point(std::vector<ReferencePoint> &);
 
+size_t n_choose_k(unsigned, unsigned);
+
 }  // namespace pagmo
 
 #endif

@@ -238,8 +238,6 @@ population nsga3::evolve(population pop) const{
     auto dim_i = prob.get_nix();
     auto NP = pop.size();
 
-    m_log.clear();
-
     // Initialize the population
 
     /* Verify problem characteristics:
@@ -249,6 +247,36 @@ population nsga3::evolve(population pop) const{
      *  - No non-linear constraints
      *  - "Appropriate" population size and factors; NP >= num reference directions
      */
+    if (detail::some_bound_is_equal(prob)) {
+        pagmo_throw(std::invalid_argument, "Lower and upper bounds are equal, " + get_name() +
+                    " requires these to be different");
+    }
+    if (prob.is_stochastic()) {
+        pagmo_throw(std::invalid_argument,
+                    get_name() + " algorithm cannot operate on stochastic problems.");
+    }
+    if (prob.get_nc() != 0u) {
+        pagmo_throw(std::invalid_argument, "Non-linear constraints detected in " + prob.get_name() + " instance. "
+                    + get_name() + " cannot deal with them.");
+    }
+    if (prob.get_nf() < 2u) {
+        pagmo_throw(std::invalid_argument, "This is a multiobjective algorithm, while number of objectives detected in "
+                    + prob.get_name() + " is " + std::to_string(prob.get_nf()));
+    }
+    if (NP < 5u || (NP % 4 != 0u)) {
+        pagmo_throw(std::invalid_argument,
+                    "NSGA-III requires a population greater than 5 and which is divisible by 4."
+                    "Detected input population size is: " + std::to_string(NP));
+    }
+    size_t num_rps = n_choose_k(prob.get_nf() + divisions - 1, divisions);
+    if(NP <= num_rps){
+        pagmo_throw(std::invalid_argument,
+                    "Population size must exceed number of reference points. NP = "
+                    + std::to_string(NP) + " while " + std::to_string(divisions) + " divisions for "
+                    "reference points gives a total of " + std::to_string(num_rps) + " points.");
+    }
+
+    m_log.clear();
 
     std::vector<vector_double::size_type> shuffle1(NP), shuffle2(NP);
     std::pair<vector_double, vector_double> children;
