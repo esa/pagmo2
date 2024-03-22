@@ -201,6 +201,8 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<std::vect
             }else{
                 v_nadir = nadir(objs);
             }
+        }else{
+            v_nadir = nadir(objs);
         }
         for(size_t i=0; i<intercepts.size(); i++){
             intercepts[i] = v_nadir[i];
