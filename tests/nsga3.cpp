@@ -26,10 +26,9 @@ BOOST_AUTO_TEST_CASE(nsga3_evolve_population){
 
     population pop1{udp, 92u, 23u /*seed*/};
 
-    //nsga3 user_algo1{10u, 0.95, 10., 0.01, 50., 32u};
-    nsga3 user_algo1{600, 1.0, 30., 0.10, 20., 12u, 32u, false};
+    nsga3 user_algo1{10u, 1.0, 30., 0.10, 20., 12u, 32u, false};
     BOOST_CHECK(user_algo1.get_seed() == 32u);
-    user_algo1.set_verbosity(1u);
+    user_algo1.set_verbosity(10u);
     pop1 = user_algo1.evolve(pop1);
 };
 
@@ -73,7 +72,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_translate_objectives){
     std::cout << "-==: nsga3_test_translate_objectives :==-\n";
     dtlz udp{1u, 10u, 3u};
     population pop{udp, 52u, 23u};
-    nsga3 nsga3_alg{10u, 0.95, 10., 0.01, 50., 32u};
+    nsga3 nsga3_alg{10u, 1.00, 30., 0.10, 20., 5u, 32u, false};
 
     pop = nsga3_alg.evolve(pop);
     auto p0_obj = pop.get_f();
@@ -114,7 +113,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_gaussian_elimination){
 BOOST_AUTO_TEST_CASE(nsga3_test_find_extreme_points){
     dtlz udp{1u, 10u, 3u};
     population pop{udp, 52u, 23u};
-    nsga3 nsga3_alg{10u, 0.95, 10., 0.01, 50., 32u};
+    nsga3 nsga3_alg{10u, 1.00, 30., 0.10, 20., 5u, 32u, false};
 
     pop = nsga3_alg.evolve(pop);
     auto translated_objectives = nsga3_alg.translate_objectives(pop);
@@ -130,7 +129,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_find_extreme_points){
 BOOST_AUTO_TEST_CASE(nsga3_test_find_intercepts){
     dtlz udp{1u, 10u, 3u};
     population pop{udp, 52u, 23u};
-    nsga3 nsga3_alg{10u, 0.95, 10., 0.01, 50., 32u};
+    nsga3 nsga3_alg{10u, 1.00, 30., 0.10, 20., 5u, 32u, false};
 
     pop = nsga3_alg.evolve(pop);
     auto translated_objectives = nsga3_alg.translate_objectives(pop);
@@ -147,7 +146,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_find_intercepts){
 BOOST_AUTO_TEST_CASE(nsga3_test_normalize_objectives){
     dtlz udp{1u, 10u, 3u};
     population pop{udp, 52u, 23u};
-    nsga3 nsga3_alg{10u, 0.95, 10., 0.01, 50., 32u};
+    nsga3 nsga3_alg{10u, 1.00, 30., 0.10, 20., 5u, 32u, false};
 
     pop = nsga3_alg.evolve(pop);
     auto translated_objectives = nsga3_alg.translate_objectives(pop);
@@ -162,15 +161,15 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_objectives){
     }
 }
 
-BOOST_AUTO_TEST_CASE(nsga3_test_associate_reference_points){
-    nsga3 n{10u, 0.95, 10., 0.01, 50., 32u};
-}
+//BOOST_AUTO_TEST_CASE(nsga3_test_associate_reference_points){
+//    nsga3 n{10u, 0.95, 10., 0.01, 50., 32u, false};
+//}
 
 BOOST_AUTO_TEST_CASE(nsga3_serialization_test){
     double close_distance = 1e-8;
     problem prob{zdt{1u, 30u}};
     population pop{prob, 40u, 23u};
-    algorithm algo{nsga3{10u, 1.00, 30., 0.01, 20, 12u, 32u}};
+    algorithm algo{nsga3{10u, 1.00, 30., 0.10, 20, 5u, 32u, false}};
     algo.set_verbosity(1u);
     algo.set_seed(1234u);
     pop = algo.evolve(pop);
@@ -203,5 +202,18 @@ BOOST_AUTO_TEST_CASE(nsga3_serialization_test){
         for (auto j = 0u; j < 2u; ++j) {
             BOOST_CHECK_CLOSE(std::get<2>(before_log[i])[j], std::get<2>(after_log[i])[j], close_distance);
         }
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_zdt5_test)
+{
+    algorithm algo{nsga3(100u, 1.00, 30., 0.10, 20., 4u, 32u, false)};
+    algo.set_verbosity(10u);
+    algo.set_seed(23456u);
+    population pop{zdt(5u, 10u), 20u, 32u};
+    pop = algo.evolve(pop);
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+        auto x = pop.get_x()[i];
+        BOOST_CHECK(std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); }));
     }
 }

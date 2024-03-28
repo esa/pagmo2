@@ -13,6 +13,7 @@
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga3.hpp>
+#include <pagmo/io.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/genetic_operators.hpp>
@@ -201,13 +202,13 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<std::vect
             }else{
                 v_nadir = nadir(objs);
             }
+            memory.v_nadir = v_nadir;
         }else{
             v_nadir = nadir(objs);
         }
         for(size_t i=0; i<intercepts.size(); i++){
             intercepts[i] = v_nadir[i];
         }
-        memory.v_nadir = v_nadir;
     }
 
     return intercepts;
@@ -282,6 +283,7 @@ population nsga3::evolve(population pop) const{
 
     std::vector<vector_double::size_type> shuffle1(NP), shuffle2(NP);
     std::pair<vector_double, vector_double> children;
+    size_t count{1u};
 
     // Initialise population indices
     std::iota(shuffle1.begin(), shuffle1.end(), vector_double::size_type(0));
@@ -299,29 +301,33 @@ population nsga3::evolve(population pop) const{
          *  2. R = P_t U Q_t
          *  3. P_t+1 = selection(R)
          */
-        std::vector<double> p_ideal = ideal(pop.get_f());
 
-        if(gen % 100 == 0){
-            std::cout << "Generation: " << gen << "/" << ngen << "\n";
-            std::cout << "fevals: " << prob.get_fevals() << "\n";
-            std::vector<double> p_ideal = ideal(pop.get_f());
-            std::vector<double> p_nadir = nadir(pop.get_f());
-            std::cout << "ideal: ";
-            std::for_each(p_ideal.begin(), p_ideal.end(), [](const auto& elem){std::cout << elem << " ";});
-            std::cout << "\nnadir: ";
-            std::for_each(p_nadir.begin(), p_nadir.end(), [](const auto& elem){std::cout << elem << " ";});
-            std::cout << std::endl;
-        }
-        if(gen == ngen){
-            using std::cout, std::endl;
-            auto p = pop.get_f();
-            std::cout << "obj" << p.size() << "_" << gen << " = [\n";
-            for(size_t i=0; i < p.size(); i++){
-                cout << "[" << p[i][0] << ", " << p[i][1] << ", " << p[i][2] << "],\n";
-            }
-            cout << "]\n" << endl;
-        }
         if(m_verbosity > 0u){
+            std::vector<double> p_ideal = ideal(pop.get_f());
+            if (gen % m_verbosity == 1u || m_verbosity == 1u) {
+                // We compute the ideal point
+                // Every 50 lines print the column names
+                if (count % 50u == 1u) {
+                    print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:");
+                    for (decltype(p_ideal.size()) i = 0u; i < p_ideal.size(); ++i) {
+                        if (i >= 5u) {
+                            print(std::setw(15), "... :");
+                            break;
+                        }
+                        print(std::setw(15), "ideal" + std::to_string(i + 1u) + ":");
+                    }
+                    print('\n');
+                }
+                print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0);
+                for (decltype(p_ideal.size()) i = 0u; i < p_ideal.size(); ++i) {
+                    if (i >= 5u) {
+                        break;
+                    }
+                    print(std::setw(15), p_ideal[i]);
+                }
+                print('\n');
+                ++count;
+            }
             m_log.emplace_back(gen, prob.get_fevals() - fevals0, p_ideal);
         }
 
