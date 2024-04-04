@@ -916,10 +916,8 @@ vector_double wfg::wfg8_fitness(const vector_double &x) const
     for (decltype(m_dim_k) i = m_dim_k; i < m_dim_dvs; ++i) {
         vector_double first_input(i);
         vector_double weights(i, 1.0);
-        decltype(m_dim_obj) index = 0u;
         for (decltype(i) j = 0u; j < i; ++j) {
             first_input[j] = y[j];
-            ++index;
         }
         t_1[i] = b_param(x_norm[i], r_sum(first_input, weights), 0.98 / 49.98, 0.02, 50);
         y[i] = t_1[i];

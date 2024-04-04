@@ -28,9 +28,12 @@ see https://www.gnu.org/licenses/. */
 
 #include <cmath>
 #include <cstdlib>
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <utility>
+
+#include <boost/math/constants/constants.hpp>
 
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
@@ -42,16 +45,6 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-
-namespace
-{
-
-// "Research code", ladies and gentlemen!
-constexpr double INF = 1.0e99;
-constexpr double E = 2.7182818284590452353602874713526625;
-constexpr double PI = 3.1415926535897932384626433832795029;
-
-} // namespace
 
 cec2014::cec2014(unsigned prob_id, unsigned dim) : m_z(dim), m_y(dim), func_num(prob_id)
 {
@@ -482,11 +475,11 @@ void cec2014::ackley_func(const double *x, double *f, const unsigned nx, const d
 
     for (i = 0; i < nx; i++) {
         sum1 += m_z[i] * m_z[i];
-        sum2 += std::cos(2.0 * PI * m_z[i]);
+        sum2 += std::cos(2.0 * boost::math::constants::pi<double>() * m_z[i]);
     }
     sum1 = -0.2 * std::sqrt(sum1 / nx);
     sum2 /= nx;
-    f[0] = E - 20.0 * std::exp(sum1) - std::exp(sum2) + 20.0;
+    f[0] = boost::math::constants::e<double>() - 20.0 * std::exp(sum1) - std::exp(sum2) + 20.0;
 }
 
 /* Weierstrass's  */
@@ -508,8 +501,8 @@ void cec2014::weierstrass_func(const double *x, double *f, const unsigned nx, co
         sum = 0.0;
         sum2 = 0.0;
         for (j = 0; j <= k_max; j++) {
-            sum += std::pow(a, j) * std::cos(2.0 * PI * std::pow(b, j) * (m_z[i] + 0.5));
-            sum2 += std::pow(a, j) * std::cos(2.0 * PI * std::pow(b, j) * 0.5);
+            sum += std::pow(a, j) * std::cos(2.0 * boost::math::constants::pi<double>() * std::pow(b, j) * (m_z[i] + 0.5));
+            sum2 += std::pow(a, j) * std::cos(2.0 * boost::math::constants::pi<double>() * std::pow(b, j) * 0.5);
         }
         f[0] += sum;
     }
@@ -546,7 +539,7 @@ void cec2014::rastrigin_func(const double *x, double *f, const unsigned nx, cons
     sr_func(x, m_z.data(), nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag); /* shift and rotate */
 
     for (i = 0; i < nx; i++) {
-        f[0] += (m_z[i] * m_z[i] - 10.0 * std::cos(2.0 * PI * m_z[i]) + 10.0);
+        f[0] += (m_z[i] * m_z[i] - 10.0 * std::cos(2.0 * boost::math::constants::pi<double>() * m_z[i]) + 10.0);
     }
 }
 
@@ -564,7 +557,7 @@ void cec2014::step_rastrigin_func(const double *x, double *f, const unsigned nx,
     sr_func(x, m_z.data(), nx, Os, Mr, 5.12 / 100.0, s_flag, r_flag); /* shift and rotate */
 
     for (i = 0; i < nx; i++) {
-        f[0] += (m_z[i] * m_z[i] - 10.0 * std::cos(2.0 * PI * m_z[i]) + 10.0);
+        f[0] += (m_z[i] * m_z[i] - 10.0 * std::cos(2.0 * boost::math::constants::pi<double>() * m_z[i]) + 10.0);
     }
 }
 
@@ -672,7 +665,7 @@ void cec2014::bi_rastrigin_func(const double *x, double *f, const unsigned nx, c
     if (r_flag == 1) {
         rotatefunc(m_z.data(), m_y.data(), nx, Mr);
         for (i = 0; i < nx; i++) {
-            tmp += std::cos(2.0 * PI * m_y[i]);
+            tmp += std::cos(2.0 * boost::math::constants::pi<double>() * m_y[i]);
         }
         if (tmp1 < tmp2) {
             f[0] = tmp1;
@@ -682,7 +675,7 @@ void cec2014::bi_rastrigin_func(const double *x, double *f, const unsigned nx, c
         f[0] += 10.0 * (nx - tmp);
     } else {
         for (i = 0; i < nx; i++) {
-            tmp += std::cos(2.0 * PI * m_z[i]);
+            tmp += std::cos(2.0 * boost::math::constants::pi<double>() * m_z[i]);
         }
         if (tmp1 < tmp2) {
             f[0] = tmp1;
@@ -1340,7 +1333,7 @@ void cec2014::cf_cal(const double *x, double *f, const unsigned nx, const double
         if (w[i] != 0)
             w[i] = std::pow(1.0 / w[i], 0.5) * std::exp(-w[i] / 2.0 / nx / std::pow(delta[i], 2.0));
         else
-            w[i] = INF;
+            w[i] = std::numeric_limits<double>::max();
         if (w[i] > w_max) w_max = w[i];
     }
 

@@ -33,6 +33,8 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <utility>
 
+#include <boost/math/constants/constants.hpp>
+
 #include <pagmo/detail/constants.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
@@ -44,13 +46,6 @@ see https://www.gnu.org/licenses/. */
 
 namespace pagmo
 {
-
-namespace
-{
-
-constexpr double E = 2.7182818284590452353602874713526625;
-
-}
 
 cec2013::cec2013(unsigned prob_id, unsigned dim)
     : m_prob_id(prob_id), m_rotation_matrix(), m_origin_shift(), m_y(dim), m_z(dim)
@@ -500,7 +495,7 @@ void cec2013::ackley_func(const double *x, double *f, const unsigned nx, const d
     }
     sum1 = -0.2 * std::sqrt(sum1 / nx);
     sum2 /= nx;
-    f[0] = E - 20.0 * std::exp(sum1) - std::exp(sum2) + 20.0;
+    f[0] = boost::math::constants::e<double>() - 20.0 * std::exp(sum1) - std::exp(sum2) + 20.0;
 }
 
 void cec2013::weierstrass_func(const double *x, double *f, const unsigned nx, const double *Os, const double *Mr,
