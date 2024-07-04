@@ -159,7 +159,9 @@ boost::any default_wait_raii_getter()
 
 // NOTE: the default implementation just returns a defected boost::any, whose ctor and dtor
 // will have no effect.
+/// @cond
 std::function<boost::any()> wait_raii_getter = &default_wait_raii_getter;
+/// @endcond
 
 namespace
 {
@@ -184,8 +186,10 @@ void default_island_factory(const algorithm &algo, const population &pop, std::u
 } // namespace
 
 // Static init.
+/// @cond
 std::function<void(const algorithm &, const population &, std::unique_ptr<detail::isl_inner_base> &)> island_factory
     = &default_island_factory;
+/// @endcond
 
 namespace
 {
