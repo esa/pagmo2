@@ -364,3 +364,34 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_all_infeasible_test)
     BOOST_CHECK((udp_p.m_f_hat_round == vector_double{7, 22., 10.}));
     BOOST_CHECK_EQUAL(udp_p.m_apply_penalty_1, true);
 }
+
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_initial_population_not_respecting_bounds_throw_test)
+{
+    // We test that the algorithm throws if the initial population does not respect the bounds
+    problem prob{hock_schittkowski_71{}};
+    population pop{prob, 10u, 23u};
+    auto dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] - 1.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(cstrs_self_adaptive{10u}.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().second[0] + 2.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(cstrs_self_adaptive{10u}.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(cstrs_self_adaptive{10u}.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::infinity();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(cstrs_self_adaptive{10u}.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] + prob.get_bounds().second[0] / 2.0;
+    pop.set_x(0, dv);
+    BOOST_CHECK_NO_THROW(cstrs_self_adaptive{10u}.evolve(pop));
+}

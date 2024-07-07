@@ -408,6 +408,7 @@ population cstrs_self_adaptive::evolve(population pop) const
     auto nec = prob.get_nec();            // This getter does not return a const reference but a copy
     const auto bounds = prob.get_bounds();
     auto NP = pop.size();
+    auto dim = prob.get_nx();
 
     auto fevals0 = prob.get_fevals(); // discount for the already made fevals
     unsigned count = 1u;              // regulates the screen output
@@ -428,6 +429,26 @@ population cstrs_self_adaptive::evolve(population pop) const
     if (NP < 4u) {
         pagmo_throw(std::invalid_argument,
                     "Cannot use " + prob.get_name() + " on a population with less than 4 individuals");
+    }
+    // Verify all decision variables respect the bounds
+    for (decltype(NP) i = 0u; i < NP; ++i) {
+        for (decltype(dim) j = 0u; j < dim; ++j) {
+            double x = pop.get_x()[i][j];
+            if (std::isnan(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to NaN" + std::to_string(x));
+            }
+
+            if (std::isinf(x)) {
+            pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                   + " equal to infinity" + std::to_string(x));
+            }
+
+            if (x < bounds.first[j] || x > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument, "Individual " + std::to_string(i) + " has a gene " + std::to_string(j)
+                                                       + " out of bounds: " + std::to_string(x));
+            }
+        }
     }
     // ---------------------------------------------------------------------------------------------------------
 

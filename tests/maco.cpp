@@ -264,3 +264,35 @@ BOOST_AUTO_TEST_CASE(memory_test)
     pop_2 = uda_2.evolve(pop_2);
     BOOST_CHECK(pop_1.get_f() == pop_2.get_f());
 }
+
+BOOST_AUTO_TEST_CASE(maco_initial_population_not_respecting_bounds_throw_test)
+{
+    // We test that the algorithm throws if the initial population does not respect the bounds
+    maco uda{10u, 20u, 1.0, 8u, 7u, 10000u, 0., false, 23u};
+    problem prob{wfg{5u, 16u, 15u, 14u}};
+    population pop{prob, 20u, 23u};
+    auto dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] - 1.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(uda.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().second[0] + 2.;
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(uda.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(uda.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = std::numeric_limits<double>::infinity();
+    pop.set_x(0, dv);
+    BOOST_CHECK_THROW(uda.evolve(pop), std::invalid_argument);
+
+    dv = pop.get_x()[0];
+    dv[0] = prob.get_bounds().first[0] + prob.get_bounds().second[0] / 2.0;
+    pop.set_x(0, dv);
+    BOOST_CHECK_NO_THROW(uda.evolve(pop));
+}
