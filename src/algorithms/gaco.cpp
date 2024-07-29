@@ -851,9 +851,16 @@ void gaco::generate_new_ants(const population &pop, std::uniform_real_distributi
             g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
 
             if (g_h < lb[h] || g_h > ub[h]) {
-
-                while ((g_h < lb[h] || g_h > ub[h])) {
+                int iter_while=0;
+                while ((g_h < lb[h] || g_h > ub[h]) && iter_while < 10) {
                     g_h = sol_archive[k_omega][1 + h] + sigma[h] * gauss_pdf(m_e);
+                    ++iter_while;
+                }
+                if (g_h < lb[h]) {
+                    g_h = lb[h];
+                }
+                if (g_h > ub[h]) {
+                    g_h = ub[h];
                 }
             }
             if (h >= n_con) {
