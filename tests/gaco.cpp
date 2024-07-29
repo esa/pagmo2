@@ -354,3 +354,14 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
 
     BOOST_CHECK_EQUAL(pop.champion_f()[0], pop_2.champion_f()[0]);
 }
+
+BOOST_AUTO_TEST_CASE(out_of_bounds_test)
+{
+    population pop{rosenbrock{}, 10u, 23u};
+    pop.set_x(0, {-20., 12});//both out of bounds
+    gaco uda{10u, 10u, 1.0, 25.0, 0.01, 5u, 7u, 1000u, 1000u, 0.0, false, 23u};
+    uda.set_verbosity(1u);
+    uda.set_seed(23u);
+    pop = uda.evolve(pop);
+}
+
