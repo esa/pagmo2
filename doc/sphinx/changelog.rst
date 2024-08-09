@@ -3,6 +3,32 @@
 Changelog
 =========
 
+2.19.1 (2024-08-09)
+-------------------
+
+New
+~~~
+
+- Add support for CMake ``UNITY_BUILD``
+  (`#564 <https://github.com/esa/pagmo2/pull/564>`__).
+
+Fix
+~~~
+
+- Fix GACO hanging when initial population is out
+  of bounds
+  (`#576 <https://github.com/esa/pagmo2/pull/576>`__).
+
+- Fix batch fitness evaluation for the ``unconstrain``
+  meta-problem
+  (`#575 <https://github.com/esa/pagmo2/pull/575>`__).
+
+- Several build/compiler warning fixes
+  (`#572 <https://github.com/esa/pagmo2/pull/572>`__,
+  `#566 <https://github.com/esa/pagmo2/pull/566>`__,
+  `#562 <https://github.com/esa/pagmo2/pull/562>`__,
+  `#542 <https://github.com/esa/pagmo2/pull/542>`__).
+
 2.19.0 (2023-01-21)
 -------------------
 
@@ -34,7 +60,7 @@ Changes
 Fix
 ~~~
 
-- A fix for the gaco algorithm that now throws if ``ker`` size is < 2.
+- A fix for the gaco algorithm that now throws if ``ker`` size is < 2
   (`#490 <https://github.com/esa/pagmo2/pull/490>`__).
 
 2.18.0 (2021-08-03)
