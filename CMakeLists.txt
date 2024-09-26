@@ -148,6 +148,22 @@ if(YACMA_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "8")
     unset(_PAGMO_GCC_SUPPORTS_NO_OVERRIDE)
 endif()
 
+if (YACMA_COMPILER_IS_CLANGXX AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 17)
+    # workaround for https://github.com/llvm/llvm-project/issues/71196
+    # tldr; The new -fassume-unique-vtables optimization breaks serialization
+    # xref https://releases.llvm.org/17.0.1/tools/clang/docs/ReleaseNotes.html#c-language-changes
+    include(CheckCXXCompilerFlag)
+    set(CMAKE_REQUIRED_QUIET TRUE)
+    check_cxx_compiler_flag("-fno-assume-unique-vtables" _PAGMO_CLANG_SUPPORTS_ASSUME_UNIQUE_VTABLES)
+    unset(CMAKE_REQUIRED_QUIET)
+    if (_PAGMO_CLANG_SUPPORTS_ASSUME_UNIQUE_VTABLES)
+        message(STATUS "The '-fno-assume-unique-vtables' flag is supported, enabling it.")
+        list(APPEND PAGMO_CXX_FLAGS_DEBUG "-fno-assume-unique-vtables")
+        list(APPEND PAGMO_CXX_FLAGS_RELEASE "-fno-assume-unique-vtables")
+    endif ()
+    unset (_PAGMO_CLANG_SUPPORTS_ASSUME_UNIQUE_VTABLES)
+endif ()
+
 # TBB. Try to find it first in config mode (supported
 # since version 2021 after the oneTBB rename), and, if this
 # fails, fall back to our own FindTBB.cmake. This is of course
