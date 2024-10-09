@@ -638,4 +638,67 @@ vector_double decompose_objectives(const vector_double &f, const vector_double &
     return {fd};
 }
 
+/* Gaussian Elimination */
+vector_double gaussian_elimination(std::vector<std::vector<double>> A, const vector_double &b){
+    // N.B. Check dimensions and pivots
+    if(A[0][0] == 0.0){
+        pagmo_throw(std::invalid_argument, "Matrix argument contains zero-valued pivot");
+    }
+    const size_t N = A.size();
+    // Build augmented matrix
+    for(size_t i=0; i<N; i++){
+        A[i].push_back(b[i]);
+    }
+
+    // Eliminate subordinate entries
+    for(size_t p=0; p<N-1; p++){
+        for(size_t i=p+1; i<N; i++){
+            double quot = A[i][p]/A[p][p];
+            for(size_t j=0; j<A[p].size(); j++){
+                A[i][j] -= A[p][j]*quot;
+            }
+        }
+    }
+    vector_double x(N);
+    // Back substitution
+    for(int i=N-1; i>=0; i--){
+        for(size_t var=i+1; var<N; var++){
+            A[i][N] -= A[i][var]*x[var];
+        }
+        x[i] = A[i][N]/A[i][i];
+    }
+
+    return x;
+}
+
+
+/* Achievement Scalarization Function */
+double achievement(const vector_double &objs, const vector_double &weights){
+    const double default_weight = 1e-5;
+    double max_ratio = -std::numeric_limits<double>::max();
+    double w = 0.0;
+
+    for(size_t i=0; i<objs.size(); i++){
+        w = weights[i] ? weights[i] : default_weight;
+        max_ratio = std::max(max_ratio, objs[i]/w);
+    }
+
+    return max_ratio;
+}
+
+/* Distance from objective point to perpendicular intersection with reference point vector */
+double perpendicular_distance(const std::vector<double> &ref_point, const std::vector<double> &obj_point){
+    double num = 0.0, denom = 0.0, sq_dist = 0.0;
+    for(size_t i=0; i<ref_point.size(); i++){
+        num += ref_point[i]*obj_point[i];
+        denom += ref_point[i]*ref_point[i];
+    }
+    double coeff = num/denom;
+    for(size_t i=0; i<ref_point.size(); i++){
+        double term = coeff*ref_point[i] - obj_point[i];
+        sq_dist += term*term;
+    }
+    return std::sqrt(sq_dist);
+}
+
 } // namespace pagmo

@@ -42,6 +42,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/discrepancy.hpp>
 #include <pagmo/utils/generic.hpp>
@@ -214,6 +215,24 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
 // Decomposes a vector of objectives.
 PAGMO_DLL_PUBLIC vector_double decompose_objectives(const vector_double &, const vector_double &, const vector_double &,
                                                     const std::string &);
+
+// Gaussian Elimination
+PAGMO_DLL_PUBLIC vector_double gaussian_elimination(std::vector<std::vector<double>>, const vector_double &);
+
+// Achievement Scalarization Function
+PAGMO_DLL_PUBLIC double achievement(const vector_double &, const vector_double &);
+
+// Perpendicular distance to reference point vectors
+PAGMO_DLL_PUBLIC double perpendicular_distance(const std::vector<double> &, const std::vector<double> &);
+
+/* Choose single random element from vector container */
+template <class T>
+PAGMO_DLL_PUBLIC
+T choose_random_element(const std::vector<T> &container){
+    std::vector<T> choice;
+    std::sample(container.begin(), container.end(), std::back_inserter(choice), 1, std::mt19937{random_device::next()});
+    return choice[0];
+}
 
 } // namespace pagmo
 
