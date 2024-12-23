@@ -54,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pagmo'
-copyright = '2017-2021, pagmo development team'
+copyright = '2017-2024, pagmo development team'
 author = 'pagmo development team'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -382,3 +382,6 @@ texinfo_documents = [
 #     app.add_stylesheet("pagmo.css")  # also can be a full URL
 
 linkcheck_workers = 1
+
+# those can fail on remote CI
+linkcheck_ignore = [r'https://www.sciencedirect.com/*', r'https://ieeexplore.ieee.org/*']

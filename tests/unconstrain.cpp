@@ -332,4 +332,11 @@ BOOST_AUTO_TEST_CASE(unconstrain_batch_test)
     bfe default_bfe{};
     population pop{p0, default_bfe, 20u};
     BOOST_CHECK(bf0::s_counter == 1u);
+
+    // through batch_fitness
+    vector_double::size_type bs = 10;
+    vector_double xs(p0.get_nx() * bs, 1.);
+    vector_double ys = t.batch_fitness(xs);
+    BOOST_CHECK(ys.size() == t.get_nobj() * bs);
+    BOOST_CHECK(bf0::s_counter == 2u);
 }
