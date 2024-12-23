@@ -221,7 +221,7 @@ population moead_gen::evolve(population pop) const
         vector_double genes(NP*dim);
         std::vector<vector_double> poptemp;
         std::vector<vector_double> ftemp;
-        std::vector<unsigned long> fidtemp;
+        std::vector<population::size_type> fidtemp;
         std::vector<bool> whole_populationtemp;
         decltype(genes.size()) pos = 0u;
 
@@ -294,7 +294,7 @@ population moead_gen::evolve(population pop) const
         }
         for( unsigned int n_i = 0; n_i<fidtemp.size(); n_i++ ) { 
             // get each individual's values from the temp vectors
-            unsigned long int n = fidtemp[n_i];
+            population::size_type n = fidtemp[n_i];
             auto new_f = ftemp[n_i];
             candidate = poptemp[n_i];
             bool whole_population = whole_populationtemp[n_i];

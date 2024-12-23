@@ -1,8 +1,13 @@
 # CMake version check.
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.20)
 # NOTE: policy for using the CheckIPOSupported module:
 # https://cmake.org/cmake/help/latest/policy/CMP0069.html
 cmake_policy(SET CMP0069 NEW)
+if(POLICY CMP0167)
+    # Keep FindBoost fallback for users that do not ship
+    # BoostConfig.cmake.
+    cmake_policy(SET CMP0167 OLD)
+endif()
 
 # Set default build type to "Release".
 # NOTE: this should be done before the project command since the latter can set
@@ -13,7 +18,7 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-project(pagmo VERSION 2.19.0 LANGUAGES CXX C)
+project(pagmo VERSION 2.19.1 LANGUAGES CXX C)
 
 # Setup module path.
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/yacma")
@@ -40,7 +45,7 @@ option(PAGMO_WITH_NLOPT "Enable wrappers for the NLopt algorithms." OFF)
 option(PAGMO_WITH_IPOPT "Enable wrappers for the Ipopt solver." OFF)
 
 # Build option: enable IPO.
-option(PAGMO_ENABLE_IPO "Enable IPO (requires CMake >= 3.9 and compiler support)." OFF)
+option(PAGMO_ENABLE_IPO "Enable IPO (requires compiler support)." OFF)
 mark_as_advanced(PAGMO_ENABLE_IPO)
 
 # Build static library instead of dynamic.
@@ -148,22 +153,28 @@ if(YACMA_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "8")
     unset(_PAGMO_GCC_SUPPORTS_NO_OVERRIDE)
 endif()
 
-# TBB. Try to find it first in config mode (supported
-# since version 2021 after the oneTBB rename), and, if this
-# fails, fall back to our own FindTBB.cmake. This is of course
-# not an ideal solution, but it should work until oneTBB
-# becomes widely deployed.
-find_package(TBB QUIET CONFIG)
-if(NOT TBB_FOUND)
-    message(STATUS "TBB not found using config mode, retrying in module mode.")
-    find_package(TBB REQUIRED MODULE)
-else()
-    message(STATUS "TBB found using config mode.")
-endif()
+if (YACMA_COMPILER_IS_CLANGXX AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 17)
+    # workaround for https://github.com/llvm/llvm-project/issues/71196
+    # tldr; The new -fassume-unique-vtables optimization breaks serialization
+    # xref https://releases.llvm.org/17.0.1/tools/clang/docs/ReleaseNotes.html#c-language-changes
+    include(CheckCXXCompilerFlag)
+    set(CMAKE_REQUIRED_QUIET TRUE)
+    check_cxx_compiler_flag("-fno-assume-unique-vtables" _PAGMO_CLANG_SUPPORTS_ASSUME_UNIQUE_VTABLES)
+    unset(CMAKE_REQUIRED_QUIET)
+    if (_PAGMO_CLANG_SUPPORTS_ASSUME_UNIQUE_VTABLES)
+        message(STATUS "The '-fno-assume-unique-vtables' flag is supported, enabling it.")
+        list(APPEND PAGMO_CXX_FLAGS_DEBUG "-fno-assume-unique-vtables")
+        list(APPEND PAGMO_CXX_FLAGS_RELEASE "-fno-assume-unique-vtables")
+    endif ()
+    unset (_PAGMO_CLANG_SUPPORTS_ASSUME_UNIQUE_VTABLES)
+endif ()
+
+# TBB.
+find_package(TBB REQUIRED CONFIG)
 
 # Eigen3
 if(PAGMO_WITH_EIGEN3)
-    find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+    find_package(Eigen3 REQUIRED NO_MODULE)
 endif()
 
 # NLopt
@@ -176,14 +187,14 @@ if(PAGMO_WITH_IPOPT)
     find_package(pagmo_IPOPT REQUIRED COMPONENTS header libipopt)
 endif()
 
+set(_PAGMO_REQUIRED_BOOST_COMPONENTS serialization)
 if(PAGMO_BUILD_TESTS)
-    # Internal variable that will be used to tell PagmoFindBoost to locate the
-    # Boost unit test framework, if tests are required.
-    set(_PAGMO_FIND_BOOST_UNIT_TEST_FRAMEWORK TRUE)
+    list(APPEND _PAGMO_REQUIRED_BOOST_COMPONENTS unit_test_framework)
 endif()
 
 # Boost setup.
-include(PagmoFindBoost)
+find_package(Boost 1.68.0 REQUIRED COMPONENTS ${_PAGMO_REQUIRED_BOOST_COMPONENTS})
+unset(_PAGMO_REQUIRED_BOOST_COMPONENTS)
 
 # List of source files.
 set(PAGMO_SRC_FILES
@@ -354,19 +365,17 @@ target_include_directories(pagmo PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.9.0")
-    if (PAGMO_ENABLE_IPO)
-        include(CheckIPOSupported)
-        check_ipo_supported(RESULT _PAGMO_IPO_RESULT OUTPUT _PAGMO_IPO_OUTPUT)
-        if (_PAGMO_IPO_RESULT)
-            message(STATUS "IPO requested and supported, enabling.")
-            set_property(TARGET pagmo PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-        else()
-            message(STATUS "IPO requested, but it is not supported by the compiler:\n${_PAGMO_IPO_OUTPUT}")
-        endif()
-        unset(_PAGMO_IPO_RESULT)
-        unset(_PAGMO_IPO_OUTPUT)
+if (PAGMO_ENABLE_IPO)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT _PAGMO_IPO_RESULT OUTPUT _PAGMO_IPO_OUTPUT)
+    if (_PAGMO_IPO_RESULT)
+        message(STATUS "IPO requested and supported, enabling.")
+        set_property(TARGET pagmo PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+    else()
+        message(STATUS "IPO requested, but it is not supported by the compiler:\n${_PAGMO_IPO_OUTPUT}")
     endif()
+    unset(_PAGMO_IPO_RESULT)
+    unset(_PAGMO_IPO_OUTPUT)
 endif()
 
 # Threads.
@@ -458,31 +467,24 @@ install(TARGETS pagmo
 # Setup of the optional deps.
 set(_PAGMO_CONFIG_OPTIONAL_DEPS)
 if(PAGMO_WITH_EIGEN3)
-    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(Eigen3 3.3 REQUIRED NO_MODULE)\n")
+	set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(Eigen3 QUIET REQUIRED NO_MODULE)\n")
 endif()
 if(PAGMO_WITH_NLOPT)
-    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLopt 2.6 REQUIRED NO_MODULE)\n")
+	set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(NLopt 2.6 QUIET REQUIRED NO_MODULE)\n")
 endif()
 if(PAGMO_WITH_IPOPT)
-    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(pagmo_IPOPT REQUIRED COMPONENTS header)\n")
+    set(_PAGMO_CONFIG_OPTIONAL_DEPS "${_PAGMO_CONFIG_OPTIONAL_DEPS}find_package(pagmo_IPOPT QUIET REQUIRED COMPONENTS header)\n")
 endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pagmo-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config.cmake" DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/Findpagmo_IPOPT.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/PagmoFindBoost.cmake"
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/Findpagmo_IPOPT.cmake"
     DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 # Take care of versioning.
 include(CMakePackageConfigHelpers)
-# NOTE: SameMinorVersion available only
-# since CMake 3.11.
-if(${CMAKE_VERSION} VERSION_LESS "3.11.0")
-    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
-        COMPATIBILITY SameMajorVersion)
-else()
-    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
-        COMPATIBILITY SameMinorVersion)
-endif()
+write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
+    COMPATIBILITY SameMinorVersion)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 
 # Uninstall target

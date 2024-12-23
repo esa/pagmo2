@@ -48,7 +48,9 @@ boost::any default_gte_getter()
 
 } // namespace
 
+/// @cond
 std::function<boost::any()> gte_getter = &default_gte_getter;
+/// @endcond
 
 } // namespace detail
 

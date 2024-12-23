@@ -1,4 +1,5 @@
 name: GitHub CI
+
 on:
   push:
     branches:
@@ -6,37 +7,128 @@ on:
   pull_request:
     branches:
       - master
+
 jobs:
-  osx:
-    runs-on: macos-latest
+  debug_unix:
+    name: Debug ${{ matrix.label }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: linux-x64
+            runner: ubuntu-22.04
+            with_optional: ON
+            conda_pkgs: c-compiler cxx-compiler cmake ninja boost-cpp tbb tbb-devel eigen nlopt ipopt
+          - label: linux-arm64
+            runner: ubuntu-22.04-arm
+            with_optional: OFF
+            conda_pkgs: c-compiler cxx-compiler cmake ninja boost-cpp tbb tbb-devel eigen
+          - label: macos-arm64
+            runner: macos-latest
+            with_optional: ON
+            conda_pkgs: c-compiler cxx-compiler libcxx cmake ninja boost-cpp tbb tbb-devel eigen nlopt ipopt
     steps:
-      - uses: actions/checkout@v2
-      - name: Build
-        run: bash tools/gha_osx.sh
-  windows-2019:
-    runs-on: windows-2019
-    steps:
-      - uses: actions/checkout@v2
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.2
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          python-version: 3.8
           channels: conda-forge
           channel-priority: strict
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -e
+          conda create -y -q -p "$HOME/local" ${{ matrix.conda_pkgs }}
+      - name: Configure
+        shell: bash
+        run: |
+          set -e
+          conda run -p "$HOME/local" cmake -S . -B build -G Ninja \
+            -DCMAKE_PREFIX_PATH="$HOME/local" \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DBoost_NO_BOOST_CMAKE=ON \
+            -DPAGMO_BUILD_TESTS=ON \
+            -DPAGMO_WITH_EIGEN3=ON \
+            -DPAGMO_WITH_NLOPT=${{ matrix.with_optional }} \
+            -DPAGMO_WITH_IPOPT=${{ matrix.with_optional }} \
+            -DPAGMO_ENABLE_IPO=ON
       - name: Build
-        run: .\tools\gha_windows-2019.ps1
-        shell: powershell
-  build-and-deploydocs:
-    if: ${{ github.event_name }} == 'push'
-    runs-on: ubuntu-latest
+        shell: bash
+        run: |
+          set -e
+          conda run -p "$HOME/local" cmake --build build --parallel
+      - name: Test
+        shell: bash
+        run: |
+          set -e
+          conda run -p "$HOME/local" ctest --test-dir build -VV --output-on-failure -j4
+
+  release_windows_x64:
+    name: Release windows-x64
+    runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v2
-      - name: Install and Build 🔧
-        run: bash tools/gha_deploydocs.sh
-      - name: Upload to github pages 🚀
-        if: ${{ github.event_name == 'push' }}
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          channels: conda-forge
+          channel-priority: strict
+      - name: Configure
+        shell: powershell
+        run: |
+          conda create -y -q -p $env:USERPROFILE\local cmake ninja eigen nlopt ipopt boost-cpp tbb tbb-devel
+          conda run -p $env:USERPROFILE\local cmake -S . -B build -G "Visual Studio 17 2022" -A x64 `
+            -DCMAKE_PREFIX_PATH=$env:USERPROFILE\local `
+            -DCMAKE_INSTALL_PREFIX=$env:USERPROFILE\local `
+            -DBoost_NO_BOOST_CMAKE=ON `
+            -DPAGMO_BUILD_TESTS=ON `
+            -DPAGMO_WITH_EIGEN3=ON `
+            -DPAGMO_WITH_NLOPT=ON `
+            -DPAGMO_WITH_IPOPT=ON `
+            -DPAGMO_ENABLE_IPO=ON
+      - name: Build
+        shell: powershell
+        run: conda run -p $env:USERPROFILE\local cmake --build build --config Release --parallel
+      - name: Test
+        shell: powershell
+        run: |
+          $env:PATH = "$PWD\build\Release;$env:USERPROFILE\local\Library\bin;$env:USERPROFILE\local\bin;$env:PATH"
+          ctest --test-dir build -VV --output-on-failure -j4 -C Release
+
+  linux_coverage_docs:
+    name: Linux coverage + docs${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && ' and deploy' || '' }}
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          channels: conda-forge
+          channel-priority: strict
+      - name: Build, test, coverage and docs
+        shell: bash
+        run: bash tools/gha_conda_coverage_docs.sh
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./build/coverage.info
+          disable_search: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-reports
+          path: |
+            build/coverage.info
+          if-no-files-found: warn
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: doc/sphinx/_build/html # The folder the action should deploy.
+          folder: doc/sphinx/_build/html

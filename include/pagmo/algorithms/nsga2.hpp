@@ -149,7 +149,7 @@ public:
      */
     std::string get_name() const
     {
-        return "NSGA-II:";
+        return "NSGA-II: Non-dominated Sorting Genetic Algorithm II";
     }
 
     // Extra info

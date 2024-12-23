@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <limits> //  std::numeric_limits<double>::infinity();
 #include <numeric>
+#include <sstream>
 #include <string>
 
 #include <boost/lexical_cast.hpp>
@@ -333,4 +334,85 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test_stoch)
     pop_2 = uda_2.evolve(pop_2);
 
     BOOST_CHECK(pop.get_f() == pop_2.get_f());
+}
+
+BOOST_AUTO_TEST_CASE(pso_gen_memory_test)
+{
+    auto omega = 0.5;
+    auto eta1 = 0.5;
+    auto eta2 = 0.5;
+    auto max_vel = 0.5;
+    auto neighb_param = 4u;
+    auto seed = 42u;
+    auto pop_size = 10u;
+
+    for (auto variant = 1u; variant <= 6; ++variant) {
+        for (auto neighb_type = 1u; neighb_type <= 4; ++neighb_type) {
+            auto log1 = ([&]() {
+                auto n_generations = 1u;
+                auto memory = true;
+                algorithm algo{pso_gen{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param,
+                                       memory, seed}};
+                algo.set_verbosity(1u);
+                problem prob{rosenbrock{25u}};
+                population pop{prob, pop_size, seed};
+                pop = algo.evolve(pop);
+                pop = algo.evolve(pop);
+                pop = algo.evolve(pop);
+                return algo.extract<pso_gen>()->get_log();
+            })();
+
+            auto log2 = ([&]() {
+                auto n_generations = 3u;
+                auto memory = false;
+                algorithm algo{pso_gen{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param,
+                                       memory, seed}};
+                algo.set_verbosity(1u);
+                problem prob{rosenbrock{25u}};
+                population pop{prob, pop_size, seed};
+                pop = algo.evolve(pop);
+                return algo.extract<pso_gen>()->get_log();
+            })();
+
+            BOOST_CHECK_CLOSE(std::get<2>(log1[0]), std::get<2>(log2[2]), 1e-8);
+            BOOST_CHECK_CLOSE(std::get<3>(log1[0]), std::get<3>(log2[2]), 1e-8);
+            BOOST_CHECK_CLOSE(std::get<4>(log1[0]), std::get<4>(log2[2]), 1e-8);
+            BOOST_CHECK_CLOSE(std::get<5>(log1[0]), std::get<5>(log2[2]), 1e-8);
+
+            auto serialize_and_deserialize = [](algorithm &algo) {
+                std::stringstream ss;
+                {
+                    boost::archive::binary_oarchive oarchive(ss);
+                    oarchive << algo;
+                }
+                algo = algorithm{};
+                {
+                    boost::archive::binary_iarchive iarchive(ss);
+                    iarchive >> algo;
+                }
+            };
+            auto log3 = ([&]() {
+                auto n_generations = 1u;
+                auto memory = true;
+                algorithm algo{pso_gen{n_generations, omega, eta1, eta2, max_vel, variant, neighb_type, neighb_param,
+                                       memory, seed}};
+                algo.set_verbosity(1u);
+                problem prob{rosenbrock{25u}};
+                population pop{prob, pop_size, seed};
+                pop = algo.evolve(pop);
+                serialize_and_deserialize(algo);
+                pop = algo.evolve(pop);
+                serialize_and_deserialize(algo);
+                pop = algo.evolve(pop);
+                return algo.extract<pso_gen>()->get_log();
+            })();
+            BOOST_CHECK_EQUAL(log1.size(), log3.size());
+            BOOST_CHECK_EQUAL(std::get<0>(log1[0]), std::get<0>(log3[0]));
+            BOOST_CHECK_EQUAL(std::get<1>(log1[0]), std::get<1>(log3[0]));
+            BOOST_CHECK_CLOSE(std::get<2>(log1[0]), std::get<2>(log3[0]), 1e-8);
+            BOOST_CHECK_CLOSE(std::get<3>(log1[0]), std::get<3>(log3[0]), 1e-8);
+            BOOST_CHECK_CLOSE(std::get<4>(log1[0]), std::get<4>(log3[0]), 1e-8);
+            BOOST_CHECK_CLOSE(std::get<5>(log1[0]), std::get<5>(log3[0]), 1e-8);
+        }
+    }
 }

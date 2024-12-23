@@ -248,13 +248,14 @@ vector_double unconstrain::batch_fitness(const vector_double &xs) const
     vector_double original_fitness(m_problem.batch_fitness(xs));
     const vector_double::size_type nx = m_problem.get_nx();
     const vector_double::size_type n_dvs = xs.size() / nx;
-    vector_double::size_type nobj = m_problem.get_nobj();
+    const vector_double::size_type nobj = m_problem.get_nobj();
+    const vector_double::size_type nf = m_problem.get_nf();
     vector_double retval;
     retval.resize(safe<vector_double::size_type>(n_dvs) * nobj);
-    vector_double y(nobj);
+    vector_double y(nf);
     vector_double z; // will be resized in penalize if necessary.
     for (vector_double::size_type i = 0; i < n_dvs; ++i) {
-        std::copy(original_fitness.data() + i * nobj, original_fitness.data() + (i + 1) * nobj, y.data());
+        std::copy(original_fitness.data() + i * nf, original_fitness.data() + (i + 1) * nf, y.data());
         penalize(y, z);
         std::copy(z.data(), z.data() + nobj, retval.data() + i * nobj);
     }

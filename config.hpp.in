@@ -31,7 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 // NOTE: include this so that we can
 // detect _LIBCPP_VERSION below.
-#include <ciso646>
+#include <vector>
 
 // Start of defines instantiated by CMake.
 // clang-format off

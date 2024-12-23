@@ -211,7 +211,6 @@ population nsga2::evolve(population pop) const
             // bfe is available:
             auto n_obj = prob.get_nobj();
             std::vector<vector_double> poptemp;
-            std::vector<unsigned long> fidtemp;
             for (decltype(NP) i = 0u; i < NP; i += 4) {
                 // We create two offsprings using the shuffled list 1
                 parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);

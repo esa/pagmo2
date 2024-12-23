@@ -1324,6 +1324,7 @@ public:
      * This method will return \f$ n_{ix} \f$, the dimension of the integer part of the problem.
      * If the UDP satisfies pagmo::has_integer_part, then the output of
      * its <tt>%get_nix()</tt> method will be returned. Otherwise, this method will return 0.
+     * Note that integer variables must be appended after continuous variables in the decision vector \f$ x \f$.
      *
      * @return \f$ n_{ix}\f$, the integer dimension of the problem.
      */

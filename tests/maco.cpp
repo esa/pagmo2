@@ -264,3 +264,15 @@ BOOST_AUTO_TEST_CASE(memory_test)
     pop_2 = uda_2.evolve(pop_2);
     BOOST_CHECK(pop_1.get_f() == pop_2.get_f());
 }
+
+BOOST_AUTO_TEST_CASE(out_of_bounds_test)
+{
+    problem prob{dtlz(1, 5, 2)};
+    population pop{prob, 43};
+
+    pop.set_x(0, {-2., 2., -2., 2., -2.});//both out of bounds
+    maco uda{1u, 20u, 1.0, 8u, 7u, 10000u, 0., true, 23u};
+    uda.set_seed(23u);
+    pop = uda.evolve(pop);
+}
+
