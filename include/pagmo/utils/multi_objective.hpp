@@ -227,7 +227,6 @@ PAGMO_DLL_PUBLIC double perpendicular_distance(const std::vector<double> &, cons
 
 /* Choose single random element from vector container */
 template <class T>
-PAGMO_DLL_PUBLIC
 T choose_random_element(const std::vector<T> &container){
     std::vector<T> choice;
     std::sample(container.begin(), container.end(), std::back_inserter(choice), 1, std::mt19937{random_device::next()});

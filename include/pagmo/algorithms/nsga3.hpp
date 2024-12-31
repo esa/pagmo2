@@ -38,23 +38,23 @@ class PAGMO_DLL_PUBLIC nsga3{
         const log_type &get_log() const { return m_log; }
         void set_verbosity(unsigned level) { m_verbosity = level; }
         unsigned get_verbosity() const { return m_verbosity; }
-        void set_seed(unsigned seed) { reng.seed(seed); seed = seed; }
-        unsigned get_seed() const { return seed; }
-        bool has_memory() const {return use_memory; }
+        void set_seed(unsigned seed) { m_reng.seed(seed); m_seed = seed; }
+        unsigned get_seed() const { return m_seed; }
+        bool has_memory() const {return m_use_memory; }
     private:
-        unsigned ngen;
-        double cr;        // crossover
-        double eta_c;     // eta crossover
-        double mut;       // mutation
-        double eta_mut;   // eta mutation
-        size_t divisions; // Reference Point hyperplane subdivisions
-        unsigned seed;    // Seed for PRNG initialisation
-        bool use_memory;  // Preserve extremes, ideal, nadir across generations
-        mutable NSGA3Memory memory{};
-        mutable detail::random_engine_type reng;  // Defaults to std::mt19937
+        unsigned m_gen;
+        double m_cr;        // crossover
+        double m_eta_c;     // eta crossover
+        double m_mut;       // mutation
+        double m_eta_mut;   // eta mutation
+        size_t m_divisions; // Reference Point hyperplane subdivisions
+        unsigned m_seed;    // Seed for PRNG initialisation
+        bool m_use_memory;  // Preserve extremes, ideal, nadir across generations
+        mutable NSGA3Memory m_memory{};
+        mutable detail::random_engine_type m_reng;  // Defaults to std::mt19937
         mutable log_type m_log;
         unsigned m_verbosity;
-        mutable std::vector<ReferencePoint> refpoints;
+        mutable std::vector<ReferencePoint> m_refpoints;
         // Serialisation support
         friend class boost::serialization::access;
         template <typename Archive>

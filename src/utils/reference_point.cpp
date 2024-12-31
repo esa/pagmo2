@@ -16,11 +16,7 @@ ReferencePoint::ReferencePoint(size_t nobjs){
     std::fill(coeffs.begin(), coeffs.end(), 0.0);
 }
 
-ReferencePoint::~ReferencePoint(){
-    coeffs.clear();
-}
-
-double& ReferencePoint::operator[](int idx){
+double& ReferencePoint::operator[](size_t idx){
     return coeffs[idx];
 }
 
@@ -46,11 +42,11 @@ std::vector<ReferencePoint> generate_reference_point_level(
     std::vector<ReferencePoint> points;
 
     if(level == rp.dim()-1){
-        rp[level] = 1.0*remain/total;
+        rp[level] = static_cast<double>(remain)/static_cast<double>(total);
         points.push_back(rp);
     }else{
         for(size_t idx = 0; idx <= remain; idx++){
-            rp[level] = 1.0*idx/total;
+            rp[level] = static_cast<double>(idx)/static_cast<double>(total);
             auto np = generate_reference_point_level(rp, remain - idx, level + 1, total);
             points.reserve(points.size() + np.size());
             points.insert(points.end(), np.begin(), np.end());
@@ -67,7 +63,7 @@ void ReferencePoint::add_candidate(size_t index, double distance){
 void ReferencePoint::remove_candidate(size_t index){
     for(size_t idx=0; idx<candidates.size(); idx++){
         if(candidates[idx].first == index){
-            candidates.erase(candidates.begin() + idx);
+            candidates.erase(candidates.begin() + static_cast<std::vector<std::pair<size_t, double>>::difference_type>(idx));
         }
     }
 }
@@ -142,7 +138,7 @@ std::optional<size_t> ReferencePoint::random_candidate() const{
     return choose_random_element<std::pair<size_t, double>>(candidates).first;
 }
 
-size_t n_choose_k(unsigned n, unsigned k){
+size_t n_choose_k(size_t n, size_t k){
     if(k == 0){
         return 1u;
     }
