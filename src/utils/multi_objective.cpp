@@ -638,7 +638,16 @@ vector_double decompose_objectives(const vector_double &f, const vector_double &
     return {fd};
 }
 
-/* Gaussian Elimination */
+/// Gaussian Elimination
+/**
+ * Solves the linear system Ax = b by performing Gaussian elimination
+ * on an augmented matrix A|b.
+ *
+ * @param
+ * @param
+ * @return
+ * @throws
+ */
 vector_double gaussian_elimination(std::vector<std::vector<double>> A, const vector_double &b){
     // N.B. Check dimensions and pivots
     if(A[0][0] == 0.0){
@@ -661,18 +670,32 @@ vector_double gaussian_elimination(std::vector<std::vector<double>> A, const vec
     }
     vector_double x(N);
     // Back substitution
-    for(int i=N-1; i>=0; i--){
+    size_t i = N-1;
+    while(true){
         for(size_t var=i+1; var<N; var++){
             A[i][N] -= A[i][var]*x[var];
         }
         x[i] = A[i][N]/A[i][i];
+        if(i == 0){
+            break;
+        }
+        i--;
     }
 
     return x;
 }
 
 
-/* Achievement Scalarization Function */
+/// Achievement Scalarization Function
+/**
+ *
+ *
+ *
+ * @param
+ * @param
+ * @return
+ * @throws
+ */
 double achievement(const vector_double &objs, const vector_double &weights){
     const double default_weight = 1e-5;
     double max_ratio = -std::numeric_limits<double>::max();
@@ -686,7 +709,16 @@ double achievement(const vector_double &objs, const vector_double &weights){
     return max_ratio;
 }
 
-/* Distance from objective point to perpendicular intersection with reference point vector */
+/// Distance from objective point to perpendicular intersection with reference point vector */
+/**
+ *
+ *
+ *
+ * @param
+ * @param
+ * @return
+ * @throws
+ */
 double perpendicular_distance(const std::vector<double> &ref_point, const std::vector<double> &obj_point){
     double num = 0.0, denom = 0.0, sq_dist = 0.0;
     for(size_t i=0; i<ref_point.size(); i++){

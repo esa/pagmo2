@@ -21,9 +21,9 @@ namespace pagmo{
 class PAGMO_DLL_PUBLIC ReferencePoint{
     public:
         ReferencePoint(size_t nobj);
-        ~ReferencePoint();
         size_t dim() const;
-        double& operator[](int);
+        //double& operator[](int);
+        double& operator[](size_t);
         friend PAGMO_DLL_PUBLIC std::ostream& operator<<(std::ostream& ostr, const ReferencePoint& rp);
         void increment_members(){ ++nmembers; }
         void decrement_members(){ --nmembers; }
@@ -56,7 +56,7 @@ void associate_with_reference_points(
 
 size_t identify_niche_point(std::vector<ReferencePoint> &);
 
-size_t n_choose_k(unsigned, unsigned);
+size_t n_choose_k(size_t, size_t);
 
 }  // namespace pagmo
 
