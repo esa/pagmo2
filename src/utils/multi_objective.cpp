@@ -702,7 +702,7 @@ double achievement(const vector_double &objs, const vector_double &weights){
     double w = 0.0;
 
     for(size_t i=0; i<objs.size(); i++){
-        w = weights[i] ? weights[i] : default_weight;
+        w = weights[i] > default_weight ? weights[i] : default_weight;
         max_ratio = std::max(max_ratio, objs[i]/w);
     }
 
