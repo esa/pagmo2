@@ -53,7 +53,7 @@ class PAGMO_DLL_PUBLIC nsga3{
         mutable NSGA3Memory m_memory{};
         mutable detail::random_engine_type m_reng;  // Defaults to std::mt19937
         mutable log_type m_log;
-        unsigned m_verbosity;
+        unsigned m_verbosity {0};
         mutable std::vector<ReferencePoint> m_refpoints;
         // Serialisation support
         friend class boost::serialization::access;
