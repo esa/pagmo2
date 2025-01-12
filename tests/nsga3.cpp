@@ -17,9 +17,25 @@
 
 using namespace pagmo;
 
-BOOST_AUTO_TEST_CASE(nsga3_instance){
+
+BOOST_AUTO_TEST_CASE(nsga3_algorithm_construction)
+{
     BOOST_CHECK_NO_THROW(nsga3{});
-};
+    nsga3 user_algo{1u, 1.00, 30.0, 0.10, 20.0, 12u, 32u, false};
+    BOOST_CHECK(user_algo.get_verbosity() == 0u);
+    BOOST_CHECK(user_algo.get_seed() == 32u);
+
+    // Verify throw on invalid arguments
+    // Invalid cr
+    BOOST_CHECK_THROW((nsga3{1u, 2.00, 30.0, 0.10, 20.0, 12u, 32u, false}), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga3{1u, -1.00, 30.0, 0.10, 20.0, 12u, 32u, false}), std::invalid_argument);
+    // Invalid mut
+    BOOST_CHECK_THROW((nsga3{1u, 1.00, 30.0, 1.10, 20.0, 12u, 32u, false}), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga3{1u, 1.00, 30.0, -0.10, 20.0, 12u, 32u, false}), std::invalid_argument);
+    // Invalid eta_mut
+    BOOST_CHECK_THROW((nsga3{1u, 1.00, 30.0, 0.10, 100.1, 12u, 32u, false}), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga3{1u, 1.00, 30.0, 0.10, -0.1, 12u, 32u, false}), std::invalid_argument);
+}
 
 BOOST_AUTO_TEST_CASE(nsga3_evolve_population){
     dtlz udp{1u, 10u, 3u};
