@@ -1,5 +1,5 @@
 # CMake version check.
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.13)
 # NOTE: policy for using the CheckIPOSupported module:
 # https://cmake.org/cmake/help/latest/policy/CMP0069.html
 cmake_policy(SET CMP0069 NEW)
@@ -40,7 +40,7 @@ option(PAGMO_WITH_NLOPT "Enable wrappers for the NLopt algorithms." OFF)
 option(PAGMO_WITH_IPOPT "Enable wrappers for the Ipopt solver." OFF)
 
 # Build option: enable IPO.
-option(PAGMO_ENABLE_IPO "Enable IPO (requires CMake >= 3.9 and compiler support)." OFF)
+option(PAGMO_ENABLE_IPO "Enable IPO (requires compiler support)." OFF)
 mark_as_advanced(PAGMO_ENABLE_IPO)
 
 # Build static library instead of dynamic.
@@ -368,19 +368,17 @@ target_include_directories(pagmo PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.9.0")
-    if (PAGMO_ENABLE_IPO)
-        include(CheckIPOSupported)
-        check_ipo_supported(RESULT _PAGMO_IPO_RESULT OUTPUT _PAGMO_IPO_OUTPUT)
-        if (_PAGMO_IPO_RESULT)
-            message(STATUS "IPO requested and supported, enabling.")
-            set_property(TARGET pagmo PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-        else()
-            message(STATUS "IPO requested, but it is not supported by the compiler:\n${_PAGMO_IPO_OUTPUT}")
-        endif()
-        unset(_PAGMO_IPO_RESULT)
-        unset(_PAGMO_IPO_OUTPUT)
+if (PAGMO_ENABLE_IPO)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT _PAGMO_IPO_RESULT OUTPUT _PAGMO_IPO_OUTPUT)
+    if (_PAGMO_IPO_RESULT)
+        message(STATUS "IPO requested and supported, enabling.")
+        set_property(TARGET pagmo PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+    else()
+        message(STATUS "IPO requested, but it is not supported by the compiler:\n${_PAGMO_IPO_OUTPUT}")
     endif()
+    unset(_PAGMO_IPO_RESULT)
+    unset(_PAGMO_IPO_OUTPUT)
 endif()
 
 # Threads.
@@ -488,15 +486,8 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/Findpagmo_IPOPT.cmake" 
 install(EXPORT pagmo_export NAMESPACE Pagmo:: DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 # Take care of versioning.
 include(CMakePackageConfigHelpers)
-# NOTE: SameMinorVersion available only
-# since CMake 3.11.
-if(${CMAKE_VERSION} VERSION_LESS "3.11.0")
-    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
-        COMPATIBILITY SameMajorVersion)
-else()
-    write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
-        COMPATIBILITY SameMinorVersion)
-endif()
+write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" VERSION ${pagmo_VERSION}
+    COMPATIBILITY SameMinorVersion)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pagmo-config-version.cmake" DESTINATION "${PAGMO_INSTALL_LIBDIR}/cmake/pagmo")
 
 # Uninstall target
