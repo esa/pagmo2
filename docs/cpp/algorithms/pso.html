@@ -420,7 +420,7 @@ document.write(`
 <span id="_CPPv3N5pagmo3psoE"></span><span id="_CPPv2N5pagmo3psoE"></span><span id="pagmo::pso"></span><span class="target" id="classpagmo_1_1pso"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pso</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo3psoE" title="Permalink to this definition">#</a><br /></dt>
 <dd><p>Particle Swarm Optimization. </p>
 <p><img alt="../../../_images/pso.png" src="../../../_images/pso.png" /></p>
-<p>Particle swarm optimization (PSO) is a population based algorithm inspired by the foraging behaviour of swarms. In PSO each point has memory of the position where it achieved the best performance <span class="math notranslate nohighlight">\(\mathbf x^l_i\)</span> (local memory) and of the best decision vector <span class="math notranslate nohighlight">\( \mathbf x^g \)</span> in a certain neighbourhood, and uses this information to update its position using the equations (constriction coefficient):  <div class="math notranslate nohighlight">
+<p>Particle swarm optimization (PSO) is a population based algorithm inspired by the foraging behaviour of swarms. In PSO each point has memory of the position where it achieved the best performance <span class="math notranslate nohighlight">\(\mathbf x^l_i\)</span> (local memory) and of the best decision vector <span class="math notranslate nohighlight">\( \mathbf x^g \)</span> in a certain neighbourhood, and uses this information to update its position using the equations (constriction coefficient):        <div class="math notranslate nohighlight">
 \[\begin{split}
   \begin{array}{l}
     \mathbf v_{i+1} = \omega \left( \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right)
@@ -429,7 +429,7 @@ document.write(`
     \mathbf x_{i+1} = \mathbf x_i + \mathbf v_i
     \end{array}
   \end{split}\]</div>
- or (inertia weight):  <div class="math notranslate nohighlight">
+ or (inertia weight):        <div class="math notranslate nohighlight">
 \[\begin{split}
   \begin{array}{l}
     \mathbf v_{i+1} = \omega \mathbf v_i + \eta_1 \mathbf r_1 \cdot \left( \mathbf x_i - \mathbf x^l_i \right)

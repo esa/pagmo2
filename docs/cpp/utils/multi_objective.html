@@ -621,7 +621,7 @@ std::sort(idx.begin(), idx.end(), [] (auto a, auto b) {return input_f[a][0] &lt;
 <dd><p>Decomposition weights generation. </p>
 <p>Generates a requested number of weight vectors to be used to decompose a multi-objective problem. Three methods are available:<ul class="simple">
 <li><p>”grid” generates weights on an uniform grid. This method may only be used when the number of requested weights to be generated is such that a uniform grid is indeed possible. In two dimensions this is always the case, but in larger dimensions uniform grids are possible only in special cases</p></li>
-<li><p>”random” generates weights randomly distributing them uniformly on the simplex (weights are such that <span class="math notranslate nohighlight">\(\sum_i
+<li><p>”random” generates weights randomly distributing them uniformly on the simplex (weights are such that  <span class="math notranslate nohighlight">\(\sum_i
   \lambda_i = 1\)</span>)</p></li>
 <li><p>”low discrepancy” generates weights using a low-discrepancy sequence to, eventually, obtain a better coverage of the Pareto front. Halton sequence is used since low dimensionalities are expected in the number of objectives (i.e. less than 20), hence Halton sequence is deemed as appropriate.</p></li>
 </ul>
@@ -667,15 +667,15 @@ weight generation methods are guaranteed to generate the canonical weights [1,0,
 <li><p>boundary interception method (with penalty constraint).</p></li>
 </ul>
 </p>
-<p>In the case of <span class="math notranslate nohighlight">\(n\)</span> objectives, we indicate with: <span class="math notranslate nohighlight">\( \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots,
-f_n(\mathbf x)] \)</span> the vector containing the original multiple objectives, with: <span class="math notranslate nohighlight">\( \boldsymbol \lambda =
-(\lambda_1, \ldots, \lambda_n) \)</span> an <span class="math notranslate nohighlight">\(n\)</span>-dimensional weight vector and with: <span class="math notranslate nohighlight">\( \mathbf z^* = (z^*_1, \ldots,
-z^*_n) \)</span> an <span class="math notranslate nohighlight">\(n\)</span>-dimensional reference point. We also ussume <span class="math notranslate nohighlight">\(\lambda_i &gt; 0, \forall i=1..n\)</span> and <span class="math notranslate nohighlight">\(\sum_i
+<p>In the case of <span class="math notranslate nohighlight">\(n\)</span> objectives, we indicate with:  <span class="math notranslate nohighlight">\( \mathbf f(\mathbf x) = [f_1(\mathbf x), \ldots,
+f_n(\mathbf x)] \)</span> the vector containing the original multiple objectives, with:  <span class="math notranslate nohighlight">\( \boldsymbol \lambda =
+(\lambda_1, \ldots, \lambda_n) \)</span> an <span class="math notranslate nohighlight">\(n\)</span>-dimensional weight vector and with:  <span class="math notranslate nohighlight">\( \mathbf z^* = (z^*_1, \ldots,
+z^*_n) \)</span> an <span class="math notranslate nohighlight">\(n\)</span>-dimensional reference point. We also ussume <span class="math notranslate nohighlight">\(\lambda_i &gt; 0, \forall i=1..n\)</span> and  <span class="math notranslate nohighlight">\(\sum_i
 \lambda_i = 1\)</span>.</p>
 <p>The resulting single objective is thus defined as:</p>
 <p><ul class="simple">
 <li><p>weighted decomposition: <span class="math notranslate nohighlight">\( f_d(\mathbf x) = \boldsymbol \lambda \cdot \mathbf f \)</span>,</p></li>
-<li><p>Tchebycheff decomposition: <span class="math notranslate nohighlight">\( f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert
+<li><p>Tchebycheff decomposition:  <span class="math notranslate nohighlight">\( f_d(\mathbf x) = \max_{1 \leq i \leq m} \lambda_i \vert f_i(\mathbf x) - z^*_i \vert
 \)</span>,</p></li>
 <li><p>boundary interception method (with penalty constraint): <span class="math notranslate nohighlight">\( f_d(\mathbf x) = d_1 + \theta d_2\)</span>,</p></li>
 </ul>
