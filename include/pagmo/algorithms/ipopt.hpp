@@ -94,12 +94,12 @@ PAGMO_DLL_PUBLIC unsigned ipopt_internal_test();
  * - *numeric* options (i.e., the type of the option is ``double``).
  *
  * The full list of options is available on the
- * <a href="https://www.coin-or.org/Ipopt/documentation/node40.html">Ipopt website</a>. pagmo::ipopt allows to configure
+ * <a href="https://coin-or.github.io/Ipopt/OPTIONS.html">Ipopt website</a>. pagmo::ipopt allows to configure
  * any Ipopt option via methods such as ipopt::set_string_options(), ipopt::set_string_option(),
  * ipopt::set_integer_options(), etc., which need to be used before invoking ipopt::evolve().
  *
  * If the user does not set any option, pagmo::ipopt will use Ipopt's default values for the options (see the
- * <a href="https://www.coin-or.org/Ipopt/documentation/node40.html">documentation</a>), with the following
+ * <a href="https://coin-or.github.io/Ipopt/OPTIONS.html">documentation</a>), with the following
  * modifications:
  * - if the ``"print_level"`` integer option is **not** set by the user, it will be set to 0 by pagmo::ipopt (this will
  *   suppress most screen output produced by the solver - note that we support an alternative form of logging via
