@@ -51,14 +51,17 @@ see https://www.gnu.org/licenses/. */
 // the other serialization headers.
 #include <boost/serialization/optional.hpp>
 
+
+#include <cstdio>
+
 namespace pagmo
 {
 
 moead_gen::moead_gen(unsigned gen, std::string weight_generation, std::string decomposition, population::size_type neighbours,
-             double CR, double F, double eta_m, double realb, unsigned limit, bool preserve_diversity, unsigned seed)
+             double CR, double F, double eta_m, double realb, unsigned limit, bool preserve_diversity, unsigned seed, std::string outfile)
     : m_gen(gen), m_weight_generation(weight_generation), m_decomposition(decomposition), m_neighbours(neighbours),
       m_CR(CR), m_F(F), m_eta_m(eta_m), m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity),
-      m_e(seed), m_seed(seed), m_verbosity(0u)
+      m_e(seed), m_seed(seed), m_outfile(outfile), m_verbosity(0u)
 {
     // Sanity checks
     if (m_weight_generation != "random" && m_weight_generation != "grid" && m_weight_generation != "low discrepancy") {
@@ -175,8 +178,26 @@ population moead_gen::evolve(population pop) const
 
     // Main Generational MOEA/D loop --------------------------------------------------------------------------------------------
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+        // 0a - custom logging of entire population at each gen
+        if (m_outfile != ""){
+            FILE *ostrm;
+            ostrm = fopen(m_outfile.c_str(), "a");
+                for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+                    vector_double pop_gen_x = pop.get_x()[i];
+                    for (decltype(pop_gen_x.size()) j = 0u; j < pop_gen_x.size(); ++j) {
+                        fprintf(ostrm, "%f, ", pop_gen_x[j]);
+                    }
+                    vector_double pop_gen_f = pop.get_f()[i];
+                    for (decltype(pop_gen_f.size()) j = 0u; j < pop_gen_f.size(); ++j) {
+                        if(j < pop.get_f()[i].size()-1)
+                            fprintf(ostrm, "%f, ", pop_gen_f[j]);
+                        else
+                            fprintf(ostrm, "%f\n", pop_gen_f[j]);
+                    }
+                }
+            fclose(ostrm);
+        }
         // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
-
         if (m_verbosity > 0u) {
             // Every m_verbosity generations print a log line
             if (gen % m_verbosity == 1u || m_verbosity == 1u) {
@@ -383,6 +404,7 @@ std::string moead_gen::get_extra_info() const
     stream(ss, "\n\tDistribution index: ", m_eta_m);
     stream(ss, "\n\tChance for diversity preservation: ", m_realb);
     stream(ss, "\n\tSeed: ", m_seed);
+    stream(ss, "\n\tOutfile: ", m_outfile);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
     return ss.str();
 }
@@ -392,7 +414,7 @@ template <typename Archive>
 void moead_gen::serialize(Archive &ar, unsigned)
 {
     detail::archive(ar, m_gen, m_weight_generation, m_decomposition, m_neighbours, m_CR, m_F, m_eta_m, m_realb, m_limit,
-                    m_preserve_diversity, m_e, m_seed, m_verbosity, m_log, m_bfe);
+                    m_preserve_diversity, m_e, m_seed, m_outfile, m_verbosity, m_log, m_bfe);
 }
 
 std::vector<population::size_type>
