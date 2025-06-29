@@ -50,15 +50,19 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-nspso::nspso(unsigned gen, double omega, double c1, double c2, double chi, double v_coeff,
+nspso::nspso(unsigned gen, double maxW, double minW, double c1, double c2, double chi, double v_coeff,
              unsigned leader_selection_range, std::string diversity_mechanism, bool memory, unsigned seed)
-    : m_gen(gen), m_omega(omega), m_c1(c1), m_c2(c2), m_chi(chi), m_v_coeff(v_coeff),
+    : m_gen(gen), m_maxW(maxW), m_minW(minW), m_c1(c1), m_c2(c2), m_chi(chi), m_v_coeff(v_coeff),
       m_leader_selection_range(leader_selection_range), m_diversity_mechanism(diversity_mechanism), m_memory(memory),
       m_velocity(), m_e(seed), m_seed(seed), m_verbosity(0u)
 {
-    if (omega < 0. || omega > 1.) {
+    if (maxW < 0. || maxW > 1.) {
         pagmo_throw(std::invalid_argument, "The particles' inertia weight must be in the [0,1] range, while a value of "
-                                               + std::to_string(m_omega) + " was detected");
+                                               + std::to_string(m_maxW) + " was detected");
+    }
+    if (minW < 0. || minW > 1.) {
+        pagmo_throw(std::invalid_argument, "The particles' inertia weight must be in the [0,1] range, while a value of "
+                                               + std::to_string(m_minW) + " was detected");
     }
     if (c1 <= 0 || c2 <= 0 || chi <= 0) {
         pagmo_throw(std::invalid_argument, "first and second magnitude of the force "
@@ -316,7 +320,8 @@ population nspso::evolve(population pop) const
             vector_double new_dvs(n_x);
             vector_double new_vel(n_x);
             for (decltype(n_x) i = 0; i < n_x; ++i) {
-                double v = m_omega * m_velocity[idx][i] + m_c1 * r1 * (m_best_dvs[idx][i] - dvs[idx][i])
+   
+                double v = (m_maxW-(m_maxW-m_minW)*i/n_x) * m_velocity[idx][i] + m_c1 * r1 * (m_best_dvs[idx][i] - dvs[idx][i])
                            + m_c2 * r2 * (leader[i] - dvs[idx][i]);
                 if (v > maxv[i]) {
                     v = maxv[i];
@@ -425,7 +430,8 @@ std::string nspso::get_extra_info() const
 {
     std::ostringstream ss;
     stream(ss, "\tGenerations: ", m_gen);
-    stream(ss, "\n\tInertia weight: ", m_omega);
+    stream(ss, "\n\tMaximumInertia weight: ", m_maxW);
+    stream(ss, "\n\tMinimumInertia weight: ", m_minW);
     stream(ss, "\n\tFirst magnitude of the force coefficients: ", m_c1);
     stream(ss, "\n\tSecond magnitude of the force coefficients: ", m_c2);
     stream(ss, "\n\tVelocity scaling factor: ", m_chi);
@@ -441,7 +447,7 @@ std::string nspso::get_extra_info() const
 template <typename Archive>
 void nspso::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, m_gen, m_omega, m_c1, m_c2, m_chi, m_v_coeff, m_leader_selection_range, m_diversity_mechanism,
+    detail::archive(ar, m_gen, m_maxW, m_minW, m_c1, m_c2, m_chi, m_v_coeff, m_leader_selection_range, m_diversity_mechanism,
                     m_e, m_seed, m_verbosity, m_log, m_bfe);
 }
 
