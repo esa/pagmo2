@@ -174,3 +174,19 @@ BOOST_AUTO_TEST_CASE(de_serialization_test)
         BOOST_CHECK_CLOSE(std::get<4>(before_log[i]), std::get<4>(after_log[i]), 1e-8);
     }
 }
+
+BOOST_AUTO_TEST_CASE(bfe_usage_test)
+{
+    population pop{rosenbrock{10u}, 200u, 23u};
+    de user_algo{1000000u, 0.7, 0.5, 2u, 1e-3, 1e-50, 23u};
+    user_algo.set_verbosity(1u);
+    user_algo.set_bfe(bfe{}); // This will use the default bfe.
+    pop = user_algo.evolve(pop);
+
+    population pop_2{rosenbrock{10u}, 200u, 23u};
+    de user_algo_2{1000000u, 0.7, 0.5, 2u, 1e-3, 1e-50, 23u};
+    user_algo_2.set_verbosity(1u);
+    pop_2 = user_algo_2.evolve(pop_2);
+
+    BOOST_CHECK_EQUAL(pop.champion_f()[0], pop_2.champion_f()[0]);
+}
