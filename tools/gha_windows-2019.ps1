@@ -12,6 +12,7 @@ cmake `
     -A x64 `
     -DCMAKE_PREFIX_PATH=C:\Miniconda\envs\pagmo `
     -DCMAKE_INSTALL_PREFIX=C:\Miniconda\envs\pagmo `
+    -DCMAKE_UNITY_BUILD=ON `
     -DBoost_NO_BOOST_CMAKE=ON `
     -DPAGMO_WITH_EIGEN3=ON `
     -DPAGMO_WITH_IPOPT=ON `
