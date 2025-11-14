@@ -1,6 +1,8 @@
 include(FindPackageHandleStandardArgs)
 
-message(STATUS "Requested IPOPT components: ${pagmo_IPOPT_FIND_COMPONENTS}")
+if (NOT pagmo_IPOPT_FIND_QUIETLY)
+  message(STATUS "Requested IPOPT components: ${pagmo_IPOPT_FIND_COMPONENTS}")
+endif ()
 
 # Check the components that were passed to find_package().
 set(_pagmo_IPOPT_ALLOWED_COMPONENTS header libipopt)
@@ -37,9 +39,11 @@ if("header" IN_LIST pagmo_IPOPT_FIND_COMPONENTS)
     mark_as_advanced(PAGMO_IPOPT_INCLUDE_DIR)
 
     if(pagmo_IPOPT_FOUND AND NOT TARGET pagmo::IPOPT::header)
-        message(STATUS "Creating the 'pagmo::IPOPT::header' imported target.")
+        if (NOT pagmo_IPOPT_FIND_QUIETLY)
+          message(STATUS "Creating the 'pagmo::IPOPT::header' imported target.")
+          message(STATUS "Path to the ipopt headers: ${PAGMO_IPOPT_INCLUDE_DIR}")
+        endif ()
         add_library(pagmo::IPOPT::header INTERFACE IMPORTED)
-        message(STATUS "Path to the ipopt headers: ${PAGMO_IPOPT_INCLUDE_DIR}")
         set_target_properties(pagmo::IPOPT::header PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${PAGMO_IPOPT_INCLUDE_DIR}")
     endif()
 endif()
@@ -48,9 +52,10 @@ if ("libipopt" IN_LIST pagmo_IPOPT_FIND_COMPONENTS)
     mark_as_advanced(PAGMO_IPOPT_LIBRARY)
 
     if(pagmo_IPOPT_FOUND AND NOT TARGET pagmo::IPOPT::libipopt)
-        message(STATUS "Creating the 'pagmo::IPOPT::libipopt' imported target.")
-        # Otherwise, we proceed as usual.
-        message(STATUS "Path to libipopt: ${PAGMO_IPOPT_LIBRARY}")
+        if (NOT pagmo_IPOPT_FIND_QUIETLY)
+          message(STATUS "Creating the 'pagmo::IPOPT::libipopt' imported target.")
+          message(STATUS "Path to libipopt: ${PAGMO_IPOPT_LIBRARY}")
+        endif ()
         add_library(pagmo::IPOPT::libipopt UNKNOWN IMPORTED)
         set_target_properties(pagmo::IPOPT::libipopt PROPERTIES IMPORTED_LOCATION "${PAGMO_IPOPT_LIBRARY}")
     endif()
