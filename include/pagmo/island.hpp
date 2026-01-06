@@ -223,7 +223,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS isl_inner final : isl_inner_base {
     }
     void *get_ptr() final
     {
-        return &m_value;
+        return const_cast<void *>(reinterpret_cast<const void *>(&m_value));
     }
 
 private:
