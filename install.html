@@ -413,6 +413,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#packages">Packages</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conda">Conda</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pypi-pip">PyPI / pip</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arch-linux">Arch Linux</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#freebsd">FreeBSD</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#homebrew">Homebrew</a></li>
@@ -437,13 +438,18 @@ document.write(`
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">#</a></h2>
 <p>pagmo is written in modern C++, and it requires a compiler able to understand
-at least C++17. pagmo is currently tested on the following setups:</p>
+at least C++17. pagmo is tested on a range of modern setups; the project’s
+GitHub Actions CI exercises representative platforms and toolchains (see
+<a class="github reference external" href="https://github.com/esa/pagmo2/blob/master/.github/workflows/main.yml">esa/pagmo2</a> for the
+current matrix).</p>
+<p>Typical tested toolchains include:</p>
 <ul class="simple">
-<li><p>GCC 9 on GNU/Linux,</p></li>
-<li><p>Clang 11 on OSX,</p></li>
-<li><p>MSVC 2017 on Windows.</p></li>
+<li><p>Ubuntu 22.04 (GCC),</p></li>
+<li><p>macOS (Apple Clang, including arm64 runners),</p></li>
+<li><p>Visual Studio 2022 on Windows.</p></li>
 </ul>
-<p>The officially-supported architectures are 64-bit x86, ARM and PowerPC.</p>
+<p>The officially-supported architectures are 64-bit x86 and arm64. Support for other architectures (e.g. PowerPC) is possible,
+but it is not guaranteed and it is not tested by the pagmo CI.</p>
 <p>The pagmo C++ library has the following <strong>mandatory</strong> dependencies:</p>
 <ul class="simple">
 <li><p>the <a class="reference external" href="https://www.boost.org/">Boost</a> C++ libraries (at least version 1.68),</p></li>
@@ -460,7 +466,8 @@ the <a class="reference internal" href="docs/cpp/algorithms/ipopt.html#_CPPv4N5p
 </ul>
 <p>Additionally, <a class="reference external" href="https://cmake.org/">CMake</a> is the build system used by
 pagmo and it must also be available when
-installing from source (the minimum required version is 3.8).</p>
+installing from source (the minimum required version is 3.20 — see
+<a class="reference external" href="https://github.com/esa/pagmo2/blob/master/CMakeLists.txt">CMakeLists.txt</a>).</p>
 </section>
 <section id="packages">
 <h2>Packages<a class="headerlink" href="#packages" title="Permalink to this headline">#</a></h2>
@@ -488,6 +495,24 @@ to the channels, and then we can immediately install pagmo:</p>
 and they are regularly updated when new pagmo versions are released.</p>
 <p>Please refer to the <a class="reference external" href="https://docs.conda.io/en/latest/">conda documentation</a> for instructions on how to setup and manage
 your conda installation.</p>
+</section>
+<section id="pypi-pip">
+<h3>PyPI / pip<a class="headerlink" href="#pypi-pip" title="Permalink to this headline">#</a></h3>
+<p>If Python wheels for the pagmo bindings are published on PyPI you can
+install them with pip:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>pagmo
+</pre></div>
+</div>
+<p>Note: <cite>pip install pagmo</cite> installs the Python bindings (if wheels are
+available for your platform) and does not provide the C++ headers or the
+development package. For C++ development, or when wheels are not available,
+prefer the <cite>conda</cite> packages (<cite>pagmo</cite> and <cite>pagmo-devel</cite>) or build from source
+as described below.</p>
+<p>Note: the Python bindings for pagmo are not available on all platforms,
+and they are not built for all pagmo releases. Developers in the core
+team build them via a dedicated manual workflow occasionally.</p>
+<p>See the available wheels and release files on the PyPI project page:
+<a class="reference external" href="https://pypi.org/project/pagmo/">pagmo on PyPI</a>.</p>
 </section>
 <section id="arch-linux">
 <h3>Arch Linux<a class="headerlink" href="#arch-linux" title="Permalink to this headline">#</a></h3>
@@ -582,19 +607,13 @@ when looking for dependencies.</p></li>
 <p>Please consult <a class="reference external" href="https://cmake.org/cmake/help/latest/">CMake’s documentation</a>
 for more details about CMake’s variables and options.</p>
 <p>A typical CMake invocation for pagmo may look something like this:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>../<span class="w"> </span>-DPAGMO_BUILD_TESTS<span class="o">=</span>ON<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>~/.local
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+<span class="gp">$ </span>cmake<span class="w"> </span>-S<span class="w"> </span>..<span class="w"> </span>-B<span class="w"> </span>.<span class="w"> </span>-DPAGMO_BUILD_TESTS<span class="o">=</span>ON<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$HOME</span>/.local
 </pre></div>
 </div>
-<p>That is, we build the test suite and we
-will be installing pagmo into our home directory into the <code class="docutils literal notranslate"><span class="pre">.local</span></code>
-subdirectory. If CMake runs without errors, we can then proceed to actually
-building pagmo:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>--build<span class="w"> </span>.
-</pre></div>
-</div>
-<p>This command will build the pagmo library and, if requested, the test suite.
-Next, we can install pagmo with the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w">  </span>--build<span class="w"> </span>.<span class="w"> </span>--target<span class="w"> </span>install
+<p>If CMake runs without errors, build and install with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>--parallel
+<span class="gp">$ </span>cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>--target<span class="w"> </span>install
 </pre></div>
 </div>
 <p>This command will install the pagmo library and header files to
@@ -669,6 +688,7 @@ or by opening an issue report on <a class="reference external" href="https://git
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#packages">Packages</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conda">Conda</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pypi-pip">PyPI / pip</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arch-linux">Arch Linux</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#freebsd">FreeBSD</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#homebrew">Homebrew</a></li>

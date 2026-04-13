@@ -7,13 +7,19 @@ Dependencies
 ------------
 
 pagmo is written in modern C++, and it requires a compiler able to understand
-at least C++17. pagmo is currently tested on the following setups:
+at least C++17. pagmo is tested on a range of modern setups; the project's
+GitHub Actions CI exercises representative platforms and toolchains (see
+https://github.com/esa/pagmo2/blob/master/.github/workflows/main.yml for the
+current matrix).
 
-* GCC 9 on GNU/Linux,
-* Clang 11 on OSX,
-* MSVC 2017 on Windows.
+Typical tested toolchains include:
 
-The officially-supported architectures are 64-bit x86, ARM and PowerPC.
+- Ubuntu 22.04 (GCC),
+- macOS (Apple Clang, including arm64 runners),
+- Visual Studio 2022 on Windows.
+
+The officially-supported architectures are 64-bit x86 and arm64. Support for other architectures (e.g. PowerPC) is possible, 
+but it is not guaranteed and it is not tested by the pagmo CI.
 
 The pagmo C++ library has the following **mandatory** dependencies:
 
@@ -31,7 +37,8 @@ Additionally, pagmo has the following **optional** dependencies:
 
 Additionally, `CMake <https://cmake.org/>`__ is the build system used by
 pagmo and it must also be available when
-installing from source (the minimum required version is 3.8).
+installing from source (the minimum required version is 3.20 — see
+`CMakeLists.txt <https://github.com/esa/pagmo2/blob/master/CMakeLists.txt>`__).
 
 Packages
 --------
@@ -65,6 +72,29 @@ and they are regularly updated when new pagmo versions are released.
 
 Please refer to the `conda documentation <https://docs.conda.io/en/latest/>`__ for instructions on how to setup and manage
 your conda installation.
+
+PyPI / pip
+^^^^^^^^^
+
+If Python wheels for the pagmo bindings are published on PyPI you can
+install them with pip:
+
+.. code-block:: console
+
+   $ pip install pagmo
+
+Note: `pip install pagmo` installs the Python bindings (if wheels are
+available for your platform) and does not provide the C++ headers or the
+development package. For C++ development, or when wheels are not available,
+prefer the `conda` packages (`pagmo` and `pagmo-devel`) or build from source
+as described below.
+
+Note: the Python bindings for pagmo are not available on all platforms, 
+and they are not built for all pagmo releases. Developers in the core
+team build them via a dedicated manual workflow occasionally.
+
+See the available wheels and release files on the PyPI project page:
+`pagmo on PyPI <https://pypi.org/project/pagmo/>`__.
 
 Arch Linux
 ^^^^^^^^^^
@@ -178,27 +208,20 @@ Additionally, there are various useful CMake variables you can set, such as:
 Please consult `CMake's documentation <https://cmake.org/cmake/help/latest/>`_
 for more details about CMake's variables and options.
 
+
 A typical CMake invocation for pagmo may look something like this:
 
 .. code-block:: console
 
-   $ cmake ../ -DPAGMO_BUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=~/.local
+   $ mkdir -p build && cd build
+   $ cmake -S .. -B . -DPAGMO_BUILD_TESTS=ON -DCMAKE_INSTALL_PREFIX=$HOME/.local
 
-That is, we build the test suite and we
-will be installing pagmo into our home directory into the ``.local``
-subdirectory. If CMake runs without errors, we can then proceed to actually
-building pagmo:
+If CMake runs without errors, build and install with:
 
 .. code-block:: console
 
-   $ cmake --build .
-
-This command will build the pagmo library and, if requested, the test suite.
-Next, we can install pagmo with the command:
-
-.. code-block:: console
-
-   $ cmake  --build . --target install
+   $ cmake --build . --parallel
+   $ cmake --build . --target install
 
 This command will install the pagmo library and header files to
 the directory tree indicated by the ``CMAKE_INSTALL_PREFIX`` variable.
