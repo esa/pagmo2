@@ -220,9 +220,6 @@ population pso_gen::evolve(population pop) const
     double acceleration_coefficient = m_eta1 + m_eta2;
     double sum_forces;
 
-    double r1 = 0.;
-    double r2 = 0.;
-
     /* --- Main PSO loop ---
      */
     // For each generation
@@ -242,8 +239,8 @@ population pso_gen::evolve(population pop) const
             /*-------Original algorithm used in the first PaGMO paper (~2007) ------------------------*/
             if (m_variant == 1u) {
                 for (decltype(dim) d = 0u; d < dim; ++d) {
-                    r1 = drng(m_e);
-                    r2 = drng(m_e);
+                    const double r1 = drng(m_e);
+                    const double r2 = drng(m_e);
                     m_V[p][d] = m_omega * m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
                                 + m_eta2 * r2 * (best_neighb[d] - X[p][d]);
                 }
@@ -254,7 +251,7 @@ population pso_gen::evolve(population pop) const
             /*-------Check with Rastrigin-------------------------------------------------------------*/
             else if (m_variant == 2u) {
                 for (decltype(dim) d = 0u; d < dim; ++d) {
-                    r1 = drng(m_e);
+                    const double r1 = drng(m_e);
                     m_V[p][d] = m_omega * m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
                                 + m_eta2 * r1 * (best_neighb[d] - X[p][d]);
                 }
@@ -263,8 +260,8 @@ population pso_gen::evolve(population pop) const
             /*-------PSO variant (commonly mistaken in literature for the canonical)----------------*/
             /*-------Same random number for all components------------------------------------------*/
             else if (m_variant == 3u) {
-                r1 = drng(m_e);
-                r2 = drng(m_e);
+                const double r1 = drng(m_e);
+                const double r2 = drng(m_e);
                 for (decltype(dim) d = 0u; d < dim; ++d) {
                     m_V[p][d] = m_omega * m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
                                 + m_eta2 * r2 * (best_neighb[d] - X[p][d]);
@@ -275,7 +272,7 @@ population pso_gen::evolve(population pop) const
             /*-------Same random number for all components------------------------------------------*/
             /*-------and with equal random weights of social and cognitive components---------------*/
             else if (m_variant == 4u) {
-                r1 = drng(m_e);
+                const double r1 = drng(m_e);
                 for (decltype(dim) d = 0u; d < dim; ++d) {
                     m_V[p][d] = m_omega * m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
                                 + m_eta2 * r1 * (best_neighb[d] - X[p][d]);
@@ -297,8 +294,8 @@ population pso_gen::evolve(population pop) const
              *-------------------------------------------------------------------------------------*/
             else if (m_variant == 5u) {
                 for (decltype(dim) d = 0u; d < dim; ++d) {
-                    r1 = drng(m_e);
-                    r2 = drng(m_e);
+                    const double r1 = drng(m_e);
+                    const double r2 = drng(m_e);
                     m_V[p][d] = m_omega
                                 * (m_V[p][d] + m_eta1 * r1 * (lbX[p][d] - X[p][d])
                                    + m_eta2 * r2 * (best_neighb[d] - X[p][d]));

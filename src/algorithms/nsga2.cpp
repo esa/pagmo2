@@ -132,7 +132,7 @@ population nsga2::evolve(population pop) const
     m_log.clear();
 
     // Declarations
-    std::vector<vector_double::size_type> best_idx(NP), shuffle1(NP), shuffle2(NP);
+    std::vector<vector_double::size_type> shuffle1(NP), shuffle2(NP);
     vector_double::size_type parent1_idx, parent2_idx;
     std::pair<vector_double, vector_double> children;
 
@@ -296,7 +296,7 @@ population nsga2::evolve(population pop) const
         }
         // This method returns the sorted N best individuals in the population according to the crowded comparison
         // operator
-        best_idx = select_best_N_mo(popnew.get_f(), NP);
+        const std::vector<vector_double::size_type> best_idx = select_best_N_mo(popnew.get_f(), NP);
         // We insert into the population
         for (population::size_type i = 0; i < NP; ++i) {
             pop.set_xf(i, popnew.get_x()[best_idx[i]], popnew.get_f()[best_idx[i]]);

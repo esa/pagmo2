@@ -145,7 +145,7 @@ population simulated_annealing::evolve(population pop) const
 
     // Stores the number of accepted points for each component
     std::vector<int> acp(dim, 0u);
-    double ratio = 0., currentT = m_Ts, probab = 0.;
+    double currentT = m_Ts;
 
     // Main SA loops
     for (decltype(m_n_T_adj) jter = 0u; jter < m_n_T_adj; ++jter) {
@@ -174,7 +174,7 @@ population simulated_annealing::evolve(population pop) const
                         }
                     } else {
                         // test it with Boltzmann to decide the acceptance
-                        probab = std::exp(-std::abs(fOLD[0] - fNEW[0]) / currentT);
+                        const double probab = std::exp(-std::abs(fOLD[0] - fNEW[0]) / currentT);
                         // we compare prob with a random probability.
                         if (probab > drng(m_e)) {
                             xOLD[nter] = xNEW[nter];
@@ -209,7 +209,7 @@ population simulated_annealing::evolve(population pop) const
             }     // end for(kter = 0; ...
             // adjust the step (adaptively)
             for (decltype(dim) iter = 0u; iter < dim; ++iter) {
-                ratio = static_cast<double>(acp[iter]) / static_cast<double>(m_bin_size);
+                const double ratio = static_cast<double>(acp[iter]) / static_cast<double>(m_bin_size);
                 acp[iter] = 0u; // reset the counter
                 if (ratio > .6) {
                     // too many acceptances, increase the step by a factor 3 maximum

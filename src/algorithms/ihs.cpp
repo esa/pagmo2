@@ -120,7 +120,6 @@ population ihs::evolve(population pop) const
 
     // Declarations
     vector_double new_x(dim, 0.);
-    std::vector<vector_double::size_type> best_idxs(pop.size());
 
     // Main loop
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
@@ -185,7 +184,7 @@ population ihs::evolve(population pop) const
             // we augment the list with the new fitness
             fitnesses.push_back(new_f);
             // select the best pop.size() individuals
-            best_idxs = select_best_N_mo(fitnesses, pop.size());
+            const std::vector<vector_double::size_type> best_idxs = select_best_N_mo(fitnesses, pop.size());
             // define the new population
             for (population::size_type i = 0u; i < pop.size(); ++i) {
                 if (best_idxs[i] == pop.size()) { // this is the new guy
