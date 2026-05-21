@@ -125,14 +125,14 @@ public:
      * @param xtol stopping criteria on the f tolerance (default is 1e-6)
      * @param memory when true the distribution parameters are not reset between successive calls to the evolve method
      * @param force_bounds when true the box bounds are enforced. The fitness will never be called outside the
-     *        bounds but the covariance matrix adaptation  mechanism will worsen
+     *        bounds but the covariance matrix adaptation  mechanism will worsen (default is true)
      * @param seed seed used by the internal random number generator (default is random)
 
      * @throws std::invalid_argument if eta_mu, eta_sigma, eta_b and sigma0 are not in ]0, 1] or -1
      */
-    xnes(unsigned gen = 1, double eta_mu = -1, double eta_sigma = -1, double eta_b = -1, double sigma0 = -1,
-         double ftol = 1e-6, double xtol = 1e-6, bool memory = false, bool force_bounds = false,
-         unsigned seed = pagmo::random_device::next());
+     xnes(unsigned gen = 1, double eta_mu = -1, double eta_sigma = -1, double eta_b = -1, double sigma0 = -1,
+          double ftol = 1e-6, double xtol = 1e-6, bool memory = false, bool force_bounds = true,
+          unsigned seed = pagmo::random_device::next());
 
     // Algorithm evolve method
     population evolve(population) const;
