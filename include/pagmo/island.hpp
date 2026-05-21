@@ -236,7 +236,7 @@ private:
     }
 
 public:
-    T m_value;
+    std::remove_const_t<T> m_value;
 };
 
 } // namespace detail
@@ -1021,8 +1021,8 @@ public:
 #if defined(PAGMO_PREFER_TYPEID_NAME_EXTRACT)
         return detail::typeid_name_extract<T>(*this);
 #else
-        auto isl = dynamic_cast<const detail::isl_inner<T> *>(m_ptr->isl_ptr.get());
-        return isl == nullptr ? nullptr : &(isl->m_value);
+        auto isl = dynamic_cast<const detail::isl_inner<uncvref_t<T>> *>(m_ptr->isl_ptr.get());
+        return isl == nullptr ? nullptr : reinterpret_cast<const T *>(&(isl->m_value));
 #endif
     }
     /// Extract a pointer to the UDI used for construction.
@@ -1054,8 +1054,8 @@ public:
 #if defined(PAGMO_PREFER_TYPEID_NAME_EXTRACT)
         return detail::typeid_name_extract<T>(*this);
 #else
-        auto isl = dynamic_cast<detail::isl_inner<T> *>(m_ptr->isl_ptr.get());
-        return isl == nullptr ? nullptr : &(isl->m_value);
+        auto isl = dynamic_cast<detail::isl_inner<uncvref_t<T>> *>(m_ptr->isl_ptr.get());
+        return isl == nullptr ? nullptr : reinterpret_cast<T *>(&(isl->m_value));
 #endif
     }
     /// Check if the UDI used for construction is of type \p T.
