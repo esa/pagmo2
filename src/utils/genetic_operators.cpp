@@ -156,7 +156,7 @@ void polynomial_mutation_impl(vector_double &child, const std::pair<vector_doubl
     const auto &lb = bounds.first;
     const auto &ub = bounds.second;
     // declarations
-    double rnd, delta1, delta2, mut_pow, deltaq;
+    double rnd, delta1, mut_pow, deltaq;
     double y, yl, yu, val, xy;
     // Random distributions
     std::uniform_real_distribution<> drng(0., 1.); // to generate a number in [0, 1)
@@ -167,7 +167,6 @@ void polynomial_mutation_impl(vector_double &child, const std::pair<vector_doubl
             yl = lb[j];
             yu = ub[j];
             delta1 = (y - yl) / (yu - yl);
-            delta2 = (yu - y) / (yu - yl);
             rnd = drng(random_engine);
             mut_pow = 1. / (eta_m + 1.);
             if (rnd < 0.5) {
@@ -175,7 +174,7 @@ void polynomial_mutation_impl(vector_double &child, const std::pair<vector_doubl
                 val = 2. * rnd + (1. - 2. * rnd) * (std::pow(xy, (eta_m + 1.)));
                 deltaq = std::pow(val, mut_pow) - 1.;
             } else {
-                xy = 1. - delta2;
+                xy = delta1;
                 val = 2. * (1. - rnd) + 2. * (rnd - 0.5) * (std::pow(xy, (eta_m + 1.)));
                 deltaq = 1. - (std::pow(val, mut_pow));
             }
