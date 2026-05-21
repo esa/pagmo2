@@ -502,7 +502,7 @@ void cec2013::weierstrass_func(const double *x, double *f, const unsigned nx, co
                                int r_flag) const /* Weierstrass's  */
 {
     unsigned i, j, k_max;
-    double sum = 0, sum2 = 0, a, b;
+    double sum2 = 0, a, b;
 
     shiftfunc(x, &m_y[0], nx, Os);
     for (i = 0u; i < nx; ++i) // shrink to the original search range
@@ -529,7 +529,7 @@ void cec2013::weierstrass_func(const double *x, double *f, const unsigned nx, co
     k_max = 20;
     f[0] = 0.0;
     for (i = 0u; i < nx; ++i) {
-        sum = 0.0;
+        double sum = 0.0;
         sum2 = 0.0;
         for (j = 0u; j <= k_max; ++j) {
             sum += std::pow(a, j) * std::cos(2.0 * detail::pi() * std::pow(b, j) * (m_y[i] + 0.5));

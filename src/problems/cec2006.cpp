@@ -918,9 +918,6 @@ void cec2006::g19_objfun_impl(vector_double &f, const vector_double &x) const
 /// Implementation of the constraint function.
 void cec2006::g19_compute_constraints_impl(vector_double &c, const vector_double &x) const
 {
-    double sum1 = 0.;
-    double sum2 = 0.;
-
     double A[10][5] = {{-16.0, 2.0, 0.0, 1.0, 0.0},    {0.0, -2.0, 0.0, 0.4, 2.0},     {-3.5, 0.0, 2.0, 0.0, 0.0},
                        {0.0, -2.0, 0.0, -4.0, -1.0},   {0.0, -9.0, -2.0, 1.0, -2.8},   {2.0, 0.0, -4.0, 0.0, 0.0},
                        {-1.0, -1.0, -1.0, -1.0, -1.0}, {-1.0, -2.0, -3.0, -2.0, -1.0}, {1.0, 2.0, 3.0, 4.0, 5.0},
@@ -937,10 +934,10 @@ void cec2006::g19_compute_constraints_impl(vector_double &c, const vector_double
 
     /* constraints g <= 0 */
     for (unsigned j = 0u; j < 5u; ++j) {
-        sum1 = 0.0;
+        double sum1 = 0.0;
         for (unsigned i = 0u; i < 5u; ++i)
             sum1 += C[i][j] * x[10 + i];
-        sum2 = 0.0;
+        double sum2 = 0.0;
         for (unsigned i = 0u; i < 10u; ++i)
             sum2 += A[i][j] * x[i];
         c[j] = -((2.0 * sum1) + (3.0 * D[j] * std::pow(x[10 + j], 2.0)) + E[j] - sum2);

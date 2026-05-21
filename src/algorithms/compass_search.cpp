@@ -115,13 +115,12 @@ population compass_search::evolve(population pop) const
     vector_double cur_best_x(std::move(sel_xf.first)), cur_best_f(std::move(sel_xf.second));
 
     // We need some auxiliary variables
-    bool flag = false;
     unsigned fevals = 0u;
 
     double newrange = m_start_range;
 
     while (newrange > m_stop_range && fevals <= m_max_fevals) {
-        flag = false;
+        bool flag = false;
         for (decltype(dim) i = 0u; i < dim; i++) {
             auto x_trial = cur_best_x;
             // move up
