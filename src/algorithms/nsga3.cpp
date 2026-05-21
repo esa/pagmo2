@@ -122,7 +122,9 @@ nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut, 
  * @throws std::invalid_argument if the problem is stochastic, constrained, single
  * objective or has equal lower and upper bounds; if the population size is smaller
  * than 5 or is smaller than the number of reference
- * directions; or if a configured batch fitness evaluator returns a fitness vector of
+ * directions; if any gene of the initial population is not finite or is outside
+ * the problem bounds, as the crossover and mutation operators assume feasible
+ * parents; or if a configured batch fitness evaluator returns a fitness vector of
  * unexpected size.
  * @throws unspecified any exception thrown by the reference direction construction,
  * in particular if the requested number of directions is too large to be built.
@@ -183,6 +185,19 @@ population nsga3::evolve(population pop) const
                         + std::to_string(NP) + " while " + std::to_string(m_divisions) + " outer and "
                         + std::to_string(m_divisions_inner) + " inner divisions for " + std::to_string(prob.get_nobj())
                         + " objectives give a total of " + std::to_string(directions.size()) + " directions.");
+    }
+
+    // We check that the initial population individuals are within the problem bounds.
+    for (decltype(pop.size()) i = 0u; i < NP; ++i) {
+        const auto &x = pop.get_x()[i];
+        for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+            if (!std::isfinite(x[j]) || x[j] < bounds.first[j] || x[j] > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument,
+                            "Individual " + std::to_string(i) + " has a gene at position "
+                                + std::to_string(j) + " that is outside the problem bounds. "
+                                + get_name() + " cannot deal with it.");
+            }
+        }
     }
 
     // No throws, all valid: we clear the logs

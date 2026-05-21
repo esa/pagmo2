@@ -86,6 +86,8 @@ nsga2::nsga2(unsigned gen, double cr, double eta_c, double m, double eta_m, unsi
  * @return evolved population
  * @throw std::invalid_argument if pop.get_problem() is stochastic, single objective or has non linear constraints.
  * If \p int_dim is larger than the problem dimension. If the population size is smaller than 5.
+ * If any gene of the initial population is not finite or is outside the problem bounds, as the crossover
+ * and mutation operators assume feasible parents.
  */
 population nsga2::evolve(population pop) const
 {
@@ -125,6 +127,19 @@ population nsga2::evolve(population pop) const
                         + std::to_string(NP));
     }
     // ---------------------------------------------------------------------------------------------------------
+
+    // We check that the initial population individuals are within the problem bounds.
+    for (decltype(NP) i = 0u; i < NP; ++i) {
+        const auto &x = pop.get_x()[i];
+        for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
+            if (!std::isfinite(x[j]) || x[j] < bounds.first[j] || x[j] > bounds.second[j]) {
+                pagmo_throw(std::invalid_argument,
+                            "Individual " + std::to_string(i) + " has a gene at position "
+                                + std::to_string(j) + " that is outside the problem bounds. "
+                                + get_name() + " cannot deal with it.");
+            }
+        }
+    }
 
     // No throws, all valid: we clear the logs
     m_log.clear();
