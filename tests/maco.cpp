@@ -46,6 +46,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/lennard_jones.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
+#include <pagmo/problems/unconstrain.hpp>
 #include <pagmo/problems/wfg.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/s11n.hpp>
@@ -274,5 +275,112 @@ BOOST_AUTO_TEST_CASE(out_of_bounds_test)
     maco uda{1u, 20u, 1.0, 8u, 7u, 10000u, 0., true, 23u};
     uda.set_seed(23u);
     pop = uda.evolve(pop);
+}
+
+BOOST_AUTO_TEST_CASE(maco_constrained_test)
+{
+    // Reproduce issue #525: mhaco asserts if initial population does not verify constraints
+    // through unconstrain death penalty.
+    struct constrained_mo_udp {
+        vector_double fitness(const vector_double &x) const
+        {
+            vector_double f(3, 0.);
+            f[0] = x[0] * x[0];
+            f[1] = (x[0] - 1.) * (x[0] - 1.);
+            f[2] = x[0]; // inequality constraint: x[0] <= 0
+            return f;
+        }
+        std::pair<vector_double, vector_double> get_bounds() const
+        {
+            return {{-5}, {5}};
+        }
+        vector_double::size_type get_nobj() const
+        {
+            return 2u;
+        }
+        vector_double::size_type get_nec() const
+        {
+            return 0u;
+        }
+        vector_double::size_type get_nic() const
+        {
+            return 1u;
+        }
+        std::string get_name() const
+        {
+            return "constrained multi-objective problem";
+        }
+    };
+
+    problem prob{unconstrain{constrained_mo_udp{}, "death penalty"}};
+    population pop{prob, 50u, 23u};
+    // Set half of the population to infeasible values (x[0] > 0) to trigger DBL_MAX via death penalty
+    for (decltype(pop.size()) i = 0u; i < pop.size() / 2u; ++i) {
+        pop.set_x(i, {2.});
+    }
+
+    maco uda{10u, 20u, 1.0, 8u, 7u, 10000u, 0., false, 23u};
+    BOOST_CHECK_NO_THROW(pop = uda.evolve(pop));
+}
+
+BOOST_AUTO_TEST_CASE(maco_extremity_replacement_test)
+{
+    struct pareto_line_udp {
+        vector_double fitness(const vector_double &x) const
+        {
+            return {x[0], 1. - x[0]};
+        }
+        std::pair<vector_double, vector_double> get_bounds() const
+        {
+            return {{0.}, {1.}};
+        }
+        vector_double::size_type get_nobj() const
+        {
+            return 2u;
+        }
+        std::string get_name() const
+        {
+            return "pareto line";
+        }
+    };
+    problem prob{pareto_line_udp{}};
+    const unsigned ker = 3u;
+    const unsigned pop_size = 20u;
+    population pop{prob, pop_size, 23u};
+    for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+        double v = static_cast<double>(i) / static_cast<double>(pop.size() - 1u);
+        pop.set_x(i, {v});
+    }
+    maco uda{1u, ker, 1.0, 1u, 7u, 10000u, 0., false, 42u};
+    uda.set_verbosity(1u);
+    BOOST_CHECK_NO_THROW(pop = uda.evolve(pop));
+    auto log = uda.get_log();
+    BOOST_REQUIRE(!log.empty());
+    auto ideal = std::get<2>(log[0]);
+    BOOST_CHECK_CLOSE(ideal[0], 0., 1e-8);
+    BOOST_CHECK_CLOSE(ideal[1], 0., 1e-8);
+    bool has_f0_min = false, has_f1_min = false;
+    for (decltype(pop.size()) i = 0u; i < ker; ++i) {
+        auto f = pop.get_f()[i];
+        if (std::abs(f[0] - 0.) < 1e-9 && std::abs(f[1] - 1.) < 1e-9) has_f0_min = true;
+        if (std::abs(f[0] - 1.) < 1e-9 && std::abs(f[1] - 0.) < 1e-9) has_f1_min = true;
+    }
+    BOOST_CHECK(has_f0_min);
+    BOOST_CHECK(has_f1_min);
+    maco uda2{5u, ker, 1.0, 1u, 7u, 10000u, 0., false, 42u};
+    uda2.set_verbosity(1u);
+    population pop2{prob, pop_size, 23u};
+    for (decltype(pop2.size()) i = 0u; i < pop2.size(); ++i) {
+        double v = static_cast<double>(i) / static_cast<double>(pop2.size() - 1u);
+        pop2.set_x(i, {v});
+    }
+    BOOST_CHECK_NO_THROW(pop2 = uda2.evolve(pop2));
+    auto log2 = uda2.get_log();
+    BOOST_REQUIRE(!log2.empty());
+    for (auto &entry : log2) {
+        auto id = std::get<2>(entry);
+        BOOST_CHECK_CLOSE(id[0], 0., 1e-8);
+        BOOST_CHECK_CLOSE(id[1], 0., 1e-8);
+    }
 }
 
