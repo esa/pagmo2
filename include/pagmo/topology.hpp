@@ -118,6 +118,21 @@ using bgl_graph_t
 
 #endif
 
+// Detect the num_vertices() method.
+template <typename T>
+class has_num_vertices
+{
+    template <typename U>
+    using num_vertices_t = decltype(std::declval<const U &>().num_vertices());
+    static const bool implementation_defined = std::is_same<std::size_t, detected_t<num_vertices_t, T>>::value;
+
+public:
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_num_vertices<T>::value;
+
 // Detect the to_bgl() method.
 template <typename T>
 class has_to_bgl
@@ -171,6 +186,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner_base {
     virtual std::string get_name() const = 0;
     virtual std::string get_extra_info() const = 0;
     virtual std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const = 0;
+    virtual std::size_t num_vertices() const = 0;
     virtual void push_back() = 0;
     virtual bgl_graph_t to_bgl() const = 0;
     virtual std::type_index get_type_index() const = 0;
@@ -196,19 +212,31 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
     // Constructors from T (copy and move variants).
     explicit topo_inner(const T &x) : m_value(x) {}
     explicit topo_inner(T &&x) : m_value(std::move(x)) {}
-    // The clone method, used in the copy constructor of topology.
     std::unique_ptr<topo_inner_base> clone() const final
     {
-        return std::make_unique<topo_inner>(m_value);
+        auto ptr = std::make_unique<topo_inner>(m_value);
+        ptr->m_fallback_vertices = m_fallback_vertices;
+        return ptr;
     }
     // The mandatory methods.
     std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t n) const final
     {
         return m_value.get_connections(n);
     }
+    std::size_t num_vertices() const final
+    {
+        if constexpr (has_num_vertices<T>::value) {
+            return m_value.num_vertices();
+        } else {
+            return m_fallback_vertices;
+        }
+    }
     void push_back() final
     {
         m_value.push_back();
+        if constexpr (!has_num_vertices<T>::value) {
+            ++m_fallback_vertices;
+        }
     }
     // Optional methods.
     bgl_graph_t to_bgl() const final
@@ -273,15 +301,15 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS topo_inner final : topo_inner_base {
 
 private:
     friend class boost::serialization::access;
-    // Serialization
     template <typename Archive>
     void serialize(Archive &ar, unsigned)
     {
-        detail::archive(ar, boost::serialization::base_object<topo_inner_base>(*this), m_value);
+        detail::archive(ar, boost::serialization::base_object<topo_inner_base>(*this), m_value, m_fallback_vertices);
     }
 
 public:
     T m_value;
+    std::size_t m_fallback_vertices = 0;
 };
 
 } // namespace detail
@@ -374,6 +402,9 @@ public:
 
     // Get the connections to a vertex.
     std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const;
+
+    // Get the number of vertices.
+    std::size_t num_vertices() const;
 
     // Add a vertex.
     void push_back();

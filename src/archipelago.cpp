@@ -737,11 +737,14 @@ topology archipelago::get_topology() const
  */
 void archipelago::set_topology(topology topo)
 {
-    // NOTE: make sure we finish any ongoing evolution before setting the topology.
-    // The assignment will trigger the destructor of the UDT, so we need to make
-    // sure there's no interaction with the UDT happening.
     wait_check_ignore();
     m_topology = std::move(topo);
+    if (m_topology.num_vertices() < m_islands.size()) {
+        auto to_add = m_islands.size() - m_topology.num_vertices();
+        for (decltype(to_add) i = 0; i < to_add; ++i) {
+            m_topology.push_back();
+        }
+    }
 }
 
 namespace detail
