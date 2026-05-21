@@ -390,3 +390,20 @@ BOOST_AUTO_TEST_CASE(get_ptr)
     BOOST_CHECK(p0.get_ptr() == p0.extract<udt00a>());
     BOOST_CHECK(static_cast<const topology &>(p0).get_ptr() == static_cast<const topology &>(p0).extract<udt00a>());
 }
+
+BOOST_AUTO_TEST_CASE(topology_legacy_fallback_test)
+{
+    BOOST_CHECK(!has_num_vertices<udt00>::value);
+    topology t{udt00{}};
+    BOOST_CHECK(t.num_vertices() == 0u);
+    t.push_back();
+    BOOST_CHECK(t.num_vertices() == 1u);
+    t.push_back(2);
+    BOOST_CHECK(t.num_vertices() == 3u);
+    BOOST_CHECK(t.extract<udt00>()->n_pushed == 3);
+    auto t2 = t;
+    BOOST_CHECK(t2.num_vertices() == 3u);
+    t2.push_back();
+    BOOST_CHECK(t2.num_vertices() == 4u);
+    BOOST_CHECK(t.num_vertices() == 3u);
+}
