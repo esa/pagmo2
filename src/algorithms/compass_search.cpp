@@ -53,8 +53,8 @@ compass_search::compass_search(unsigned max_fevals, double start_range, double s
         pagmo_throw(std::invalid_argument, "The start range must be in (0, 1], while a value of "
                                                + std::to_string(start_range) + " was detected.");
     }
-    if (stop_range > 1. || stop_range >= start_range || std::isnan(stop_range)) {
-        pagmo_throw(std::invalid_argument, "the stop range must be in (start_range, 1], while a value of "
+    if (stop_range < 0. || stop_range >= start_range || std::isnan(stop_range)) {
+        pagmo_throw(std::invalid_argument, "the stop range must be in [0, start_range), while a value of "
                                                + std::to_string(stop_range) + " was detected.");
     }
     if (reduction_coeff >= 1. || reduction_coeff <= 0. || std::isnan(reduction_coeff)) {
