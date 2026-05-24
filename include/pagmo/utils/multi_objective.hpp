@@ -59,7 +59,7 @@ PAGMO_DLL_PUBLIC void reksum(std::vector<std::vector<double>> &, const std::vect
 } // namespace detail
 
 // Pareto-dominance
-PAGMO_DLL_PUBLIC bool pareto_dominance(const vector_double &, const vector_double &);
+PAGMO_DLL_PUBLIC inline bool pareto_dominance(const vector_double &, const vector_double &);
 
 // Non dominated front 2D (Kung's algorithm)
 PAGMO_DLL_PUBLIC std::vector<pop_size_t> non_dominated_front_2d(const std::vector<vector_double> &);
@@ -71,6 +71,9 @@ using fnds_return_type = std::tuple<std::vector<std::vector<pop_size_t>>, std::v
 // Fast non dominated sorting
 PAGMO_DLL_PUBLIC fnds_return_type fast_non_dominated_sorting(const std::vector<vector_double> &);
 
+// Fast non dominated sorting with pre-allocated buffers
+PAGMO_DLL_PUBLIC void fast_non_dominated_sorting_buffered(const std::vector<vector_double> &, fnds_return_type&);
+
 // Crowding distance
 PAGMO_DLL_PUBLIC vector_double crowding_distance(const std::vector<vector_double> &);
 
@@ -79,6 +82,9 @@ PAGMO_DLL_PUBLIC std::vector<pop_size_t> sort_population_mo(const std::vector<ve
 
 // Selects the best N individuals in multi-objective optimization
 PAGMO_DLL_PUBLIC std::vector<pop_size_t> select_best_N_mo(const std::vector<vector_double> &, pop_size_t);
+
+// Selects the best N individuals in multi-objective optimization with pre-allocated buffers
+PAGMO_DLL_PUBLIC std::vector<pop_size_t> select_best_N_mo_buffered(const std::vector<vector_double> &, pop_size_t, fnds_return_type&);
 
 // Ideal point
 PAGMO_DLL_PUBLIC vector_double ideal(const std::vector<vector_double> &);

@@ -136,6 +136,10 @@ population nsga2::evolve(population pop) const
     vector_double::size_type parent1_idx, parent2_idx;
     std::pair<vector_double, vector_double> children;
 
+    // We're using select_best_N_mo_buffered(), which prevents re-allocation of this structure
+    fnds_return_type best_N_buffer{};
+    fnds_return_type fnds_buffer{};
+
     std::iota(shuffle1.begin(), shuffle1.end(), vector_double::size_type(0));
     std::iota(shuffle2.begin(), shuffle2.end(), vector_double::size_type(0));
 
@@ -181,10 +185,10 @@ population nsga2::evolve(population pop) const
         std::shuffle(shuffle2.begin(), shuffle2.end(), m_e);
 
         // 1 - We compute crowding distance and non dominated rank for the current population
-        auto fnds_res = fast_non_dominated_sorting(pop.get_f());
-        auto ndf = std::get<0>(fnds_res); // non dominated fronts [[0,3,2],[1,5,6],[4],...]
+        fast_non_dominated_sorting_buffered(pop.get_f(), fnds_buffer);
+        auto& ndf = std::get<0>(fnds_buffer); // non dominated fronts [[0,3,2],[1,5,6],[4],...]
         vector_double pop_cd(NP);         // crowding distances of the whole population
-        auto ndr = std::get<3>(fnds_res); // non domination rank [0,1,0,0,2,1,1, ... ]
+        auto& ndr = std::get<3>(fnds_buffer); // non domination rank [0,1,0,0,2,1,1, ... ]
         for (const auto &front_idxs : ndf) {
             if (front_idxs.size() == 1u) { // handles the case where the front has collapsed to one point
                 pop_cd[front_idxs[0]] = std::numeric_limits<double>::infinity();
@@ -296,7 +300,7 @@ population nsga2::evolve(population pop) const
         }
         // This method returns the sorted N best individuals in the population according to the crowded comparison
         // operator
-        best_idx = select_best_N_mo(popnew.get_f(), NP);
+        best_idx = select_best_N_mo_buffered(popnew.get_f(), NP, best_N_buffer);
         // We insert into the population
         for (population::size_type i = 0; i < NP; ++i) {
             pop.set_xf(i, popnew.get_x()[best_idx[i]], popnew.get_f()[best_idx[i]]);
