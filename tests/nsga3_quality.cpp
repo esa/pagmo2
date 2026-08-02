@@ -74,6 +74,7 @@ struct quality_metrics {
     double coverage;     // share of reference directions with at least one individual
     double front_error;  // mean distance to the analytic front, in objective space
     double igd;          // inverted generational distance against the analytic front
+    std::vector<vector_double> objs;  // the final objectives, for cross-run comparisons
 };
 
 /*  Samples the analytic Pareto front at the structured reference directions. Deb
@@ -218,6 +219,7 @@ quality_metrics evolve_and_check(unsigned prob_id, unsigned dim, unsigned nobj, 
     m.front_error = total / static_cast<double>(objs.size());
 
     m.igd = inverted_generational_distance(front_reference_set(nobj, divisions, shape), objs);
+    m.objs = objs;
 
     return m;
 }
@@ -300,6 +302,32 @@ BOOST_AUTO_TEST_CASE(nsga3_quality_dtlz4)
     BOOST_CHECK(m.front_error < 0.1);
     BOOST_CHECK(m.coverage > 0.0);
     BOOST_CHECK(m.igd < 1.5);
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_quality_seed_sensitivity)
+{
+    /*  Different seeds must explore differently and still arrive somewhere good.
+     *  Asserting only that the runs differ would pass for an algorithm that had
+     *  stopped working, so each run is held to the same bounds independently.
+     */
+    const std::vector<unsigned> seeds{32u, 7u, 101u};
+    std::vector<std::vector<vector_double>> populations;
+
+    for (unsigned seed : seeds) {
+        auto m = evolve_and_check(2u, 10u, 3u, 12u, 92u, 100u, seed, front_shape::sphere);
+        BOOST_CHECK(m.p_dist < 0.05);
+        BOOST_CHECK(m.nd_fraction > 0.9);
+        BOOST_CHECK(m.coverage > 0.8);
+        BOOST_CHECK(m.igd < 0.05);
+        populations.push_back(m.objs);
+    }
+
+    // Every pair of runs really did explore a different part of the space
+    for (size_t i = 0; i < populations.size(); ++i) {
+        for (size_t j = i + 1; j < populations.size(); ++j) {
+            BOOST_CHECK(populations[i] != populations[j]);
+        }
+    }
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_quality_reproducible)
