@@ -10,6 +10,7 @@
 #include <limits>
 #include <numeric>
 #include <optional>
+#include <sstream>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -512,10 +513,31 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
     return next;
 }
 
+/// Extra info
+/**
+ * Returns extra information on the algorithm.
+ *
+ * @return an <tt> std::string </tt> containing extra info on the algorithm
+ */
+std::string nsga3::get_extra_info() const{
+    std::ostringstream ss;
+    stream(ss, "\tGenerations: ", m_gen);
+    stream(ss, "\n\tCrossover probability: ", m_cr);
+    stream(ss, "\n\tDistribution index for crossover: ", m_eta_c);
+    stream(ss, "\n\tMutation probability: ", m_mut);
+    stream(ss, "\n\tDistribution index for mutation: ", m_eta_mut);
+    stream(ss, "\n\tReference point divisions: ", m_divisions);
+    stream(ss, "\n\tInter-generational memory: ", m_use_memory);
+    stream(ss, "\n\tSeed: ", m_seed);
+    stream(ss, "\n\tVerbosity: ", m_verbosity);
+    return ss.str();
+}
+
 // Object serialization
 template <typename Archive>
 void nsga3::serialize(Archive &ar, unsigned int) {
-    detail::archive(ar, m_gen, m_cr, m_eta_c, m_mut, m_eta_mut, m_seed, m_verbosity, m_log);
+    detail::archive(ar, m_gen, m_cr, m_eta_c, m_mut, m_eta_mut, m_divisions, m_seed,
+                    m_use_memory, m_memory, m_reng, m_verbosity, m_log);
 }
 
 }  // namespace pagmo

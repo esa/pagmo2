@@ -8,6 +8,7 @@
 #include <pagmo/rng.hpp>  // random_device, random_engine_type
 #include <pagmo/detail/visibility.hpp>  // PAGMO_DLL_PUBLIC
 #include <pagmo/population.hpp>  // population
+#include <pagmo/s11n.hpp>  // detail::archive
 #include <pagmo/utils/reference_point.hpp>  // ReferencePoint
 
 
@@ -22,6 +23,10 @@ class PAGMO_DLL_PUBLIC nsga3{
         struct NSGA3Memory{
             std::vector<std::vector<double>> v_extreme;
             std::vector<double> v_ideal;
+            template <typename Archive>
+            void serialize(Archive &ar, unsigned){
+                detail::archive(ar, v_extreme, v_ideal);
+            }
         };
         // Log line format: (gen, fevals, ideal_point)
         typedef std::tuple<unsigned, unsigned long long, vector_double> log_line_type;
@@ -31,6 +36,7 @@ class PAGMO_DLL_PUBLIC nsga3{
               double mut = 0.10, double eta_mut = 20.0, size_t divisions = 12u,
               unsigned seed = pagmo::random_device::next(), bool use_memory = false);
         std::string get_name() const{ return "NSGA-III:"; }
+        std::string get_extra_info() const;
         population evolve(population) const;
         std::vector<size_t> selection(population &, size_t) const;
         std::vector<ReferencePoint> generate_uniform_reference_points(size_t nobjs, size_t divisions) const;

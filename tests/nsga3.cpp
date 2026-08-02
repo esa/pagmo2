@@ -28,6 +28,7 @@ BOOST_AUTO_TEST_CASE(nsga3_algorithm_construction)
     nsga3 user_algo{1u, 1.00, 30.0, 0.10, 20.0, 12u, 32u, false};
     BOOST_CHECK(user_algo.get_verbosity() == 0u);
     BOOST_CHECK(user_algo.get_seed() == 32u);
+    BOOST_CHECK(user_algo.get_extra_info().find("Seed: 32") != std::string::npos);
 
     // Verify throw on invalid arguments
     // Invalid cr
@@ -486,6 +487,47 @@ BOOST_AUTO_TEST_CASE(nsga3_log_generation_numbers){
     nsga3 alg3{5u, 1.00, 30., 0.10, 20., 5u, 32u, false};
     pop3 = alg3.evolve(pop3);
     BOOST_CHECK(alg3.get_log().empty());
+}
+
+static void nsga3_verify_serialization_continuation(bool use_memory){
+    dtlz udp{1u, 10u, 3u};
+    population pop{udp, 52u, 23u};
+
+    algorithm algo{nsga3{3u, 1.00, 30., 0.10, 20., 5u, 32u, use_memory}};
+    algo.set_verbosity(1u);
+    pop = algo.evolve(pop);
+
+    /*  Round-trip the *evolved* algorithm. Continuing the evolution from the
+     *  restored copy requires the engine state, the inter-generational memory
+     *  and the constructor arguments to have all been archived.
+     */
+    std::stringstream ss;
+    {
+        boost::archive::binary_oarchive oarchive(ss);
+        oarchive << algo;
+    }
+    algorithm restored{};
+    {
+        boost::archive::binary_iarchive iarchive(ss);
+        iarchive >> restored;
+    }
+
+    BOOST_CHECK_EQUAL(algo.get_extra_info(), restored.get_extra_info());
+    BOOST_CHECK(algo.extract<nsga3>()->get_log() == restored.extract<nsga3>()->get_log());
+
+    population continued_direct{pop};
+    population continued_restored{pop};
+    continued_direct = algo.evolve(continued_direct);
+    continued_restored = restored.evolve(continued_restored);
+
+    BOOST_CHECK(continued_direct.get_x() == continued_restored.get_x());
+    BOOST_CHECK(continued_direct.get_f() == continued_restored.get_f());
+    BOOST_CHECK(algo.extract<nsga3>()->get_log() == restored.extract<nsga3>()->get_log());
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_serialization_continuation){
+    nsga3_verify_serialization_continuation(false);
+    nsga3_verify_serialization_continuation(true);
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_serialization_test){
