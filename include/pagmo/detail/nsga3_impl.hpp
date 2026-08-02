@@ -34,11 +34,12 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/population.hpp>  // pop_size_t
 #include <pagmo/rng.hpp>         // random_engine_type
 #include <pagmo/types.hpp>
 
-// NOTE: this header contains the numerical utilities of the NSGA-III algorithm.
-// They are implementation details of pagmo::nsga3.
+// NOTE: this header contains the numerical utilities and the adaptive normalisation
+// pipeline of the NSGA-III algorithm. They are implementation details of pagmo::nsga3.
 namespace pagmo
 {
 
@@ -65,6 +66,33 @@ T choose_random_element(const std::vector<T> &container, random_engine_type &ran
     std::uniform_int_distribution<typename std::vector<T>::size_type> dist(0u, container.size() - 1u);
     return container[dist(random_engine)];
 }
+
+/*  Adaptive normalisation of the objectives, Deb & Jain Algorithm 2.
+ *
+ *  The inter-generational memory is passed in explicitly rather than held by these
+ *  functions: a null pointer means the corresponding quantity is not retained across
+ *  generations, and a non-null one is read and then updated in place.
+ */
+
+// Ideal point; with memory, the best value found for each objective since the start of the run
+PAGMO_DLL_PUBLIC std::vector<double> nsga3_compute_ideal(const std::vector<vector_double> &objs,
+                                                         std::vector<double> *running_ideal);
+
+PAGMO_DLL_PUBLIC std::vector<std::vector<double>> nsga3_translate_objectives(const std::vector<vector_double> &objs,
+                                                                            const std::vector<double> &ideal_point);
+
+// Retained extreme points are expressed in the *original* objective coordinates
+PAGMO_DLL_PUBLIC std::vector<std::vector<double>> nsga3_find_extreme_points(
+    const std::vector<std::vector<pop_size_t>> &fronts,
+    const std::vector<std::vector<double>> &translated_objs,
+    const std::vector<double> &ideal_point,
+    std::vector<std::vector<double>> *retained_extremes);
+
+PAGMO_DLL_PUBLIC std::vector<double> nsga3_find_intercepts(const std::vector<std::vector<double>> &ext_points,
+                                                           const std::vector<std::vector<double>> &translated_objs);
+
+PAGMO_DLL_PUBLIC std::vector<std::vector<double>> nsga3_normalize_objectives(
+    const std::vector<std::vector<double>> &translated_objs, const std::vector<double> &intercepts);
 
 } // namespace detail
 

@@ -1,3 +1,31 @@
+/* Copyright 2017-2021 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
 /*
  *  Implements the NSGA-III multi-objective evolutionary algorithm
  *  as described in http://dx.doi.org/10.1109/TEVC.2013.2281535
@@ -5,7 +33,6 @@
  *  Paul Slavin <paul.slavin@manchester.ac.uk>
  */
 #include <algorithm>
-#include <cmath>
 #include <iomanip>
 #include <limits>
 #include <numeric>
@@ -28,33 +55,6 @@
 #include <pagmo/s11n.hpp>
 
 #include <boost/serialization/optional.hpp>
-
-
-namespace{
-
-/*  Relative tolerance used when deciding whether two extreme points coincide.
- */
-constexpr double extreme_point_tol = 1e-12;
-
-/*  Two extreme points are duplicates only when *every* coordinate matches. The
- *  comparison is relative to the magnitude of the coordinates, so that it does
- *  not depend on the scale of the objectives, with an absolute floor of tol for
- *  coordinates close to zero.
- */
-bool close_vectors(const std::vector<double> &lhs, const std::vector<double> &rhs, double tol){
-    if(lhs.size() != rhs.size()){
-        return false;
-    }
-    for(size_t i=0; i<lhs.size(); i++){
-        double scale = std::max(1.0, std::max(std::abs(lhs[i]), std::abs(rhs[i])));
-        if(!(std::abs(lhs[i] - rhs[i]) <= tol*scale)){
-            return false;
-        }
-    }
-    return true;
-}
-
-}  // namespace
 
 
 namespace pagmo{
@@ -87,202 +87,6 @@ nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut,
     }
 }
 
-
-/*  The ideal point used to translate the objectives.
- *  With memory enabled this is the best value found for each objective since the
- *  start of the run, as described in Deb & Jain Section IV.B, and is retained
- *  across generations.
- */
-std::vector<double> nsga3::compute_ideal(const std::vector<vector_double> &objs) const{
-    std::vector<double> p_ideal = ideal(objs);
-
-    if(has_memory()){
-        if(m_memory.v_ideal.size() == p_ideal.size()){  // i.e. not first gen
-            for(size_t i=0; i<p_ideal.size(); i++){
-                p_ideal[i] = std::min(p_ideal[i], m_memory.v_ideal[i]);
-            }
-        }
-        m_memory.v_ideal = p_ideal;
-    }
-
-    return p_ideal;
-}
-
-
-std::vector<std::vector<double>> nsga3::translate_objectives(const std::vector<vector_double> &objs,
-                                                             const std::vector<double> &ideal_point) const{
-    size_t NP = objs.size();
-    size_t nobj = ideal_point.size();
-    std::vector<std::vector<double>> translated_objs(NP, std::vector<double>(nobj));
-
-    for(size_t obj=0; obj<nobj; obj++){
-        for(size_t i=0; i<NP; i++){
-            translated_objs[i][obj] = objs[i][obj] - ideal_point[obj];
-        }
-    }
-
-    return translated_objs;
-}
-
-// fronts arg is NDS return type
-std::vector<std::vector<double>> nsga3::find_extreme_points(const std::vector<std::vector<pop_size_t>> &fronts,
-                                               const std::vector<std::vector<double>> &translated_objs,
-                                               const std::vector<double> &ideal_point) const{
-    std::vector<std::vector<double>> points;
-    size_t nobj = ideal_point.size();
-
-    if(has_memory() && m_memory.v_extreme.size() != nobj){
-        m_memory.v_extreme.assign(nobj, std::vector<double>{});
-    }
-
-    for(size_t i=0; i<nobj; i++){
-        std::vector<double> weights(nobj, 1e-6);
-        weights[i] = 1.0;
-        double min_asf = std::numeric_limits<double>::max();
-        std::vector<double> min_obj{};
-
-        /*  Extreme points retained from previous generations are stored in the
-         *  original objective coordinates: each must be translated by the
-         *  *current* ideal point before it can be compared, on the same footing,
-         *  with the candidates of this generation.
-         */
-        if(has_memory()){
-            for(size_t p=0; p<m_memory.v_extreme.size(); p++){
-                if(m_memory.v_extreme[p].size() != nobj){
-                    continue;  // Nothing retained for this objective yet
-                }
-                std::vector<double> retained(nobj);
-                for(size_t obj=0; obj<nobj; obj++){
-                    retained[obj] = m_memory.v_extreme[p][obj] - ideal_point[obj];
-                }
-                double asf = detail::achievement(retained, weights);
-                if(asf < min_asf){
-                    min_asf = asf;
-                    min_obj = retained;
-                }
-            }
-        }
-
-        // Only first front need be considered for extremes
-        for(size_t ind=0; ind<fronts[0].size(); ind++){
-            // Calculate ASF value for translated objectives
-            double asf = detail::achievement(translated_objs[fronts[0][ind]], weights);
-            if(asf < min_asf){
-                min_asf = asf;
-                min_obj = translated_objs[fronts[0][ind]];
-            }
-        }
-        if(min_obj.empty()){  // Only reachable if every ASF value was NaN
-            min_obj = translated_objs[fronts[0][0]];
-        }
-        points.push_back(min_obj);
-        if(has_memory()){
-            // Retain in the original coordinates, so a moving ideal point does not invalidate it
-            std::vector<double> original(nobj);
-            for(size_t obj=0; obj<nobj; obj++){
-                original[obj] = min_obj[obj] + ideal_point[obj];
-            }
-            m_memory.v_extreme[i] = original;
-        }
-    }
-
-    return points;
-}
-
-std::vector<double> nsga3::find_intercepts(const std::vector<std::vector<double>> &ext_points,
-                                           const std::vector<std::vector<double>> &translated_objs) const{
-    /*  1. Check duplicate extreme points
-     *  2. A = translated objectives of extreme points;  b = [1,1,...] to n_objs
-     *  3. Solve Ax = b via Gaussian Elimination
-     *  4. Return reciprocals as intercepts
-     *  NB Duplicate ext_points, a singular system and non-positive solutions
-     *  all fall back to the nadir point. Both the extreme points and the
-     *  returned intercepts are expressed in the translated coordinate system.
-     */
-
-    size_t n_obj = ext_points.size();
-    std::vector<double> intercepts(n_obj, 1.0);
-    bool fallback_to_nadir = false;
-
-    for(size_t p=0; !fallback_to_nadir && p<n_obj; p++){
-        if(ext_points[p].size() != n_obj){
-            fallback_to_nadir = true;
-            break;
-        }
-        for(size_t q=p+1; !fallback_to_nadir && q<n_obj; q++){
-            // Extreme points coincide only when the *complete* vectors match
-            fallback_to_nadir = close_vectors(ext_points[p], ext_points[q], extreme_point_tol);
-        }
-    }
-
-    if(!fallback_to_nadir){
-        std::vector<double> b(n_obj, 1.0);
-
-        // Ax = b
-        std::optional<vector_double> x = detail::gaussian_elimination(ext_points, b);
-
-        if(x.has_value()){
-            // Express as intercepts, 1/x
-            for(size_t i=0; i<n_obj; i++){
-                // A zero, negative or non-finite coefficient has no usable reciprocal
-                if(!std::isfinite((*x)[i]) || (*x)[i] <= 0.0){
-                    fallback_to_nadir = true;
-                    break;
-                }
-                intercepts[i] = 1.0/(*x)[i];
-            }
-        }else{
-            fallback_to_nadir = true;  // Singular, or numerically singular, system
-        }
-    }
-
-    if(fallback_to_nadir){
-        /*  Translation by a constant vector preserves the dominance relation, so
-         *  the nadir point of the translated objectives is exactly (worst - ideal):
-         *  the same coordinate system as the objectives these intercepts divide.
-         */
-        std::vector<double> v_nadir = nadir(translated_objs);
-        for(size_t i=0; i<n_obj && i<v_nadir.size(); i++){
-            intercepts[i] = v_nadir[i];
-        }
-    }
-
-    /*  A degenerate objective, identical across the whole population, has zero
-     *  extent. Its translated coordinate is zero everywhere, so dividing by one
-     *  keeps it at zero instead of producing an infinity or a NaN.
-     */
-    for(size_t i=0; i<n_obj; i++){
-        if(!std::isfinite(intercepts[i]) || intercepts[i] <= 0.0){
-            intercepts[i] = 1.0;
-        }
-    }
-
-    return intercepts;
-}
-
-std::vector<std::vector<double>> nsga3::normalize_objectives(const std::vector<std::vector<double>> &translated_objs,
-                                                      const std::vector<double> &intercepts) const{
-    /*  Algorithm 2, step 7 and Equation 4
-     *  Note that Objectives and therefore intercepts
-     *  are already translated by ideal point.
-     */
-
-    if(translated_objs.empty()){
-        return {};
-    }
-
-    size_t nobj = translated_objs[0].size();
-    std::vector<std::vector<double>> norm_objs(translated_objs.size(), std::vector<double>(nobj));
-
-    for(size_t i=0; i<translated_objs.size(); i++){
-        for(size_t idx=0; idx<nobj; idx++){
-            double intercept_or_eps = std::max(intercepts[idx], std::numeric_limits<double>::epsilon());
-            norm_objs[i][idx] = translated_objs[i][idx]/intercept_or_eps;
-        }
-    }
-
-    return norm_objs;
-}
 
 population nsga3::evolve(population pop) const{
     const auto &prob = pop.get_problem();
@@ -479,12 +283,16 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
         return next;
     }
 
+    /*  A null memory pointer means the corresponding quantity is recomputed from
+     *  scratch every generation instead of being retained across them.
+     */
     auto objs = R.get_f();
-    auto ideal_point = compute_ideal(objs);
-    auto translated_objectives = translate_objectives(objs, ideal_point);
-    auto ext_points = find_extreme_points(fronts, translated_objectives, ideal_point);
-    auto intercepts = find_intercepts(ext_points, translated_objectives);
-    auto norm_objs = normalize_objectives(translated_objectives, intercepts);
+    auto ideal_point = detail::nsga3_compute_ideal(objs, m_use_memory ? &m_memory.v_ideal : nullptr);
+    auto translated_objectives = detail::nsga3_translate_objectives(objs, ideal_point);
+    auto ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point,
+                                                        m_use_memory ? &m_memory.v_extreme : nullptr);
+    auto intercepts = detail::nsga3_find_intercepts(ext_points, translated_objectives);
+    auto norm_objs = detail::nsga3_normalize_objectives(translated_objectives, intercepts);
     std::vector<detail::reference_point> rps = detail::generate_uniform_reference_points(nobj, m_divisions);
     detail::associate_with_reference_points(rps, norm_objs, fronts);
 

@@ -97,8 +97,8 @@ BOOST_AUTO_TEST_CASE(nsga3_test_translate_objectives){
 
     pop = nsga3_alg.evolve(pop);
     auto p0_obj = pop.get_f();
-    auto ideal_point = nsga3_alg.compute_ideal(p0_obj);
-    BOOST_CHECK_NO_THROW((translated_objectives = nsga3_alg.translate_objectives(p0_obj, ideal_point)));
+    auto ideal_point = detail::nsga3_compute_ideal(p0_obj, nullptr);
+    BOOST_CHECK_NO_THROW((translated_objectives = detail::nsga3_translate_objectives(p0_obj, ideal_point)));
     size_t t_size = translated_objectives.size();
     BOOST_CHECK_EQUAL(t_size, p0_obj.size());
 }
@@ -157,8 +157,6 @@ BOOST_AUTO_TEST_CASE(nsga3_test_gaussian_elimination){
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_test_extreme_point_duplicates){
-    nsga3 nsga3_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, false};
-
     // Translated objectives whose nadir point, (1, 1, 1), differs from the solved intercepts
     const std::vector<std::vector<double>> translated{{1.0, 1.0, 1.0}, {2.0, 2.0, 2.0}};
 
@@ -167,14 +165,14 @@ BOOST_AUTO_TEST_CASE(nsga3_test_extreme_point_duplicates){
      *  duplicates and skips the solver; comparing complete vectors does not.
      */
     std::vector<std::vector<double>> distinct{{2.0, 0.0, 0.0}, {0.0, 4.0, 0.0}, {0.0, 0.0, 8.0}};
-    auto intercepts = nsga3_alg.find_intercepts(distinct, translated);
+    auto intercepts = detail::nsga3_find_intercepts(distinct, translated);
     BOOST_CHECK_CLOSE(intercepts[0], 2.0, 1e-8);
     BOOST_CHECK_CLOSE(intercepts[1], 4.0, 1e-8);
     BOOST_CHECK_CLOSE(intercepts[2], 8.0, 1e-8);
 
     // Two identical extreme points do fall back to the nadir point
     std::vector<std::vector<double>> duplicated{{2.0, 0.0, 0.0}, {2.0, 0.0, 0.0}, {0.0, 0.0, 8.0}};
-    intercepts = nsga3_alg.find_intercepts(duplicated, translated);
+    intercepts = detail::nsga3_find_intercepts(duplicated, translated);
     BOOST_CHECK_CLOSE(intercepts[0], 1.0, 1e-8);
     BOOST_CHECK_CLOSE(intercepts[1], 1.0, 1e-8);
     BOOST_CHECK_CLOSE(intercepts[2], 1.0, 1e-8);
@@ -182,27 +180,25 @@ BOOST_AUTO_TEST_CASE(nsga3_test_extreme_point_duplicates){
     // As do points which differ only within the numerical tolerance
     std::vector<std::vector<double>> near_duplicated{{2.0, 0.0, 0.0}, {2.0 + 1e-15, 1e-16, -1e-16},
                                                      {0.0, 0.0, 8.0}};
-    intercepts = nsga3_alg.find_intercepts(near_duplicated, translated);
+    intercepts = detail::nsga3_find_intercepts(near_duplicated, translated);
     BOOST_CHECK_CLOSE(intercepts[0], 1.0, 1e-8);
     BOOST_CHECK_CLOSE(intercepts[1], 1.0, 1e-8);
     BOOST_CHECK_CLOSE(intercepts[2], 1.0, 1e-8);
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_test_intercepts_fallback){
-    nsga3 nsga3_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, false};
-
     // Front 0 is {(1,3), (3,1)}; (4,4) is dominated, so the nadir point is (3, 3)
     const std::vector<std::vector<double>> translated{{1.0, 3.0}, {3.0, 1.0}, {4.0, 4.0}};
 
     // A negative solution component has no usable reciprocal
     std::vector<std::vector<double>> negative{{-1.0, 0.0}, {0.0, 2.0}};
-    auto intercepts = nsga3_alg.find_intercepts(negative, translated);
+    auto intercepts = detail::nsga3_find_intercepts(negative, translated);
     BOOST_CHECK_CLOSE(intercepts[0], 3.0, 1e-8);
     BOOST_CHECK_CLOSE(intercepts[1], 3.0, 1e-8);
 
     // A singular system falls back rather than aborting the evolution
     std::vector<std::vector<double>> singular{{0.0, 0.0}, {0.0, 2.0}};
-    BOOST_CHECK_NO_THROW((intercepts = nsga3_alg.find_intercepts(singular, translated)));
+    BOOST_CHECK_NO_THROW((intercepts = detail::nsga3_find_intercepts(singular, translated)));
     BOOST_CHECK_CLOSE(intercepts[0], 3.0, 1e-8);
     BOOST_CHECK_CLOSE(intercepts[1], 3.0, 1e-8);
 
@@ -212,9 +208,9 @@ BOOST_AUTO_TEST_CASE(nsga3_test_intercepts_fallback){
      */
     const std::vector<std::vector<double>> degenerate{{0.0, 1.0}, {0.0, 2.0}, {0.0, 3.0}};
     std::vector<std::vector<double>> degenerate_ext{{0.0, 1.0}, {0.0, 1.0}};
-    auto degenerate_intercepts = nsga3_alg.find_intercepts(degenerate_ext, degenerate);
+    auto degenerate_intercepts = detail::nsga3_find_intercepts(degenerate_ext, degenerate);
     BOOST_CHECK_CLOSE(degenerate_intercepts[0], 1.0, 1e-8);
-    auto norm_objs = nsga3_alg.normalize_objectives(degenerate, degenerate_intercepts);
+    auto norm_objs = detail::nsga3_normalize_objectives(degenerate, degenerate_intercepts);
     for(const auto &row: norm_objs){
         BOOST_CHECK_EQUAL(row[0], 0.0);
         for(double value: row){
@@ -224,19 +220,17 @@ BOOST_AUTO_TEST_CASE(nsga3_test_intercepts_fallback){
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_test_normalize_nonzero_ideal){
-    nsga3 nsga3_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, false};
-
     /*  Ideal point (2, 5, -1), well away from the origin. The first three points
      *  are mutually non-dominated and the fourth is dominated by all of them.
      */
     const std::vector<vector_double> objs{{2.0, 9.0, 3.0}, {6.0, 5.0, 3.0}, {6.0, 9.0, -1.0}, {6.0, 9.0, 3.0}};
 
-    auto ideal_point = nsga3_alg.compute_ideal(objs);
+    auto ideal_point = detail::nsga3_compute_ideal(objs, nullptr);
     BOOST_CHECK_CLOSE(ideal_point[0],  2.0, 1e-8);
     BOOST_CHECK_CLOSE(ideal_point[1],  5.0, 1e-8);
     BOOST_CHECK_CLOSE(ideal_point[2], -1.0, 1e-8);
 
-    auto translated = nsga3_alg.translate_objectives(objs, ideal_point);
+    auto translated = detail::nsga3_translate_objectives(objs, ideal_point);
     for(size_t obj=0; obj<ideal_point.size(); obj++){
         double col_min = std::numeric_limits<double>::max();
         for(const auto &row: translated){
@@ -246,8 +240,8 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_nonzero_ideal){
     }
 
     const std::vector<std::vector<pop_size_t>> fronts{{0u, 1u, 2u}};
-    auto ext_points = nsga3_alg.find_extreme_points(fronts, translated, ideal_point);
-    auto intercepts = nsga3_alg.find_intercepts(ext_points, translated);
+    auto ext_points = detail::nsga3_find_extreme_points(fronts, translated, ideal_point, nullptr);
+    auto intercepts = detail::nsga3_find_intercepts(ext_points, translated);
 
     /*  The extreme points coincide here, so the nadir fallback is taken. The
      *  intercepts must be the nadir of the *translated* objectives, (4, 4, 4),
@@ -258,7 +252,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_nonzero_ideal){
     BOOST_CHECK_CLOSE(intercepts[2], 4.0, 1e-8);
 
     // The individual sitting on the intercept vector normalizes to (1, 1, 1)
-    auto norm_objs = nsga3_alg.normalize_objectives(translated, intercepts);
+    auto norm_objs = detail::nsga3_normalize_objectives(translated, intercepts);
     BOOST_CHECK_CLOSE(norm_objs[3][0], 1.0, 1e-8);
     BOOST_CHECK_CLOSE(norm_objs[3][1], 1.0, 1e-8);
     BOOST_CHECK_CLOSE(norm_objs[3][2], 1.0, 1e-8);
@@ -268,13 +262,13 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_nonzero_ideal){
      *  give x = (1/9, 1/5, 1) and therefore intercepts (9, 5, 1).
      */
     const std::vector<vector_double> spread_objs{{11.0, 5.0, -1.0}, {2.0, 10.0, -1.0}, {2.0, 5.0, 0.0}};
-    auto spread_ideal = nsga3_alg.compute_ideal(spread_objs);
+    auto spread_ideal = detail::nsga3_compute_ideal(spread_objs, nullptr);
     BOOST_CHECK_CLOSE(spread_ideal[0],  2.0, 1e-8);
     BOOST_CHECK_CLOSE(spread_ideal[1],  5.0, 1e-8);
     BOOST_CHECK_CLOSE(spread_ideal[2], -1.0, 1e-8);
-    auto spread_translated = nsga3_alg.translate_objectives(spread_objs, spread_ideal);
-    auto spread_ext = nsga3_alg.find_extreme_points(fronts, spread_translated, spread_ideal);
-    auto spread_intercepts = nsga3_alg.find_intercepts(spread_ext, spread_translated);
+    auto spread_translated = detail::nsga3_translate_objectives(spread_objs, spread_ideal);
+    auto spread_ext = detail::nsga3_find_extreme_points(fronts, spread_translated, spread_ideal, nullptr);
+    auto spread_intercepts = detail::nsga3_find_intercepts(spread_ext, spread_translated);
     BOOST_CHECK_CLOSE(spread_intercepts[0], 9.0, 1e-8);
     BOOST_CHECK_CLOSE(spread_intercepts[1], 5.0, 1e-8);
     BOOST_CHECK_CLOSE(spread_intercepts[2], 1.0, 1e-8);
@@ -288,27 +282,31 @@ BOOST_AUTO_TEST_CASE(nsga3_test_memory_ideal_shift){
     // Generation 2: the ideal point improves to (8, 9, 10)
     const std::vector<vector_double> objs2{{8.0, 30.0, 30.0}, {30.0, 9.0, 30.0}, {30.0, 30.0, 10.0}};
 
-    nsga3 mem_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, true};
+    /*  With memory enabled the running ideal point and the retained extreme
+     *  points persist across generations; nsga3 owns these two buffers.
+     */
+    std::vector<double> running_ideal;
+    std::vector<std::vector<double>> retained_extremes;
 
-    auto ideal1 = mem_alg.compute_ideal(objs1);
+    auto ideal1 = detail::nsga3_compute_ideal(objs1, &running_ideal);
     BOOST_CHECK_CLOSE(ideal1[0], 10.0, 1e-8);
     BOOST_CHECK_CLOSE(ideal1[1], 10.0, 1e-8);
     BOOST_CHECK_CLOSE(ideal1[2], 10.0, 1e-8);
-    auto translated1 = mem_alg.translate_objectives(objs1, ideal1);
-    auto ext1 = mem_alg.find_extreme_points(fronts, translated1, ideal1);
+    auto translated1 = detail::nsga3_translate_objectives(objs1, ideal1);
+    auto ext1 = detail::nsga3_find_extreme_points(fronts, translated1, ideal1, &retained_extremes);
     // Translated extremes of generation 1: (9,0,0), (0,5,0), (0,0,1)
     BOOST_CHECK_CLOSE(ext1[0][0], 9.0, 1e-8);
     BOOST_CHECK_CLOSE(ext1[1][1], 5.0, 1e-8);
     BOOST_CHECK_CLOSE(ext1[2][2], 1.0, 1e-8);
 
     // The running ideal point is the elementwise minimum over both generations
-    auto ideal2 = mem_alg.compute_ideal(objs2);
+    auto ideal2 = detail::nsga3_compute_ideal(objs2, &running_ideal);
     BOOST_CHECK_CLOSE(ideal2[0],  8.0, 1e-8);
     BOOST_CHECK_CLOSE(ideal2[1],  9.0, 1e-8);
     BOOST_CHECK_CLOSE(ideal2[2], 10.0, 1e-8);
 
-    auto translated2 = mem_alg.translate_objectives(objs2, ideal2);
-    auto ext2 = mem_alg.find_extreme_points(fronts, translated2, ideal2);
+    auto translated2 = detail::nsga3_translate_objectives(objs2, ideal2);
+    auto ext2 = detail::nsga3_find_extreme_points(fronts, translated2, ideal2, &retained_extremes);
 
     /*  Generation 2 has no candidate better than the retained extreme points, so
      *  those are returned, re-expressed in the *current* translated coordinates:
@@ -325,7 +323,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_memory_ideal_shift){
 
     // A worse generation does not degrade the retained ideal point
     const std::vector<vector_double> objs3{{20.0, 20.0, 20.0}, {21.0, 21.0, 21.0}, {22.0, 22.0, 22.0}};
-    auto ideal3 = mem_alg.compute_ideal(objs3);
+    auto ideal3 = detail::nsga3_compute_ideal(objs3, &running_ideal);
     BOOST_CHECK_CLOSE(ideal3[0],  8.0, 1e-8);
     BOOST_CHECK_CLOSE(ideal3[1],  9.0, 1e-8);
     BOOST_CHECK_CLOSE(ideal3[2], 10.0, 1e-8);
@@ -333,10 +331,9 @@ BOOST_AUTO_TEST_CASE(nsga3_test_memory_ideal_shift){
     /*  Without memory the same generation-2 input depends only on the current
      *  objectives: the extreme point for the first objective is (22, 0, 20).
      */
-    nsga3 plain_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, false};
-    auto plain_ideal = plain_alg.compute_ideal(objs2);
-    auto plain_translated = plain_alg.translate_objectives(objs2, plain_ideal);
-    auto plain_ext = plain_alg.find_extreme_points(fronts, plain_translated, plain_ideal);
+    auto plain_ideal = detail::nsga3_compute_ideal(objs2, nullptr);
+    auto plain_translated = detail::nsga3_translate_objectives(objs2, plain_ideal);
+    auto plain_ext = detail::nsga3_find_extreme_points(fronts, plain_translated, plain_ideal, nullptr);
     BOOST_CHECK_CLOSE(plain_ext[0][0], 22.0, 1e-8);
     BOOST_CHECK_SMALL(plain_ext[0][1], 1e-12);
     BOOST_CHECK_CLOSE(plain_ext[0][2], 20.0, 1e-8);
@@ -350,11 +347,11 @@ BOOST_AUTO_TEST_CASE(nsga3_test_find_extreme_points){
 
     pop = nsga3_alg.evolve(pop);
     auto objs = pop.get_f();
-    auto ideal_point = nsga3_alg.compute_ideal(objs);
-    auto translated_objectives = nsga3_alg.translate_objectives(objs, ideal_point);
+    auto ideal_point = detail::nsga3_compute_ideal(objs, nullptr);
+    auto translated_objectives = detail::nsga3_translate_objectives(objs, ideal_point);
     auto fnds_res = fast_non_dominated_sorting(objs);
     auto fronts = std::get<0>(fnds_res);
-    BOOST_CHECK_NO_THROW((ext_points = nsga3_alg.find_extreme_points(fronts, translated_objectives, ideal_point)));
+    BOOST_CHECK_NO_THROW((ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point, nullptr)));
     size_t point_count = ext_points.size();
     BOOST_CHECK_EQUAL(point_count, udp.get_nobj());
 }
@@ -367,13 +364,13 @@ BOOST_AUTO_TEST_CASE(nsga3_test_find_intercepts){
 
     pop = nsga3_alg.evolve(pop);
     auto objs = pop.get_f();
-    auto ideal_point = nsga3_alg.compute_ideal(objs);
-    auto translated_objectives = nsga3_alg.translate_objectives(objs, ideal_point);
+    auto ideal_point = detail::nsga3_compute_ideal(objs, nullptr);
+    auto translated_objectives = detail::nsga3_translate_objectives(objs, ideal_point);
     auto fnds_res = fast_non_dominated_sorting(objs);
     auto fronts = std::get<0>(fnds_res);
-    auto ext_points = nsga3_alg.find_extreme_points(fronts, translated_objectives, ideal_point);
+    auto ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point, nullptr);
 
-    BOOST_CHECK_NO_THROW((intercepts = nsga3_alg.find_intercepts(ext_points, translated_objectives)));
+    BOOST_CHECK_NO_THROW((intercepts = detail::nsga3_find_intercepts(ext_points, translated_objectives)));
     BOOST_CHECK_EQUAL(intercepts.size(), udp.get_nobj());
     // Intercepts are always usable divisors
     for(double intercept: intercepts){
@@ -390,13 +387,13 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_objectives){
 
     pop = nsga3_alg.evolve(pop);
     auto objs = pop.get_f();
-    auto ideal_point = nsga3_alg.compute_ideal(objs);
-    auto translated_objectives = nsga3_alg.translate_objectives(objs, ideal_point);
+    auto ideal_point = detail::nsga3_compute_ideal(objs, nullptr);
+    auto translated_objectives = detail::nsga3_translate_objectives(objs, ideal_point);
     auto fnds_res = fast_non_dominated_sorting(objs);
     auto fronts = std::get<0>(fnds_res);
-    auto ext_points = nsga3_alg.find_extreme_points(fronts, translated_objectives, ideal_point);
-    auto intercepts = nsga3_alg.find_intercepts(ext_points, translated_objectives);
-    BOOST_CHECK_NO_THROW((norm_objs = nsga3_alg.normalize_objectives(translated_objectives, intercepts)));
+    auto ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point, nullptr);
+    auto intercepts = detail::nsga3_find_intercepts(ext_points, translated_objectives);
+    BOOST_CHECK_NO_THROW((norm_objs = detail::nsga3_normalize_objectives(translated_objectives, intercepts)));
     size_t obj_count = norm_objs.size();
     BOOST_CHECK_EQUAL(obj_count, translated_objectives.size());
 }

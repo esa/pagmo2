@@ -1,3 +1,38 @@
+/* Copyright 2017-2021 PaGMO development team
+
+This file is part of the PaGMO library.
+
+The PaGMO library is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+  * the GNU Lesser General Public License as published by the Free
+    Software Foundation; either version 3 of the License, or (at your
+    option) any later version.
+
+or
+
+  * the GNU General Public License as published by the Free Software
+    Foundation; either version 3 of the License, or (at your option) any
+    later version.
+
+or both in parallel, as here.
+
+The PaGMO library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received copies of the GNU General Public License and the
+GNU Lesser General Public License along with the PaGMO library.  If not,
+see https://www.gnu.org/licenses/. */
+
+/*
+ *  Implements the NSGA-III multi-objective evolutionary algorithm
+ *  as described in http://dx.doi.org/10.1109/TEVC.2013.2281535
+ *
+ *  Paul Slavin <paul.slavin@manchester.ac.uk>
+ */
+
 #ifndef PAGMO_ALGORITHMS_NSGA3_HPP
 #define PAGMO_ALGORITHMS_NSGA3_HPP
 
@@ -5,28 +40,17 @@
 #include <tuple>
 #include <vector>
 
-#include <pagmo/rng.hpp>  // random_device, random_engine_type
 #include <pagmo/detail/visibility.hpp>  // PAGMO_DLL_PUBLIC
 #include <pagmo/population.hpp>  // population
+#include <pagmo/rng.hpp>  // random_device, random_engine_type
 #include <pagmo/s11n.hpp>  // detail::archive
+#include <pagmo/types.hpp>  // vector_double
 
 
 namespace pagmo{
 
 class PAGMO_DLL_PUBLIC nsga3{
     public:
-        /*  State retained across generations when memory is enabled.
-         *  Both members are expressed in the *original* objective coordinates,
-         *  so that they remain meaningful as the ideal point moves.
-         */
-        struct NSGA3Memory{
-            std::vector<std::vector<double>> v_extreme;
-            std::vector<double> v_ideal;
-            template <typename Archive>
-            void serialize(Archive &ar, unsigned){
-                detail::archive(ar, v_extreme, v_ideal);
-            }
-        };
         // Log line format: (gen, fevals, ideal_point)
         typedef std::tuple<unsigned, unsigned long long, vector_double> log_line_type;
         typedef std::vector<log_line_type> log_type;
@@ -37,28 +61,27 @@ class PAGMO_DLL_PUBLIC nsga3{
         std::string get_name() const{ return "NSGA-III:"; }
         std::string get_extra_info() const;
         population evolve(population) const;
-        std::vector<size_t> selection(population &, size_t) const;
-        /*  The normalisation helpers below are expressed in terms of objective vectors
-         *  and an explicit ideal point rather than a population, so that the coordinate
-         *  system in use is never implicit. They are public to allow direct testing.
-         */
-        std::vector<double> compute_ideal(const std::vector<vector_double> &) const;
-        std::vector<std::vector<double>> translate_objectives(const std::vector<vector_double> &,
-                                                              const std::vector<double> &) const;
-        std::vector<std::vector<double>> find_extreme_points(const std::vector<std::vector<pop_size_t>> &,
-                                                             const std::vector<std::vector<double>> &,
-                                                             const std::vector<double> &) const;
-        std::vector<double> find_intercepts(const std::vector<std::vector<double>> &,
-                                            const std::vector<std::vector<double>> &) const;
-        std::vector<std::vector<double>> normalize_objectives(const std::vector<std::vector<double>> &,
-                                                              const std::vector<double> &) const;
         const log_type &get_log() const { return m_log; }
         void set_verbosity(unsigned level) { m_verbosity = level; }
         unsigned get_verbosity() const { return m_verbosity; }
         void set_seed(unsigned seed) { m_reng.seed(seed); m_seed = seed; }
         unsigned get_seed() const { return m_seed; }
-        bool has_memory() const {return m_use_memory; }
     private:
+        /*  State retained across generations when memory is enabled.
+         *  Both members are expressed in the *original* objective coordinates,
+         *  so that they remain meaningful as the ideal point moves.
+         */
+        struct nsga3_memory{
+            std::vector<std::vector<double>> v_extreme;
+            std::vector<double> v_ideal;
+            template <typename Archive>
+            void serialize(Archive &ar, unsigned){
+                detail::archive(ar, v_extreme, v_ideal);
+            }
+        };
+        // Survival selection over the combined parent and offspring populations
+        std::vector<size_t> selection(population &, size_t) const;
+
         unsigned m_gen;
         double m_cr;        // crossover
         double m_eta_c;     // eta crossover
@@ -67,7 +90,7 @@ class PAGMO_DLL_PUBLIC nsga3{
         size_t m_divisions; // Reference Point hyperplane subdivisions
         unsigned m_seed;    // Seed for PRNG initialisation
         bool m_use_memory;  // Preserve extremes and ideal across generations
-        mutable NSGA3Memory m_memory{};
+        mutable nsga3_memory m_memory{};
         mutable detail::random_engine_type m_reng;  // Defaults to std::mt19937
         mutable log_type m_log;
         unsigned m_verbosity {0};
