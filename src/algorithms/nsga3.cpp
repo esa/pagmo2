@@ -8,6 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <numeric>
 #include <optional>
 #include <string>
 #include <tuple>
@@ -337,6 +338,7 @@ population nsga3::evolve(population pop) const{
     m_log.clear();
 
     std::vector<vector_double::size_type> shuffle1(NP), shuffle2(NP);
+    vector_double::size_type parent1_idx, parent2_idx;
     std::pair<vector_double, vector_double> children;
     size_t count{1u};
 
@@ -386,12 +388,38 @@ population nsga3::evolve(population pop) const{
             m_log.emplace_back(m_gen, prob.get_fevals() - fevals0, p_ideal);
         }
 
+        /*  Mating selection. Deb & Jain leave the parents of NSGA-III chosen at
+         *  random, which Seada & Deb later identify as a weakness. We follow the
+         *  pagmo convention established by nsga2 instead and hold a binary
+         *  tournament on the non-domination rank and the crowding distance.
+         */
+        auto fnds_res = fast_non_dominated_sorting(pop.get_f());
+        auto ndf = std::get<0>(fnds_res);  // non dominated fronts [[0,3,2],[1,5,6],[4],...]
+        auto ndr = std::get<3>(fnds_res);  // non domination rank [0,1,0,0,2,1,1, ... ]
+        vector_double pop_cd(NP);          // crowding distances of the whole population
+        for (const auto &front_idxs : ndf) {
+            if (front_idxs.size() < 3u) {  // crowding distance is undefined for one or two points
+                for (auto idx : front_idxs) {
+                    pop_cd[idx] = std::numeric_limits<double>::infinity();
+                }
+            } else {
+                std::vector<vector_double> front;
+                for (auto idx : front_idxs) {
+                    front.push_back(pop.get_f()[idx]);
+                }
+                auto cd = crowding_distance(front);
+                for (decltype(cd.size()) i = 0u; i < cd.size(); ++i) {
+                    pop_cd[front_idxs[i]] = cd[i];
+                }
+            }
+        }
+
         // Offspring generation
         for (decltype(NP) i = 0; i < NP; i += 4) {
             // We create two offsprings using the shuffled list 1
-            decltype(shuffle1) parents1;
-            std::sample(shuffle1.begin(), shuffle1.end(), std::back_inserter(parents1), 2, std::mt19937{m_reng()});
-            children = detail::sbx_crossover_impl(pop.get_x()[parents1[0]], pop.get_x()[parents1[1]], bounds, dim_i,
+            parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_reng);
+            parent2_idx = detail::mo_tournament_selection_impl(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_reng);
+            children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                   m_cr, m_eta_c, m_reng);
             detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_mut, m_eta_mut, m_reng);
             detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_mut, m_eta_mut, m_reng);
@@ -402,9 +430,9 @@ population nsga3::evolve(population pop) const{
             popnew.push_back(children.second, f2);
 
             // Repeat with the shuffled list 2
-            decltype(shuffle2) parents2;
-            std::sample(shuffle2.begin(), shuffle2.end(), std::back_inserter(parents2), 2, std::mt19937{m_reng()});
-            children = detail::sbx_crossover_impl(pop.get_x()[parents2[0]], pop.get_x()[parents2[1]], bounds, dim_i,
+            parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_reng);
+            parent2_idx = detail::mo_tournament_selection_impl(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_reng);
+            children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                   m_cr, m_eta_c, m_reng);
             detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_mut, m_eta_mut, m_reng);
             detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_mut, m_eta_mut, m_reng);
