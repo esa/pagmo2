@@ -179,15 +179,19 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<std::vect
         }
 
         // Ax = b
-        std::vector<double> x = gaussian_elimination(A, b);
+        std::optional<vector_double> x = gaussian_elimination(A, b);
 
-        // Express as intercepts, 1/x
-        for(size_t i=0; i<intercepts.size(); i++){
-            intercepts[i] = 1.0/x[i];
-            if(x[i] < 0.0){
-                fallback_to_nadir = true;
-                break;
+        if(x.has_value()){
+            // Express as intercepts, 1/x
+            for(size_t i=0; i<intercepts.size(); i++){
+                intercepts[i] = 1.0/(*x)[i];
+                if((*x)[i] < 0.0){
+                    fallback_to_nadir = true;
+                    break;
+                }
             }
+        }else{
+            fallback_to_nadir = true;  // Singular, or numerically singular, system
         }
     }
 

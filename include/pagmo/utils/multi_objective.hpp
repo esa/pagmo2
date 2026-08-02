@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <cmath>
 #include <numeric>
+#include <optional>
 #include <random>
 #include <sstream>
 #include <stdexcept>
@@ -216,8 +217,9 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
 PAGMO_DLL_PUBLIC vector_double decompose_objectives(const vector_double &, const vector_double &, const vector_double &,
                                                     const std::string &);
 
-// Gaussian Elimination
-PAGMO_DLL_PUBLIC vector_double gaussian_elimination(std::vector<std::vector<double>>, const vector_double &);
+// Gaussian Elimination with partial pivoting
+PAGMO_DLL_PUBLIC std::optional<vector_double> gaussian_elimination(std::vector<std::vector<double>>,
+                                                                   const vector_double &);
 
 // Achievement Scalarization Function
 PAGMO_DLL_PUBLIC double achievement(const vector_double &, const vector_double &);
