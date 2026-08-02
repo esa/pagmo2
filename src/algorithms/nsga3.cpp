@@ -138,24 +138,34 @@ std::vector<std::vector<double>> nsga3::find_extreme_points(const std::vector<st
     std::vector<std::vector<double>> points;
     size_t nobj = ideal_point.size();
 
+    if(has_memory() && m_memory.v_extreme.size() != nobj){
+        m_memory.v_extreme.assign(nobj, std::vector<double>{});
+    }
+
     for(size_t i=0; i<nobj; i++){
         std::vector<double> weights(nobj, 1e-6);
         weights[i] = 1.0;
         double min_asf = std::numeric_limits<double>::max();
         std::vector<double> min_obj{};
 
+        /*  Extreme points retained from previous generations are stored in the
+         *  original objective coordinates: each must be translated by the
+         *  *current* ideal point before it can be compared, on the same footing,
+         *  with the candidates of this generation.
+         */
         if(has_memory()){
-            if(m_memory.v_extreme.size() == 0){
-                for(size_t idx=0; idx<nobj ; idx++){
-                    m_memory.v_extreme.push_back(std::vector<double>(nobj, {}));
+            for(size_t p=0; p<m_memory.v_extreme.size(); p++){
+                if(m_memory.v_extreme[p].size() != nobj){
+                    continue;  // Nothing retained for this objective yet
                 }
-            }else{
-                for(size_t p=0; p<m_memory.v_extreme.size(); p++){
-                    double asf = achievement(m_memory.v_extreme[p], weights);
-                    if(asf < min_asf){
-                        min_asf = asf;
-                        min_obj = m_memory.v_extreme[p];
-                    }
+                std::vector<double> retained(nobj);
+                for(size_t obj=0; obj<nobj; obj++){
+                    retained[obj] = m_memory.v_extreme[p][obj] - ideal_point[obj];
+                }
+                double asf = achievement(retained, weights);
+                if(asf < min_asf){
+                    min_asf = asf;
+                    min_obj = retained;
                 }
             }
         }
@@ -174,7 +184,12 @@ std::vector<std::vector<double>> nsga3::find_extreme_points(const std::vector<st
         }
         points.push_back(min_obj);
         if(has_memory()){
-            m_memory.v_extreme[i] = std::vector<double>(min_obj);
+            // Retain in the original coordinates, so a moving ideal point does not invalidate it
+            std::vector<double> original(nobj);
+            for(size_t obj=0; obj<nobj; obj++){
+                original[obj] = min_obj[obj] + ideal_point[obj];
+            }
+            m_memory.v_extreme[i] = original;
         }
     }
 

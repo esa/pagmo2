@@ -16,6 +16,8 @@ namespace pagmo{
 class PAGMO_DLL_PUBLIC nsga3{
     public:
         /*  State retained across generations when memory is enabled.
+         *  Both members are expressed in the *original* objective coordinates,
+         *  so that they remain meaningful as the ideal point moves.
          */
         struct NSGA3Memory{
             std::vector<std::vector<double>> v_extreme;

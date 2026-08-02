@@ -279,6 +279,68 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_nonzero_ideal){
     BOOST_CHECK_CLOSE(spread_intercepts[2], 1.0, 1e-8);
 }
 
+BOOST_AUTO_TEST_CASE(nsga3_test_memory_ideal_shift){
+    const std::vector<std::vector<pop_size_t>> fronts{{0u, 1u, 2u}};
+
+    // Generation 1: the ideal point is (10, 10, 10)
+    const std::vector<vector_double> objs1{{19.0, 10.0, 10.0}, {10.0, 15.0, 10.0}, {10.0, 10.0, 11.0}};
+    // Generation 2: the ideal point improves to (8, 9, 10)
+    const std::vector<vector_double> objs2{{8.0, 30.0, 30.0}, {30.0, 9.0, 30.0}, {30.0, 30.0, 10.0}};
+
+    nsga3 mem_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, true};
+
+    auto ideal1 = mem_alg.compute_ideal(objs1);
+    BOOST_CHECK_CLOSE(ideal1[0], 10.0, 1e-8);
+    BOOST_CHECK_CLOSE(ideal1[1], 10.0, 1e-8);
+    BOOST_CHECK_CLOSE(ideal1[2], 10.0, 1e-8);
+    auto translated1 = mem_alg.translate_objectives(objs1, ideal1);
+    auto ext1 = mem_alg.find_extreme_points(fronts, translated1, ideal1);
+    // Translated extremes of generation 1: (9,0,0), (0,5,0), (0,0,1)
+    BOOST_CHECK_CLOSE(ext1[0][0], 9.0, 1e-8);
+    BOOST_CHECK_CLOSE(ext1[1][1], 5.0, 1e-8);
+    BOOST_CHECK_CLOSE(ext1[2][2], 1.0, 1e-8);
+
+    // The running ideal point is the elementwise minimum over both generations
+    auto ideal2 = mem_alg.compute_ideal(objs2);
+    BOOST_CHECK_CLOSE(ideal2[0],  8.0, 1e-8);
+    BOOST_CHECK_CLOSE(ideal2[1],  9.0, 1e-8);
+    BOOST_CHECK_CLOSE(ideal2[2], 10.0, 1e-8);
+
+    auto translated2 = mem_alg.translate_objectives(objs2, ideal2);
+    auto ext2 = mem_alg.find_extreme_points(fronts, translated2, ideal2);
+
+    /*  Generation 2 has no candidate better than the retained extreme points, so
+     *  those are returned, re-expressed in the *current* translated coordinates:
+     *  (19,10,10) - (8,9,10) = (11,1,0), and so on. Had the extreme points been
+     *  retained in the translated coordinates of generation 1 they would still
+     *  read (9,0,0), (0,5,0), (0,0,1) here.
+     */
+    const std::vector<std::vector<double>> expected_ext2{{11.0, 1.0, 0.0}, {2.0, 6.0, 0.0}, {2.0, 1.0, 1.0}};
+    for(size_t i=0; i<expected_ext2.size(); i++){
+        for(size_t j=0; j<expected_ext2[i].size(); j++){
+            BOOST_CHECK_SMALL(ext2[i][j] - expected_ext2[i][j], 1e-9);
+        }
+    }
+
+    // A worse generation does not degrade the retained ideal point
+    const std::vector<vector_double> objs3{{20.0, 20.0, 20.0}, {21.0, 21.0, 21.0}, {22.0, 22.0, 22.0}};
+    auto ideal3 = mem_alg.compute_ideal(objs3);
+    BOOST_CHECK_CLOSE(ideal3[0],  8.0, 1e-8);
+    BOOST_CHECK_CLOSE(ideal3[1],  9.0, 1e-8);
+    BOOST_CHECK_CLOSE(ideal3[2], 10.0, 1e-8);
+
+    /*  Without memory the same generation-2 input depends only on the current
+     *  objectives: the extreme point for the first objective is (22, 0, 20).
+     */
+    nsga3 plain_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, false};
+    auto plain_ideal = plain_alg.compute_ideal(objs2);
+    auto plain_translated = plain_alg.translate_objectives(objs2, plain_ideal);
+    auto plain_ext = plain_alg.find_extreme_points(fronts, plain_translated, plain_ideal);
+    BOOST_CHECK_CLOSE(plain_ext[0][0], 22.0, 1e-8);
+    BOOST_CHECK_SMALL(plain_ext[0][1], 1e-12);
+    BOOST_CHECK_CLOSE(plain_ext[0][2], 20.0, 1e-8);
+}
+
 BOOST_AUTO_TEST_CASE(nsga3_test_find_extreme_points){
     dtlz udp{1u, 10u, 3u};
     population pop{udp, 52u, 23u};
