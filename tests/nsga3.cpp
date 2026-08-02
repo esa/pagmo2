@@ -451,14 +451,42 @@ BOOST_AUTO_TEST_CASE(nsga3_test_translate_objectives){
     dtlz udp{1u, 10u, 3u};
     population pop{udp, 52u, 23u};
     nsga3 nsga3_alg{10u, 1.00, 30., 0.10, 20., 5u, 32u, false};
-    std::vector<std::vector<double>> translated_objectives{};
 
     pop = nsga3_alg.evolve(pop);
     auto p0_obj = pop.get_f();
     auto ideal_point = detail::nsga3_compute_ideal(p0_obj, nullptr);
-    BOOST_CHECK_NO_THROW((translated_objectives = detail::nsga3_translate_objectives(p0_obj, ideal_point)));
-    size_t t_size = translated_objectives.size();
-    BOOST_CHECK_EQUAL(t_size, p0_obj.size());
+    auto translated_objectives = detail::nsga3_translate_objectives(p0_obj, ideal_point);
+
+    BOOST_REQUIRE_EQUAL(translated_objectives.size(), p0_obj.size());
+    BOOST_REQUIRE_EQUAL(ideal_point.size(), udp.get_nobj());
+
+    // The ideal point is the componentwise minimum of the objectives
+    for(size_t obj=0; obj<ideal_point.size(); obj++){
+        double column_min = std::numeric_limits<double>::max();
+        for(const auto &f: p0_obj){
+            column_min = std::min(column_min, f[obj]);
+        }
+        BOOST_CHECK_EQUAL(ideal_point[obj], column_min);
+    }
+
+    // Translation is an exact componentwise shift by that point
+    for(size_t i=0; i<p0_obj.size(); i++){
+        BOOST_REQUIRE_EQUAL(translated_objectives[i].size(), ideal_point.size());
+        for(size_t obj=0; obj<ideal_point.size(); obj++){
+            BOOST_CHECK_EQUAL(translated_objectives[i][obj], p0_obj[i][obj] - ideal_point[obj]);
+            // Which leaves the whole population in the non-negative orthant
+            BOOST_CHECK(translated_objectives[i][obj] >= 0.0);
+        }
+    }
+
+    // and puts the origin at the ideal point: every objective attains zero
+    for(size_t obj=0; obj<ideal_point.size(); obj++){
+        double column_min = std::numeric_limits<double>::max();
+        for(const auto &row: translated_objectives){
+            column_min = std::min(column_min, row[obj]);
+        }
+        BOOST_CHECK_SMALL(column_min, 1e-12);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_test_gaussian_elimination){
@@ -701,17 +729,49 @@ BOOST_AUTO_TEST_CASE(nsga3_test_find_extreme_points){
     dtlz udp{1u, 10u, 3u};
     population pop{udp, 52u, 23u};
     nsga3 nsga3_alg{10u, 1.00, 30., 0.10, 20., 5u, 32u, false};
-    std::vector<std::vector<double>> ext_points{};
 
     pop = nsga3_alg.evolve(pop);
     auto objs = pop.get_f();
+    const size_t nobj = udp.get_nobj();
     auto ideal_point = detail::nsga3_compute_ideal(objs, nullptr);
     auto translated_objectives = detail::nsga3_translate_objectives(objs, ideal_point);
     auto fnds_res = fast_non_dominated_sorting(objs);
     auto fronts = std::get<0>(fnds_res);
-    BOOST_CHECK_NO_THROW((ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point, nullptr)));
-    size_t point_count = ext_points.size();
-    BOOST_CHECK_EQUAL(point_count, udp.get_nobj());
+    auto ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point, nullptr);
+
+    BOOST_REQUIRE_EQUAL(ext_points.size(), nobj);
+
+    for(size_t axis=0; axis<nobj; axis++){
+        BOOST_REQUIRE_EQUAL(ext_points[axis].size(), nobj);
+
+        /*  Recompute the achievement scalarization independently: the returned
+         *  extreme point must be the individual of the first front that minimises
+         *  it for this axis, which is the whole contract of the function.
+         */
+        std::vector<double> weights(nobj, 1e-6);
+        weights[axis] = 1.0;
+        double best_asf = std::numeric_limits<double>::max();
+        for(auto idx: fronts[0]){
+            best_asf = std::min(best_asf, detail::achievement(translated_objectives[idx], weights));
+        }
+        BOOST_CHECK_CLOSE(detail::achievement(ext_points[axis], weights), best_asf, 1e-8);
+
+        // and it must be one of those individuals, not a synthesised point
+        bool found = false;
+        for(auto idx: fronts[0]){
+            if(translated_objectives[idx] == ext_points[axis]){
+                found = true;
+                break;
+            }
+        }
+        BOOST_CHECK(found);
+
+        // Extremes come from the translated population, so they are non-negative
+        for(double value: ext_points[axis]){
+            BOOST_CHECK(std::isfinite(value));
+            BOOST_CHECK(value >= 0.0);
+        }
+    }
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_test_find_intercepts){
@@ -728,12 +788,43 @@ BOOST_AUTO_TEST_CASE(nsga3_test_find_intercepts){
     auto fronts = std::get<0>(fnds_res);
     auto ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point, nullptr);
 
-    BOOST_CHECK_NO_THROW((intercepts = detail::nsga3_find_intercepts(ext_points, translated_objectives)));
-    BOOST_CHECK_EQUAL(intercepts.size(), udp.get_nobj());
+    intercepts = detail::nsga3_find_intercepts(ext_points, translated_objectives);
+    BOOST_REQUIRE_EQUAL(intercepts.size(), udp.get_nobj());
     // Intercepts are always usable divisors
     for(double intercept: intercepts){
         BOOST_CHECK(std::isfinite(intercept));
         BOOST_CHECK(intercept > 0.0);
+    }
+    /*  Each extreme point, expressed in units of the intercepts, stays finite and
+     *  positive. The stronger identity below cannot be asserted here because the
+     *  nadir fallback legitimately breaks it whenever the extreme points coincide.
+     */
+    for(const auto &ext: ext_points){
+        double plane = 0.0;
+        for(size_t j=0; j<intercepts.size(); j++){
+            plane += ext[j]/intercepts[j];
+        }
+        BOOST_CHECK(std::isfinite(plane));
+        BOOST_CHECK(plane > 0.0);
+    }
+
+    /*  With well separated extreme points the solver path is taken, and the
+     *  intercepts are by construction the axis crossings of the hyperplane through
+     *  them: every extreme point then satisfies sum_j ext[j]/intercept[j] == 1.
+     */
+    const std::vector<std::vector<double>> spread_translated{{9.0, 0.0, 0.0}, {0.0, 5.0, 0.0}, {0.0, 0.0, 1.0},
+                                                             {3.0, 2.0, 0.5}};
+    const std::vector<std::vector<double>> spread_ext{{9.0, 0.0, 0.0}, {0.0, 5.0, 0.0}, {0.0, 0.0, 1.0}};
+    auto spread_intercepts = detail::nsga3_find_intercepts(spread_ext, spread_translated);
+    BOOST_CHECK_CLOSE(spread_intercepts[0], 9.0, 1e-8);
+    BOOST_CHECK_CLOSE(spread_intercepts[1], 5.0, 1e-8);
+    BOOST_CHECK_CLOSE(spread_intercepts[2], 1.0, 1e-8);
+    for(const auto &ext: spread_ext){
+        double plane = 0.0;
+        for(size_t j=0; j<spread_intercepts.size(); j++){
+            plane += ext[j]/spread_intercepts[j];
+        }
+        BOOST_CHECK_CLOSE(plane, 1.0, 1e-8);
     }
 }
 
@@ -751,9 +842,27 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_objectives){
     auto fronts = std::get<0>(fnds_res);
     auto ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point, nullptr);
     auto intercepts = detail::nsga3_find_intercepts(ext_points, translated_objectives);
-    BOOST_CHECK_NO_THROW((norm_objs = detail::nsga3_normalize_objectives(translated_objectives, intercepts)));
-    size_t obj_count = norm_objs.size();
-    BOOST_CHECK_EQUAL(obj_count, translated_objectives.size());
+    norm_objs = detail::nsga3_normalize_objectives(translated_objectives, intercepts);
+
+    BOOST_REQUIRE_EQUAL(norm_objs.size(), translated_objectives.size());
+
+    // Normalization divides each objective by its own intercept, and nothing else
+    for(size_t i=0; i<translated_objectives.size(); i++){
+        BOOST_REQUIRE_EQUAL(norm_objs[i].size(), intercepts.size());
+        for(size_t j=0; j<intercepts.size(); j++){
+            BOOST_CHECK_EQUAL(norm_objs[i][j], translated_objectives[i][j]/intercepts[j]);
+            BOOST_CHECK(std::isfinite(norm_objs[i][j]));
+            // The translated objectives are non-negative and the intercepts positive
+            BOOST_CHECK(norm_objs[i][j] >= 0.0);
+        }
+    }
+
+    // An individual sitting on the intercept vector lands on the unit hyperplane
+    auto on_plane = detail::nsga3_normalize_objectives({intercepts}, intercepts);
+    BOOST_REQUIRE_EQUAL(on_plane.size(), 1u);
+    for(double value: on_plane[0]){
+        BOOST_CHECK_CLOSE(value, 1.0, 1e-8);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_reproducibility_same_seed){
@@ -932,8 +1041,23 @@ BOOST_AUTO_TEST_CASE(nsga3_zdt5_test)
     algo.set_seed(23456u);
     population pop{zdt(5u, 10u), 20u, 32u};
     pop = algo.evolve(pop);
+
+    // The integer chromosome of zdt5 survives crossover and mutation intact
     for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
         auto x = pop.get_x()[i];
         BOOST_CHECK(std::all_of(x.begin(), x.end(), [](double el) { return (el == std::floor(el)); }));
     }
+
+    // and the evolution is otherwise well formed on a discrete problem too
+    BOOST_CHECK_EQUAL(pop.size(), 20u);
+    const auto objs = pop.get_f();
+    for (const auto &f : objs) {
+        BOOST_REQUIRE_EQUAL(f.size(), 2u);
+        for (double value : f) {
+            BOOST_CHECK(std::isfinite(value));
+        }
+    }
+    // After 100 generations a good share of the population is nondominated
+    auto fronts = std::get<0>(fast_non_dominated_sorting(objs));
+    BOOST_CHECK(fronts[0].size() * 2u >= pop.size());
 }
