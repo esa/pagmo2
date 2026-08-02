@@ -511,8 +511,7 @@ std::vector<pop_size_t> nsga3_selection(const std::vector<vector_double> &objs, 
     while (next_size < N_pop) {
         next_size += fronts[last_front++].size();
     }
-    fronts.erase(fronts.begin() + static_cast<std::vector<vector_double>::difference_type>(last_front), fronts.end());
-
+    fronts.erase(fronts.begin() + static_cast<decltype(fronts)::difference_type>(last_front), fronts.end());
     std::vector<pop_size_t> selected; // S_t
     selected.reserve(next_size);
     for (const auto &front : fronts) {
@@ -557,7 +556,7 @@ std::vector<pop_size_t> nsga3_selection(const std::vector<vector_double> &objs, 
             rps[min_rp_idx].remove_candidate(selected_idx.value());
             next.push_back(selected_idx.value());
         } else {
-            rps.erase(rps.begin() + static_cast<std::vector<vector_double>::difference_type>(min_rp_idx));
+            rps.erase(rps.begin() + static_cast<decltype(rps)::difference_type>(min_rp_idx));
         }
     }
 

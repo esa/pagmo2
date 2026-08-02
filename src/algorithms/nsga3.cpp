@@ -160,9 +160,9 @@ population nsga3::evolve(population pop) const
                                                + prob.get_name() + " is " + std::to_string(prob.get_nf()));
     }
     if (NP < 5u || (NP % 4 != 0u)) {
-        pagmo_throw(std::invalid_argument, "NSGA-III requires a population greater than 5 and which is divisible by 4."
-                                           "Detected input population size is: "
-                                               + std::to_string(NP));
+        pagmo_throw(std::invalid_argument,
+                    "NSGA-III requires a population of at least 5 and divisible by 4. Detected input population size is: "
+                        + std::to_string(NP));
     }
 
     /*  The reference directions do not change during the evolution, so they are
