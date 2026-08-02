@@ -29,6 +29,7 @@ see https://www.gnu.org/licenses/. */
 #ifndef PAGMO_DETAIL_NSGA3_IMPL_HPP
 #define PAGMO_DETAIL_NSGA3_IMPL_HPP
 
+#include <cstddef>
 #include <optional>
 #include <random>
 #include <vector>
@@ -93,6 +94,18 @@ PAGMO_DLL_PUBLIC std::vector<double> nsga3_find_intercepts(const std::vector<std
 
 PAGMO_DLL_PUBLIC std::vector<std::vector<double>> nsga3_normalize_objectives(
     const std::vector<std::vector<double>> &translated_objs, const std::vector<double> &intercepts);
+
+/*  Environmental selection, Deb & Jain Algorithm 1.
+ *
+ *  Selects N_pop of the objective vectors of the combined parent and offspring
+ *  populations for survival into the next generation, and returns their indices.
+ *  The memory pointers are those of nsga3_compute_ideal and
+ *  nsga3_find_extreme_points.
+ */
+PAGMO_DLL_PUBLIC std::vector<size_t> nsga3_selection(const std::vector<vector_double> &objs, size_t N_pop,
+                                                     size_t divisions, std::vector<double> *running_ideal,
+                                                     std::vector<std::vector<double>> *retained_extremes,
+                                                     random_engine_type &reng);
 
 } // namespace detail
 

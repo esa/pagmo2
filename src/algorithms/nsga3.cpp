@@ -36,7 +36,6 @@ see https://www.gnu.org/licenses/. */
 #include <iomanip>
 #include <limits>
 #include <numeric>
-#include <optional>
 #include <sstream>
 #include <string>
 #include <tuple>
@@ -240,76 +239,19 @@ population nsga3::evolve(population pop) const{
             popnew.push_back(children.second, f2);
         } // popnew now contains |P_t|+|R| = 2NP individuals
 
-        // Select NP individuals for next generation
-        std::vector<size_t> pop_next = selection(popnew, NP);
+        /*  Select NP individuals for next generation. A null memory pointer means
+         *  the corresponding quantity is recomputed from scratch every generation
+         *  instead of being retained across them.
+         */
+        std::vector<size_t> pop_next = detail::nsga3_selection(popnew.get_f(), NP, m_divisions,
+                                                               m_use_memory ? &m_memory.v_ideal : nullptr,
+                                                               m_use_memory ? &m_memory.v_extreme : nullptr,
+                                                               m_reng);
         for(population::size_type i = 0; i<NP; i++){
             pop.set_xf(i, popnew.get_x()[pop_next[i]], popnew.get_f()[pop_next[i]]);
         }
     }
     return pop;
-}
-
-/*  Selects members of a population for survival into the next generation
- *  arguments:
- *    population R: The combined parent and offspring populations
- *                  of size 2*N_pop
- *    size_t N_pop: The target population size to return
- *
- */
-std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
-
-    std::vector<size_t> next;
-    next.reserve(N_pop);
-    size_t last_front = 0;
-    size_t next_size = 0;
-    size_t nobj = R.get_problem().get_nobj();
-
-    fnds_return_type nds = fast_non_dominated_sorting(R.get_f());
-    auto fronts = std::get<0>(nds);
-
-    while(next_size < N_pop){
-        next_size += fronts[last_front++].size();
-    }
-    fronts.erase(fronts.begin() + static_cast<std::vector<vector_double>::difference_type>(last_front), fronts.end());
-
-    // Accept all members of first l-1 fronts
-    for(size_t f=0; f<fronts.size()-1; f++){
-        for(size_t i=0; i<fronts[f].size(); i++){
-            next.push_back(fronts[f][i]);
-        }
-    }
-
-    if(next.size() == N_pop){
-        return next;
-    }
-
-    /*  A null memory pointer means the corresponding quantity is recomputed from
-     *  scratch every generation instead of being retained across them.
-     */
-    auto objs = R.get_f();
-    auto ideal_point = detail::nsga3_compute_ideal(objs, m_use_memory ? &m_memory.v_ideal : nullptr);
-    auto translated_objectives = detail::nsga3_translate_objectives(objs, ideal_point);
-    auto ext_points = detail::nsga3_find_extreme_points(fronts, translated_objectives, ideal_point,
-                                                        m_use_memory ? &m_memory.v_extreme : nullptr);
-    auto intercepts = detail::nsga3_find_intercepts(ext_points, translated_objectives);
-    auto norm_objs = detail::nsga3_normalize_objectives(translated_objectives, intercepts);
-    std::vector<detail::reference_point> rps = detail::generate_uniform_reference_points(nobj, m_divisions);
-    detail::associate_with_reference_points(rps, norm_objs, fronts);
-
-    // Apply RP selection to final front until N_pop reached
-    while(next.size() < N_pop){
-        size_t min_rp_idx = detail::identify_niche_point(rps, m_reng);
-        std::optional<size_t> selected_idx = rps[min_rp_idx].select_member(m_reng);
-        if(selected_idx.has_value()){
-            rps[min_rp_idx].increment_members();
-            rps[min_rp_idx].remove_candidate(selected_idx.value());
-            next.push_back(selected_idx.value());
-        }else{
-            rps.erase(rps.begin() + static_cast<std::vector<vector_double>::difference_type>(min_rp_idx));
-        }
-    }
-
-    return next;
 }
 
 /// Extra info

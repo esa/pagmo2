@@ -80,9 +80,6 @@ class PAGMO_DLL_PUBLIC nsga3{
                 detail::archive(ar, v_extreme, v_ideal);
             }
         };
-        // Survival selection over the combined parent and offspring populations
-        std::vector<size_t> selection(population &, size_t) const;
-
         unsigned m_gen;
         double m_cr;        // crossover
         double m_eta_c;     // eta crossover

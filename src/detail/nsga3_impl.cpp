@@ -36,9 +36,10 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/detail/nsga3_impl.hpp>
+#include <pagmo/detail/reference_point.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/utils/multi_objective.hpp>  // ideal, nadir
+#include <pagmo/utils/multi_objective.hpp>  // ideal, nadir, fast_non_dominated_sorting
 
 
 namespace{
@@ -411,6 +412,70 @@ std::vector<std::vector<double>> nsga3_normalize_objectives(const std::vector<st
     }
 
     return norm_objs;
+}
+
+/*  Selects members of a population for survival into the next generation
+ *  arguments:
+ *    objs:  The objective vectors of the combined parent and offspring
+ *           populations, of size 2*N_pop
+ *    N_pop: The target population size to return
+ *
+ */
+std::vector<size_t> nsga3_selection(const std::vector<vector_double> &objs, size_t N_pop, size_t divisions,
+                                    std::vector<double> *running_ideal,
+                                    std::vector<std::vector<double>> *retained_extremes,
+                                    random_engine_type &reng){
+
+    std::vector<size_t> next;
+    next.reserve(N_pop);
+    size_t last_front = 0;
+    size_t next_size = 0;
+    size_t nobj = objs[0].size();
+
+    fnds_return_type nds = fast_non_dominated_sorting(objs);
+    auto fronts = std::get<0>(nds);
+
+    while(next_size < N_pop){
+        next_size += fronts[last_front++].size();
+    }
+    fronts.erase(fronts.begin() + static_cast<std::vector<vector_double>::difference_type>(last_front), fronts.end());
+
+    // Accept all members of first l-1 fronts
+    for(size_t f=0; f<fronts.size()-1; f++){
+        for(size_t i=0; i<fronts[f].size(); i++){
+            next.push_back(fronts[f][i]);
+        }
+    }
+
+    if(next.size() == N_pop){
+        return next;
+    }
+
+    /*  A null memory pointer means the corresponding quantity is recomputed from
+     *  scratch every generation instead of being retained across them.
+     */
+    auto ideal_point = nsga3_compute_ideal(objs, running_ideal);
+    auto translated_objectives = nsga3_translate_objectives(objs, ideal_point);
+    auto ext_points = nsga3_find_extreme_points(fronts, translated_objectives, ideal_point, retained_extremes);
+    auto intercepts = nsga3_find_intercepts(ext_points, translated_objectives);
+    auto norm_objs = nsga3_normalize_objectives(translated_objectives, intercepts);
+    std::vector<reference_point> rps = generate_uniform_reference_points(nobj, divisions);
+    associate_with_reference_points(rps, norm_objs, fronts);
+
+    // Apply RP selection to final front until N_pop reached
+    while(next.size() < N_pop){
+        size_t min_rp_idx = identify_niche_point(rps, reng);
+        std::optional<size_t> selected_idx = rps[min_rp_idx].select_member(reng);
+        if(selected_idx.has_value()){
+            rps[min_rp_idx].increment_members();
+            rps[min_rp_idx].remove_candidate(selected_idx.value());
+            next.push_back(selected_idx.value());
+        }else{
+            rps.erase(rps.begin() + static_cast<std::vector<vector_double>::difference_type>(min_rp_idx));
+        }
+    }
+
+    return next;
 }
 
 } // namespace detail
