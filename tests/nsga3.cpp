@@ -452,6 +452,42 @@ BOOST_AUTO_TEST_CASE(nsga3_instance_independence){
     BOOST_CHECK_EQUAL(expected, random_device::next());
 }
 
+BOOST_AUTO_TEST_CASE(nsga3_log_generation_numbers){
+    dtlz udp{1u, 10u, 3u};
+
+    // Verbosity 1 logs every generation, numbered from 1
+    population pop1{udp, 52u, 23u};
+    nsga3 alg1{5u, 1.00, 30., 0.10, 20., 5u, 32u, false};
+    alg1.set_verbosity(1u);
+    pop1 = alg1.evolve(pop1);
+    const auto &log1 = alg1.get_log();
+    BOOST_REQUIRE_EQUAL(log1.size(), 5u);
+    for(unsigned i=0; i<log1.size(); i++){
+        BOOST_CHECK_EQUAL(std::get<0>(log1[i]), i + 1u);
+    }
+    // Function evaluations accumulate across generations
+    for(size_t i=1; i<log1.size(); i++){
+        BOOST_CHECK(std::get<1>(log1[i]) > std::get<1>(log1[i-1]));
+    }
+
+    // Verbosity 2 logs generations 1, 3 and 5
+    population pop2{udp, 52u, 23u};
+    nsga3 alg2{5u, 1.00, 30., 0.10, 20., 5u, 32u, false};
+    alg2.set_verbosity(2u);
+    pop2 = alg2.evolve(pop2);
+    const auto &log2 = alg2.get_log();
+    BOOST_REQUIRE_EQUAL(log2.size(), 3u);
+    BOOST_CHECK_EQUAL(std::get<0>(log2[0]), 1u);
+    BOOST_CHECK_EQUAL(std::get<0>(log2[1]), 3u);
+    BOOST_CHECK_EQUAL(std::get<0>(log2[2]), 5u);
+
+    // Verbosity 0 logs nothing
+    population pop3{udp, 52u, 23u};
+    nsga3 alg3{5u, 1.00, 30., 0.10, 20., 5u, 32u, false};
+    pop3 = alg3.evolve(pop3);
+    BOOST_CHECK(alg3.get_log().empty());
+}
+
 BOOST_AUTO_TEST_CASE(nsga3_serialization_test){
     double close_distance = 1e-8;
     problem prob{zdt{1u, 30u}};

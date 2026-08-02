@@ -6,7 +6,7 @@
  */
 #include <algorithm>
 #include <cmath>
-#include <iostream>
+#include <iomanip>
 #include <limits>
 #include <numeric>
 #include <optional>
@@ -360,9 +360,10 @@ population nsga3::evolve(population pop) const{
          */
 
         if(m_verbosity > 0u){
-            std::vector<double> p_ideal = ideal(pop.get_f());
-            if (m_gen % m_verbosity == 1u || m_verbosity == 1u) {
+            // Every m_verbosity generations print a log line
+            if (gen % m_verbosity == 1u || m_verbosity == 1u) {
                 // We compute the ideal point
+                vector_double p_ideal = ideal(pop.get_f());
                 // Every 50 lines print the column names
                 if (count % 50u == 1u) {
                     print("\n", std::setw(7), "Gen:", std::setw(15), "Fevals:");
@@ -375,7 +376,7 @@ population nsga3::evolve(population pop) const{
                     }
                     print('\n');
                 }
-                print(std::setw(7), m_gen, std::setw(15), prob.get_fevals() - fevals0);
+                print(std::setw(7), gen, std::setw(15), prob.get_fevals() - fevals0);
                 for (decltype(p_ideal.size()) i = 0u; i < p_ideal.size(); ++i) {
                     if (i >= 5u) {
                         break;
@@ -384,8 +385,9 @@ population nsga3::evolve(population pop) const{
                 }
                 print('\n');
                 ++count;
+                // Logs
+                m_log.emplace_back(gen, prob.get_fevals() - fevals0, p_ideal);
             }
-            m_log.emplace_back(m_gen, prob.get_fevals() - fevals0, p_ideal);
         }
 
         /*  Mating selection. Deb & Jain leave the parents of NSGA-III chosen at
