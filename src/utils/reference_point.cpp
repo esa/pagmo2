@@ -1,7 +1,7 @@
-#include <algorithm>  // sample
+#include <algorithm>
 #include <iterator>
+#include <limits>
 #include <optional>
-#include <random>     // mt19937
 #include <sstream>
 #include <string>
 
@@ -64,13 +64,14 @@ void ReferencePoint::remove_candidate(size_t index){
     for(size_t idx=0; idx<candidates.size(); idx++){
         if(candidates[idx].first == index){
             candidates.erase(candidates.begin() + static_cast<std::vector<std::pair<size_t, double>>::difference_type>(idx));
+            break;  // Candidate indices are unique
         }
     }
 }
 
 void associate_with_reference_points(std::vector<ReferencePoint> &rps,
-                                     std::vector<std::vector<double>> norm_objs,
-                                     std::vector<std::vector<pop_size_t>> fronts){
+                                     const std::vector<std::vector<double>> &norm_objs,
+                                     const std::vector<std::vector<pop_size_t>> &fronts){
     for(size_t f=0; f<fronts.size(); f++){
         for(size_t i=0; i<fronts[f].size(); i++){
             size_t nearest = 0;
@@ -91,7 +92,7 @@ void associate_with_reference_points(std::vector<ReferencePoint> &rps,
     }
 }
 
-size_t identify_niche_point(std::vector<ReferencePoint> &rps){
+size_t identify_niche_point(std::vector<ReferencePoint> &rps, detail::random_engine_type &reng){
     size_t min_size = std::numeric_limits<size_t>::max();
     std::vector<size_t> minimal_set;
     for(const auto &rp: rps){
@@ -103,17 +104,17 @@ size_t identify_niche_point(std::vector<ReferencePoint> &rps){
         }
     }
     // Return a random element from the minimal set
-    return choose_random_element<size_t>(minimal_set);
+    return choose_random_element<size_t>(minimal_set, reng);
 }
 
 // Section IV.E
-std::optional<size_t> ReferencePoint::select_member() const{
+std::optional<size_t> ReferencePoint::select_member(detail::random_engine_type &reng) const{
     std::optional<size_t> selected = std::nullopt;
     if(candidate_count() != 0){
         if(member_count() == 0){  // Candidates but no members: rho == 0
             selected = nearest_candidate();
         }else{
-            selected = random_candidate(); // Candidates and members: rho >= 1
+            selected = random_candidate(reng); // Candidates and members: rho >= 1
         }
     }
     return selected;
@@ -131,11 +132,11 @@ std::optional<size_t> ReferencePoint::nearest_candidate() const{
     return min_idx;
 }
 
-std::optional<size_t> ReferencePoint::random_candidate() const{
+std::optional<size_t> ReferencePoint::random_candidate(detail::random_engine_type &reng) const{
     if(candidates.empty()){
         return std::nullopt;
     }
-    return choose_random_element<std::pair<size_t, double>>(candidates).first;
+    return choose_random_element<std::pair<size_t, double>>(candidates, reng).first;
 }
 
 size_t n_choose_k(size_t n, size_t k){

@@ -11,6 +11,7 @@
 #include <pagmo/io.hpp>
 #include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/zdt.hpp>
+#include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/reference_point.hpp>
@@ -197,6 +198,58 @@ BOOST_AUTO_TEST_CASE(nsga3_test_normalize_objectives){
     BOOST_CHECK_NO_THROW(norm_objs = nsga3_alg.normalize_objectives(translated_objectives, intercepts));
     size_t obj_count = norm_objs.size();
     BOOST_CHECK_EQUAL(obj_count, translated_objectives.size());
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_reproducibility_same_seed){
+    dtlz udp{1u, 10u, 3u};
+
+    population pop_a{udp, 52u, 23u};
+    population pop_b{udp, 52u, 23u};
+    nsga3 alg_a{5u, 1.00, 30., 0.10, 20., 5u, 42u, false};
+    nsga3 alg_b{5u, 1.00, 30., 0.10, 20., 5u, 42u, false};
+    alg_a.set_verbosity(1u);
+    alg_b.set_verbosity(1u);
+
+    pop_a = alg_a.evolve(pop_a);
+    pop_b = alg_b.evolve(pop_b);
+
+    BOOST_CHECK(pop_a.get_x() == pop_b.get_x());
+    BOOST_CHECK(pop_a.get_f() == pop_b.get_f());
+    BOOST_CHECK(alg_a.get_log() == alg_b.get_log());
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_instance_independence){
+    dtlz udp{1u, 10u, 3u};
+
+    // Baseline run
+    population pop_ref{udp, 52u, 23u};
+    nsga3 alg_ref{5u, 1.00, 30., 0.10, 20., 5u, 42u, false};
+    pop_ref = alg_ref.evolve(pop_ref);
+
+    /*  A differently seeded instance evolved in between, and a reseeded global
+     *  random device, must leave an identically seeded run unchanged.
+     */
+    population pop_other{udp, 52u, 23u};
+    nsga3 alg_other{5u, 1.00, 30., 0.10, 20., 5u, 7u, false};
+    pop_other = alg_other.evolve(pop_other);
+    random_device::set_seed(987654u);
+
+    population pop_test{udp, 52u, 23u};
+    nsga3 alg_test{5u, 1.00, 30., 0.10, 20., 5u, 42u, false};
+    pop_test = alg_test.evolve(pop_test);
+
+    BOOST_CHECK(pop_ref.get_x() == pop_test.get_x());
+    BOOST_CHECK(pop_ref.get_f() == pop_test.get_f());
+    // A differently seeded instance really does explore differently
+    BOOST_CHECK(pop_ref.get_f() != pop_other.get_f());
+
+    // Constructing an nsga3 must not disturb the global random device
+    random_device::set_seed(4242u);
+    unsigned expected = random_device::next();
+    random_device::set_seed(4242u);
+    nsga3 constructed{5u, 1.00, 30., 0.10, 20., 5u, 32u, false};
+    BOOST_CHECK_EQUAL(constructed.get_seed(), 32u);
+    BOOST_CHECK_EQUAL(expected, random_device::next());
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_serialization_test){

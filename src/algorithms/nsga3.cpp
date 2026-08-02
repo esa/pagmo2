@@ -52,12 +52,6 @@ nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut,
         pagmo_throw(std::invalid_argument, "Invalid <divisions> argument: " + std::to_string(divisions) + ". "
                                            "Number of reference point divisions per objective must be positive");
     }
-
-    /*  Initialise the global pagmo::random_device with our seed.
-     *  This ensures the choose_random_element template function
-     *  makes deterministic choices using std::sample.
-     */
-    random_device::set_seed(seed);
 }
 
 
@@ -413,8 +407,8 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
 
     // Apply RP selection to final front until N_pop reached
     while(next.size() < N_pop){
-        size_t min_rp_idx = identify_niche_point(rps);
-        std::optional<size_t> selected_idx = rps[min_rp_idx].select_member();
+        size_t min_rp_idx = identify_niche_point(rps, m_reng);
+        std::optional<size_t> selected_idx = rps[min_rp_idx].select_member(m_reng);
         if(selected_idx.has_value()){
             rps[min_rp_idx].increment_members();
             rps[min_rp_idx].remove_candidate(selected_idx.value());

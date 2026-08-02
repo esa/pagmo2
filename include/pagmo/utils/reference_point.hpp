@@ -14,6 +14,7 @@
 
 #include <pagmo/detail/visibility.hpp>  // PAGMO_DLL_PUBLIC
 #include <pagmo/population.hpp>         // pop_size_t
+#include <pagmo/rng.hpp>                // random_engine_type
 
 
 namespace pagmo{
@@ -31,10 +32,10 @@ class PAGMO_DLL_PUBLIC ReferencePoint{
         void add_candidate(size_t, double);
         void remove_candidate(size_t index);
         size_t candidate_count() const{ return candidates.size(); }
-        std::vector<double> get_coeffs(){ return coeffs; }
+        const std::vector<double> &get_coeffs() const{ return coeffs; }
         std::optional<size_t> nearest_candidate() const;
-        std::optional<size_t> random_candidate() const;
-        std::optional<size_t> select_member() const;
+        std::optional<size_t> random_candidate(detail::random_engine_type &) const;
+        std::optional<size_t> select_member(detail::random_engine_type &) const;
     protected:
         std::vector<double> coeffs{0};
         size_t nmembers{0};
@@ -49,12 +50,12 @@ std::vector<ReferencePoint> generate_reference_point_level(
 );
 
 void associate_with_reference_points(
-    std::vector<ReferencePoint> &,          // Reference points
-    std::vector<std::vector<double>>,       // Normalized objectives
-    std::vector<std::vector<pop_size_t>>    // NDS Fronts
+    std::vector<ReferencePoint> &,                  // Reference points
+    const std::vector<std::vector<double>> &,       // Normalized objectives
+    const std::vector<std::vector<pop_size_t>> &    // NDS Fronts
 );
 
-size_t identify_niche_point(std::vector<ReferencePoint> &);
+size_t identify_niche_point(std::vector<ReferencePoint> &, detail::random_engine_type &);
 
 size_t n_choose_k(size_t, size_t);
 
