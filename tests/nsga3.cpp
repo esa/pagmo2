@@ -1,9 +1,12 @@
 #define BOOST_TEST_MODULE nsga3_test
 #define BOOST_TEST_DYN_LINK
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <limits>
 #include <optional>
+#include <utility>
+#include <vector>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/lexical_cast.hpp>
@@ -45,13 +48,35 @@ BOOST_AUTO_TEST_CASE(nsga3_algorithm_construction)
 
 BOOST_AUTO_TEST_CASE(nsga3_evolve_population){
     dtlz udp{1u, 10u, 3u};
+    problem prob{udp};
+    const auto bounds = prob.get_bounds();
 
-    population pop1{udp, 92u, 23u /*seed*/};
+    population pop1{prob, 92u, 23u /*seed*/};
+    const auto fevals0 = pop1.get_problem().get_fevals();
 
     nsga3 user_algo1{10u, 1.0, 30., 0.10, 20., 12u, 32u, false};
     BOOST_CHECK(user_algo1.get_seed() == 32u);
     user_algo1.set_verbosity(10u);
     pop1 = user_algo1.evolve(pop1);
+
+    // The population size is preserved across the evolution
+    BOOST_CHECK_EQUAL(pop1.size(), 92u);
+    // Every individual is a usable, in-bounds solution with a finite fitness
+    for(const auto &x: pop1.get_x()){
+        BOOST_REQUIRE_EQUAL(x.size(), bounds.first.size());
+        for(size_t i=0; i<x.size(); i++){
+            BOOST_CHECK(x[i] >= bounds.first[i]);
+            BOOST_CHECK(x[i] <= bounds.second[i]);
+        }
+    }
+    for(const auto &f: pop1.get_f()){
+        BOOST_REQUIRE_EQUAL(f.size(), prob.get_nobj());
+        for(double value: f){
+            BOOST_CHECK(std::isfinite(value));
+        }
+    }
+    // Each generation evaluates a full offspring population
+    BOOST_CHECK_EQUAL(pop1.get_problem().get_fevals() - fevals0, 10u*92u);
 };
 
 BOOST_AUTO_TEST_CASE(nsga3_reference_point_type){
@@ -86,6 +111,339 @@ BOOST_AUTO_TEST_CASE(nsga3_verify_uniform_reference_points){
             p_sum += p[idx];
         }
         BOOST_CHECK_CLOSE(p_sum, 1.0, close_distance);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_reference_points_exact){
+    /*  The Das and Dennis recursion is easy to get subtly wrong, so pin the exact
+     *  point sets, in generation order, for the smallest cases.
+     */
+    auto rp_2_2 = detail::generate_uniform_reference_points(2, 2);
+    const std::vector<std::vector<double>> expected_2_2{{0.0, 1.0}, {0.5, 0.5}, {1.0, 0.0}};
+    BOOST_REQUIRE_EQUAL(rp_2_2.size(), expected_2_2.size());
+    for(size_t i=0; i<expected_2_2.size(); i++){
+        BOOST_REQUIRE_EQUAL(rp_2_2[i].dim(), expected_2_2[i].size());
+        for(size_t j=0; j<expected_2_2[i].size(); j++){
+            BOOST_CHECK_SMALL(rp_2_2[i][j] - expected_2_2[i][j], 1e-12);
+        }
+    }
+
+    // One division per objective yields exactly the canonical axis directions
+    auto rp_3_1 = detail::generate_uniform_reference_points(3, 1);
+    const std::vector<std::vector<double>> expected_3_1{{0.0, 0.0, 1.0}, {0.0, 1.0, 0.0}, {1.0, 0.0, 0.0}};
+    BOOST_REQUIRE_EQUAL(rp_3_1.size(), expected_3_1.size());
+    for(size_t i=0; i<expected_3_1.size(); i++){
+        for(size_t j=0; j<expected_3_1[i].size(); j++){
+            BOOST_CHECK_SMALL(rp_3_1[i][j] - expected_3_1[i][j], 1e-12);
+        }
+    }
+
+    auto rp_3_2 = detail::generate_uniform_reference_points(3, 2);
+    const std::vector<std::vector<double>> expected_3_2{{0.0, 0.0, 1.0}, {0.0, 0.5, 0.5}, {0.0, 1.0, 0.0},
+                                                        {0.5, 0.0, 0.5}, {0.5, 0.5, 0.0}, {1.0, 0.0, 0.0}};
+    BOOST_REQUIRE_EQUAL(rp_3_2.size(), expected_3_2.size());
+    for(size_t i=0; i<expected_3_2.size(); i++){
+        for(size_t j=0; j<expected_3_2[i].size(); j++){
+            BOOST_CHECK_SMALL(rp_3_2[i][j] - expected_3_2[i][j], 1e-12);
+        }
+    }
+
+    // Every generated point is on the unit simplex: non-negative and summing to one
+    for(const auto &set: {rp_2_2, rp_3_1, rp_3_2}){
+        for(const auto &p: set){
+            double sum = 0.0;
+            for(double c: p.get_coeffs()){
+                BOOST_CHECK(c >= 0.0);
+                sum += c;
+            }
+            BOOST_CHECK_CLOSE(sum, 1.0, 1e-8);
+        }
+    }
+
+    // n_choose_k against hand values
+    BOOST_CHECK_EQUAL(detail::n_choose_k(3, 2), 3u);
+    BOOST_CHECK_EQUAL(detail::n_choose_k(4, 2), 6u);
+    BOOST_CHECK_EQUAL(detail::n_choose_k(5, 3), 10u);
+    BOOST_CHECK_EQUAL(detail::n_choose_k(7, 5), 21u);
+    BOOST_CHECK_EQUAL(detail::n_choose_k(14, 12), 91u);
+    BOOST_CHECK_EQUAL(detail::n_choose_k(10, 3), 120u);
+    BOOST_CHECK_EQUAL(detail::n_choose_k(9, 0), 1u);
+
+    /*  evolve() sizes the population against n_choose_k(m + p - 1, p), so that
+     *  count must agree with the number of points actually generated.
+     */
+    const std::vector<std::pair<size_t, size_t>> cases{{2, 1}, {2, 2}, {3, 1}, {3, 2}, {3, 3}, {5, 4}, {8, 2}};
+    for(const auto &c: cases){
+        size_t nobjs = c.first, divisions = c.second;
+        BOOST_CHECK_EQUAL(detail::generate_uniform_reference_points(nobjs, divisions).size(),
+                          detail::n_choose_k(nobjs + divisions - 1, divisions));
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_perpendicular_distance){
+    // A point on an axis is a unit distance from an orthogonal reference direction
+    BOOST_CHECK_CLOSE(detail::perpendicular_distance({1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}), 1.0, 1e-8);
+    // A point lying on the reference ray is at zero distance, wherever it sits along it
+    BOOST_CHECK_SMALL(detail::perpendicular_distance({1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}), 1e-12);
+    BOOST_CHECK_SMALL(detail::perpendicular_distance({1.0, 1.0, 1.0}, {4.0, 4.0, 4.0}), 1e-12);
+    // The projection of (3,4) onto the first axis leaves the second component
+    BOOST_CHECK_CLOSE(detail::perpendicular_distance({1.0, 0.0}, {3.0, 4.0}), 4.0, 1e-8);
+    BOOST_CHECK_CLOSE(detail::perpendicular_distance({0.5, 0.5}, {1.0, 0.0}), std::sqrt(0.5), 1e-8);
+
+    /*  Only the direction of the reference point matters, not its length: the
+     *  reference set is generated on the simplex but is used as a set of rays.
+     */
+    BOOST_CHECK_CLOSE(detail::perpendicular_distance({2.0, 0.0}, {3.0, 4.0}),
+                      detail::perpendicular_distance({1.0, 0.0}, {3.0, 4.0}), 1e-8);
+    BOOST_CHECK_CLOSE(detail::perpendicular_distance({0.25, 0.25}, {1.0, 0.0}),
+                      detail::perpendicular_distance({0.5, 0.5}, {1.0, 0.0}), 1e-8);
+
+    // The origin projects onto every ray
+    BOOST_CHECK_SMALL(detail::perpendicular_distance({0.5, 0.5}, {0.0, 0.0}), 1e-12);
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_achievement_scalarization){
+    // With unit weights the ASF degenerates to the largest component
+    BOOST_CHECK_CLOSE(detail::achievement({1.0, 2.0, 3.0}, {1.0, 1.0, 1.0}), 3.0, 1e-8);
+    BOOST_CHECK_CLOSE(detail::achievement({5.0, 2.0, 3.0}, {1.0, 1.0, 1.0}), 5.0, 1e-8);
+
+    /*  Weights below the 1e-5 floor are raised to it, so the axis direction used by
+     *  find_extreme_points penalises every off-axis component by 1e5.
+     */
+    BOOST_CHECK_CLOSE(detail::achievement({1.0, 2.0, 3.0}, {1.0, 1e-6, 1e-6}), 3.0e5, 1e-8);
+    // A zero weight cannot divide by zero: it is floored just the same
+    BOOST_CHECK_CLOSE(detail::achievement({1.0, 2.0, 3.0}, {1.0, 0.0, 0.0}), 3.0e5, 1e-8);
+    BOOST_CHECK(std::isfinite(detail::achievement({1.0, 0.0}, {0.0, 0.0})));
+
+    // A point exactly on the axis is not penalised at all
+    BOOST_CHECK_CLOSE(detail::achievement({4.0, 0.0, 0.0}, {1.0, 1e-6, 1e-6}), 4.0, 1e-8);
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_reference_point_candidates){
+    detail::reference_point rp(2);
+    detail::random_engine_type reng(7u);
+
+    BOOST_CHECK_EQUAL(rp.candidate_count(), 0u);
+    BOOST_CHECK_EQUAL(rp.member_count(), 0u);
+    // Nothing to select from an empty reference point
+    BOOST_CHECK(!rp.select_member(reng).has_value());
+    BOOST_CHECK(!rp.nearest_candidate().has_value());
+
+    rp.add_candidate(7u, 0.5);
+    rp.add_candidate(3u, 0.1);
+    rp.add_candidate(9u, 0.9);
+    BOOST_CHECK_EQUAL(rp.candidate_count(), 3u);
+
+    // The nearest candidate is the one with the smallest perpendicular distance
+    BOOST_REQUIRE(rp.nearest_candidate().has_value());
+    BOOST_CHECK_EQUAL(rp.nearest_candidate().value(), 3u);
+
+    /*  Section IV.E: a reference point with no members yet takes its closest
+     *  candidate, which involves no random draw at all.
+     */
+    auto chosen = rp.select_member(reng);
+    BOOST_REQUIRE(chosen.has_value());
+    BOOST_CHECK_EQUAL(chosen.value(), 3u);
+
+    // With at least one member the choice is random, but confined to the candidates
+    rp.increment_members();
+    BOOST_CHECK_EQUAL(rp.member_count(), 1u);
+    detail::random_engine_type reng_a(11u), reng_b(11u);
+    auto random_a = rp.select_member(reng_a);
+    auto random_b = rp.select_member(reng_b);
+    BOOST_REQUIRE(random_a.has_value());
+    BOOST_REQUIRE(random_b.has_value());
+    BOOST_CHECK_EQUAL(random_a.value(), random_b.value());  // same seed, same choice
+    BOOST_CHECK(random_a.value() == 3u || random_a.value() == 7u || random_a.value() == 9u);
+
+    // Removing a candidate shifts the nearest one
+    rp.remove_candidate(3u);
+    BOOST_CHECK_EQUAL(rp.candidate_count(), 2u);
+    BOOST_REQUIRE(rp.nearest_candidate().has_value());
+    BOOST_CHECK_EQUAL(rp.nearest_candidate().value(), 7u);
+
+    // Removing an index which is not a candidate is a no-op
+    rp.remove_candidate(42u);
+    BOOST_CHECK_EQUAL(rp.candidate_count(), 2u);
+
+    rp.decrement_members();
+    BOOST_CHECK_EQUAL(rp.member_count(), 0u);
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_association_golden){
+    /*  Two objectives and two divisions give the three reference directions
+     *  (0,1), (1/2,1/2) and (1,0). Each normalized point below has a hand computed
+     *  nearest direction and distance.
+     */
+    auto rps = detail::generate_uniform_reference_points(2, 2);
+    BOOST_REQUIRE_EQUAL(rps.size(), 3u);
+
+    const std::vector<std::vector<double>> norm_objs{{0.0, 1.0}, {1.0, 0.0}, {0.5, 0.5}, {0.9, 0.1}};
+    const std::vector<size_t> expected_nearest{0u, 2u, 1u, 2u};
+    const std::vector<double> expected_distance{0.0, 0.0, 0.0, 0.1};
+
+    for(size_t i=0; i<norm_objs.size(); i++){
+        size_t nearest = 0;
+        double min_dist = std::numeric_limits<double>::max();
+        for(size_t p=0; p<rps.size(); p++){
+            double dist = detail::perpendicular_distance(rps[p].get_coeffs(), norm_objs[i]);
+            if(dist < min_dist){
+                min_dist = dist;
+                nearest = p;
+            }
+        }
+        BOOST_CHECK_EQUAL(nearest, expected_nearest[i]);
+        BOOST_CHECK_SMALL(min_dist - expected_distance[i], 1e-9);
+    }
+
+    /*  Individuals of the earlier fronts become members of their nearest reference
+     *  point; only those of the last front become candidates for niching.
+     */
+    const std::vector<std::vector<pop_size_t>> fronts{{0u, 1u}, {2u, 3u}};
+    detail::associate_with_reference_points(rps, norm_objs, fronts);
+
+    BOOST_CHECK_EQUAL(rps[0].member_count(), 1u);   // individual 0
+    BOOST_CHECK_EQUAL(rps[1].member_count(), 0u);
+    BOOST_CHECK_EQUAL(rps[2].member_count(), 1u);   // individual 1
+    BOOST_CHECK_EQUAL(rps[0].candidate_count(), 0u);
+    BOOST_CHECK_EQUAL(rps[1].candidate_count(), 1u);  // individual 2
+    BOOST_CHECK_EQUAL(rps[2].candidate_count(), 1u);  // individual 3
+    BOOST_REQUIRE(rps[1].nearest_candidate().has_value());
+    BOOST_CHECK_EQUAL(rps[1].nearest_candidate().value(), 2u);
+    BOOST_REQUIRE(rps[2].nearest_candidate().has_value());
+    BOOST_CHECK_EQUAL(rps[2].nearest_candidate().value(), 3u);
+
+    /*  A single front is the last front, so every individual becomes a candidate
+     *  and none becomes a member.
+     */
+    auto single = detail::generate_uniform_reference_points(2, 2);
+    const std::vector<std::vector<pop_size_t>> one_front{{0u, 1u, 2u, 3u}};
+    detail::associate_with_reference_points(single, norm_objs, one_front);
+    size_t total_members = 0, total_candidates = 0;
+    for(const auto &rp: single){
+        total_members += rp.member_count();
+        total_candidates += rp.candidate_count();
+    }
+    BOOST_CHECK_EQUAL(total_members, 0u);
+    BOOST_CHECK_EQUAL(total_candidates, norm_objs.size());
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_niching_tie_breaking){
+    detail::random_engine_type reng(1234u);
+
+    // A unique least crowded reference point is returned without consulting the engine
+    auto rps = detail::generate_uniform_reference_points(2, 2);
+    BOOST_REQUIRE_EQUAL(rps.size(), 3u);
+    rps[0].increment_members();
+    rps[0].increment_members();
+    rps[1].increment_members();
+    rps[2].increment_members();
+    rps[2].increment_members();
+    rps[2].increment_members();
+    BOOST_CHECK_EQUAL(detail::identify_niche_point(rps, reng), 1u);
+
+    /*  Under a tie the choice is random, so it is only pinned down to the minimal
+     *  set. Two identically seeded engines must still agree: this is what makes a
+     *  whole run reproducible.
+     */
+    auto tied = detail::generate_uniform_reference_points(3, 2);
+    BOOST_REQUIRE_EQUAL(tied.size(), 6u);
+    detail::random_engine_type reng_a(99u), reng_b(99u);
+    size_t pick_a = detail::identify_niche_point(tied, reng_a);
+    size_t pick_b = detail::identify_niche_point(tied, reng_b);
+    BOOST_CHECK_EQUAL(pick_a, pick_b);
+    BOOST_CHECK(pick_a < tied.size());
+
+    // Only reference points at the minimum member count are eligible
+    for(size_t i=0; i<tied.size(); i++){
+        if(i != 2u){
+            tied[i].increment_members();
+        }
+    }
+    BOOST_CHECK_EQUAL(detail::identify_niche_point(tied, reng), 2u);
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_selection_golden){
+    /*  Golden environmental selection over fixed objective vectors. The fixtures
+     *  are chosen so that the outcome does not depend on how ties are broken:
+     *  std::uniform_int_distribution is not specified to map engine output to
+     *  values identically across standard library implementations, so an index
+     *  drawn from a set of two or more cannot be asserted portably.
+     */
+    detail::random_engine_type reng(17u);
+
+    /*  Fixture A: indices 0-3 are the first front, 4 is the whole second front and
+     *  5 is dominated by 4. One slot is left after the first front and exactly one
+     *  candidate can fill it, so the result is completely determined.
+     */
+    const std::vector<vector_double> objs_a{{0.0, 1.0}, {0.1, 0.9}, {0.5, 0.5}, {0.45, 0.55},
+                                            {0.6, 0.6}, {2.0, 0.6}};
+    auto fronts_a = std::get<0>(fast_non_dominated_sorting(objs_a));
+    BOOST_REQUIRE_EQUAL(fronts_a.size(), 3u);
+    BOOST_REQUIRE_EQUAL(fronts_a[0].size(), 4u);
+
+    auto next_a = detail::nsga3_selection(objs_a, 5u, 2u, nullptr, nullptr, reng);
+    const std::vector<size_t> expected_a{0u, 1u, 2u, 3u, 4u};
+    BOOST_CHECK(next_a == expected_a);
+
+    /*  Fixture B: the second front is absorbed whole, so every individual survives
+     *  whatever order the niching visits the reference points in.
+     */
+    const std::vector<vector_double> objs_b{{0.0, 1.0}, {0.1, 0.9}, {0.5, 0.5}, {1.0, 0.0},
+                                            {0.6, 0.6}, {1.1, 0.1}};
+    auto next_b = detail::nsga3_selection(objs_b, 6u, 2u, nullptr, nullptr, reng);
+    std::vector<size_t> sorted_b{next_b};
+    std::sort(sorted_b.begin(), sorted_b.end());
+    const std::vector<size_t> expected_b{0u, 1u, 2u, 3u, 4u, 5u};
+    BOOST_CHECK(sorted_b == expected_b);
+
+    /*  Fixture C: two candidates compete for one slot, so which one survives is a
+     *  random tie-break. The structural guarantees still hold exactly, and the
+     *  choice must be reproducible for a given engine state.
+     */
+    detail::random_engine_type reng_c1(5u), reng_c2(5u);
+    auto next_c1 = detail::nsga3_selection(objs_b, 5u, 2u, nullptr, nullptr, reng_c1);
+    auto next_c2 = detail::nsga3_selection(objs_b, 5u, 2u, nullptr, nullptr, reng_c2);
+    BOOST_CHECK(next_c1 == next_c2);  // same seed, same survivors
+
+    BOOST_CHECK_EQUAL(next_c1.size(), 5u);
+    std::vector<size_t> sorted_c{next_c1};
+    std::sort(sorted_c.begin(), sorted_c.end());
+    BOOST_CHECK(std::unique(sorted_c.begin(), sorted_c.end()) == sorted_c.end());  // no duplicates
+    for(size_t idx: next_c1){
+        BOOST_CHECK(idx < objs_b.size());
+    }
+    // The whole first front survives, and the last slot comes from the second front
+    auto fronts_b = std::get<0>(fast_non_dominated_sorting(objs_b));
+    BOOST_REQUIRE_EQUAL(fronts_b[0].size(), 4u);
+    for(auto idx: fronts_b[0]){
+        BOOST_CHECK(std::find(next_c1.begin(), next_c1.end(), idx) != next_c1.end());
+    }
+    size_t from_last_front = 0;
+    for(auto idx: fronts_b[1]){
+        from_last_front += (std::find(next_c1.begin(), next_c1.end(), idx) != next_c1.end()) ? 1u : 0u;
+    }
+    BOOST_CHECK_EQUAL(from_last_front, 1u);
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_selection_preserves_size){
+    /*  Environmental selection over a larger, structured set: whatever the fronts
+     *  look like, exactly N_pop distinct in-range indices come back.
+     */
+    dtlz udp{2u, 10u, 3u};
+    population pop{udp, 64u, 23u};
+    detail::random_engine_type reng(3u);
+
+    auto objs = pop.get_f();
+    for(size_t n_pop: {8u, 16u, 32u, 63u}){
+        auto next = detail::nsga3_selection(objs, n_pop, 4u, nullptr, nullptr, reng);
+        BOOST_CHECK_EQUAL(next.size(), n_pop);
+        std::vector<size_t> sorted_next{next};
+        std::sort(sorted_next.begin(), sorted_next.end());
+        BOOST_CHECK(std::unique(sorted_next.begin(), sorted_next.end()) == sorted_next.end());
+        for(size_t idx: next){
+            BOOST_CHECK(idx < objs.size());
+        }
     }
 }
 
