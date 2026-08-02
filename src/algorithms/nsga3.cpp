@@ -17,6 +17,7 @@
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga3.hpp>
+#include <pagmo/detail/nsga3_impl.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/types.hpp>
@@ -164,7 +165,7 @@ std::vector<std::vector<double>> nsga3::find_extreme_points(const std::vector<st
                 for(size_t obj=0; obj<nobj; obj++){
                     retained[obj] = m_memory.v_extreme[p][obj] - ideal_point[obj];
                 }
-                double asf = achievement(retained, weights);
+                double asf = detail::achievement(retained, weights);
                 if(asf < min_asf){
                     min_asf = asf;
                     min_obj = retained;
@@ -175,7 +176,7 @@ std::vector<std::vector<double>> nsga3::find_extreme_points(const std::vector<st
         // Only first front need be considered for extremes
         for(size_t ind=0; ind<fronts[0].size(); ind++){
             // Calculate ASF value for translated objectives
-            double asf = achievement(translated_objs[fronts[0][ind]], weights);
+            double asf = detail::achievement(translated_objs[fronts[0][ind]], weights);
             if(asf < min_asf){
                 min_asf = asf;
                 min_obj = translated_objs[fronts[0][ind]];
@@ -228,7 +229,7 @@ std::vector<double> nsga3::find_intercepts(const std::vector<std::vector<double>
         std::vector<double> b(n_obj, 1.0);
 
         // Ax = b
-        std::optional<vector_double> x = gaussian_elimination(ext_points, b);
+        std::optional<vector_double> x = detail::gaussian_elimination(ext_points, b);
 
         if(x.has_value()){
             // Express as intercepts, 1/x

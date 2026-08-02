@@ -12,6 +12,7 @@
 #include <pagmo/algorithms/nsga3.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/problems/dtlz.hpp>
+#include <pagmo/detail/nsga3_impl.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
@@ -112,7 +113,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_gaussian_elimination){
     A[1] = { 2, 0, -3};
     A[2] = { 5, 1, -2};
 
-    auto x = gaussian_elimination(A, b);
+    auto x = detail::gaussian_elimination(A, b);
     BOOST_REQUIRE(x.has_value());
     BOOST_CHECK_CLOSE((*x)[0], -0.4, 1e-8);
     BOOST_CHECK_CLOSE((*x)[1],  1.8, 1e-8);
@@ -122,7 +123,7 @@ BOOST_AUTO_TEST_CASE(nsga3_test_gaussian_elimination){
      *  available pivot in each column, so this non-singular system is solvable.
      */
     std::vector<std::vector<double>> pivoted{{0.0, 2.0, 1.0}, {1.0, 0.0, 3.0}, {2.0, 1.0, 0.0}};
-    auto xp = gaussian_elimination(pivoted, b);
+    auto xp = detail::gaussian_elimination(pivoted, b);
     BOOST_REQUIRE(xp.has_value());
     for(size_t i=0; i<pivoted.size(); i++){
         double residual = 0.0;
@@ -134,26 +135,26 @@ BOOST_AUTO_TEST_CASE(nsga3_test_gaussian_elimination){
 
     // An exactly singular system is reported, not thrown: the third row is row0 + row1
     std::vector<std::vector<double>> singular{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {5.0, 7.0, 9.0}};
-    BOOST_CHECK_NO_THROW((gaussian_elimination(singular, b)));
-    BOOST_CHECK(!gaussian_elimination(singular, b).has_value());
+    BOOST_CHECK_NO_THROW((detail::gaussian_elimination(singular, b)));
+    BOOST_CHECK(!detail::gaussian_elimination(singular, b).has_value());
 
     /*  A nearly singular system is caught by the scale-aware tolerance: the first
      *  two rows differ by an amount well below eps*N*max|A_ij|.
      */
     std::vector<std::vector<double>> near_singular{{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0 + 1e-15}, {1.0, 2.0, 3.0}};
-    BOOST_CHECK(!gaussian_elimination(near_singular, b).has_value());
+    BOOST_CHECK(!detail::gaussian_elimination(near_singular, b).has_value());
 
     // The same system, perturbed well above the tolerance, remains solvable
     std::vector<std::vector<double>> conditioned{{1.0, 1.0, 1.0}, {1.0, 1.0, 1.0 + 1e-6}, {1.0, 2.0, 3.0}};
-    BOOST_CHECK(gaussian_elimination(conditioned, b).has_value());
+    BOOST_CHECK(detail::gaussian_elimination(conditioned, b).has_value());
 
     // Dimensions are validated
     std::vector<std::vector<double>> empty_matrix;
-    BOOST_CHECK_THROW((gaussian_elimination(empty_matrix, b)), std::invalid_argument);
+    BOOST_CHECK_THROW((detail::gaussian_elimination(empty_matrix, b)), std::invalid_argument);
     std::vector<std::vector<double>> non_square{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
-    BOOST_CHECK_THROW((gaussian_elimination(non_square, b)), std::invalid_argument);
+    BOOST_CHECK_THROW((detail::gaussian_elimination(non_square, b)), std::invalid_argument);
     std::vector<double> short_b{1.0, 1.0};
-    BOOST_CHECK_THROW((gaussian_elimination(A, short_b)), std::invalid_argument);
+    BOOST_CHECK_THROW((detail::gaussian_elimination(A, short_b)), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_test_extreme_point_duplicates){

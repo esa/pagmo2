@@ -293,6 +293,7 @@ set(PAGMO_SRC_FILES
     # Detail.
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/base_sr_policy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/nsga3_impl.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/gte_getter.cpp"

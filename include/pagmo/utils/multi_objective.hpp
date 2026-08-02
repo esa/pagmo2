@@ -31,7 +31,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <cmath>
 #include <numeric>
-#include <optional>
 #include <random>
 #include <sstream>
 #include <stdexcept>
@@ -43,7 +42,6 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/exceptions.hpp>
-#include <pagmo/rng.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/discrepancy.hpp>
 #include <pagmo/utils/generic.hpp>
@@ -216,26 +214,6 @@ inline std::vector<vector_double> decomposition_weights(vector_double::size_type
 // Decomposes a vector of objectives.
 PAGMO_DLL_PUBLIC vector_double decompose_objectives(const vector_double &, const vector_double &, const vector_double &,
                                                     const std::string &);
-
-// Gaussian Elimination with partial pivoting
-PAGMO_DLL_PUBLIC std::optional<vector_double> gaussian_elimination(std::vector<std::vector<double>>,
-                                                                   const vector_double &);
-
-// Achievement Scalarization Function
-PAGMO_DLL_PUBLIC double achievement(const vector_double &, const vector_double &);
-
-// Perpendicular distance to reference point vectors
-PAGMO_DLL_PUBLIC double perpendicular_distance(const std::vector<double> &, const std::vector<double> &);
-
-/* Choose single random element from vector container.
- * The random engine is supplied by the caller so that the choice depends only
- * on the state of that engine, and not on the global pagmo::random_device.
- */
-template <class T>
-T choose_random_element(const std::vector<T> &container, detail::random_engine_type &random_engine){
-    std::uniform_int_distribution<typename std::vector<T>::size_type> dist(0u, container.size() - 1u);
-    return container[dist(random_engine)];
-}
 
 } // namespace pagmo
 

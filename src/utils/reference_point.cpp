@@ -5,8 +5,8 @@
 #include <sstream>
 #include <string>
 
+#include <pagmo/detail/nsga3_impl.hpp>  // perpendicular_distance, choose_random_element
 #include <pagmo/utils/reference_point.hpp>
-#include <pagmo/utils/multi_objective.hpp>  // perpendicular_distance
 
 
 namespace pagmo{
@@ -77,7 +77,7 @@ void associate_with_reference_points(std::vector<ReferencePoint> &rps,
             size_t nearest = 0;
             double min_dist = std::numeric_limits<double>::max();
             for(size_t p=0; p<rps.size(); p++){
-                double dist = perpendicular_distance(rps[p].get_coeffs(), norm_objs[fronts[f][i]]);
+                double dist = detail::perpendicular_distance(rps[p].get_coeffs(), norm_objs[fronts[f][i]]);
                 if(dist < min_dist){
                     min_dist = dist;
                     nearest = p;
@@ -104,7 +104,7 @@ size_t identify_niche_point(std::vector<ReferencePoint> &rps, detail::random_eng
         }
     }
     // Return a random element from the minimal set
-    return choose_random_element<size_t>(minimal_set, reng);
+    return detail::choose_random_element<size_t>(minimal_set, reng);
 }
 
 // Section IV.E
@@ -136,7 +136,7 @@ std::optional<size_t> ReferencePoint::random_candidate(detail::random_engine_typ
     if(candidates.empty()){
         return std::nullopt;
     }
-    return choose_random_element<std::pair<size_t, double>>(candidates, reng).first;
+    return detail::choose_random_element<std::pair<size_t, double>>(candidates, reng).first;
 }
 
 size_t n_choose_k(size_t n, size_t k){
