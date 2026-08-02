@@ -9,7 +9,6 @@
 #include <pagmo/detail/visibility.hpp>  // PAGMO_DLL_PUBLIC
 #include <pagmo/population.hpp>  // population
 #include <pagmo/s11n.hpp>  // detail::archive
-#include <pagmo/utils/reference_point.hpp>  // ReferencePoint
 
 
 namespace pagmo{
@@ -39,7 +38,6 @@ class PAGMO_DLL_PUBLIC nsga3{
         std::string get_extra_info() const;
         population evolve(population) const;
         std::vector<size_t> selection(population &, size_t) const;
-        std::vector<ReferencePoint> generate_uniform_reference_points(size_t nobjs, size_t divisions) const;
         /*  The normalisation helpers below are expressed in terms of objective vectors
          *  and an explicit ideal point rather than a population, so that the coordinate
          *  system in use is never implicit. They are public to allow direct testing.
@@ -73,7 +71,6 @@ class PAGMO_DLL_PUBLIC nsga3{
         mutable detail::random_engine_type m_reng;  // Defaults to std::mt19937
         mutable log_type m_log;
         unsigned m_verbosity {0};
-        mutable std::vector<ReferencePoint> m_refpoints;
         // Serialisation support
         friend class boost::serialization::access;
         template <typename Archive>

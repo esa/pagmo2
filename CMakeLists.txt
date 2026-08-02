@@ -289,11 +289,11 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hv2d.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hv3d.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_hvwfg.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/reference_point.cpp"
     # Detail.
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/base_sr_policy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/nsga3_impl.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/reference_point.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/gte_getter.cpp"

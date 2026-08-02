@@ -18,13 +18,13 @@
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga3.hpp>
 #include <pagmo/detail/nsga3_impl.hpp>
+#include <pagmo/detail/reference_point.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
 #include <pagmo/utils/genetic_operators.hpp>
 #include <pagmo/utils/multi_objective.hpp>  // fast_non_dominated_sorting
-#include <pagmo/utils/reference_point.hpp>  // ReferencePoint
 #include <pagmo/s11n.hpp>
 
 #include <boost/serialization/optional.hpp>
@@ -85,16 +85,6 @@ nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut,
         pagmo_throw(std::invalid_argument, "Invalid <divisions> argument: " + std::to_string(divisions) + ". "
                                            "Number of reference point divisions per objective must be positive");
     }
-}
-
-
-std::vector<ReferencePoint> nsga3::generate_uniform_reference_points(size_t nobjs, size_t divisions) const{
-    ReferencePoint rp(nobjs);
-    if(!m_refpoints.empty()){
-        m_refpoints.clear();
-    }
-    m_refpoints = generate_reference_point_level(rp, divisions, 0, divisions);
-    return m_refpoints;
 }
 
 
@@ -329,7 +319,7 @@ population nsga3::evolve(population pop) const{
                     "NSGA-III requires a population greater than 5 and which is divisible by 4."
                     "Detected input population size is: " + std::to_string(NP));
     }
-    size_t num_rps = n_choose_k(prob.get_nf() + m_divisions - 1, m_divisions);
+    size_t num_rps = detail::n_choose_k(prob.get_nf() + m_divisions - 1, m_divisions);
     if(NP <= num_rps){
         pagmo_throw(std::invalid_argument,
                     "Population size must exceed number of reference points. NP = "
@@ -495,12 +485,12 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
     auto ext_points = find_extreme_points(fronts, translated_objectives, ideal_point);
     auto intercepts = find_intercepts(ext_points, translated_objectives);
     auto norm_objs = normalize_objectives(translated_objectives, intercepts);
-    std::vector<ReferencePoint> rps = generate_uniform_reference_points(nobj, m_divisions);
-    associate_with_reference_points(rps, norm_objs, fronts);
+    std::vector<detail::reference_point> rps = detail::generate_uniform_reference_points(nobj, m_divisions);
+    detail::associate_with_reference_points(rps, norm_objs, fronts);
 
     // Apply RP selection to final front until N_pop reached
     while(next.size() < N_pop){
-        size_t min_rp_idx = identify_niche_point(rps, m_reng);
+        size_t min_rp_idx = detail::identify_niche_point(rps, m_reng);
         std::optional<size_t> selected_idx = rps[min_rp_idx].select_member(m_reng);
         if(selected_idx.has_value()){
             rps[min_rp_idx].increment_members();

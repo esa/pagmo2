@@ -13,11 +13,11 @@
 #include <pagmo/io.hpp>
 #include <pagmo/problems/dtlz.hpp>
 #include <pagmo/detail/nsga3_impl.hpp>
+#include <pagmo/detail/reference_point.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/rng.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
-#include <pagmo/utils/reference_point.hpp>
 #include <pagmo/utils/multi_objective.hpp>
 
 using namespace pagmo;
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(nsga3_evolve_population){
 };
 
 BOOST_AUTO_TEST_CASE(nsga3_reference_point_type){
-    ReferencePoint rp3(3);
+    detail::reference_point rp3(3);
     BOOST_CHECK_EQUAL(rp3.dim(), 3);
     BOOST_CHECK_EQUAL(rp3[0], 0.0);
     BOOST_CHECK_EQUAL(rp3[1], 0.0);
@@ -68,8 +68,7 @@ BOOST_AUTO_TEST_CASE(nsga3_verify_uniform_reference_points){
      */
 
     double close_distance = 1e-8;
-    nsga3 n = nsga3();
-    auto rp_3_12 = n.generate_uniform_reference_points(3, 12);
+    auto rp_3_12 = detail::generate_uniform_reference_points(3, 12);
     BOOST_CHECK_EQUAL(rp_3_12.size(), 91);
     for(auto& p: rp_3_12){
         double p_sum = 0.0;
@@ -79,7 +78,7 @@ BOOST_AUTO_TEST_CASE(nsga3_verify_uniform_reference_points){
         BOOST_CHECK_CLOSE(p_sum, 1.0, 1e-8);
     }
 
-    auto rp_8_12 = n.generate_uniform_reference_points(8, 12);
+    auto rp_8_12 = detail::generate_uniform_reference_points(8, 12);
     BOOST_CHECK_EQUAL(rp_8_12.size(), 50388);
     for(auto& p: rp_8_12){
         double p_sum = 0.0;
