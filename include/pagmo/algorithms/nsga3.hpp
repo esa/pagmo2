@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
+#include <pagmo/algorithm.hpp>  // PAGMO_S11N_ALGORITHM_EXPORT_KEY
 #include <pagmo/detail/visibility.hpp>  // PAGMO_DLL_PUBLIC
 #include <pagmo/population.hpp>  // population
 #include <pagmo/rng.hpp>  // random_device, random_engine_type
