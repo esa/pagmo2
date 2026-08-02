@@ -254,6 +254,7 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/moead.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/moead_gen.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/nsga2.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/nsga3.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/gaco.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/de1220.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithms/gwo.cpp"
@@ -291,6 +292,8 @@ set(PAGMO_SRC_FILES
     # Detail.
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/base_sr_policy.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/bfe_impl.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/nsga3_impl.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/reference_point.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/task_queue.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/prime_numbers.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/detail/gte_getter.cpp"
