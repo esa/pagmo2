@@ -5,7 +5,9 @@
  *  Paul Slavin <paul.slavin@manchester.ac.uk>
  */
 #include <algorithm>
+#include <cmath>
 #include <iostream>
+#include <limits>
 #include <optional>
 #include <string>
 #include <tuple>
@@ -13,6 +15,7 @@
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/nsga3.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
@@ -65,28 +68,36 @@ std::vector<ReferencePoint> nsga3::generate_uniform_reference_points(size_t nobj
 }
 
 
-std::vector<std::vector<double>> nsga3::translate_objectives(population pop) const{
-    size_t NP = pop.size();
-    size_t nobj = pop.get_problem().get_nobj();
-    auto objs = pop.get_f();
-    std::vector<double> p_ideal;
+/*  The ideal point used to translate the objectives.
+ *  With memory enabled this is the best value found for each objective since the
+ *  start of the run, as described in Deb & Jain Section IV.B, and is retained
+ *  across generations.
+ */
+std::vector<double> nsga3::compute_ideal(const std::vector<vector_double> &objs) const{
+    std::vector<double> p_ideal = ideal(objs);
+
     if(has_memory()){
-        decltype(objs) combined{m_memory.v_ideal};
-        if(m_memory.v_ideal.size() != 0){  // i.e. not first gen
-            combined.insert(combined.end(), objs.begin(), objs.end());
-            p_ideal = ideal(combined);
-        }else{
-            p_ideal = ideal(objs);
+        if(m_memory.v_ideal.size() == p_ideal.size()){  // i.e. not first gen
+            for(size_t i=0; i<p_ideal.size(); i++){
+                p_ideal[i] = std::min(p_ideal[i], m_memory.v_ideal[i]);
+            }
         }
         m_memory.v_ideal = p_ideal;
-    }else{
-        p_ideal = ideal(objs);
     }
+
+    return p_ideal;
+}
+
+
+std::vector<std::vector<double>> nsga3::translate_objectives(const std::vector<vector_double> &objs,
+                                                             const std::vector<double> &ideal_point) const{
+    size_t NP = objs.size();
+    size_t nobj = ideal_point.size();
     std::vector<std::vector<double>> translated_objs(NP, std::vector<double>(nobj));
 
     for(size_t obj=0; obj<nobj; obj++){
         for(size_t i=0; i<NP; i++){
-            translated_objs[i][obj] = objs[i][obj] - p_ideal[obj];
+            translated_objs[i][obj] = objs[i][obj] - ideal_point[obj];
         }
     }
 
@@ -94,11 +105,11 @@ std::vector<std::vector<double>> nsga3::translate_objectives(population pop) con
 }
 
 // fronts arg is NDS return type
-std::vector<std::vector<double>> nsga3::find_extreme_points(population pop,
-                                               std::vector<std::vector<pop_size_t>> &fronts,
-                                               std::vector<std::vector<double>> &translated_objs) const{
+std::vector<std::vector<double>> nsga3::find_extreme_points(const std::vector<std::vector<pop_size_t>> &fronts,
+                                               const std::vector<std::vector<double>> &translated_objs,
+                                               const std::vector<double> &ideal_point) const{
     std::vector<std::vector<double>> points;
-    size_t nobj = pop.get_problem().get_nobj();
+    size_t nobj = ideal_point.size();
 
     for(size_t i=0; i<nobj; i++){
         std::vector<double> weights(nobj, 1e-6);
@@ -131,33 +142,39 @@ std::vector<std::vector<double>> nsga3::find_extreme_points(population pop,
                 min_obj = translated_objs[fronts[0][ind]];
             }
         }
-        points.push_back(std::vector<double>(min_obj));
+        if(min_obj.empty()){  // Only reachable if every ASF value was NaN
+            min_obj = translated_objs[fronts[0][0]];
+        }
+        points.push_back(min_obj);
         if(has_memory()){
             m_memory.v_extreme[i] = std::vector<double>(min_obj);
         }
     }
 
-
     return points;
 }
 
-std::vector<double> nsga3::find_intercepts(population pop, std::vector<std::vector<double>> &ext_points) const{
+std::vector<double> nsga3::find_intercepts(const std::vector<std::vector<double>> &ext_points,
+                                           const std::vector<std::vector<double>> &translated_objs) const{
     /*  1. Check duplicate extreme points
      *  2. A = translated objectives of extreme points;  b = [1,1,...] to n_objs
      *  3. Solve Ax = b via Gaussian Elimination
      *  4. Return reciprocals as intercepts
-     *  NB Duplicate ext_points (singular matrix) and
-     *  negative intercepts fall back to nadir values.
+     *  NB Duplicate ext_points, a singular system and non-positive solutions
+     *  all fall back to the nadir point. Both the extreme points and the
+     *  returned intercepts are expressed in the translated coordinate system.
      */
 
-    size_t n_obj = pop.get_problem().get_nobj();
-    std::vector<double> b(n_obj, 1.0);
+    size_t n_obj = ext_points.size();
     std::vector<double> intercepts(n_obj, 1.0);
-    std::vector<std::vector<double>> A;
     bool fallback_to_nadir = false;
 
-    for(size_t p=0; !fallback_to_nadir && p<ext_points.size()-1; p++){
-        for(size_t q=p+1; !fallback_to_nadir && q<ext_points.size(); q++){
+    for(size_t p=0; !fallback_to_nadir && p<n_obj; p++){
+        if(ext_points[p].size() != n_obj){
+            fallback_to_nadir = true;
+            break;
+        }
+        for(size_t q=p+1; !fallback_to_nadir && q<n_obj; q++){
             for(size_t r=0; r<n_obj; r++){
                 fallback_to_nadir = (ext_points[p][r] == ext_points[q][r]);
                 if(fallback_to_nadir){
@@ -168,21 +185,20 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<std::vect
     }
 
     if(!fallback_to_nadir){
-        for(size_t i=0; i<ext_points.size(); i++){
-            A.push_back(ext_points[i]);
-        }
+        std::vector<double> b(n_obj, 1.0);
 
         // Ax = b
-        std::optional<vector_double> x = gaussian_elimination(A, b);
+        std::optional<vector_double> x = gaussian_elimination(ext_points, b);
 
         if(x.has_value()){
             // Express as intercepts, 1/x
-            for(size_t i=0; i<intercepts.size(); i++){
-                intercepts[i] = 1.0/(*x)[i];
-                if((*x)[i] < 0.0){
+            for(size_t i=0; i<n_obj; i++){
+                // A zero, negative or non-finite coefficient has no usable reciprocal
+                if(!std::isfinite((*x)[i]) || (*x)[i] <= 0.0){
                     fallback_to_nadir = true;
                     break;
                 }
+                intercepts[i] = 1.0/(*x)[i];
             }
         }else{
             fallback_to_nadir = true;  // Singular, or numerically singular, system
@@ -190,36 +206,41 @@ std::vector<double> nsga3::find_intercepts(population pop, std::vector<std::vect
     }
 
     if(fallback_to_nadir){
-        auto objs = pop.get_f();
-        std::vector<double> v_nadir;
-        if(has_memory()){
-            decltype(objs) combined{m_memory.v_nadir};
-            if(m_memory.v_nadir.size() != 0){
-                combined.insert(combined.end(), objs.begin(), objs.end());
-                v_nadir = nadir(combined);
-            }else{
-                v_nadir = nadir(objs);
-            }
-            m_memory.v_nadir = v_nadir;
-        }else{
-            v_nadir = nadir(objs);
-        }
-        for(size_t i=0; i<intercepts.size(); i++){
+        /*  Translation by a constant vector preserves the dominance relation, so
+         *  the nadir point of the translated objectives is exactly (worst - ideal):
+         *  the same coordinate system as the objectives these intercepts divide.
+         */
+        std::vector<double> v_nadir = nadir(translated_objs);
+        for(size_t i=0; i<n_obj && i<v_nadir.size(); i++){
             intercepts[i] = v_nadir[i];
+        }
+    }
+
+    /*  A degenerate objective, identical across the whole population, has zero
+     *  extent. Its translated coordinate is zero everywhere, so dividing by one
+     *  keeps it at zero instead of producing an infinity or a NaN.
+     */
+    for(size_t i=0; i<n_obj; i++){
+        if(!std::isfinite(intercepts[i]) || intercepts[i] <= 0.0){
+            intercepts[i] = 1.0;
         }
     }
 
     return intercepts;
 }
 
-std::vector<std::vector<double>> nsga3::normalize_objectives(std::vector<std::vector<double>> &translated_objs,
-                                                      std::vector<double> &intercepts) const{
+std::vector<std::vector<double>> nsga3::normalize_objectives(const std::vector<std::vector<double>> &translated_objs,
+                                                      const std::vector<double> &intercepts) const{
     /*  Algorithm 2, step 7 and Equation 4
      *  Note that Objectives and therefore intercepts
      *  are already translated by ideal point.
      */
 
-    size_t nobj = translated_objs[1].size();
+    if(translated_objs.empty()){
+        return {};
+    }
+
+    size_t nobj = translated_objs[0].size();
     std::vector<std::vector<double>> norm_objs(translated_objs.size(), std::vector<double>(nobj));
 
     for(size_t i=0; i<translated_objs.size(); i++){
@@ -398,9 +419,11 @@ std::vector<size_t> nsga3::selection(population &R, size_t N_pop) const{
         return next;
     }
 
-    auto translated_objectives = translate_objectives(R);
-    auto ext_points = find_extreme_points(R, fronts, translated_objectives);
-    auto intercepts = find_intercepts(R, ext_points);
+    auto objs = R.get_f();
+    auto ideal_point = compute_ideal(objs);
+    auto translated_objectives = translate_objectives(objs, ideal_point);
+    auto ext_points = find_extreme_points(fronts, translated_objectives, ideal_point);
+    auto intercepts = find_intercepts(ext_points, translated_objectives);
     auto norm_objs = normalize_objectives(translated_objectives, intercepts);
     std::vector<ReferencePoint> rps = generate_uniform_reference_points(nobj, m_divisions);
     associate_with_reference_points(rps, norm_objs, fronts);

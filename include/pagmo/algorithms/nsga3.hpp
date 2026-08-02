@@ -15,11 +15,12 @@ namespace pagmo{
 
 class PAGMO_DLL_PUBLIC nsga3{
     public:
-        typedef struct{
+        /*  State retained across generations when memory is enabled.
+         */
+        struct NSGA3Memory{
             std::vector<std::vector<double>> v_extreme;
             std::vector<double> v_ideal;
-            std::vector<double> v_nadir;
-        } NSGA3Memory;
+        };
         // Log line format: (gen, fevals, ideal_point)
         typedef std::tuple<unsigned, unsigned long long, vector_double> log_line_type;
         typedef std::vector<log_line_type> log_type;
@@ -31,10 +32,20 @@ class PAGMO_DLL_PUBLIC nsga3{
         population evolve(population) const;
         std::vector<size_t> selection(population &, size_t) const;
         std::vector<ReferencePoint> generate_uniform_reference_points(size_t nobjs, size_t divisions) const;
-        std::vector<std::vector<double>> translate_objectives(population) const;
-        std::vector<std::vector<double>> find_extreme_points(population, std::vector<std::vector<pop_size_t>> &, std::vector<std::vector<double>> &) const;
-        std::vector<double> find_intercepts(population, std::vector<std::vector<double>> &) const;
-        std::vector<std::vector<double>> normalize_objectives(std::vector<std::vector<double>> &, std::vector<double> &) const;
+        /*  The normalisation helpers below are expressed in terms of objective vectors
+         *  and an explicit ideal point rather than a population, so that the coordinate
+         *  system in use is never implicit. They are public to allow direct testing.
+         */
+        std::vector<double> compute_ideal(const std::vector<vector_double> &) const;
+        std::vector<std::vector<double>> translate_objectives(const std::vector<vector_double> &,
+                                                              const std::vector<double> &) const;
+        std::vector<std::vector<double>> find_extreme_points(const std::vector<std::vector<pop_size_t>> &,
+                                                             const std::vector<std::vector<double>> &,
+                                                             const std::vector<double> &) const;
+        std::vector<double> find_intercepts(const std::vector<std::vector<double>> &,
+                                            const std::vector<std::vector<double>> &) const;
+        std::vector<std::vector<double>> normalize_objectives(const std::vector<std::vector<double>> &,
+                                                              const std::vector<double> &) const;
         const log_type &get_log() const { return m_log; }
         void set_verbosity(unsigned level) { m_verbosity = level; }
         unsigned get_verbosity() const { return m_verbosity; }
@@ -49,7 +60,7 @@ class PAGMO_DLL_PUBLIC nsga3{
         double m_eta_mut;   // eta mutation
         size_t m_divisions; // Reference Point hyperplane subdivisions
         unsigned m_seed;    // Seed for PRNG initialisation
-        bool m_use_memory;  // Preserve extremes, ideal, nadir across generations
+        bool m_use_memory;  // Preserve extremes and ideal across generations
         mutable NSGA3Memory m_memory{};
         mutable detail::random_engine_type m_reng;  // Defaults to std::mt19937
         mutable log_type m_log;
