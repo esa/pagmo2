@@ -155,6 +155,38 @@ BOOST_AUTO_TEST_CASE(nsga3_test_gaussian_elimination){
     BOOST_CHECK_THROW((gaussian_elimination(A, short_b)), std::invalid_argument);
 }
 
+BOOST_AUTO_TEST_CASE(nsga3_test_extreme_point_duplicates){
+    nsga3 nsga3_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, false};
+
+    // Translated objectives whose nadir point, (1, 1, 1), differs from the solved intercepts
+    const std::vector<std::vector<double>> translated{{1.0, 1.0, 1.0}, {2.0, 2.0, 2.0}};
+
+    /*  These extreme points are pairwise distinct, but every pair shares at least
+     *  one coordinate. Comparing coordinates individually misclassifies them as
+     *  duplicates and skips the solver; comparing complete vectors does not.
+     */
+    std::vector<std::vector<double>> distinct{{2.0, 0.0, 0.0}, {0.0, 4.0, 0.0}, {0.0, 0.0, 8.0}};
+    auto intercepts = nsga3_alg.find_intercepts(distinct, translated);
+    BOOST_CHECK_CLOSE(intercepts[0], 2.0, 1e-8);
+    BOOST_CHECK_CLOSE(intercepts[1], 4.0, 1e-8);
+    BOOST_CHECK_CLOSE(intercepts[2], 8.0, 1e-8);
+
+    // Two identical extreme points do fall back to the nadir point
+    std::vector<std::vector<double>> duplicated{{2.0, 0.0, 0.0}, {2.0, 0.0, 0.0}, {0.0, 0.0, 8.0}};
+    intercepts = nsga3_alg.find_intercepts(duplicated, translated);
+    BOOST_CHECK_CLOSE(intercepts[0], 1.0, 1e-8);
+    BOOST_CHECK_CLOSE(intercepts[1], 1.0, 1e-8);
+    BOOST_CHECK_CLOSE(intercepts[2], 1.0, 1e-8);
+
+    // As do points which differ only within the numerical tolerance
+    std::vector<std::vector<double>> near_duplicated{{2.0, 0.0, 0.0}, {2.0 + 1e-15, 1e-16, -1e-16},
+                                                     {0.0, 0.0, 8.0}};
+    intercepts = nsga3_alg.find_intercepts(near_duplicated, translated);
+    BOOST_CHECK_CLOSE(intercepts[0], 1.0, 1e-8);
+    BOOST_CHECK_CLOSE(intercepts[1], 1.0, 1e-8);
+    BOOST_CHECK_CLOSE(intercepts[2], 1.0, 1e-8);
+}
+
 BOOST_AUTO_TEST_CASE(nsga3_test_intercepts_fallback){
     nsga3 nsga3_alg{1u, 1.00, 30., 0.10, 20., 5u, 32u, false};
 

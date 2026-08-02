@@ -27,6 +27,33 @@
 #include <boost/serialization/optional.hpp>
 
 
+namespace{
+
+/*  Relative tolerance used when deciding whether two extreme points coincide.
+ */
+constexpr double extreme_point_tol = 1e-12;
+
+/*  Two extreme points are duplicates only when *every* coordinate matches. The
+ *  comparison is relative to the magnitude of the coordinates, so that it does
+ *  not depend on the scale of the objectives, with an absolute floor of tol for
+ *  coordinates close to zero.
+ */
+bool close_vectors(const std::vector<double> &lhs, const std::vector<double> &rhs, double tol){
+    if(lhs.size() != rhs.size()){
+        return false;
+    }
+    for(size_t i=0; i<lhs.size(); i++){
+        double scale = std::max(1.0, std::max(std::abs(lhs[i]), std::abs(rhs[i])));
+        if(!(std::abs(lhs[i] - rhs[i]) <= tol*scale)){
+            return false;
+        }
+    }
+    return true;
+}
+
+}  // namespace
+
+
 namespace pagmo{
 
 nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut,
@@ -175,12 +202,8 @@ std::vector<double> nsga3::find_intercepts(const std::vector<std::vector<double>
             break;
         }
         for(size_t q=p+1; !fallback_to_nadir && q<n_obj; q++){
-            for(size_t r=0; r<n_obj; r++){
-                fallback_to_nadir = (ext_points[p][r] == ext_points[q][r]);
-                if(fallback_to_nadir){
-                    break;
-                }
-            }
+            // Extreme points coincide only when the *complete* vectors match
+            fallback_to_nadir = close_vectors(ext_points[p], ext_points[q], extreme_point_tol);
         }
     }
 
