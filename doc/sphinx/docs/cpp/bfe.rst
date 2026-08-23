@@ -46,8 +46,10 @@ Batch fitness evaluator
    stored contiguously).
 
    Additionally, UDBFEs must also be destructible and default, copy and move constructible.
-   Note that pointers to plain C++ functions with an appropriate signature
-   are UDBFEs, but lambda functions are not (as they currently are not default-constructible).
+   Note that pointers to plain C++ functions with an appropriate signature are UDBFEs.
+   Stateless lambdas are also UDBFEs when their closure types are default-constructible
+   (e.g., when using C++20 or later), while capturing lambdas are not default-constructible
+   and thus are not UDBFEs.
 
    UDBFEs can also implement the following (optional) member functions:
 
