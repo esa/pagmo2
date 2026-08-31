@@ -53,5 +53,8 @@ if ("libipopt" IN_LIST pagmo_IPOPT_FIND_COMPONENTS)
         message(STATUS "Path to libipopt: ${PAGMO_IPOPT_LIBRARY}")
         add_library(pagmo::IPOPT::libipopt UNKNOWN IMPORTED)
         set_target_properties(pagmo::IPOPT::libipopt PROPERTIES IMPORTED_LOCATION "${PAGMO_IPOPT_LIBRARY}")
+        find_package(LAPACK REQUIRED)
+        set_property(TARGET pagmo::IPOPT::libipopt APPEND PROPERTY
+            INTERFACE_LINK_LIBRARIES LAPACK::LAPACK ${CMAKE_DL_LIBS})
     endif()
 endif()

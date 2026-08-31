@@ -38,8 +38,19 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
+#if __has_include(<IpReturnCodes.hpp>) && __has_include(<IpTypes.hpp>)
 #include <IpReturnCodes.hpp>
 #include <IpTypes.hpp>
+#elif __has_include(<coin-or/IpReturnCodes.hpp>) && __has_include(<coin-or/IpTypes.hpp>)
+#include <coin-or/IpReturnCodes.hpp>
+#include <coin-or/IpTypes.hpp>
+#elif __has_include(<coin/IpReturnCodes.hpp>) && __has_include(<coin/IpTypes.hpp>)
+#include <coin/IpReturnCodes.hpp>
+#include <coin/IpTypes.hpp>
+#else
+#include <IpReturnCodes.hpp>
+#include <IpTypes.hpp>
+#endif
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
