@@ -31,7 +31,7 @@ conda run -p "$DEPS_DIR" ctest --test-dir build -VV --output-on-failure -j4 -E t
 # Generate lcov report.
 (
     cd build
-    conda run -p "$DEPS_DIR" lcov --capture --directory . --output-file coverage.info
+    conda run -p "$DEPS_DIR" lcov --ignore-errors inconsistent --capture --directory . --output-file coverage.info
 )
 test -s build/coverage.info
 
