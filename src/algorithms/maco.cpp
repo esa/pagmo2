@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #include <cmath>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <iterator>
 #include <numeric>
 #include <random>
@@ -182,71 +183,90 @@ population maco::evolve(population pop) const
                     // We can now go through the individuals within each front and store them in the archive, according
                     // to
                     // their hypervolume values:
-                    std::vector<vector_double> list_of_fit(front_idxs.size(), vector_double(n_f, 1));
-                    std::vector<vector_double> list_of_dvs(front_idxs.size(), vector_double(n_x, 1));
-                    vector_double::size_type i_ndf = 0;
+                    // Filter out fitness vectors unsuitable for hypervolume:
+                    // infeasible points penalised by `unconstrain(..., "death penalty")`
+                    // carry DBL_MAX (non-finite/inf). If kept, hv.refpoint(offset)
+                    // saturates: max=DBL_MAX -> ref=DBL_MAX+offset==DBL_MAX, so
+                    // hv.contributions(ref) fails verify_before_compute/
+                    // assert_minimisation with "Reference point is invalid:
+                    // point equal to / outside reference" (issue #525), not a
+                    // non-finite hypervolume return. Filtering here keeps
+                    // hypervolume strict (it still throws on non-finite input)
+                    // and documents the death-penalty intent. Example in
+                    // tests/maco.cpp::maco_constrained_test.
+                    std::vector<vector_double> list_of_fit;
+                    std::vector<vector_double> list_of_dvs;
                     for (auto idx : front_idxs) {
-                        // Here I store the fitness vector corresponding to each front:
-                        list_of_fit[i_ndf] = fit[idx];
-                        list_of_dvs[i_ndf] = dvs[idx];
-                        ++i_ndf;
-                    }
-                    // I set-up the hypervolume computation by passing the list of fitnesses:
-                    hypervolume hv = hypervolume(list_of_fit, true);
-                    // I compute the reference point by offsetting it of 0.1 to ensure strict domination:
-                    auto ref_point = hv.refpoint(0.1);
-                    // I can now compute the hypervolume values:
-                    auto contrib = hv.contributions(ref_point);
-                    // I sort the individuals in the ndf according to their hypervolume values (bigger first, lower
-                    // after)
-                    std::vector<decltype(contrib.size())> sort_list(contrib.size());
-                    // I now have to order the vectors in a list
-                    std::iota(std::begin(sort_list), std::end(sort_list), decltype(contrib.size())(0));
-                    // I sort them by placing the biggest hypervolume contributor first:
-                    std::sort(sort_list.begin(), sort_list.end(),
-                              [&contrib](decltype(contrib.size()) idx1, decltype(contrib.size()) idx2) {
-                                  return detail::greater_than_f(contrib[idx1], contrib[idx2]);
-                              });
-
-                    // I can now place the sorted individuals in the sol_archive:
-                    vector_double::size_type i_hv = 0;
-                    for (decltype(contrib.size()) i = 0u; i < contrib.size() && i_arch < m_ker; ++i) {
-                        for (decltype(n_x) i_nx = 0u; i_nx < n_x; ++i_nx) {
-                            sol_archive[i_arch][i_nx] = list_of_dvs[sort_list[i_hv]][i_nx];
-                        }
-                        for (decltype(n_f) i_nf = 0u; i_nf < n_f; ++i_nf) {
-                            sol_archive[i_arch][n_x + i_nf] = list_of_fit[sort_list[i_hv]][i_nf];
-                            sol_archive_fit[i_arch][i_nf] = sol_archive[i_arch][n_x + i_nf];
-                        }
-                        ++i_hv;
-                        ++i_arch;
-                    }
-                    // If, in the first front, there are more pareto points than the ones allowed to store
-                    // in the archive, then we make sure that the extremities are included
-                    if (i_arch >= m_ker && front == 0) {
-                        vector_double id_pt = ideal(list_of_fit);
-                        std::vector<vector_double> border_fits(n_f, vector_double(n_f, 1));
-                        std::vector<vector_double> border_points(n_f, vector_double(n_x, 1));
-                        vector_double::size_type elem = 0;
-                        for (decltype(n_f) i_f = 0; i_f < n_f; ++i_f) {
-                            bool flag = true;
-                            for (decltype(list_of_fit.size()) i_pop = 0; i_pop < list_of_fit.size() && flag == true;
-                                 ++i_pop) {
-                                if (list_of_fit[i_pop][i_f] == id_pt[i_f]) {
-                                    border_points[elem] = list_of_dvs[i_pop];
-                                    border_fits[elem] = list_of_fit[i_pop];
-                                    flag = false;
-                                    ++elem;
-                                }
+                        bool valid = true;
+                        for (const auto &val : fit[idx]) {
+                            if (!std::isfinite(val) || val == std::numeric_limits<double>::max()) {
+                                valid = false;
+                                break;
                             }
                         }
-                        for (decltype(n_f) i_f = 0; i_f < n_f && i_f < m_ker; ++i_f) {
+                        if (valid) {
+                            list_of_fit.push_back(fit[idx]);
+                            list_of_dvs.push_back(dvs[idx]);
+                        }
+                    }
+                    if (!list_of_fit.empty()) {
+                        // I set-up the hypervolume computation by passing the list of fitnesses:
+                        hypervolume hv = hypervolume(list_of_fit, true);
+                        // I compute the reference point by offsetting it of 0.1 to ensure strict domination:
+                        auto ref_point = hv.refpoint(0.1);
+                        // I can now compute the hypervolume values:
+                        auto contrib = hv.contributions(ref_point);
+                        // I sort the individuals in the ndf according to their hypervolume values (bigger first, lower
+                        // after)
+                        std::vector<decltype(contrib.size())> sort_list(contrib.size());
+                        // I now have to order the vectors in a list
+                        std::iota(std::begin(sort_list), std::end(sort_list), decltype(contrib.size())(0));
+                        // I sort them by placing the biggest hypervolume contributor first:
+                        std::sort(sort_list.begin(), sort_list.end(),
+                                  [&contrib](decltype(contrib.size()) idx1, decltype(contrib.size()) idx2) {
+                                      return detail::greater_than_f(contrib[idx1], contrib[idx2]);
+                                  });
+
+                        // I can now place the sorted individuals in the sol_archive:
+                        vector_double::size_type i_hv = 0;
+                        for (decltype(contrib.size()) i = 0u; i < contrib.size() && i_arch < m_ker; ++i) {
                             for (decltype(n_x) i_nx = 0u; i_nx < n_x; ++i_nx) {
-                                sol_archive[m_ker - 1 - i_f][i_nx] = border_points[i_f][i_nx];
+                                sol_archive[i_arch][i_nx] = list_of_dvs[sort_list[i_hv]][i_nx];
                             }
                             for (decltype(n_f) i_nf = 0u; i_nf < n_f; ++i_nf) {
-                                sol_archive[m_ker - 1 - i_f][n_x + i_nf] = border_fits[i_f][i_nf];
-                                sol_archive_fit[m_ker - 1 - i_f][i_nf] = sol_archive[i_f][n_x + i_nf];
+                                sol_archive[i_arch][n_x + i_nf] = list_of_fit[sort_list[i_hv]][i_nf];
+                                sol_archive_fit[i_arch][i_nf] = sol_archive[i_arch][n_x + i_nf];
+                            }
+                            ++i_hv;
+                            ++i_arch;
+                        }
+                        // If, in the first front, there are more pareto points than the ones allowed to store
+                        // in the archive, then we make sure that the extremities are included
+                        if (i_arch >= m_ker && front == 0) {
+                            vector_double id_pt = ideal(list_of_fit);
+                            std::vector<vector_double> border_fits(n_f, vector_double(n_f, 1));
+                            std::vector<vector_double> border_points(n_f, vector_double(n_x, 1));
+                            vector_double::size_type elem = 0;
+                            for (decltype(n_f) i_f = 0; i_f < n_f; ++i_f) {
+                                bool flag = true;
+                                for (decltype(list_of_fit.size()) i_pop = 0;
+                                     i_pop < list_of_fit.size() && flag == true; ++i_pop) {
+                                    if (list_of_fit[i_pop][i_f] == id_pt[i_f]) {
+                                        border_points[elem] = list_of_dvs[i_pop];
+                                        border_fits[elem] = list_of_fit[i_pop];
+                                        flag = false;
+                                        ++elem;
+                                    }
+                                }
+                            }
+                            for (decltype(n_f) i_f = 0; i_f < n_f && i_f < m_ker; ++i_f) {
+                                for (decltype(n_x) i_nx = 0u; i_nx < n_x; ++i_nx) {
+                                    sol_archive[m_ker - 1 - i_f][i_nx] = border_points[i_f][i_nx];
+                                }
+                                for (decltype(n_f) i_nf = 0u; i_nf < n_f; ++i_nf) {
+                                    sol_archive[m_ker - 1 - i_f][n_x + i_nf] = border_fits[i_f][i_nf];
+                                    sol_archive_fit[m_ker - 1 - i_f][i_nf] = border_fits[i_f][i_nf];
+                                }
                             }
                         }
                     }
@@ -331,71 +351,82 @@ population maco::evolve(population pop) const
                     // We can now go through the individuals within each front and store them in the archive, according
                     // to
                     // their hypervolume values:
-                    std::vector<vector_double> list_of_fit(front_idxs.size(), vector_double(n_f, 1));
-                    std::vector<vector_double> list_of_dvs(front_idxs.size(), vector_double(n_x, 1));
-                    vector_double::size_type i_ndf = 0;
+                    // Same filtering as above: exclude DBL_MAX/non-finite before
+                    // hv.refpoint/verify; see comment on first stage and issue #525.
+                    std::vector<vector_double> list_of_fit;
+                    std::vector<vector_double> list_of_dvs;
                     for (auto idx : front_idxs) {
-                        // Here I store the fitness vector corresponding to each front:
-                        list_of_fit[i_ndf] = merged_fit[idx];
-                        list_of_dvs[i_ndf] = merged_dvs[idx];
-                        ++i_ndf;
-                    }
-                    // I set-up the hypervolume computation by passing the list of fitnesses:
-                    hypervolume hv = hypervolume(list_of_fit, true);
-                    // I compute the reference point by offsetting it of 0.01 to ensure strict domination:
-                    auto ref_point = hv.refpoint(0.01);
-                    // I can now compute the hypervolume values:
-                    auto contrib = hv.contributions(ref_point);
-
-                    // I sort the individuals in the ndf according to their hypervolume values (bigger first, lower
-                    // after)
-                    std::vector<decltype(contrib.size())> sort_list(contrib.size());
-                    // I now have to order the vectors in a list
-                    std::iota(std::begin(sort_list), std::end(sort_list), decltype(contrib.size())(0));
-                    // I sort them by placing the biggest hypervolume contributor first:
-                    std::sort(sort_list.begin(), sort_list.end(),
-                              [&contrib](decltype(contrib.size()) idx1, decltype(contrib.size()) idx2) {
-                                  return detail::greater_than_f(contrib[idx1], contrib[idx2]);
-                              });
-
-                    // I can now place the sorted individuals in the sol_archive:
-                    vector_double::size_type i_hv = 0;
-                    for (decltype(contrib.size()) i = 0u; i < contrib.size() && i_arch < m_ker; ++i) {
-                        for (decltype(n_x) i_nx = 0u; i_nx < n_x; ++i_nx) {
-                            sol_archive[i_arch][i_nx] = list_of_dvs[sort_list[i_hv]][i_nx];
-                        }
-                        for (decltype(n_f) i_nf = 0u; i_nf < n_f; ++i_nf) {
-                            sol_archive[i_arch][n_x + i_nf] = list_of_fit[sort_list[i_hv]][i_nf];
-                        }
-                        ++i_hv;
-                        ++i_arch;
-                    }
-                    // If, in the first front, there are more pareto points than the ones allowed to store
-                    // in the archive, then we make sure that the extremities are included
-                    if (i_arch >= m_ker && front == 0) {
-                        vector_double id_pt = ideal(list_of_fit);
-                        std::vector<vector_double> border_fits(n_f, vector_double(n_f, 1));
-                        std::vector<vector_double> border_points(n_f, vector_double(n_x, 1));
-                        vector_double::size_type elem = 0;
-                        for (decltype(n_f) i_f = 0; i_f < n_f; ++i_f) {
-                            bool flag = true;
-                            for (decltype(list_of_fit.size()) i_pop = 0; i_pop < list_of_fit.size() && flag == true;
-                                 ++i_pop) {
-                                if (list_of_fit[i_pop][i_f] == id_pt[i_f]) {
-                                    border_points[elem] = list_of_dvs[i_pop];
-                                    border_fits[elem] = list_of_fit[i_pop];
-                                    flag = false;
-                                    ++elem;
-                                }
+                        bool valid = true;
+                        for (const auto &val : merged_fit[idx]) {
+                            if (!std::isfinite(val) || val == std::numeric_limits<double>::max()) {
+                                valid = false;
+                                break;
                             }
                         }
-                        for (decltype(n_f) i_f = 0; i_f < n_f && i_f < m_ker; ++i_f) {
+                        if (valid) {
+                            list_of_fit.push_back(merged_fit[idx]);
+                            list_of_dvs.push_back(merged_dvs[idx]);
+                        }
+                    }
+                    if (!list_of_fit.empty()) {
+                        // I set-up the hypervolume computation by passing the list of fitnesses:
+                        hypervolume hv = hypervolume(list_of_fit, true);
+                        // I compute the reference point by offsetting it of 0.01 to ensure strict domination:
+                        auto ref_point = hv.refpoint(0.01);
+                        // I can now compute the hypervolume values:
+                        auto contrib = hv.contributions(ref_point);
+
+                        // I sort the individuals in the ndf according to their hypervolume values (bigger first, lower
+                        // after)
+                        std::vector<decltype(contrib.size())> sort_list(contrib.size());
+                        // I now have to order the vectors in a list
+                        std::iota(std::begin(sort_list), std::end(sort_list), decltype(contrib.size())(0));
+                        // I sort them by placing the biggest hypervolume contributor first:
+                        std::sort(sort_list.begin(), sort_list.end(),
+                                  [&contrib](decltype(contrib.size()) idx1, decltype(contrib.size()) idx2) {
+                                      return detail::greater_than_f(contrib[idx1], contrib[idx2]);
+                                  });
+
+                        // I can now place the sorted individuals in the sol_archive:
+                        vector_double::size_type i_hv = 0;
+                        for (decltype(contrib.size()) i = 0u; i < contrib.size() && i_arch < m_ker; ++i) {
                             for (decltype(n_x) i_nx = 0u; i_nx < n_x; ++i_nx) {
-                                sol_archive[m_ker - 1 - i_f][i_nx] = border_points[i_f][i_nx];
+                                sol_archive[i_arch][i_nx] = list_of_dvs[sort_list[i_hv]][i_nx];
                             }
                             for (decltype(n_f) i_nf = 0u; i_nf < n_f; ++i_nf) {
-                                sol_archive[m_ker - 1 - i_f][n_x + i_nf] = border_fits[i_f][i_nf];
-                                sol_archive_fit[m_ker - 1 - i_f][i_nf] = sol_archive[i_f][n_x + i_nf];
+                                sol_archive[i_arch][n_x + i_nf] = list_of_fit[sort_list[i_hv]][i_nf];
+                                sol_archive_fit[i_arch][i_nf] = sol_archive[i_arch][n_x + i_nf];
+                            }
+                            ++i_hv;
+                            ++i_arch;
+                        }
+                        // If, in the first front, there are more pareto points than the ones allowed to store
+                        // in the archive, then we make sure that the extremities are included
+                        if (i_arch >= m_ker && front == 0) {
+                            vector_double id_pt = ideal(list_of_fit);
+                            std::vector<vector_double> border_fits(n_f, vector_double(n_f, 1));
+                            std::vector<vector_double> border_points(n_f, vector_double(n_x, 1));
+                            vector_double::size_type elem = 0;
+                            for (decltype(n_f) i_f = 0; i_f < n_f; ++i_f) {
+                                bool flag = true;
+                                for (decltype(list_of_fit.size()) i_pop = 0;
+                                     i_pop < list_of_fit.size() && flag == true; ++i_pop) {
+                                    if (list_of_fit[i_pop][i_f] == id_pt[i_f]) {
+                                        border_points[elem] = list_of_dvs[i_pop];
+                                        border_fits[elem] = list_of_fit[i_pop];
+                                        flag = false;
+                                        ++elem;
+                                    }
+                                }
+                            }
+                            for (decltype(n_f) i_f = 0; i_f < n_f && i_f < m_ker; ++i_f) {
+                                for (decltype(n_x) i_nx = 0u; i_nx < n_x; ++i_nx) {
+                                    sol_archive[m_ker - 1 - i_f][i_nx] = border_points[i_f][i_nx];
+                                }
+                                for (decltype(n_f) i_nf = 0u; i_nf < n_f; ++i_nf) {
+                                    sol_archive[m_ker - 1 - i_f][n_x + i_nf] = border_fits[i_f][i_nf];
+                                    sol_archive_fit[m_ker - 1 - i_f][i_nf] = border_fits[i_f][i_nf];
+                                }
                             }
                         }
                     }
