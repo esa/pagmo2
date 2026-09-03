@@ -120,6 +120,54 @@ BOOST_AUTO_TEST_CASE(sbx_crossover_test)
         });
 }
 
+BOOST_AUTO_TEST_CASE(sbx_crossover_nan_inf_test)
+{
+    detail::random_engine_type random_engine(32u);
+    // Parents with genes severely violating bounds can cause a negative beta in the
+    // SBX crossover calculation, which leads to NaN in std::pow(). We verify the
+    // children are always finite (no NaN/inf propagation) and clamped to bounds
+    // when crossover occurs.
+    vector_double lb = {0., 0., -5.};
+    vector_double ub = {1., 1., 5.};
+    // parent1[0] is far below lb[0], causing a negative beta in sbx_betaq
+    // which would previously produce NaN in pow().
+    vector_double parent1 = {-10., 0.3, 1.};
+    vector_double parent2 = {0.7, 0.8, -2.};
+    for (int trial = 0; trial < 100; ++trial) {
+        // Use p_cr = 1 to force crossover to always run.
+        auto children
+            = sbx_crossover(parent1, parent2, {lb, ub}, 0u, 1.0, 10., random_engine);
+        BOOST_CHECK(std::isfinite(children.first[0]));
+        BOOST_CHECK(std::isfinite(children.first[1]));
+        BOOST_CHECK(std::isfinite(children.first[2]));
+        BOOST_CHECK(std::isfinite(children.second[0]));
+        BOOST_CHECK(std::isfinite(children.second[1]));
+        BOOST_CHECK(std::isfinite(children.second[2]));
+        // Genes that were crossbred must be within bounds. A gene retains the
+        // parent value (even if out of bounds) when crossover is skipped for
+        // that gene, so we only verify that the clamped-to-bounds invariant
+        // holds when the value differs from the parent copy.
+        if (std::abs(children.first[0] - parent1[0]) > 1e-14) {
+            BOOST_CHECK(children.first[0] >= lb[0] && children.first[0] <= ub[0]);
+        }
+        if (std::abs(children.first[1] - parent1[1]) > 1e-14) {
+            BOOST_CHECK(children.first[1] >= lb[1] && children.first[1] <= ub[1]);
+        }
+        if (std::abs(children.first[2] - parent1[2]) > 1e-14) {
+            BOOST_CHECK(children.first[2] >= lb[2] && children.first[2] <= ub[2]);
+        }
+        if (std::abs(children.second[0] - parent2[0]) > 1e-14) {
+            BOOST_CHECK(children.second[0] >= lb[0] && children.second[0] <= ub[0]);
+        }
+        if (std::abs(children.second[1] - parent2[1]) > 1e-14) {
+            BOOST_CHECK(children.second[1] >= lb[1] && children.second[1] <= ub[1]);
+        }
+        if (std::abs(children.second[2] - parent2[2]) > 1e-14) {
+            BOOST_CHECK(children.second[2] >= lb[2] && children.second[2] <= ub[2]);
+        }
+    }
+}
+
 BOOST_AUTO_TEST_CASE(polynomial_mutation_test)
 {
     detail::random_engine_type random_engine(32u);

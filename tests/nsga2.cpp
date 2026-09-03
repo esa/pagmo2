@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
+#include <limits>
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
@@ -134,6 +135,49 @@ BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
     udp = dtlz{1u, 12u, 7u};
     population pop4{udp, 52u, 23u};
     pop4 = user_algo2.evolve(pop4);
+}
+
+struct mo_bounds_check {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0., 0.};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0., 0.}, {1., 1.}};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(nsga2_out_of_bounds_population_test)
+{
+    // Create a population with individuals outside bounds.
+    // NSGA-II should throw on evolve.
+    problem prob{mo_bounds_check{}};
+    population pop{prob, 8u, 23u};
+    // Modify the first individual to be outside the bounds.
+    auto x = pop.get_x()[0];
+    auto f = pop.get_f()[0];
+    x[0] = -1.0; // below lower bound
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga2{1u}.evolve(pop), std::invalid_argument);
+    // Test with a value above the upper bound.
+    x[0] = 2.0;
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga2{1u}.evolve(pop), std::invalid_argument);
+    // Non-finite genes must also be rejected (NaN bypasses < / > checks).
+    x[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga2{1u}.evolve(pop), std::invalid_argument);
+    x[0] = std::numeric_limits<double>::infinity();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga2{1u}.evolve(pop), std::invalid_argument);
+    x[0] = -std::numeric_limits<double>::infinity();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga2{1u}.evolve(pop), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(nsga2_setters_getters_test)

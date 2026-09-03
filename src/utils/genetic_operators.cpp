@@ -112,10 +112,8 @@ std::pair<vector_double, vector_double> sbx_crossover_impl(const vector_double &
                 betaq = sbx_betaq(beta, eta_c, rand01);
                 c2 = 0.5 * ((y1 + y2) + betaq * (y2 - y1));
 
-                if (c1 < lb[i]) c1 = lb[i];
-                if (c2 < lb[i]) c2 = lb[i];
-                if (c1 > ub[i]) c1 = ub[i];
-                if (c2 > ub[i]) c2 = ub[i];
+                c1 = std::isfinite(c1) ? std::clamp(c1, lb[i], ub[i]) : lb[i];
+                c2 = std::isfinite(c2) ? std::clamp(c2, lb[i], ub[i]) : lb[i];
                 if (drng(random_engine) < .5) {
                     child1[i] = c1;
                     child2[i] = c2;
