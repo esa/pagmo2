@@ -460,13 +460,28 @@ BOOST_AUTO_TEST_CASE(lambda_std_function)
     auto fun = [](const problem &p, const vector_double &dvs) {
         return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), 1.);
     };
+    // In C++20, stateless lambdas are default-constructible, so a lambda with
+    // the right call signature satisfies all is_udbfe requirements. In C++17
+    // and earlier, lambdas are not default-constructible and fail the check.
+#if __cplusplus >= 202002L || (defined(_MSVC_LANG) && _MSVC_LANG >= 202002L)
+    BOOST_CHECK(is_udbfe<decltype(fun)>::value);
+#else
     BOOST_CHECK(!is_udbfe<decltype(fun)>::value);
+#endif
 #if !defined(_MSC_VER)
     BOOST_CHECK(is_udbfe<decltype(+fun)>::value);
 #endif
     auto stdfun = std::function<vector_double(const problem &, const vector_double &)>(fun);
     BOOST_CHECK(is_udbfe<decltype(stdfun)>::value);
 
+#if __cplusplus >= 202002L || (defined(_MSVC_LANG) && _MSVC_LANG >= 202002L)
+    // In C++20 the lambda itself is a valid UDBFE.
+    {
+        bfe bfe0{fun};
+        BOOST_CHECK(bfe0(problem{}, vector_double{.5}) == vector_double{1.});
+        BOOST_CHECK(bfe0(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
+    }
+#endif
 #if !defined(_MSC_VER)
     {
         bfe bfe0{+fun};
