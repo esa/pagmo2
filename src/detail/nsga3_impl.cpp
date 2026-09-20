@@ -518,16 +518,18 @@ std::vector<pop_size_t> nsga3_selection(const std::vector<vector_double> &objs, 
         selected.insert(selected.end(), front.begin(), front.end());
     }
 
-    // Algorithm 1 lines 9 to 12: accept all members of the first l-1 fronts
+    if (selected.size() == N_pop) {
+        /*  Algorithm 1 lines 9 and 10: |S_t| == N, so the splitting front is absorbed
+         *  whole and neither normalisation nor niching is needed.
+         */
+        return selected;
+    }
+
+    // Algorithm 1 lines 11 and 12: accept all members of the first l-1 fronts
     std::vector<pop_size_t> next;
     next.reserve(N_pop);
     for (std::size_t f = 0u; f + 1u < fronts.size(); ++f) {
         next.insert(next.end(), fronts[f].begin(), fronts[f].end());
-    }
-
-    if (next.size() == N_pop) {
-        // |S_t| == N: the splitting front is absorbed whole and no niching is needed
-        return next;
     }
 
     /*  Algorithm 1 line 14, Algorithm 2. A null memory pointer means the

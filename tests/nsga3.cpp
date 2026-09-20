@@ -797,6 +797,72 @@ BOOST_AUTO_TEST_CASE(nsga3_selection_golden)
     BOOST_CHECK_THROW(detail::nsga3_selection(objs_b, 5u, {}, nullptr, nullptr, reng), std::invalid_argument);
 }
 
+BOOST_AUTO_TEST_CASE(nsga3_selection_exact_front_fit)
+{
+    /*  Algorithm 1 lines 9 and 10: when the retained fronts fit the target size
+     *  exactly, S_t survives whole. Neither normalisation nor niching may run, so the
+     *  engine and the memory of the ideal and extreme points must come back untouched.
+     *  The guard used to be written against the set of accepted fronts, which excludes
+     *  the splitting front and is therefore always smaller than N_pop, so it never
+     *  fired and the exact fit was reselected by niching at the cost of random draws.
+     */
+    const std::vector<vector_double> objs{{3.0, 0.0, 0.0}, {0.0, 3.0, 0.0}, {0.0, 0.0, 3.0}, {1.0, 1.0, 1.0},
+                                          {4.0, 1.0, 1.0}, {1.0, 4.0, 1.0}, {1.0, 1.0, 4.0}, {2.0, 2.0, 2.0},
+                                          {5.0, 2.0, 2.0}, {2.0, 5.0, 2.0}, {2.0, 2.0, 5.0}, {3.0, 3.0, 3.0}};
+    const auto fronts = std::get<0>(fast_non_dominated_sorting(objs));
+    BOOST_REQUIRE_EQUAL(fronts.size(), 3u);
+    BOOST_REQUIRE_EQUAL(fronts[0].size(), 4u);
+    BOOST_REQUIRE_EQUAL(fronts[1].size(), 4u);
+
+    const auto directions = detail::generate_reference_directions(3u, 4u, 0u);
+
+    /*  The first front alone fills the population: the accepted set is still empty when
+     *  the fit is detected, which is the case the old guard was furthest from catching.
+     */
+    detail::random_engine_type reng_a(31u);
+    const auto reng_a_before = reng_a;
+    std::vector<double> ideal_a;
+    std::vector<std::vector<double>> extremes_a;
+    auto next_a = detail::nsga3_selection(objs, 4u, directions, &ideal_a, &extremes_a, reng_a);
+    BOOST_CHECK(next_a == fronts[0]);
+    BOOST_CHECK(reng_a == reng_a_before); // no niching, hence no random draws
+    BOOST_CHECK(ideal_a.empty());         // no normalisation, hence nothing memorised
+    BOOST_CHECK(extremes_a.empty());
+
+    // Two fronts fit exactly: the splitting front is absorbed whole after a non-empty one
+    detail::random_engine_type reng_b(31u);
+    const auto reng_b_before = reng_b;
+    std::vector<double> ideal_b;
+    std::vector<std::vector<double>> extremes_b;
+    auto next_b = detail::nsga3_selection(objs, 8u, directions, &ideal_b, &extremes_b, reng_b);
+    std::vector<pop_size_t> expected_b{fronts[0]};
+    expected_b.insert(expected_b.end(), fronts[1].begin(), fronts[1].end());
+    BOOST_CHECK(next_b == expected_b);
+    BOOST_CHECK(reng_b == reng_b_before);
+    BOOST_CHECK(ideal_b.empty());
+    BOOST_CHECK(extremes_b.empty());
+
+    /*  Control: two slots short of an exact fit, so the splitting front has to be
+     *  niched. The engine must advance here, otherwise the checks above would hold
+     *  for reasons which have nothing to do with the early return.
+     */
+    detail::random_engine_type reng_c(31u);
+    const auto reng_c_before = reng_c;
+    std::vector<double> ideal_c;
+    std::vector<std::vector<double>> extremes_c;
+    auto next_c = detail::nsga3_selection(objs, 6u, directions, &ideal_c, &extremes_c, reng_c);
+    BOOST_CHECK_EQUAL(next_c.size(), 6u);
+    std::vector<pop_size_t> sorted_c{next_c};
+    std::sort(sorted_c.begin(), sorted_c.end());
+    BOOST_CHECK(std::unique(sorted_c.begin(), sorted_c.end()) == sorted_c.end());
+    for (auto idx : next_c) {
+        BOOST_CHECK(idx < objs.size());
+    }
+    BOOST_CHECK(!(reng_c == reng_c_before)); // niching ran and consumed the engine
+    BOOST_CHECK(!ideal_c.empty());
+    BOOST_CHECK(!extremes_c.empty());
+}
+
 BOOST_AUTO_TEST_CASE(nsga3_selection_preserves_size)
 {
     /*  Environmental selection over a larger, structured set: whatever the fronts
