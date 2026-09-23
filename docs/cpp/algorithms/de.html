@@ -482,6 +482,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo2de2deEjddjddj"><code class="docutils literal notranslate"><span class="pre">de()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo2de6evolveE10population"><code class="docutils literal notranslate"><span class="pre">evolve()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo2de8set_seedEj"><code class="docutils literal notranslate"><span class="pre">set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo2de7set_bfeERK3bfe"><code class="docutils literal notranslate"><span class="pre">set_bfe()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo2de8get_seedEv"><code class="docutils literal notranslate"><span class="pre">get_seed()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo2de13set_verbosityEj"><code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo2de13get_verbosityEv"><code class="docutils literal notranslate"><span class="pre">get_verbosity()</span></code></a></li>
@@ -521,6 +522,13 @@
 <p class="admonition-title">Note</p>
 <p>The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
 the allowed box-bounds, is here done by creating a random number in the bounds.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This algorithm supports batch fitness evaluation via <a class="reference internal" href="#_CPPv4N5pagmo2de7set_bfeERK3bfe" title="pagmo::de::set_bfe"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::de::set_bfe()</span></code></a>. When a
+<a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> is set, all trial vectors of a generation are evaluated in a single
+batch call, allowing parallel evaluation of expensive fitness functions. The evolution is
+otherwise identical to the serial version.</p>
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
@@ -601,6 +609,17 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>seed</strong> – the seed controlling the algorithm stochastic behaviour </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5pagmo2de7set_bfeERK3bfe">
+<span id="_CPPv3N5pagmo2de7set_bfeERK3bfe"></span><span id="_CPPv2N5pagmo2de7set_bfeERK3bfe"></span><span id="pagmo::de::set_bfe__bfeCR"></span><span class="target" id="classpagmo_1_1de_1a9c20bf5f037083e14980bc3669e8d3f8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_bfe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../bfe.html#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><span class="n"><span class="pre">bfe</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo2de7set_bfeERK3bfe" title="Link to this definition">#</a><br /></dt>
+<dd><p>Sets the batch function evaluation scheme. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>b</strong> – batch function evaluation object </p>
 </dd>
 </dl>
 </dd></dl>
@@ -758,6 +777,7 @@ the allowed box-bounds, is here done by creating a random number in the bounds.<
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo2de2deEjddjddj"><code class="docutils literal notranslate"><span class="pre">de()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo2de6evolveE10population"><code class="docutils literal notranslate"><span class="pre">evolve()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo2de8set_seedEj"><code class="docutils literal notranslate"><span class="pre">set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo2de7set_bfeERK3bfe"><code class="docutils literal notranslate"><span class="pre">set_bfe()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo2de8get_seedEv"><code class="docutils literal notranslate"><span class="pre">get_seed()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo2de13set_verbosityEj"><code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo2de13get_verbosityEv"><code class="docutils literal notranslate"><span class="pre">get_verbosity()</span></code></a></li>
