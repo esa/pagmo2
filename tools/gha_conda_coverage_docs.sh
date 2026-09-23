@@ -11,7 +11,7 @@ DEPS_DIR="$HOME/local"
 # Install deps in a dedicated conda env.
 conda create -y -q -p "$DEPS_DIR" \
     c-compiler cxx-compiler cmake ninja boost-cpp tbb tbb-devel eigen nlopt ipopt lcov \
-    python=3.10 sphinx=4.5.0 sphinx-book-theme breathe "doxygen<1.13" graphviz
+    python sphinx sphinx-book-theme "breathe>=4.36" doxygen graphviz
 
 # Configure, build, and test.
 conda run -p "$DEPS_DIR" cmake -S . -B build -G Ninja \
