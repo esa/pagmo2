@@ -231,7 +231,7 @@ BOOST_AUTO_TEST_CASE(nsga3_evolve_rejects_unsuitable_problems)
         population pop{problem{cec2006{1u}}, 32u, 23u};
         BOOST_CHECK_THROW(nsga3{}.evolve(pop), std::invalid_argument);
     }
-    // Population size not a multiple of four, and too small
+    // Population smaller than the number of reference directions, and too small
     {
         population pop{problem{dtlz{1u, 10u, 3u}}, 90u, 23u};
         BOOST_CHECK_THROW((nsga3{1u, 1.0, 30., 0.1, 20., 12u, 0u, true, 32u, false}.evolve(pop)),
@@ -259,7 +259,7 @@ BOOST_AUTO_TEST_CASE(nsga3_population_size_rule)
     population equal_pop{udp, 156u, 23u};
     BOOST_CHECK_NO_THROW(algo.evolve(equal_pop));
 
-    // One reference direction short of the population, and a multiple of four
+    // One reference direction short of the population
     population small_pop{udp, 152u, 23u};
     BOOST_CHECK_THROW(algo.evolve(small_pop), std::invalid_argument);
 
@@ -270,6 +270,21 @@ BOOST_AUTO_TEST_CASE(nsga3_population_size_rule)
     BOOST_CHECK_NO_THROW(algo3.evolve(pop92));
     population pop88{dtlz{2u, 10u, 3u}, 88u, 23u};
     BOOST_CHECK_THROW(algo3.evolve(pop88), std::invalid_argument);
+    // Any size >= directions is allowed, no longer requires a multiple of 4:
+    // 93 and 91 are odd / non-multiples, in both mating modes.
+    for (bool random_mating : {true, false}) {
+        nsga3 algo_odd{1u, 1.0, 30., 0.1, 20., 12u, 0u, random_mating, 32u, false};
+        population pop93{dtlz{2u, 10u, 3u}, 93u, 23u};
+        BOOST_CHECK_NO_THROW(algo_odd.evolve(pop93));
+        population pop91{dtlz{2u, 10u, 3u}, 91u, 23u};
+        BOOST_CHECK_NO_THROW(algo_odd.evolve(pop91));
+        // Each generation evaluates a full offspring population
+        population pop_count{dtlz{2u, 10u, 3u}, 93u, 23u};
+        auto fevals0 = pop_count.get_problem().get_fevals();
+        pop_count = algo_odd.evolve(pop_count);
+        BOOST_CHECK_EQUAL(pop_count.size(), 93u);
+        BOOST_CHECK_EQUAL(pop_count.get_problem().get_fevals() - fevals0, 93u);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(nsga3_reference_point_type)
