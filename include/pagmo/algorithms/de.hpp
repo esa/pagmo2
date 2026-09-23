@@ -33,7 +33,10 @@ see https://www.gnu.org/licenses/. */
 #include <tuple>
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <pagmo/algorithm.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
@@ -61,6 +64,13 @@ namespace pagmo
  *
  *    The feasibility correction, that is the correction applied to an allele when some mutation puts it outside
  *    the allowed box-bounds, is here done by creating a random number in the bounds.
+ *
+ * .. note::
+ *
+ *    This algorithm supports batch fitness evaluation via :cpp:func:`pagmo::de::set_bfe`. When a
+ *    :cpp:class:`~pagmo::bfe` is set, all trial vectors of a generation are evaluated in a single
+ *    batch call, allowing parallel evaluation of expensive fitness functions. The evolution is
+ *    otherwise identical to the serial version.
  *
  * .. seealso::
  *
@@ -107,6 +117,8 @@ public:
     population evolve(population) const;
     // Set the seed.
     void set_seed(unsigned);
+    // Sets the bfe
+    void set_bfe(const bfe &b);
     /// Get the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
@@ -184,6 +196,15 @@ public:
     }
 
 private:
+    vector_double mutate(const std::vector<vector_double> &popold, population::size_type i,
+                         const vector_double &gbIter, std::uniform_real_distribution<double> drng,
+                         std::uniform_int_distribution<vector_double::size_type> c_idx) const;
+
+    void update_pop(population &pop, population::size_type i, const vector_double &trial,
+                    const vector_double &newfitness, std::vector<vector_double> &fit, vector_double &gbfit,
+                    vector_double &gbX, std::vector<vector_double> &popnew,
+                    const std::vector<vector_double> &popold) const;
+
     // Object serialization
     friend class boost::serialization::access;
     template <typename Archive>
@@ -199,6 +220,7 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    boost::optional<bfe> m_bfe;
 };
 
 } // namespace pagmo
