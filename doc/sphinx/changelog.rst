@@ -3,6 +3,27 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+New
+~~~
+
+- Add the NSGA-III many-objective evolutionary algorithm
+  (`#633 <https://github.com/esa/pagmo2/pull/633>`__).
+
+Changes
+~~~~~~~
+
+- Allow the documentation build to use the latest Sphinx and Breathe releases
+  without an upper version pin.
+
+Fix
+~~~
+
+- Fix BFE tests under C++20, where stateless lambdas are default-constructible
+  (`#634 <https://github.com/esa/pagmo2/pull/634>`__).
+
 2.19.1 (2024-08-09)
 -------------------
 
