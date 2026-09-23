@@ -74,7 +74,7 @@ Please refer to the `conda documentation <https://docs.conda.io/en/latest/>`__ f
 your conda installation.
 
 PyPI / pip
-^^^^^^^^^
+^^^^^^^^^^
 
 If Python wheels for the pagmo bindings are published on PyPI you can
 install them with pip:
