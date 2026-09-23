@@ -7,7 +7,7 @@ Dependencies
 ------------
 
 pagmo is written in modern C++, and it requires a compiler able to understand
-at least C++17. pagmo is tested on a range of modern setups; the project's
+at least C++20. pagmo is tested on a range of modern setups; the project's
 GitHub Actions CI exercises representative platforms and toolchains (see
 https://github.com/esa/pagmo2/blob/master/.github/workflows/main.yml for the
 current matrix).
