@@ -525,6 +525,39 @@ BOOST_AUTO_TEST_CASE(archipelago_topology_setter)
     BOOST_CHECK((archi.get_topology().get_connections(1).first == std::vector<std::size_t>{0, 2, 3}));
     BOOST_CHECK((archi.get_topology().get_connections(2).first == std::vector<std::size_t>{0, 1, 3}));
     BOOST_CHECK((archi.get_topology().get_connections(3).first == std::vector<std::size_t>{0, 1, 2}));
+
+    // Test that set_topology with a fresh topology (no pre-populated vertices)
+    // auto-syncs the vertex count and works correctly with evolve.
+    {
+        archipelago archi2{4u, de{}, rosenbrock{5}, 10u};
+        BOOST_CHECK(archi2.get_topology().is<unconnected>());
+        archi2.set_topology(topology{ring{}});
+        BOOST_CHECK(archi2.get_topology().is<ring>());
+        BOOST_CHECK(archi2.get_topology().num_vertices() == 4u);
+        archi2.evolve(2);
+        BOOST_CHECK_NO_THROW(archi2.wait_check());
+    }
+
+    // Legacy custom topology regression: UDA implements push_back() but not
+    // num_vertices(). set_topology() must not hang.
+    {
+        struct legacy_topo {
+            std::pair<std::vector<std::size_t>, vector_double> get_connections(std::size_t) const
+            {
+                return {{}, {}};
+            }
+            void push_back() { ++count; }
+            int count = 0;
+        };
+        archipelago archi2{3u, de{}, rosenbrock{5}, 10u};
+        topology t{legacy_topo{}};
+        BOOST_CHECK(t.num_vertices() == 0u);
+        archi2.set_topology(std::move(t));
+        BOOST_CHECK(archi2.get_topology().num_vertices() == 3u);
+        BOOST_CHECK(archi2.get_topology().extract<legacy_topo>()->count == 3);
+        BOOST_CHECK_NO_THROW(archi2.evolve(1));
+        BOOST_CHECK_NO_THROW(archi2.wait_check());
+    }
 }
 
 BOOST_AUTO_TEST_CASE(archipelago_island_access)
