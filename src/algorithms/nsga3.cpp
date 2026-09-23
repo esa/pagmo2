@@ -121,7 +121,7 @@ nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut, 
  *
  * @throws std::invalid_argument if the problem is stochastic, constrained, single
  * objective or has equal lower and upper bounds; if the population size is smaller
- * than 5, is not a multiple of 4, or is smaller than the number of reference
+ * than 5 or is smaller than the number of reference
  * directions; or if a configured batch fitness evaluator returns a fitness vector of
  * unexpected size.
  * @throws unspecified any exception thrown by the reference direction construction,
@@ -159,9 +159,9 @@ population nsga3::evolve(population pop) const
         pagmo_throw(std::invalid_argument, "This is a multiobjective algorithm, while number of objectives detected in "
                                                + prob.get_name() + " is " + std::to_string(prob.get_nf()));
     }
-    if (NP < 5u || (NP % 4 != 0u)) {
+    if (NP < 5u) {
         pagmo_throw(std::invalid_argument,
-                    "NSGA-III requires a population of at least 5 and divisible by 4. Detected input population size is: "
+                    "NSGA-III requires a population of at least 5. Detected input population size is: "
                         + std::to_string(NP));
     }
 
@@ -171,7 +171,8 @@ population nsga3::evolve(population pop) const
      */
     const auto directions = detail::generate_reference_directions(prob.get_nobj(), m_divisions, m_divisions_inner);
     /*  Deb & Jain size the population as the smallest multiple of four which is not
-     *  smaller than the number of reference directions; their Table I uses a
+     *  smaller than the number of reference directions; here any size not smaller
+     *  than the number of directions is accepted. Their Table I uses a
      *  population of exactly 156 for the 156 directions of the eight-objective case,
      *  so equality is permitted here.
      */
@@ -251,14 +252,19 @@ population nsga3::evolve(population pop) const
             /*  Deb & Jain Section IV-F: no explicit selection operator is applied,
              *  the parents being picked at random. A random permutation of the
              *  population, mated in consecutive pairs, is a uniformly random pairing
-             *  in which every individual is a parent exactly once.
+             *  in which every individual is a parent exactly once. Modulo indexing
+             *  wraps the permutation when NP is odd to generate exactly NP offspring.
              */
-            for (population::size_type i = 0u; i < NP; i += 2u) {
-                children = detail::sbx_crossover_impl(pop.get_x()[shuffle1[i]], pop.get_x()[shuffle1[i + 1u]], bounds,
-                                                      dim_i, m_cr, m_eta_c, m_reng);
+            for (population::size_type i = 0u; offspring.size() < NP; i += 2u) {
+                children = detail::sbx_crossover_impl(pop.get_x()[shuffle1[i % NP]],
+                                                      pop.get_x()[shuffle1[(i + 1u) % NP]], bounds, dim_i, m_cr,
+                                                      m_eta_c, m_reng);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_mut, m_eta_mut, m_reng);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_mut, m_eta_mut, m_reng);
                 offspring.push_back(std::move(children.first));
+                if (offspring.size() >= NP) {
+                    break;
+                }
                 offspring.push_back(std::move(children.second));
             }
         } else {
@@ -288,27 +294,40 @@ population nsga3::evolve(population pop) const
                 }
             }
 
-            for (population::size_type i = 0u; i < NP; i += 4u) {
+            // Modulo indexing wraps the shuffles when NP is not a multiple of 4,
+            // generating exactly NP offspring.
+            for (population::size_type i = 0u; offspring.size() < NP; i += 4u) {
                 // We create two offsprings using the shuffled list 1
-                parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1u], ndr, pop_cd, m_reng);
-                parent2_idx
-                    = detail::mo_tournament_selection_impl(shuffle1[i + 2u], shuffle1[i + 3u], ndr, pop_cd, m_reng);
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i % NP], shuffle1[(i + 1u) % NP], ndr,
+                                                                  pop_cd, m_reng);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle1[(i + 2u) % NP], shuffle1[(i + 3u) % NP],
+                                                                  ndr, pop_cd, m_reng);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                       m_cr, m_eta_c, m_reng);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_mut, m_eta_mut, m_reng);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_mut, m_eta_mut, m_reng);
                 offspring.push_back(std::move(children.first));
+                if (offspring.size() >= NP) {
+                    break;
+                }
                 offspring.push_back(std::move(children.second));
+                if (offspring.size() >= NP) {
+                    break;
+                }
 
                 // Repeat with the shuffled list 2
-                parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1u], ndr, pop_cd, m_reng);
-                parent2_idx
-                    = detail::mo_tournament_selection_impl(shuffle2[i + 2u], shuffle2[i + 3u], ndr, pop_cd, m_reng);
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i % NP], shuffle2[(i + 1u) % NP], ndr,
+                                                                  pop_cd, m_reng);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle2[(i + 2u) % NP], shuffle2[(i + 3u) % NP],
+                                                                  ndr, pop_cd, m_reng);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                       m_cr, m_eta_c, m_reng);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_mut, m_eta_mut, m_reng);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_mut, m_eta_mut, m_reng);
                 offspring.push_back(std::move(children.first));
+                if (offspring.size() >= NP) {
+                    break;
+                }
                 offspring.push_back(std::move(children.second));
             }
         }

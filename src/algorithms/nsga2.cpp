@@ -85,8 +85,7 @@ nsga2::nsga2(unsigned gen, double cr, double eta_c, double m, double eta_m, unsi
  * @param pop population to be evolved
  * @return evolved population
  * @throw std::invalid_argument if pop.get_problem() is stochastic, single objective or has non linear constraints.
- * If \p int_dim is larger than the problem dimension. If the population size is smaller than 5 or not a multiple of
- * 4.
+ * If \p int_dim is larger than the problem dimension. If the population size is smaller than 5.
  */
 population nsga2::evolve(population pop) const
 {
@@ -120,10 +119,9 @@ population nsga2::evolve(population pop) const
         pagmo_throw(std::invalid_argument, "This is a multiobjective algorithm, while number of objectives detected in "
                                                + prob.get_name() + " is " + std::to_string(prob.get_nf()));
     }
-    if (NP < 5u || (NP % 4 != 0u)) {
+    if (NP < 5u) {
         pagmo_throw(std::invalid_argument,
-                    "for NSGA-II at least 5 individuals in the population are needed and the "
-                    "population size must be a multiple of 4. Detected input population size is: "
+                    "for NSGA-II at least 5 individuals in the population are needed. Detected input population size is: "
                         + std::to_string(NP));
     }
     // ---------------------------------------------------------------------------------------------------------
@@ -211,31 +209,47 @@ population nsga2::evolve(population pop) const
             // bfe is available:
             auto n_obj = prob.get_nobj();
             std::vector<vector_double> poptemp;
-            for (decltype(NP) i = 0u; i < NP; i += 4) {
+            poptemp.reserve(NP);
+            // Modulo indexing wraps the shuffles when NP is not a multiple of 4,
+            // generating exactly NP offspring.
+            for (decltype(NP) i = 0u; poptemp.size() < NP; i += 4u) {
                 // We create two offsprings using the shuffled list 1
-                parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
-                parent2_idx = detail::mo_tournament_selection_impl(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i % NP], shuffle1[(i + 1u) % NP], ndr,
+                                                                  pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle1[(i + 2u) % NP], shuffle1[(i + 3u) % NP],
+                                                                  ndr, pop_cd, m_e);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                       m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
 
-                poptemp.push_back(children.first);
-                poptemp.push_back(children.second);
+                poptemp.push_back(std::move(children.first));
+                if (poptemp.size() >= NP) {
+                    break;
+                }
+                poptemp.push_back(std::move(children.second));
+                if (poptemp.size() >= NP) {
+                    break;
+                }
 
                 // We repeat with the shuffled list 2
-                parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
-                parent2_idx = detail::mo_tournament_selection_impl(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i % NP], shuffle2[(i + 1u) % NP], ndr,
+                                                                  pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle2[(i + 2u) % NP], shuffle2[(i + 3u) % NP],
+                                                                  ndr, pop_cd, m_e);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                       m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
-                poptemp.push_back(children.first);
-                poptemp.push_back(children.second);
+                poptemp.push_back(std::move(children.first));
+                if (poptemp.size() >= NP) {
+                    break;
+                }
+                poptemp.push_back(std::move(children.second));
 
-            } // poptemp now contains 2NP individuals
+            } // poptemp now contains NP individuals
 
             vector_double genes(NP * poptemp[0].size());
             decltype(genes.size()) pos = 0u;
@@ -247,7 +261,7 @@ population nsga2::evolve(population pop) const
                     ++pos;
                 }
             }
-            // array - now contains 2NP new individuals
+            // array - now contains NP new individuals
             // run bfe and populate popnew.
             auto fitnesses = (*m_bfe)(prob, genes);
 
@@ -264,34 +278,49 @@ population nsga2::evolve(population pop) const
             }
         } else {
             // bfe not available:
-            for (decltype(NP) i = 0u; i < NP; i += 4) {
+            // Modulo indexing wraps the shuffles when NP is not a multiple of 4,
+            // generating exactly NP offspring.
+            population::size_type n_off = 0u;
+            for (decltype(NP) i = 0u; n_off < NP; i += 4u) {
                 // We create two offsprings using the shuffled list 1
-                parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i], shuffle1[i + 1], ndr, pop_cd, m_e);
-                parent2_idx = detail::mo_tournament_selection_impl(shuffle1[i + 2], shuffle1[i + 3], ndr, pop_cd, m_e);
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle1[i % NP], shuffle1[(i + 1u) % NP], ndr,
+                                                                  pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle1[(i + 2u) % NP], shuffle1[(i + 3u) % NP],
+                                                                  ndr, pop_cd, m_e);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                       m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
-                auto f1 = prob.fitness(children.first);
-                auto f2 = prob.fitness(children.second);
-                popnew.push_back(children.first, f1);
-                popnew.push_back(children.second, f2);
+                popnew.push_back(children.first, prob.fitness(children.first));
+                if (++n_off >= NP) {
+                    break;
+                }
+                popnew.push_back(children.second, prob.fitness(children.second));
+                if (++n_off >= NP) {
+                    break;
+                }
 
                 // We repeat with the shuffled list 2
-                parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i], shuffle2[i + 1], ndr, pop_cd, m_e);
-                parent2_idx = detail::mo_tournament_selection_impl(shuffle2[i + 2], shuffle2[i + 3], ndr, pop_cd, m_e);
+                parent1_idx = detail::mo_tournament_selection_impl(shuffle2[i % NP], shuffle2[(i + 1u) % NP], ndr,
+                                                                  pop_cd, m_e);
+                parent2_idx = detail::mo_tournament_selection_impl(shuffle2[(i + 2u) % NP], shuffle2[(i + 3u) % NP],
+                                                                  ndr, pop_cd, m_e);
                 children = detail::sbx_crossover_impl(pop.get_x()[parent1_idx], pop.get_x()[parent2_idx], bounds, dim_i,
                                                       m_cr, m_eta_c, m_e);
                 detail::polynomial_mutation_impl(children.first, bounds, dim_i, m_m, m_eta_m, m_e);
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
-                f1 = prob.fitness(children.first);
-                f2 = prob.fitness(children.second);
-                popnew.push_back(children.first, f1);
-                popnew.push_back(children.second, f2);
+                popnew.push_back(children.first, prob.fitness(children.first));
+                if (++n_off >= NP) {
+                    break;
+                }
+                popnew.push_back(children.second, prob.fitness(children.second));
+                if (++n_off >= NP) {
+                    break;
+                }
             } // popnew now contains 2NP individuals
         }
         // This method returns the sorted N best individuals in the population according to the crowded comparison
