@@ -1,77 +1,73 @@
  
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Algorithm &#8212; pagmo 2.19.1 documentation</title>
+    <title>Algorithm &#8212; pagmo 2.20.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=22086b0a"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/cpp/algorithm';</script>
-    <link rel="shortcut icon" href="../../_static/logo_favico.ico"/>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Population" href="population.html" />
     <link rel="prev" title="Problem" href="problem.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
+  <body data-default-mode="">
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
+  <div id="pst-scroll-pixel-helper"></div>
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -79,7 +75,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,16 +82,69 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
   
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -109,6 +157,9 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -117,23 +168,31 @@
   
   
   
-    <p class="title logo__title">pagmo 2.19.1 documentation</p>
+  
+    <p class="title logo__title">pagmo 2.20.0 documentation</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Capabilities</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/cpp_tut.html">C++ tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/cpp_tut.html">C++ tutorial</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/cpp_tut_preliminaries.html">Preliminaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/cpp_tut_first_problem.html">Writing your first optimisation problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/evolving_a_population.html">Evolving a population</a></li>
 </ul>
-</li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="cpp_docs.html">C++ API documentation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="cpp_docs.html">C++ API documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="problem.html">Problem</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Algorithm</a></li>
@@ -214,7 +273,7 @@
 <li class="toctree-l2"><a class="reference internal" href="miscellanea/exceptions.html">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="miscellanea/utility_classes.html">Utility classes</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../../credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 </ul>
@@ -225,14 +284,19 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -241,14 +305,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -357,7 +421,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -370,24 +434,27 @@
 </button>
 
 
-<script>
-document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-  </button>
-`);
-</script>
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -403,6 +470,39 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithmE"><code class="docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm9algorithmEv"><code class="docutils literal notranslate"><span class="pre">algorithm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T"><code class="docutils literal notranslate"><span class="pre">algorithm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm9algorithmERK9algorithm"><code class="docutils literal notranslate"><span class="pre">algorithm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm9algorithmERR9algorithm"><code class="docutils literal notranslate"><span class="pre">algorithm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithmaSERR9algorithm"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithmaSERK9algorithm"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv"><code class="docutils literal notranslate"><span class="pre">extract()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5pagmo9algorithm7extractEP1Tv"><code class="docutils literal notranslate"><span class="pre">extract()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5pagmo9algorithm2isEbv"><code class="docutils literal notranslate"><span class="pre">is()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm6evolveERK10population"><code class="docutils literal notranslate"><span class="pre">evolve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm8set_seedEj"><code class="docutils literal notranslate"><span class="pre">set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm12has_set_seedEv"><code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm13is_stochasticEv"><code class="docutils literal notranslate"><span class="pre">is_stochastic()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm13set_verbosityEj"><code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm17has_set_verbosityEv"><code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm8get_nameEv"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm14get_extra_infoEv"><code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm17get_thread_safetyEv"><code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm8is_validEv"><code class="docutils literal notranslate"><span class="pre">is_valid()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm14get_type_indexEv"><code class="docutils literal notranslate"><span class="pre">get_type_index()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm7get_ptrEv"><code class="docutils literal notranslate"><span class="pre">get_ptr()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm7get_ptrEv"><code class="docutils literal notranslate"><span class="pre">get_ptr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -410,13 +510,13 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="algorithm">
-<h1>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this headline">#</a></h1>
+<h1>Algorithm<a class="headerlink" href="#algorithm" title="Link to this heading">#</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithmE">
-<span id="_CPPv3N5pagmo9algorithmE"></span><span id="_CPPv2N5pagmo9algorithmE"></span><span id="pagmo::algorithm"></span><span class="target" id="classpagmo_1_1algorithm"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo9algorithmE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithmE"></span><span id="_CPPv2N5pagmo9algorithmE"></span><span id="pagmo::algorithm"></span><span class="target" id="classpagmo_1_1algorithm"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo9algorithmE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Algorithm class. </p>
 <p><img alt="../../_images/algo_no_text.png" src="../../_images/algo_no_text.png" /></p>
 <p>This class represents an optimization algorithm. An algorithm can be stochastic, deterministic, population based, derivative-free, using hessians, using gradients, a meta-heuristic, evolutionary, etc.. Via this class pagmo offers a common interface to all types of algorithms that can be applied to find solution to a generic mathematical programming problem as represented by the <a class="reference internal" href="problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> class.</p>
@@ -447,11 +547,11 @@ Any other operation will result in undefined behaviour.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithm9algorithmEv">
-<span id="_CPPv3N5pagmo9algorithm9algorithmEv"></span><span id="_CPPv2N5pagmo9algorithm9algorithmEv"></span><span id="pagmo::algorithm::algorithm"></span><span class="target" id="classpagmo_1_1algorithm_1ac04a85b33f6b2be8fdd387cbf71a14fe"></span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithm9algorithmEv"></span><span id="_CPPv2N5pagmo9algorithm9algorithmEv"></span><span id="pagmo::algorithm::algorithm"></span><span class="target" id="classpagmo_1_1algorithm_1ac04a85b33f6b2be8fdd387cbf71a14fe"></span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The default constructor will initialize a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> containing a <a class="reference internal" href="algorithms/null.html#structpagmo_1_1null__algorithm"><span class="std std-ref">pagmo::null_algorithm</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws</dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the constructor from UDA. </p>
 </dd>
 </dl>
@@ -459,7 +559,7 @@ Any other operation will result in undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T">
-<span id="_CPPv3I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T"></span><span id="_CPPv2I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">generic_ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="pagmo::algorithm::algorithm::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1a9c5c7fbd2ed43b09c7fea65222c2cd7a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="pagmo::algorithm::algorithm::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T"></span><span id="_CPPv2I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">generic_ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="pagmo::algorithm::algorithm::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1a9c5c7fbd2ed43b09c7fea65222c2cd7a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="pagmo::algorithm::algorithm::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T" title="Link to this definition">#</a><br /></dt>
 <dd><p>Constructor from a user-defined algorithm of type <code class="docutils literal notranslate"><span class="pre">T</span></code>. </p>
 <p>This constructor will construct a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> from the UDA (user-defined algorithm) <code class="docutils literal notranslate"><span class="pre">x</span></code> of type <code class="docutils literal notranslate"><span class="pre">T</span></code>. In order for the construction to be successful, the UDA must implement a minimal set of methods, as described in the documentation of <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a>. The constructor will examine the properties of <code class="docutils literal notranslate"><span class="pre">x</span></code> and store them as data members of <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
 <div class="admonition note">
@@ -469,10 +569,10 @@ Any other operation will result in undefined behaviour.</p>
 constructors of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a>), or if  <code class="docutils literal notranslate"><span class="pre">T</span></code> does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4I0EN5pagmo6is_udaE" title="pagmo::is_uda"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_uda</span></code></a>.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> – the UDA.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by methods of the UDA invoked during construction or by memory errors in strings and standard containers. </p>
 </dd>
 </dl>
@@ -480,14 +580,14 @@ constructors of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" t
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithm9algorithmERK9algorithm">
-<span id="_CPPv3N5pagmo9algorithm9algorithmERK9algorithm"></span><span id="_CPPv2N5pagmo9algorithm9algorithmERK9algorithm"></span><span id="pagmo::algorithm::algorithm__algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1a04d322337f0e422457ed3abc6334323f"></span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo9algorithm9algorithmERK9algorithm" title="pagmo::algorithm::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmERK9algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithm9algorithmERK9algorithm"></span><span id="_CPPv2N5pagmo9algorithm9algorithmERK9algorithm"></span><span id="pagmo::algorithm::algorithm__algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1a04d322337f0e422457ed3abc6334323f"></span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo9algorithm9algorithmERK9algorithm" title="pagmo::algorithm::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmERK9algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Copy constructor. </p>
 <p>The copy constructor will deep copy the input algorithm <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> – the algorithm to be copied.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by:<ul class="simple">
 <li><p>memory allocation errors in standard containers,</p></li>
 <li><p>the copying of the internal UDA. </p></li>
@@ -499,10 +599,10 @@ constructors of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" t
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithm9algorithmERR9algorithm">
-<span id="_CPPv3N5pagmo9algorithm9algorithmERR9algorithm"></span><span id="_CPPv2N5pagmo9algorithm9algorithmERR9algorithm"></span><span id="pagmo::algorithm::algorithm__algorithmRR"></span><span class="target" id="classpagmo_1_1algorithm_1ab25a0f1a1074be3d54fffa02f483562c"></span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9algorithm9algorithmERR9algorithm" title="pagmo::algorithm::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmERR9algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithm9algorithmERR9algorithm"></span><span id="_CPPv2N5pagmo9algorithm9algorithmERR9algorithm"></span><span id="pagmo::algorithm::algorithm__algorithmRR"></span><span class="target" id="classpagmo_1_1algorithm_1ab25a0f1a1074be3d54fffa02f483562c"></span><span class="sig-name descname"><span class="n"><span class="pre">algorithm</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9algorithm9algorithmERR9algorithm" title="pagmo::algorithm::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm9algorithmERR9algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Move constructor. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> – the algorithm from which <code class="docutils literal notranslate"><span class="pre">this</span></code> will be move-constructed. </p>
 </dd>
 </dl>
@@ -510,13 +610,13 @@ constructors of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" t
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithmaSERR9algorithm">
-<span id="_CPPv3N5pagmo9algorithmaSERR9algorithm"></span><span id="_CPPv2N5pagmo9algorithmaSERR9algorithm"></span><span id="pagmo::algorithm::assign-operator__algorithmRR"></span><span class="target" id="classpagmo_1_1algorithm_1ae799de94643c8b326184c1db8ffe1624"></span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo9algorithmaSERR9algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithmaSERR9algorithm"></span><span id="_CPPv2N5pagmo9algorithmaSERR9algorithm"></span><span id="pagmo::algorithm::assign-operator__algorithmRR"></span><span class="target" id="classpagmo_1_1algorithm_1ae799de94643c8b326184c1db8ffe1624"></span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5pagmo9algorithmaSERR9algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Move assignment operator. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> – the assignment target.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>. </p>
 </dd>
 </dl>
@@ -524,17 +624,17 @@ constructors of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" t
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithmaSERK9algorithm">
-<span id="_CPPv3N5pagmo9algorithmaSERK9algorithm"></span><span id="_CPPv2N5pagmo9algorithmaSERK9algorithm"></span><span id="pagmo::algorithm::assign-operator__algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1a833c47b7e6478d6d820fb460febebc1d"></span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithmaSERK9algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithmaSERK9algorithm"></span><span id="_CPPv2N5pagmo9algorithmaSERK9algorithm"></span><span id="pagmo::algorithm::assign-operator__algorithmCR"></span><span class="target" id="classpagmo_1_1algorithm_1a833c47b7e6478d6d820fb460febebc1d"></span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithmaSERK9algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Copy assignment operator. </p>
 <p>Copy assignment is implemented as a copy constructor followed by a move assignment.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> – the assignment target.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the copy constructor. </p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
 </dd>
 </dl>
@@ -542,7 +642,7 @@ constructors of <a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" t
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T">
-<span id="_CPPv3I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSERR1T"></span><span id="_CPPv2I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">generic_ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="pagmo::algorithm::operator=::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1a093ca1de98c704b374c56ab59205251b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="pagmo::algorithm::operator=::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSERR1T"></span><span id="_CPPv2I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSERR1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">generic_ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="pagmo::algorithm::operator=::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1a093ca1de98c704b374c56ab59205251b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo9algorithmE" title="pagmo::algorithm"><span class="n"><span class="pre">algorithm</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="pagmo::algorithm::operator=::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T" title="Link to this definition">#</a><br /></dt>
 <dd><p>Assignment from a user-defined algorithm of type <code class="docutils literal notranslate"><span class="pre">T</span></code>. </p>
 <p>This operator will set the internal UDA to <code class="docutils literal notranslate"><span class="pre">x</span></code> by constructing a <a class="reference internal" href="#classpagmo_1_1algorithm"><span class="std std-ref">pagmo::algorithm</span></a> from <code class="docutils literal notranslate"><span class="pre">x</span></code>, and then move-assigning the result to <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
 <div class="admonition note">
@@ -553,13 +653,13 @@ assignment operators of <a class="reference internal" href="#_CPPv4N5pagmo9algor
 <a class="reference internal" href="miscellanea/type_traits.html#_CPPv4I0EN5pagmo6is_udaE" title="pagmo::is_uda"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::is_uda</span></code></a>.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> – the UDA.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the constructor from UDA. </p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>.</p>
 </dd>
 </dl>
@@ -567,7 +667,7 @@ assignment operators of <a class="reference internal" href="#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv">
-<span id="_CPPv3I0ENK5pagmo9algorithm7extractEv"></span><span id="_CPPv2I0ENK5pagmo9algorithm7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1a4b4b24c43e5e5b391d042239a6d2c084"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="pagmo::algorithm::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3I0ENK5pagmo9algorithm7extractEv"></span><span id="_CPPv2I0ENK5pagmo9algorithm7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1a4b4b24c43e5e5b391d042239a6d2c084"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="pagmo::algorithm::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Extract a const pointer to the UDA. </p>
 <p>This method will extract a const pointer to the internal instance of the UDA. If <code class="docutils literal notranslate"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
 <div class="admonition note">
@@ -576,7 +676,7 @@ assignment operators of <a class="reference internal" href="#_CPPv4N5pagmo9algor
 <code class="docutils literal notranslate"><span class="pre">this</span></code> and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a const pointer to the internal UDA, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> does not correspond exactly to the original UDA type used in the constructor. </p>
 </dd>
 </dl>
@@ -584,7 +684,7 @@ assignment operators of <a class="reference internal" href="#_CPPv4N5pagmo9algor
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN5pagmo9algorithm7extractEP1Tv">
-<span id="_CPPv3I0EN5pagmo9algorithm7extractEv"></span><span id="_CPPv2I0EN5pagmo9algorithm7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1ac435544fc132e7c3f1dacf5a11c2e797"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5pagmo9algorithm7extractEP1Tv" title="pagmo::algorithm::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo9algorithm7extractEP1Tv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3I0EN5pagmo9algorithm7extractEv"></span><span id="_CPPv2I0EN5pagmo9algorithm7extractEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1ac435544fc132e7c3f1dacf5a11c2e797"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN5pagmo9algorithm7extractEP1Tv" title="pagmo::algorithm::extract::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">extract</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0EN5pagmo9algorithm7extractEP1Tv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Extract a pointer to the UDA. </p>
 <p>This method will extract a pointer to the internal instance of the UDA. If <code class="docutils literal notranslate"><span class="pre">T</span></code> is not the same type as the UDA used during construction (after removal of cv and reference qualifiers), this method will return <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
 <div class="admonition note">
@@ -598,7 +698,7 @@ of <code class="docutils literal notranslate"><span class="pre">this</span></cod
 methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a pointer to the internal UDA, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if <code class="docutils literal notranslate"><span class="pre">T</span></code> does not correspond exactly to the original UDA type used in the constructor. </p>
 </dd>
 </dl>
@@ -606,10 +706,10 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0ENK5pagmo9algorithm2isEbv">
-<span id="_CPPv3I0ENK5pagmo9algorithm2isEv"></span><span id="_CPPv2I0ENK5pagmo9algorithm2isEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1ac6e4006999c2fee8a1fc0921443cfdb1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo9algorithm2isEbv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3I0ENK5pagmo9algorithm2isEv"></span><span id="_CPPv2I0ENK5pagmo9algorithm2isEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1algorithm_1ac6e4006999c2fee8a1fc0921443cfdb1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4I0ENK5pagmo9algorithm2isEbv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Checks the user-defined algorithm type at run-time. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the user-defined algorithm is <code class="docutils literal notranslate"><span class="pre">T</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. </p>
 </dd>
 </dl>
@@ -617,17 +717,17 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm6evolveERK10population">
-<span id="_CPPv3NK5pagmo9algorithm6evolveERK10population"></span><span id="_CPPv2NK5pagmo9algorithm6evolveERK10population"></span><span id="pagmo::algorithm::evolve__populationCRC"></span><span class="target" id="classpagmo_1_1algorithm_1af738085169bf75c21377a0945ebfd199"></span><a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm6evolveERK10population" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm6evolveERK10population"></span><span id="_CPPv2NK5pagmo9algorithm6evolveERK10population"></span><span id="pagmo::algorithm::evolve__populationCRC"></span><span class="target" id="classpagmo_1_1algorithm_1af738085169bf75c21377a0945ebfd199"></span><a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm6evolveERK10population" title="Link to this definition">#</a><br /></dt>
 <dd><p>Evolve method. </p>
 <p>This method will invoke the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA. This is where the core of the optimization (<em>evolution</em>) is made.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pop</strong> – starting population</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA. </p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>evolved population</p>
 </dd>
 </dl>
@@ -635,14 +735,14 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithm8set_seedEj">
-<span id="_CPPv3N5pagmo9algorithm8set_seedEj"></span><span id="_CPPv2N5pagmo9algorithm8set_seedEj"></span><span id="pagmo::algorithm::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1algorithm_1a0a0b2c0577ca22d288ebd78145883c76"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm8set_seedEj" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithm8set_seedEj"></span><span id="_CPPv2N5pagmo9algorithm8set_seedEj"></span><span id="pagmo::algorithm::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1algorithm_1a0a0b2c0577ca22d288ebd78145883c76"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm8set_seedEj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the seed for the stochastic evolution. </p>
 <p>Sets the seed to be used in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the UDA for all stochastic variables. If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>, then its <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>seed</strong> – seed.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="miscellanea/exceptions.html#_CPPv4N5pagmo21not_implemented_errorE" title="pagmo::not_implemented_error"><span class="n">not_implemented_error</span></a></span></span> – if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__seed"><span class="std std-ref">pagmo::has_set_seed</span></a>. </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method of the UDA. </p></li>
@@ -653,7 +753,7 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm12has_set_seedEv">
-<span id="_CPPv3NK5pagmo9algorithm12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9algorithm12has_set_seedEv"></span><span id="pagmo::algorithm::has_set_seedC"></span><span class="target" id="classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm12has_set_seedEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm12has_set_seedEv"></span><span id="_CPPv2NK5pagmo9algorithm12has_set_seedEv"></span><span id="pagmo::algorithm::has_set_seedC"></span><span class="target" id="classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm12has_set_seedEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Check if a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is available in the UDA. </p>
 <p>This method will return <code class="docutils literal notranslate"><span class="pre">true</span></code> if a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is available in the UDA, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
 <p>The availability of the a <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method is determined as follows:<ul class="simple">
@@ -663,7 +763,7 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </ul>
 </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a flag signalling the availability of the <code class="docutils literal notranslate"><span class="pre">set_seed()</span></code> method in the UDA. </p>
 </dd>
 </dl>
@@ -671,10 +771,10 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm13is_stochasticEv">
-<span id="_CPPv3NK5pagmo9algorithm13is_stochasticEv"></span><span id="_CPPv2NK5pagmo9algorithm13is_stochasticEv"></span><span id="pagmo::algorithm::is_stochasticC"></span><span class="target" id="classpagmo_1_1algorithm_1a2cc53a8adf1a5f59fcb0ad177420c96f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_stochastic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm13is_stochasticEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm13is_stochasticEv"></span><span id="_CPPv2NK5pagmo9algorithm13is_stochasticEv"></span><span id="pagmo::algorithm::is_stochasticC"></span><span class="target" id="classpagmo_1_1algorithm_1a2cc53a8adf1a5f59fcb0ad177420c96f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_stochastic</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm13is_stochasticEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Alias for <a class="reference internal" href="#classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"><span class="std std-ref">algorithm::has_set_seed()</span></a>. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the output of <a class="reference internal" href="#classpagmo_1_1algorithm_1adcb1f27156ae092eb9e208f8bf8774fe"><span class="std std-ref">algorithm::has_set_seed()</span></a>. </p>
 </dd>
 </dl>
@@ -682,15 +782,15 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithm13set_verbosityEj">
-<span id="_CPPv3N5pagmo9algorithm13set_verbosityEj"></span><span id="_CPPv2N5pagmo9algorithm13set_verbosityEj"></span><span id="pagmo::algorithm::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1algorithm_1a4dc399af29e0d404cc0029b4793beaf6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm13set_verbosityEj" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithm13set_verbosityEj"></span><span id="_CPPv2N5pagmo9algorithm13set_verbosityEj"></span><span id="pagmo::algorithm::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1algorithm_1a4dc399af29e0d404cc0029b4793beaf6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm13set_verbosityEj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the verbosity of logs and screen output. </p>
 <p>This method will set the level of verbosity for the algorithm. If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a>, then its <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method will be invoked. Otherwise, an error will be raised.</p>
 <p>The exact meaning of the input parameter <code class="docutils literal notranslate"><span class="pre">level</span></code> is dependent on the UDA.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>level</strong> – the desired verbosity level.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="miscellanea/exceptions.html#_CPPv4N5pagmo21not_implemented_errorE" title="pagmo::not_implemented_error"><span class="n">not_implemented_error</span></a></span></span> – if the UDA does not satisfy <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__set__verbosity"><span class="std std-ref">pagmo::has_set_verbosity</span></a>. </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method of the UDA. </p></li>
@@ -701,7 +801,7 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm17has_set_verbosityEv">
-<span id="_CPPv3NK5pagmo9algorithm17has_set_verbosityEv"></span><span id="_CPPv2NK5pagmo9algorithm17has_set_verbosityEv"></span><span id="pagmo::algorithm::has_set_verbosityC"></span><span class="target" id="classpagmo_1_1algorithm_1aaa5c39118c4357bc7e26dbdd68b5305c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm17has_set_verbosityEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm17has_set_verbosityEv"></span><span id="_CPPv2NK5pagmo9algorithm17has_set_verbosityEv"></span><span id="pagmo::algorithm::has_set_verbosityC"></span><span class="target" id="classpagmo_1_1algorithm_1aaa5c39118c4357bc7e26dbdd68b5305c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm17has_set_verbosityEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Check if a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is available in the UDA. </p>
 <p>This method will return <code class="docutils literal notranslate"><span class="pre">true</span></code> if a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is available in the UDA, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
 <p>The availability of the a <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method is determined as follows:<ul class="simple">
@@ -711,7 +811,7 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 </ul>
 </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a flag signalling the availability of the <code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code> method in the UDA. </p>
 </dd>
 </dl>
@@ -719,14 +819,14 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm8get_nameEv">
-<span id="_CPPv3NK5pagmo9algorithm8get_nameEv"></span><span id="_CPPv2NK5pagmo9algorithm8get_nameEv"></span><span id="pagmo::algorithm::get_nameC"></span><span class="target" id="classpagmo_1_1algorithm_1ac787878e086fc4b3e305693471988e2d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm8get_nameEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm8get_nameEv"></span><span id="_CPPv2NK5pagmo9algorithm8get_nameEv"></span><span id="pagmo::algorithm::get_nameC"></span><span class="target" id="classpagmo_1_1algorithm_1ac787878e086fc4b3e305693471988e2d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm8get_nameEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Algorithm’s name. </p>
 <p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__name"><span class="std std-ref">pagmo::has_name</span></a>, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_name()</span></code> method. Otherwise, an implementation-defined name based on the type of the UDA will be returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws</dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by copying an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> object. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the algorithm’s name.</p>
 </dd>
 </dl>
@@ -734,14 +834,14 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo9algorithm14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9algorithm14get_extra_infoEv"></span><span id="pagmo::algorithm::get_extra_infoC"></span><span class="target" id="classpagmo_1_1algorithm_1a57fe662e89ffad42c9f43c3a45f3a8eb"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm14get_extra_infoEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo9algorithm14get_extra_infoEv"></span><span id="pagmo::algorithm::get_extra_infoC"></span><span class="target" id="classpagmo_1_1algorithm_1a57fe662e89ffad42c9f43c3a45f3a8eb"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm14get_extra_infoEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Algorithm’s extra info. </p>
 <p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__extra__info"><span class="std std-ref">pagmo::has_extra_info</span></a>, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method. Otherwise, an empty string will be returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws</dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code> method of the UDA. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>extra info about the UDA.</p>
 </dd>
 </dl>
@@ -749,11 +849,11 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo9algorithm17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9algorithm17get_thread_safetyEv"></span><span id="pagmo::algorithm::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1algorithm_1ab14582644ffedad6c861502ddd64672c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm17get_thread_safetyEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo9algorithm17get_thread_safetyEv"></span><span id="pagmo::algorithm::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1algorithm_1ab14582644ffedad6c861502ddd64672c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm17get_thread_safetyEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Algorithm’s thread safety level. </p>
 <p>If the UDA satisfies <a class="reference internal" href="miscellanea/type_traits.html#classpagmo_1_1has__get__thread__safety"><span class="std std-ref">pagmo::has_get_thread_safety</span></a>, then this method will return the output of its <code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code> method. Otherwise, thread_safety::basic will be returned. That is, pagmo assumes by default that is it safe to operate concurrently on distinct UDA instances.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the thread safety level of the UDA. </p>
 </dd>
 </dl>
@@ -761,10 +861,10 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm8is_validEv">
-<span id="_CPPv3NK5pagmo9algorithm8is_validEv"></span><span id="_CPPv2NK5pagmo9algorithm8is_validEv"></span><span id="pagmo::algorithm::is_validC"></span><span class="target" id="classpagmo_1_1algorithm_1af4cf759aedbcf8eab8b9532bfbb2ed4a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm8is_validEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm8is_validEv"></span><span id="_CPPv2NK5pagmo9algorithm8is_validEv"></span><span id="pagmo::algorithm::is_validC"></span><span class="target" id="classpagmo_1_1algorithm_1af4cf759aedbcf8eab8b9532bfbb2ed4a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm8is_validEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Check if the algorithm is in a valid state. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">false</span></code> if <code class="docutils literal notranslate"><span class="pre">this</span></code> was moved from, <code class="docutils literal notranslate"><span class="pre">true</span></code> otherwise. </p>
 </dd>
 </dl>
@@ -772,17 +872,17 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm14get_type_indexEv">
-<span id="_CPPv3NK5pagmo9algorithm14get_type_indexEv"></span><span id="_CPPv2NK5pagmo9algorithm14get_type_indexEv"></span><span id="pagmo::algorithm::get_type_indexC"></span><span class="target" id="classpagmo_1_1algorithm_1aca1d95ae13e9063fc5e137b9765fcbd6"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_type_index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm14get_type_indexEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm14get_type_indexEv"></span><span id="_CPPv2NK5pagmo9algorithm14get_type_indexEv"></span><span id="pagmo::algorithm::get_type_indexC"></span><span class="target" id="classpagmo_1_1algorithm_1aca1d95ae13e9063fc5e137b9765fcbd6"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">type_index</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_type_index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm14get_type_indexEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the type of the UDA. </p>
 <p><div class="versionadded">
-<p><span class="versionmodified added">New in version 2.15.</span></p>
+<p><span class="versionmodified added">Added in version 2.15.</span></p>
 </div>
 <p>This function will return the type
 of the UDA stored within this algorithm
 instance.</p>
 </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the type of the UDA. </p>
 </dd>
 </dl>
@@ -790,10 +890,10 @@ instance.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo9algorithm7get_ptrEv">
-<span id="_CPPv3NK5pagmo9algorithm7get_ptrEv"></span><span id="_CPPv2NK5pagmo9algorithm7get_ptrEv"></span><span id="pagmo::algorithm::get_ptrC"></span><span class="target" id="classpagmo_1_1algorithm_1ae1ef01c7cd3b9d800115514036e2ca6d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm7get_ptrEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo9algorithm7get_ptrEv"></span><span id="_CPPv2NK5pagmo9algorithm7get_ptrEv"></span><span id="pagmo::algorithm::get_ptrC"></span><span class="target" id="classpagmo_1_1algorithm_1ae1ef01c7cd3b9d800115514036e2ca6d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo9algorithm7get_ptrEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get a const pointer to the UDA. </p>
 <p><div class="versionadded">
-<p><span class="versionmodified added">New in version 2.15.</span></p>
+<p><span class="versionmodified added">Added in version 2.15.</span></p>
 </div>
 <p>This function will return a raw const pointer
 to the internal UDA instance. Differently from
@@ -808,7 +908,7 @@ to cast the returned void pointer to the correct type.</p>
 of <code class="docutils literal notranslate"><span class="pre">this</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a pointer to the internal UDA. </p>
 </dd>
 </dl>
@@ -816,10 +916,10 @@ of <code class="docutils literal notranslate"><span class="pre">this</span></cod
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo9algorithm7get_ptrEv">
-<span id="_CPPv3N5pagmo9algorithm7get_ptrEv"></span><span id="_CPPv2N5pagmo9algorithm7get_ptrEv"></span><span id="pagmo::algorithm::get_ptr"></span><span class="target" id="classpagmo_1_1algorithm_1adf87453a710205668bc2e6dc6ee3e2e1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm7get_ptrEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo9algorithm7get_ptrEv"></span><span id="_CPPv2N5pagmo9algorithm7get_ptrEv"></span><span id="pagmo::algorithm::get_ptr"></span><span class="target" id="classpagmo_1_1algorithm_1adf87453a710205668bc2e6dc6ee3e2e1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ptr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo9algorithm7get_ptrEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get a mutable pointer to the UDA. </p>
 <p><div class="versionadded">
-<p><span class="versionmodified added">New in version 2.15.</span></p>
+<p><span class="versionmodified added">Added in version 2.15.</span></p>
 </div>
 <p>This function will return a raw pointer
 to the internal UDA instance. Differently from
@@ -839,7 +939,7 @@ of <code class="docutils literal notranslate"><span class="pre">this</span></cod
 methods on the internal UDA instance. Assigning a new UDA via this pointer is undefined behaviour.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a pointer to the internal UDA. </p>
 </dd>
 </dl>
@@ -856,11 +956,10 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="problem.html"
@@ -880,15 +979,54 @@ methods on the internal UDA instance. Assigning a new UDA via this pointer is un
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithmE"><code class="docutils literal notranslate"><span class="pre">pagmo::algorithm</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm9algorithmEv"><code class="docutils literal notranslate"><span class="pre">algorithm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithm9algorithmERR1T"><code class="docutils literal notranslate"><span class="pre">algorithm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm9algorithmERK9algorithm"><code class="docutils literal notranslate"><span class="pre">algorithm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm9algorithmERR9algorithm"><code class="docutils literal notranslate"><span class="pre">algorithm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithmaSERR9algorithm"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithmaSERK9algorithm"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0_20generic_ctor_enablerI1TEEN5pagmo9algorithmaSER9algorithmRR1T"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5pagmo9algorithm7extractEPK1Tv"><code class="docutils literal notranslate"><span class="pre">extract()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0EN5pagmo9algorithm7extractEP1Tv"><code class="docutils literal notranslate"><span class="pre">extract()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0ENK5pagmo9algorithm2isEbv"><code class="docutils literal notranslate"><span class="pre">is()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm6evolveERK10population"><code class="docutils literal notranslate"><span class="pre">evolve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm8set_seedEj"><code class="docutils literal notranslate"><span class="pre">set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm12has_set_seedEv"><code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm13is_stochasticEv"><code class="docutils literal notranslate"><span class="pre">is_stochastic()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm13set_verbosityEj"><code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm17has_set_verbosityEv"><code class="docutils literal notranslate"><span class="pre">has_set_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm8get_nameEv"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm14get_extra_infoEv"><code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm17get_thread_safetyEv"><code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm8is_validEv"><code class="docutils literal notranslate"><span class="pre">is_valid()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm14get_type_indexEv"><code class="docutils literal notranslate"><span class="pre">get_type_index()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo9algorithm7get_ptrEv"><code class="docutils literal notranslate"><span class="pre">get_ptr()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo9algorithm7get_ptrEv"><code class="docutils literal notranslate"><span class="pre">get_ptr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -906,6 +1044,7 @@ By pagmo development team
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2017-2024, pagmo development team.
@@ -932,8 +1071,8 @@ By pagmo development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

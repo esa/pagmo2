@@ -1,77 +1,73 @@
  
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compass Search &#8212; pagmo 2.19.1 documentation</title>
+    <title>Compass Search &#8212; pagmo 2.20.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../../_static/documentation_options.js?v=22086b0a"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/cpp/algorithms/compass_search';</script>
-    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Differential Evolution" href="de.html" />
     <link rel="prev" title="Covariance Matrix Adaptation Evolutionary Strategy (CMA-ES)" href="cmaes.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
+  <body data-default-mode="">
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
+  <div id="pst-scroll-pixel-helper"></div>
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -79,7 +75,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,16 +82,69 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
   
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -109,6 +157,9 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -117,23 +168,31 @@
   
   
   
-    <p class="title logo__title">pagmo 2.19.1 documentation</p>
+  
+    <p class="title logo__title">pagmo 2.20.0 documentation</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">Preliminaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">Writing your first optimisation problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/evolving_a_population.html">Evolving a population</a></li>
 </ul>
-</li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../types.html">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../problem.html">Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm.html">Algorithm</a></li>
@@ -214,7 +273,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../miscellanea/exceptions.html">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../miscellanea/utility_classes.html">Utility classes</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
@@ -225,14 +284,19 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -241,14 +305,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -357,7 +421,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -370,24 +434,27 @@
 </button>
 
 
-<script>
-document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-  </button>
-`);
-</script>
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -403,6 +470,36 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_searchE"><code class="docutils literal notranslate"><span class="pre">pagmo::compass_search</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search13log_line_typeE"><code class="docutils literal notranslate"><span class="pre">log_line_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search8log_typeE"><code class="docutils literal notranslate"><span class="pre">log_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search14compass_searchEjddd"><code class="docutils literal notranslate"><span class="pre">compass_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search6evolveE10population"><code class="docutils literal notranslate"><span class="pre">evolve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search13set_verbosityEj"><code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search13get_verbosityEv"><code class="docutils literal notranslate"><span class="pre">get_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search14get_max_fevalsEv"><code class="docutils literal notranslate"><span class="pre">get_max_fevals()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search14get_stop_rangeEv"><code class="docutils literal notranslate"><span class="pre">get_stop_range()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search15get_start_rangeEv"><code class="docutils literal notranslate"><span class="pre">get_start_range()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search19get_reduction_coeffEv"><code class="docutils literal notranslate"><span class="pre">get_reduction_coeff()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search8get_nameEv"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search14get_extra_infoEv"><code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search7get_logEv"><code class="docutils literal notranslate"><span class="pre">get_log()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search18set_random_sr_seedEj"><code class="docutils literal notranslate"><span class="pre">set_random_sr_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search13set_selectionERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search13set_selectionEN10population9size_typeE"><code class="docutils literal notranslate"><span class="pre">set_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search13get_selectionEv"><code class="docutils literal notranslate"><span class="pre">get_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search15set_replacementERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_replacement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search15set_replacementEN10population9size_typeE"><code class="docutils literal notranslate"><span class="pre">set_replacement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search15get_replacementEv"><code class="docutils literal notranslate"><span class="pre">get_replacement()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -410,14 +507,14 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="compass-search">
-<h1>Compass Search<a class="headerlink" href="#compass-search" title="Permalink to this headline">#</a></h1>
+<h1>Compass Search<a class="headerlink" href="#compass-search" title="Link to this heading">#</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_searchE">
-<span id="_CPPv3N5pagmo14compass_searchE"></span><span id="_CPPv2N5pagmo14compass_searchE"></span><span id="pagmo::compass_search"></span><span class="target" id="classpagmo_1_1compass__search"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compass_search</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv4N5pagmo20not_population_basedE" title="pagmo::not_population_based"><span class="n"><span class="pre">not_population_based</span></span></a><a class="headerlink" href="#_CPPv4N5pagmo14compass_searchE" title="Permalink to this definition">#</a><br /></dt>
-<dd><p>The Compass Search Solver (CS) </p>
+<span id="_CPPv3N5pagmo14compass_searchE"></span><span id="_CPPv2N5pagmo14compass_searchE"></span><span id="pagmo::compass_search"></span><span class="target" id="classpagmo_1_1compass__search"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compass_search</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv4N5pagmo20not_population_basedE" title="pagmo::not_population_based"><span class="n"><span class="pre">not_population_based</span></span></a><a class="headerlink" href="#_CPPv4N5pagmo14compass_searchE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The Compass Search Solver (CS). </p>
 <p><img alt="../../../_images/compass_search.png" src="../../../_images/compass_search.png" /></p>
 <p>In the review paper by Kolda, Lewis, Torczon: ‘Optimization by Direct Search: New Perspectives on Some Classical and Modern Methods’ published in the SIAM Journal Vol. 45, No. 3, pp. 385-482 (2003), the following description of the compass search algorithm is given:</p>
 <p>‘Davidon describes what is one of the earliest examples of a direct search method used on a digital computer to solve an optimization problem: Enrico Fermi and Nicholas Metropolis used one of the first digital computers, the Los Alamos Maniac, to determine which values of certain theoretical parameters (phase shifts) best fit experimental data (scattering cross sections). They varied one theoretical parameter at a time by steps of the same magnitude, and when no such increase or decrease in any one parameter further improved the fit to the experimental data, they halved the step size and repeated the process until the steps were deemed sufficiently small. Their simple procedure was slow but sure, and several of us used it on the Avidac computer at the Argonne National Laboratory for adjusting six theoretical parameters to fit the pion-proton scattering data we had gathered using the University of Chicago synchrocyclotron. While this basic algorithm undoubtedly predates Fermi and Metropolis, it has remained a standard in the scientific computing community for exactly the reason observed by Davidon: it is slow but sure’.</p>
@@ -445,13 +542,13 @@ called from two identical populations.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search13log_line_typeE">
-<span id="_CPPv3N5pagmo14compass_search13log_line_typeE"></span><span id="_CPPv2N5pagmo14compass_search13log_line_typeE"></span><span id="pagmo::compass_search::log_line_type"></span><span class="target" id="classpagmo_1_1compass__search_1ac23ac8250bee4ea338ac3c647d82af1a"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13log_line_typeE" title="Permalink to this definition">#</a><br /></dt>
-<dd><p>Single entry of the log (feval, best fitness, n. constraints violated, violation norm, range) </p>
+<span id="_CPPv3N5pagmo14compass_search13log_line_typeE"></span><span id="_CPPv2N5pagmo14compass_search13log_line_typeE"></span><span id="pagmo::compass_search::log_line_type"></span><span class="target" id="classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13log_line_typeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Single entry of the log (feval, best fitness, n. constraints violated, violation norm, range). </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search8log_typeE">
-<span id="_CPPv3N5pagmo14compass_search8log_typeE"></span><span id="_CPPv2N5pagmo14compass_search8log_typeE"></span><span id="pagmo::compass_search::log_type"></span><span class="target" id="classpagmo_1_1compass__search_1ac65ecc307c1175400265b5257cb4a424"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo14compass_search13log_line_typeE" title="pagmo::compass_search::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search8log_typeE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo14compass_search8log_typeE"></span><span id="_CPPv2N5pagmo14compass_search8log_typeE"></span><span id="pagmo::compass_search::log_type"></span><span class="target" id="classpagmo_1_1compass__search_1a1af2f04182eff8f9009e7b9006ab2a63"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo14compass_search13log_line_typeE" title="pagmo::compass_search::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search8log_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The log. </p>
 </dd></dl>
 
@@ -460,11 +557,11 @@ called from two identical populations.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search14compass_searchEjddd">
-<span id="_CPPv3N5pagmo14compass_search14compass_searchEjddd"></span><span id="_CPPv2N5pagmo14compass_search14compass_searchEjddd"></span><span id="pagmo::compass_search::compass_search__unsigned.double.double.double"></span><span class="target" id="classpagmo_1_1compass__search_1af06dd2bc23cc01850c12e461466651b1"></span><span class="sig-name descname"><span class="n"><span class="pre">compass_search</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">max_fevals</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start_range</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">.1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stop_range</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">.01</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reduction_coeff</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">.5</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search14compass_searchEjddd" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo14compass_search14compass_searchEjddd"></span><span id="_CPPv2N5pagmo14compass_search14compass_searchEjddd"></span><span id="pagmo::compass_search::compass_search__unsigned.double.double.double"></span><span class="target" id="classpagmo_1_1compass__search_1af06dd2bc23cc01850c12e461466651b1"></span><span class="sig-name descname"><span class="n"><span class="pre">compass_search</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">max_fevals</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start_range</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">.1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stop_range</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">.01</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reduction_coeff</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">.5</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search14compass_searchEjddd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Constructor. </p>
 <p>Constructs <a class="reference internal" href="#classpagmo_1_1compass__search"><span class="std std-ref">compass_search</span></a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>max_fevals</strong> – maximum number of fitness evaluations </p></li>
 <li><p><strong>start_range</strong> – start range </p></li>
@@ -472,7 +569,7 @@ called from two identical populations.</p>
 <li><p><strong>reduction_coeff</strong> – range reduction coefficient </p></li>
 </ul>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">start_range</span></code> is not in (0,1] </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">stop_range</span></code> is not in (start_range,1] </p></li>
@@ -484,20 +581,20 @@ called from two identical populations.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search6evolveE10population">
-<span id="_CPPv3NK5pagmo14compass_search6evolveE10population"></span><span id="_CPPv2NK5pagmo14compass_search6evolveE10population"></span><span id="pagmo::compass_search::evolve__populationC"></span><span class="target" id="classpagmo_1_1compass__search_1ac92dbb5ab2ebd176614015dc3d6a676e"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search6evolveE10population" title="Permalink to this definition">#</a><br /></dt>
-<dd><p>Algorithm evolve method (juice implementation of the algorithm) </p>
+<span id="_CPPv3NK5pagmo14compass_search6evolveE10population"></span><span id="_CPPv2NK5pagmo14compass_search6evolveE10population"></span><span id="pagmo::compass_search::evolve__populationC"></span><span class="target" id="classpagmo_1_1compass__search_1ac92dbb5ab2ebd176614015dc3d6a676e"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search6evolveE10population" title="Link to this definition">#</a><br /></dt>
+<dd><p>Algorithm evolve method (juice implementation of the algorithm). </p>
 <p>Evolves the population up to when the search range becomes smaller than the defined stop_range</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pop</strong> – population to be evolved </p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the problem is multi-objective or stochastic </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the population is empty </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>evolved population </p>
 </dd>
 </dl>
@@ -505,7 +602,7 @@ called from two identical populations.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search13set_verbosityEj">
-<span id="_CPPv3N5pagmo14compass_search13set_verbosityEj"></span><span id="_CPPv2N5pagmo14compass_search13set_verbosityEj"></span><span id="pagmo::compass_search::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1compass__search_1a0751d3a7ffb8a8ce091d3cf42a9691c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13set_verbosityEj" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo14compass_search13set_verbosityEj"></span><span id="_CPPv2N5pagmo14compass_search13set_verbosityEj"></span><span id="pagmo::compass_search::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1compass__search_1a0751d3a7ffb8a8ce091d3cf42a9691c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13set_verbosityEj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Sets the algorithm verbosity. </p>
 <p>Sets the verbosity level of the screen output and of the log returned by <a class="reference internal" href="#classpagmo_1_1compass__search_1aa50e9c70ed40eeb47b2576f445efb842"><span class="std std-ref">get_log()</span></a>. <code class="docutils literal notranslate"><span class="pre">level</span></code> can be:<ul class="simple">
 <li><p>0: no verbosity</p></li>
@@ -534,7 +631,7 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 </div>
  Fevals, is the number of fitness evaluations made, Best is the best fitness Violated and Viol.Norm are the number of constraints violated and the L2 norm of the violation (accounting for the tolerances returned by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a22a38321cad16dface23ea5c5efb147a"><span class="std std-ref">problem::get_c_tol</span></a>, and Range is the range used at that point of the search</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>level</strong> – verbosity level </p>
 </dd>
 </dl>
@@ -542,10 +639,10 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search13get_verbosityEv">
-<span id="_CPPv3NK5pagmo14compass_search13get_verbosityEv"></span><span id="_CPPv2NK5pagmo14compass_search13get_verbosityEv"></span><span id="pagmo::compass_search::get_verbosityC"></span><span class="target" id="classpagmo_1_1compass__search_1abba5c99dcc3fb1a5a22fa94386e08ee9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search13get_verbosityEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search13get_verbosityEv"></span><span id="_CPPv2NK5pagmo14compass_search13get_verbosityEv"></span><span id="pagmo::compass_search::get_verbosityC"></span><span class="target" id="classpagmo_1_1compass__search_1abba5c99dcc3fb1a5a22fa94386e08ee9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search13get_verbosityEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Gets the verbosity level. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the verbosity level </p>
 </dd>
 </dl>
@@ -553,10 +650,10 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search14get_max_fevalsEv">
-<span id="_CPPv3NK5pagmo14compass_search14get_max_fevalsEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_max_fevalsEv"></span><span id="pagmo::compass_search::get_max_fevalsC"></span><span class="target" id="classpagmo_1_1compass__search_1a7d18492b40166364270b3fee451f2ed7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_max_fevals</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_max_fevalsEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search14get_max_fevalsEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_max_fevalsEv"></span><span id="pagmo::compass_search::get_max_fevalsC"></span><span class="target" id="classpagmo_1_1compass__search_1a7d18492b40166364270b3fee451f2ed7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_max_fevals</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_max_fevalsEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Gets the maximum number of iterations allowed. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the maximum number of iterations allowed </p>
 </dd>
 </dl>
@@ -564,10 +661,10 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search14get_stop_rangeEv">
-<span id="_CPPv3NK5pagmo14compass_search14get_stop_rangeEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_stop_rangeEv"></span><span id="pagmo::compass_search::get_stop_rangeC"></span><span class="target" id="classpagmo_1_1compass__search_1acd0ee1e0b85d07ff303900cc88d1c7ec"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_stop_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_stop_rangeEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search14get_stop_rangeEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_stop_rangeEv"></span><span id="pagmo::compass_search::get_stop_rangeC"></span><span class="target" id="classpagmo_1_1compass__search_1acd0ee1e0b85d07ff303900cc88d1c7ec"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_stop_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_stop_rangeEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Gets the stop_range. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the stop range </p>
 </dd>
 </dl>
@@ -575,10 +672,10 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search15get_start_rangeEv">
-<span id="_CPPv3NK5pagmo14compass_search15get_start_rangeEv"></span><span id="_CPPv2NK5pagmo14compass_search15get_start_rangeEv"></span><span id="pagmo::compass_search::get_start_rangeC"></span><span class="target" id="classpagmo_1_1compass__search_1a82a9cd24f46ffbcf17b1d56413010e37"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_start_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search15get_start_rangeEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search15get_start_rangeEv"></span><span id="_CPPv2NK5pagmo14compass_search15get_start_rangeEv"></span><span id="pagmo::compass_search::get_start_rangeC"></span><span class="target" id="classpagmo_1_1compass__search_1a82a9cd24f46ffbcf17b1d56413010e37"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_start_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search15get_start_rangeEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the start range. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the start range </p>
 </dd>
 </dl>
@@ -586,10 +683,10 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search19get_reduction_coeffEv">
-<span id="_CPPv3NK5pagmo14compass_search19get_reduction_coeffEv"></span><span id="_CPPv2NK5pagmo14compass_search19get_reduction_coeffEv"></span><span id="pagmo::compass_search::get_reduction_coeffC"></span><span class="target" id="classpagmo_1_1compass__search_1a32451a1b28248f1c60796b8cf07d23a5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_reduction_coeff</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search19get_reduction_coeffEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search19get_reduction_coeffEv"></span><span id="_CPPv2NK5pagmo14compass_search19get_reduction_coeffEv"></span><span id="pagmo::compass_search::get_reduction_coeffC"></span><span class="target" id="classpagmo_1_1compass__search_1a32451a1b28248f1c60796b8cf07d23a5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_reduction_coeff</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search19get_reduction_coeffEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the reduction_coeff. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the reduction coefficient </p>
 </dd>
 </dl>
@@ -597,11 +694,11 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search8get_nameEv">
-<span id="_CPPv3NK5pagmo14compass_search8get_nameEv"></span><span id="_CPPv2NK5pagmo14compass_search8get_nameEv"></span><span id="pagmo::compass_search::get_nameC"></span><span class="target" id="classpagmo_1_1compass__search_1af1e4add7c64d6c5da8b704d58006132a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search8get_nameEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search8get_nameEv"></span><span id="_CPPv2NK5pagmo14compass_search8get_nameEv"></span><span id="pagmo::compass_search::get_nameC"></span><span class="target" id="classpagmo_1_1compass__search_1af1e4add7c64d6c5da8b704d58006132a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search8get_nameEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Algorithm name. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a string containing the algorithm name </p>
 </dd>
 </dl>
@@ -609,11 +706,11 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo14compass_search14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_extra_infoEv"></span><span id="pagmo::compass_search::get_extra_infoC"></span><span class="target" id="classpagmo_1_1compass__search_1a575d0d8e7161c4ed4caab973753b69cb"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_extra_infoEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo14compass_search14get_extra_infoEv"></span><span id="pagmo::compass_search::get_extra_infoC"></span><span class="target" id="classpagmo_1_1compass__search_1a575d0d8e7161c4ed4caab973753b69cb"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search14get_extra_infoEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>One of the optional methods of any user-defined algorithm (UDA).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a string containing extra info on the algorithm </p>
 </dd>
 </dl>
@@ -621,22 +718,22 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search7get_logEv">
-<span id="_CPPv3NK5pagmo14compass_search7get_logEv"></span><span id="_CPPv2NK5pagmo14compass_search7get_logEv"></span><span id="pagmo::compass_search::get_logC"></span><span class="target" id="classpagmo_1_1compass__search_1aa50e9c70ed40eeb47b2576f445efb842"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo14compass_search8log_typeE" title="pagmo::compass_search::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search7get_logEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search7get_logEv"></span><span id="_CPPv2NK5pagmo14compass_search7get_logEv"></span><span id="pagmo::compass_search::get_logC"></span><span class="target" id="classpagmo_1_1compass__search_1aa50e9c70ed40eeb47b2576f445efb842"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo14compass_search8log_typeE" title="pagmo::compass_search::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search7get_logEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get log. </p>
-<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1compass__search_1ac23ac8250bee4ea338ac3c647d82af1a"><span class="std std-ref">compass_search::log_line_type</span></a> containing: Fevals, Best, Violated and Viol.Norm, Range as described in <a class="reference internal" href="#classpagmo_1_1compass__search_1a0751d3a7ffb8a8ce091d3cf42a9691c1"><span class="std std-ref">compass_search::set_verbosity</span></a> </p>
+<p>A log containing relevant quantities monitoring the last call to evolve. Each element of the returned <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> is a <a class="reference internal" href="#classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"><span class="std std-ref">compass_search::log_line_type</span></a> containing: Fevals, Best, Violated and Viol.Norm, Range as described in <a class="reference internal" href="#classpagmo_1_1compass__search_1a0751d3a7ffb8a8ce091d3cf42a9691c1"><span class="std std-ref">compass_search::set_verbosity</span></a> </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1compass__search_1ac23ac8250bee4ea338ac3c647d82af1a"><span class="std std-ref">compass_search::log_line_type</span></a> containing the logged values Fevals, Best, Range </p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> of <a class="reference internal" href="#classpagmo_1_1compass__search_1a32bde4a5c0344c344eca65d7f4c57c86"><span class="std std-ref">compass_search::log_line_type</span></a> containing the logged values Fevals, Best, Range </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search18set_random_sr_seedEj">
-<span id="_CPPv3N5pagmo14compass_search18set_random_sr_seedEj"></span><span id="_CPPv2N5pagmo14compass_search18set_random_sr_seedEj"></span><span id="pagmo::compass_search::set_random_sr_seed__unsigned"></span><span class="target" id="classpagmo_1_1not__population__based_1ac8cb01a8cce5a99de6d01dea185567cf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_random_sr_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search18set_random_sr_seedEj" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo14compass_search18set_random_sr_seedEj"></span><span id="_CPPv2N5pagmo14compass_search18set_random_sr_seedEj"></span><span id="pagmo::compass_search::set_random_sr_seed__unsigned"></span><span class="target" id="classpagmo_1_1not__population__based_1ac8cb01a8cce5a99de6d01dea185567cf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_random_sr_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search18set_random_sr_seedEj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the seed for the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>seed</strong> – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
 </dd>
 </dl>
@@ -644,7 +741,7 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search13set_selectionERKNSt6stringE">
-<span id="_CPPv3N5pagmo14compass_search13set_selectionERKNSt6stringE"></span><span id="_CPPv2N5pagmo14compass_search13set_selectionERKNSt6stringE"></span><span id="pagmo::compass_search::set_selection__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_selection</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13set_selectionERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo14compass_search13set_selectionERKNSt6stringE"></span><span id="_CPPv2N5pagmo14compass_search13set_selectionERKNSt6stringE"></span><span id="pagmo::compass_search::set_selection__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_selection</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13set_selectionERKNSt6stringE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the individual selection policy. </p>
 <p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <p>The input string must be one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
@@ -656,10 +753,10 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 <p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac8cb01a8cce5a99de6d01dea185567cf"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>select</strong> – the selection policy.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">select</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>. </p>
 </dd>
 </dl>
@@ -667,11 +764,11 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search13set_selectionEN10population9size_typeE">
-<span id="_CPPv3N5pagmo14compass_search13set_selectionEN10population9size_typeE"></span><span id="_CPPv2N5pagmo14compass_search13set_selectionEN10population9size_typeE"></span><span id="pagmo::compass_search::set_selection__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_selection</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type"><span class="n"><span class="pre">size_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13set_selectionEN10population9size_typeE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo14compass_search13set_selectionEN10population9size_typeE"></span><span id="_CPPv2N5pagmo14compass_search13set_selectionEN10population9size_typeE"></span><span id="pagmo::compass_search::set_selection__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_selection</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type"><span class="n"><span class="pre">size_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search13set_selectionEN10population9size_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the individual selection index. </p>
 <p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – the index in the population of the individual to be selected for optimisation. </p>
 </dd>
 </dl>
@@ -679,11 +776,11 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search13get_selectionEv">
-<span id="_CPPv3NK5pagmo14compass_search13get_selectionEv"></span><span id="_CPPv2NK5pagmo14compass_search13get_selectionEv"></span><span id="pagmo::compass_search::get_selectionC"></span><span class="target" id="classpagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_selection</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search13get_selectionEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search13get_selectionEv"></span><span id="_CPPv2NK5pagmo14compass_search13get_selectionEv"></span><span id="pagmo::compass_search::get_selectionC"></span><span class="target" id="classpagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_selection</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search13get_selectionEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the individual selection policy or index. </p>
-<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a6eb52f7d48a0cfd0ce37956139a3a862"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1acd046a0de9bc2a40566496e75e4db1f7"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the individual selection policy or index. </p>
 </dd>
 </dl>
@@ -691,7 +788,7 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search15set_replacementERKNSt6stringE">
-<span id="_CPPv3N5pagmo14compass_search15set_replacementERKNSt6stringE"></span><span id="_CPPv2N5pagmo14compass_search15set_replacementERKNSt6stringE"></span><span id="pagmo::compass_search::set_replacement__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_replacement</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search15set_replacementERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo14compass_search15set_replacementERKNSt6stringE"></span><span id="_CPPv2N5pagmo14compass_search15set_replacementERKNSt6stringE"></span><span id="pagmo::compass_search::set_replacement__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_replacement</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search15set_replacementERKNSt6stringE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the individual replacement policy. </p>
 <p>This method will set the policy that is used in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
 <p>The input string must be one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
@@ -703,10 +800,10 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 <p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac8cb01a8cce5a99de6d01dea185567cf"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>replace</strong> – the replacement policy.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">replace</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>. </p>
 </dd>
 </dl>
@@ -714,11 +811,11 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo14compass_search15set_replacementEN10population9size_typeE">
-<span id="_CPPv3N5pagmo14compass_search15set_replacementEN10population9size_typeE"></span><span id="_CPPv2N5pagmo14compass_search15set_replacementEN10population9size_typeE"></span><span id="pagmo::compass_search::set_replacement__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_replacement</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type"><span class="n"><span class="pre">size_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search15set_replacementEN10population9size_typeE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo14compass_search15set_replacementEN10population9size_typeE"></span><span id="_CPPv2N5pagmo14compass_search15set_replacementEN10population9size_typeE"></span><span id="pagmo::compass_search::set_replacement__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_replacement</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type"><span class="n"><span class="pre">size_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo14compass_search15set_replacementEN10population9size_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the individual replacement index. </p>
 <p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – the index in the population of the individual to be replaced after the optimisation. </p>
 </dd>
 </dl>
@@ -726,11 +823,11 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo14compass_search15get_replacementEv">
-<span id="_CPPv3NK5pagmo14compass_search15get_replacementEv"></span><span id="_CPPv2NK5pagmo14compass_search15get_replacementEv"></span><span id="pagmo::compass_search::get_replacementC"></span><span class="target" id="classpagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_replacement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search15get_replacementEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo14compass_search15get_replacementEv"></span><span id="_CPPv2NK5pagmo14compass_search15get_replacementEv"></span><span id="pagmo::compass_search::get_replacementC"></span><span class="target" id="classpagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_replacement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo14compass_search15get_replacementEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the individual replacement policy or index. </p>
-<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a6eb52f7d48a0cfd0ce37956139a3a862"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1acd046a0de9bc2a40566496e75e4db1f7"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the individual replacement policy or index. </p>
 </dd>
 </dl>
@@ -747,11 +844,10 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="cmaes.html"
@@ -771,15 +867,51 @@ Exit condition -- range: 7.62939e-06 &lt;= 1e-05
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_searchE"><code class="docutils literal notranslate"><span class="pre">pagmo::compass_search</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search13log_line_typeE"><code class="docutils literal notranslate"><span class="pre">log_line_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search8log_typeE"><code class="docutils literal notranslate"><span class="pre">log_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search14compass_searchEjddd"><code class="docutils literal notranslate"><span class="pre">compass_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search6evolveE10population"><code class="docutils literal notranslate"><span class="pre">evolve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search13set_verbosityEj"><code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search13get_verbosityEv"><code class="docutils literal notranslate"><span class="pre">get_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search14get_max_fevalsEv"><code class="docutils literal notranslate"><span class="pre">get_max_fevals()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search14get_stop_rangeEv"><code class="docutils literal notranslate"><span class="pre">get_stop_range()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search15get_start_rangeEv"><code class="docutils literal notranslate"><span class="pre">get_start_range()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search19get_reduction_coeffEv"><code class="docutils literal notranslate"><span class="pre">get_reduction_coeff()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search8get_nameEv"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search14get_extra_infoEv"><code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search7get_logEv"><code class="docutils literal notranslate"><span class="pre">get_log()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search18set_random_sr_seedEj"><code class="docutils literal notranslate"><span class="pre">set_random_sr_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search13set_selectionERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search13set_selectionEN10population9size_typeE"><code class="docutils literal notranslate"><span class="pre">set_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search13get_selectionEv"><code class="docutils literal notranslate"><span class="pre">get_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search15set_replacementERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_replacement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo14compass_search15set_replacementEN10population9size_typeE"><code class="docutils literal notranslate"><span class="pre">set_replacement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo14compass_search15get_replacementEv"><code class="docutils literal notranslate"><span class="pre">get_replacement()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -797,6 +929,7 @@ By pagmo development team
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2017-2024, pagmo development team.
@@ -823,8 +956,8 @@ By pagmo development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

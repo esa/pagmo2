@@ -1,77 +1,73 @@
  
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Hypervolumes &#8212; pagmo 2.19.1 documentation</title>
+    <title>Hypervolumes &#8212; pagmo 2.20.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../../_static/documentation_options.js?v=22086b0a"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/cpp/utils/hypervolume';</script>
-    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Utilities for gradient and hessians" href="gradient_and_hessians.html" />
     <link rel="prev" title="Low-discrepancy sequences" href="discrepancy.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
+  <body data-default-mode="">
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
+  <div id="pst-scroll-pixel-helper"></div>
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -79,7 +75,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,16 +82,69 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
   
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -109,6 +157,9 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -117,23 +168,31 @@
   
   
   
-    <p class="title logo__title">pagmo 2.19.1 documentation</p>
+  
+    <p class="title logo__title">pagmo 2.20.0 documentation</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">Preliminaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">Writing your first optimisation problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/evolving_a_population.html">Evolving a population</a></li>
 </ul>
-</li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../types.html">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../problem.html">Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm.html">Algorithm</a></li>
@@ -214,7 +273,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../miscellanea/exceptions.html">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../miscellanea/utility_classes.html">Utility classes</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
@@ -225,14 +284,19 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -241,14 +305,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -357,7 +421,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -370,24 +434,27 @@
 </button>
 
 
-<script>
-document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-  </button>
-`);
-</script>
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -403,6 +470,40 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolumeE"><code class="docutils literal notranslate"><span class="pre">pagmo::hypervolume</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume11hypervolumeEv"><code class="docutils literal notranslate"><span class="pre">hypervolume()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb"><code class="docutils literal notranslate"><span class="pre">hypervolume()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb"><code class="docutils literal notranslate"><span class="pre">hypervolume()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERK11hypervolume"><code class="docutils literal notranslate"><span class="pre">hypervolume()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolumeaSERK11hypervolume"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume15set_copy_pointsEb"><code class="docutils literal notranslate"><span class="pre">set_copy_points()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume15get_copy_pointsEv"><code class="docutils literal notranslate"><span class="pre">get_copy_points()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume10set_verifyEb"><code class="docutils literal notranslate"><span class="pre">set_verify()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume10get_verifyEv"><code class="docutils literal notranslate"><span class="pre">get_verify()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume8refpointEd"><code class="docutils literal notranslate"><span class="pre">refpoint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume10get_pointsEv"><code class="docutils literal notranslate"><span class="pre">get_points()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume16get_best_computeERK13vector_double"><code class="docutils literal notranslate"><span class="pre">get_best_compute()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double"><code class="docutils literal notranslate"><span class="pre">get_best_exclusive()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume22get_best_contributionsERK13vector_double"><code class="docutils literal notranslate"><span class="pre">get_best_contributions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume7computeERK13vector_double"><code class="docutils literal notranslate"><span class="pre">compute()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">compute()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">exclusive()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_double"><code class="docutils literal notranslate"><span class="pre">exclusive()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">contributions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_double"><code class="docutils literal notranslate"><span class="pre">contributions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">least_contributor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_double"><code class="docutils literal notranslate"><span class="pre">least_contributor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">greatest_contributor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_double"><code class="docutils literal notranslate"><span class="pre">greatest_contributor()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -410,30 +511,31 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="hypervolumes">
-<span id="cpp-hypervolume-utils"></span><h1>Hypervolumes<a class="headerlink" href="#hypervolumes" title="Permalink to this headline">#</a></h1>
-<a class="reference internal image-reference" href="../../../_images/hypervolume.png"><img alt="hypervolume" class="align-right" src="../../../_images/hypervolume.png" style="width: 288.0px; height: 310.40000000000003px;" /></a>
+<span id="cpp-hypervolume-utils"></span><h1>Hypervolumes<a class="headerlink" href="#hypervolumes" title="Link to this heading">#</a></h1>
+<a class="reference internal image-reference" href="../../../_images/hypervolume.png"><img alt="hypervolume" class="align-right" src="../../../_images/hypervolume.png" style="width: 288.0px; height: 310.40000000000003px;" />
+</a>
 <p>The computation of hypervolumes plays an important role in solving multi-objective optimization
 problems. In pagmo we include a number of different methods and algorithms that allow
 hypervolumes to be computed efficiently at all dimensions. More information on the details
 of the algorithms implemented and their performance can be found in the publication:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Title</dt>
+<dt class="field-odd">Title<span class="colon">:</span></dt>
 <dd class="field-odd"><p>“Empirical performance of the approximation of the least hypervolume contributor.”</p>
 </dd>
-<dt class="field-even">Authors</dt>
+<dt class="field-even">Authors<span class="colon">:</span></dt>
 <dd class="field-even"><p>Krzysztof Nowak, Marcus Märtens, and Dario Izzo.</p>
 </dd>
-<dt class="field-odd">Published in</dt>
+<dt class="field-odd">Published in<span class="colon">:</span></dt>
 <dd class="field-odd"><p>International Conference on Parallel Problem Solving from Nature. Springer International Publishing, 2014.</p>
 </dd>
 </dl>
 <hr class="docutils" />
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11hypervolumeE">
-<span id="_CPPv3N5pagmo11hypervolumeE"></span><span id="_CPPv2N5pagmo11hypervolumeE"></span><span id="pagmo::hypervolume"></span><span class="target" id="classpagmo_1_1hypervolume"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolumeE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11hypervolumeE"></span><span id="_CPPv2N5pagmo11hypervolumeE"></span><span id="pagmo::hypervolume"></span><span class="target" id="classpagmo_1_1hypervolume"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolumeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Hypervolume. </p>
 <p>This class encapsulate various utilities used to compute the hypervolume of a set of points or the various exclusive contributions.</p>
 <p>The main API consists of the five methods:</p>
@@ -450,14 +552,14 @@ of the algorithms implemented and their performance can be found in the publicat
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11hypervolume11hypervolumeEv">
-<span id="_CPPv3N5pagmo11hypervolume11hypervolumeEv"></span><span id="_CPPv2N5pagmo11hypervolume11hypervolumeEv"></span><span id="pagmo::hypervolume::hypervolume"></span><span class="target" id="classpagmo_1_1hypervolume_1aba9b7e4f0cfcfa5c1cbf3c74471f2cd2"></span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume11hypervolumeEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11hypervolume11hypervolumeEv"></span><span id="_CPPv2N5pagmo11hypervolume11hypervolumeEv"></span><span id="pagmo::hypervolume::hypervolume"></span><span class="target" id="classpagmo_1_1hypervolume_1aba9b7e4f0cfcfa5c1cbf3c74471f2cd2"></span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume11hypervolumeEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>Initiates hypervolume with empty set of points. Used for serialization purposes. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb">
-<span id="_CPPv3N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb"></span><span id="_CPPv2N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb"></span><span id="pagmo::hypervolume::hypervolume__pagmo::populationCR.b"></span><span class="target" id="classpagmo_1_1hypervolume_1a26157de355a882044dddae3fb6772252"></span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pop</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">verify</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb"></span><span id="_CPPv2N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb"></span><span id="pagmo::hypervolume::hypervolume__pagmo::populationCR.b"></span><span class="target" id="classpagmo_1_1hypervolume_1a26157de355a882044dddae3fb6772252"></span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pop</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">verify</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Constructor from population. </p>
 <p>Constructs a hypervolume object, where points are elicited from a <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a> object.</p>
 <p>
@@ -468,13 +570,13 @@ Example:</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pop</strong> – a <a class="reference internal" href="../population.html#classpagmo_1_1population"><span class="std std-ref">pagmo::population</span></a></p></li>
 <li><p><strong>verify</strong> – flag stating whether the points should be verified for consistency after the construction.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the population contains a problem that is constrained or single-objective </p>
 </dd>
 </dl>
@@ -482,7 +584,7 @@ Example:</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb">
-<span id="_CPPv3N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb"></span><span id="_CPPv2N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb"></span><span id="pagmo::hypervolume::hypervolume__std::vector:vector_double:CR.b"></span><span class="target" id="classpagmo_1_1hypervolume_1ac5f4c950ff9a4808ce37048358367cf9"></span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">verify</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb"></span><span id="_CPPv2N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb"></span><span id="pagmo::hypervolume::hypervolume__std::vector:vector_double:CR.b"></span><span class="target" id="classpagmo_1_1hypervolume_1ac5f4c950ff9a4808ce37048358367cf9"></span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">verify</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Constructor from points. </p>
 <p>Constructs a hypervolume object from a provided set of points.</p>
 <p>
@@ -492,7 +594,7 @@ Example: <div class="highlight-default notranslate"><div class="highlight"><pre>
 </div>
  </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>points</strong> – vector of points for which the hypervolume is computed </p></li>
 <li><p><strong>verify</strong> – flag stating whether the points should be verified after the construction. This regulates validation for further computation as well, use ‘set_verify’ flag to alter it later.</p></li>
@@ -503,11 +605,11 @@ Example: <div class="highlight-default notranslate"><div class="highlight"><pre>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11hypervolume11hypervolumeERK11hypervolume">
-<span id="_CPPv3N5pagmo11hypervolume11hypervolumeERK11hypervolume"></span><span id="_CPPv2N5pagmo11hypervolume11hypervolumeERK11hypervolume"></span><span id="pagmo::hypervolume::hypervolume__hypervolumeCR"></span><span class="target" id="classpagmo_1_1hypervolume_1a637e77dab6fc7a2a8d39d3eaad430883"></span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERK11hypervolume" title="pagmo::hypervolume::hypervolume"><span class="n"><span class="pre">hypervolume</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERK11hypervolume" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11hypervolume11hypervolumeERK11hypervolume"></span><span id="_CPPv2N5pagmo11hypervolume11hypervolumeERK11hypervolume"></span><span id="pagmo::hypervolume::hypervolume__hypervolumeCR"></span><span class="target" id="classpagmo_1_1hypervolume_1a637e77dab6fc7a2a8d39d3eaad430883"></span><span class="sig-name descname"><span class="n"><span class="pre">hypervolume</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERK11hypervolume" title="pagmo::hypervolume::hypervolume"><span class="n"><span class="pre">hypervolume</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERK11hypervolume" title="Link to this definition">#</a><br /></dt>
 <dd><p>Default copy constructor. </p>
 <p>The copy constructor will deep copy the input problem <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws</dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by:<ul class="simple">
 <li><p>memory allocation errors in standard containers, </p></li>
 </ul>
@@ -518,10 +620,10 @@ Example: <div class="highlight-default notranslate"><div class="highlight"><pre>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11hypervolumeaSERK11hypervolume">
-<span id="_CPPv3N5pagmo11hypervolumeaSERK11hypervolume"></span><span id="_CPPv2N5pagmo11hypervolumeaSERK11hypervolume"></span><span id="pagmo::hypervolume::assign-operator__hypervolumeCR"></span><span class="target" id="classpagmo_1_1hypervolume_1a78221ed4612feea7010ed49cddf50eba"></span><a class="reference internal" href="#_CPPv4N5pagmo11hypervolumeE" title="pagmo::hypervolume"><span class="n"><span class="pre">hypervolume</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo11hypervolumeE" title="pagmo::hypervolume"><span class="n"><span class="pre">hypervolume</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolumeaSERK11hypervolume" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11hypervolumeaSERK11hypervolume"></span><span id="_CPPv2N5pagmo11hypervolumeaSERK11hypervolume"></span><span id="pagmo::hypervolume::assign-operator__hypervolumeCR"></span><span class="target" id="classpagmo_1_1hypervolume_1a78221ed4612feea7010ed49cddf50eba"></span><a class="reference internal" href="#_CPPv4N5pagmo11hypervolumeE" title="pagmo::hypervolume"><span class="n"><span class="pre">hypervolume</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo11hypervolumeE" title="pagmo::hypervolume"><span class="n"><span class="pre">hypervolume</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolumeaSERK11hypervolume" title="Link to this definition">#</a><br /></dt>
 <dd><p>Default copy assignment operator. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>. </p>
 </dd>
 </dl>
@@ -529,7 +631,7 @@ Example: <div class="highlight-default notranslate"><div class="highlight"><pre>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11hypervolume15set_copy_pointsEb">
-<span id="_CPPv3N5pagmo11hypervolume15set_copy_pointsEb"></span><span id="_CPPv2N5pagmo11hypervolume15set_copy_pointsEb"></span><span id="pagmo::hypervolume::set_copy_points__b"></span><span class="target" id="classpagmo_1_1hypervolume_1a255baedf67c048efdf74305a98815634"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_copy_points</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume15set_copy_pointsEb" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11hypervolume15set_copy_pointsEb"></span><span id="_CPPv2N5pagmo11hypervolume15set_copy_pointsEb"></span><span id="pagmo::hypervolume::set_copy_points__b"></span><span class="target" id="classpagmo_1_1hypervolume_1a255baedf67c048efdf74305a98815634"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_copy_points</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume15set_copy_pointsEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Setter for ‘copy_points’ flag. </p>
 <p>It is used in cases where we are certain that we can alter the original set of points from the hypervolume object. This is useful when we don’t want to make a copy of the points first, as most algorithms alter the original set, but may result in unexpected behaviour when used incorrectly (e.g. requesting the computation twice out of the same object)</p>
 <div class="admonition warning">
@@ -538,7 +640,7 @@ Example: <div class="highlight-default notranslate"><div class="highlight"><pre>
 the hypervolume. Successive usages are undefined behaviour.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>copy_points</strong> – boolean value stating whether the hypervolume computation may use original set </p>
 </dd>
 </dl>
@@ -546,11 +648,11 @@ the hypervolume. Successive usages are undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume15get_copy_pointsEv">
-<span id="_CPPv3NK5pagmo11hypervolume15get_copy_pointsEv"></span><span id="_CPPv2NK5pagmo11hypervolume15get_copy_pointsEv"></span><span id="pagmo::hypervolume::get_copy_pointsC"></span><span class="target" id="classpagmo_1_1hypervolume_1a59d694e9c047f8d312514cd60bd66451"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_copy_points</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume15get_copy_pointsEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume15get_copy_pointsEv"></span><span id="_CPPv2NK5pagmo11hypervolume15get_copy_pointsEv"></span><span id="pagmo::hypervolume::get_copy_pointsC"></span><span class="target" id="classpagmo_1_1hypervolume_1a59d694e9c047f8d312514cd60bd66451"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_copy_points</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume15get_copy_pointsEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Getter for ‘copy_points’ flag. </p>
 <p>Gets the copy_points flag</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the copy_points flag value </p>
 </dd>
 </dl>
@@ -558,12 +660,12 @@ the hypervolume. Successive usages are undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11hypervolume10set_verifyEb">
-<span id="_CPPv3N5pagmo11hypervolume10set_verifyEb"></span><span id="_CPPv2N5pagmo11hypervolume10set_verifyEb"></span><span id="pagmo::hypervolume::set_verify__b"></span><span class="target" id="classpagmo_1_1hypervolume_1a4f0690fc746a156f47dfca54e6c80b4a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verify</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume10set_verifyEb" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11hypervolume10set_verifyEb"></span><span id="_CPPv2N5pagmo11hypervolume10set_verifyEb"></span><span id="pagmo::hypervolume::set_verify__b"></span><span class="target" id="classpagmo_1_1hypervolume_1a4f0690fc746a156f47dfca54e6c80b4a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verify</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11hypervolume10set_verifyEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Setter for the ‘verify’ flag. </p>
 <p>Turns off the verification phase. By default, the hypervolume object verifies whether certain characteristics of the point set hold, such as valid dimension sizes or a reference point that suits the minimisation. In order to optimize the computation when the rules above are certain, we can turn off that phase.</p>
 <p>This may result in unexpected behaviour when used incorrectly (e.g. requesting the computation of empty set of points)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>verify</strong> – boolean value stating whether the hypervolume computation is to be executed without verification </p>
 </dd>
 </dl>
@@ -571,11 +673,11 @@ the hypervolume. Successive usages are undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume10get_verifyEv">
-<span id="_CPPv3NK5pagmo11hypervolume10get_verifyEv"></span><span id="_CPPv2NK5pagmo11hypervolume10get_verifyEv"></span><span id="pagmo::hypervolume::get_verifyC"></span><span class="target" id="classpagmo_1_1hypervolume_1af975ff7cbe0871c827325d00458dd204"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verify</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume10get_verifyEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume10get_verifyEv"></span><span id="_CPPv2NK5pagmo11hypervolume10get_verifyEv"></span><span id="pagmo::hypervolume::get_verifyC"></span><span class="target" id="classpagmo_1_1hypervolume_1af975ff7cbe0871c827325d00458dd204"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_verify</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume10get_verifyEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Getter for the ‘verify’ flag. </p>
 <p>Gets the verify flag</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the verify flag value </p>
 </dd>
 </dl>
@@ -583,7 +685,7 @@ the hypervolume. Successive usages are undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume8refpointEd">
-<span id="_CPPv3NK5pagmo11hypervolume8refpointEd"></span><span id="_CPPv2NK5pagmo11hypervolume8refpointEd"></span><span id="pagmo::hypervolume::refpoint__doubleC"></span><span class="target" id="classpagmo_1_1hypervolume_1a9380aaf15d7663536b1a95102d205247"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">refpoint</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume8refpointEd" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume8refpointEd"></span><span id="_CPPv2NK5pagmo11hypervolume8refpointEd"></span><span id="pagmo::hypervolume::refpoint__doubleC"></span><span class="target" id="classpagmo_1_1hypervolume_1a9380aaf15d7663536b1a95102d205247"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">refpoint</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume8refpointEd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Calculate a default reference point. </p>
 <p>Calculates a mock refpoint by taking the maximum in each dimension over all points saved in the hypervolume object. The result is a point that is necessarily dominated by all other points, frequently used for hypervolume computations.</p>
 <div class="admonition note">
@@ -592,10 +694,10 @@ the hypervolume. Successive usages are undefined behaviour.</p>
 is considered in that method (also its complexity is thus higher)</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>offset</strong> – value that can be added to each objective to assure strict domination</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>reference point </p>
 </dd>
 </dl>
@@ -603,11 +705,11 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume10get_pointsEv">
-<span id="_CPPv3NK5pagmo11hypervolume10get_pointsEv"></span><span id="_CPPv2NK5pagmo11hypervolume10get_pointsEv"></span><span id="pagmo::hypervolume::get_pointsC"></span><span class="target" id="classpagmo_1_1hypervolume_1ae926637c22327017a8bb17d174658a26"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_points</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume10get_pointsEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume10get_pointsEv"></span><span id="_CPPv2NK5pagmo11hypervolume10get_pointsEv"></span><span id="pagmo::hypervolume::get_pointsC"></span><span class="target" id="classpagmo_1_1hypervolume_1ae926637c22327017a8bb17d174658a26"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_points</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume10get_pointsEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get points. </p>
 <p>Will return a vector containing the points as they were set up during construction of the hypervolume object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>const reference to the vector containing the fitness_vectors representing the points in the hyperspace. </p>
 </dd>
 </dl>
@@ -615,14 +717,14 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume16get_best_computeERK13vector_double">
-<span id="_CPPv3NK5pagmo11hypervolume16get_best_computeERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume16get_best_computeERK13vector_double"></span><span id="pagmo::hypervolume::get_best_compute__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1abfda97789c3cded08963e70ba45f5f78"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_best_compute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume16get_best_computeERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume16get_best_computeERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume16get_best_computeERK13vector_double"></span><span id="pagmo::hypervolume::get_best_compute__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1abfda97789c3cded08963e70ba45f5f78"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_best_compute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume16get_best_computeERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Chooses the best algorithm to compute the hypervolume. </p>
 <p>Returns the best method for given hypervolume computation problem. As of yet, only the dimension size is taken into account.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>r_point</strong> – reference point for the vector of points</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>an std::shared_ptr to the selected algorithm </p>
 </dd>
 </dl>
@@ -630,17 +732,17 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double">
-<span id="_CPPv3NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double"></span><span id="pagmo::hypervolume::get_best_exclusive__unsignedC.vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a804d3bfb1a1717b4b2bbac94a036de8c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_best_exclusive</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double"></span><span id="pagmo::hypervolume::get_best_exclusive__unsignedC.vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a804d3bfb1a1717b4b2bbac94a036de8c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_best_exclusive</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Chooses the best algorithm to compute the hypervolume. </p>
 <p>Returns the best method for given hypervolume computation problem. As of yet, only the dimension size is taken into account.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p_idx</strong> – index of the point for which the exclusive contribution is to be computed </p></li>
 <li><p><strong>r_point</strong> – reference point for the vector of points</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>an std::shared_ptr to the selected algorithm </p>
 </dd>
 </dl>
@@ -648,14 +750,14 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume22get_best_contributionsERK13vector_double">
-<span id="_CPPv3NK5pagmo11hypervolume22get_best_contributionsERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume22get_best_contributionsERK13vector_double"></span><span id="pagmo::hypervolume::get_best_contributions__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a3d3c81b8f0bf5a2726ad854e1f408ca9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_best_contributions</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume22get_best_contributionsERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume22get_best_contributionsERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume22get_best_contributionsERK13vector_double"></span><span id="pagmo::hypervolume::get_best_contributions__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a3d3c81b8f0bf5a2726ad854e1f408ca9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_best_contributions</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume22get_best_contributionsERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Chooses the best algorithm to compute the hypervolume. </p>
 <p>Returns the best method for given hypervolume computation problem. As of yet, only the dimension size is taken into account.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>r_point</strong> – reference point for the vector of points</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>an std::shared_ptr to the selected algorithm </p>
 </dd>
 </dl>
@@ -663,14 +765,14 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume7computeERK13vector_double">
-<span id="_CPPv3NK5pagmo11hypervolume7computeERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume7computeERK13vector_double"></span><span id="pagmo::hypervolume::compute__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a85a44d2a42c273e49a1ea70537ad63f0"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume7computeERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume7computeERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume7computeERK13vector_double"></span><span id="pagmo::hypervolume::compute__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a85a44d2a42c273e49a1ea70537ad63f0"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume7computeERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Compute hypervolume. </p>
 <p>Computes hypervolume for given reference point. This method chooses the hv_algorithm dynamically.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>r_point</strong> – vector describing the reference point</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>value representing the hypervolume </p>
 </dd>
 </dl>
@@ -678,17 +780,17 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm">
-<span id="_CPPv3NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::compute__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a6e3744cbf7edb12f32eb6dcc972781ce"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::compute__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a6e3744cbf7edb12f32eb6dcc972781ce"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Compute hypervolume. </p>
 <p>Computes hypervolume for given reference point, using given pagmo::hv_algorithm object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>r_point</strong> – fitness vector describing the reference point </p></li>
 <li><p><strong>hv_algo</strong> – instance of the algorithm object used for the computation</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the hypervolume </p>
 </dd>
 </dl>
@@ -696,18 +798,18 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm">
-<span id="_CPPv3NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::exclusive__unsigned.vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a653911946584101ea3ca3db143ca8aca"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exclusive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::exclusive__unsigned.vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a653911946584101ea3ca3db143ca8aca"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exclusive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Compute exclusive contribution. </p>
 <p>Computes exclusive hypervolume for given individual.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p_idx</strong> – index of the individual for whom we compute the exclusive contribution to the hypervolume </p></li>
 <li><p><strong>r_point</strong> – fitness vector describing the reference point </p></li>
 <li><p><strong>hv_algo</strong> – instance of the algorithm object used for the computation</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the exclusive contribution to the hypervolume </p>
 </dd>
 </dl>
@@ -715,17 +817,17 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_double">
-<span id="_CPPv3NK5pagmo11hypervolume9exclusiveEjRK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_double"></span><span id="pagmo::hypervolume::exclusive__unsigned.vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1ae34bc56f22bcf1e3593eaf42ad9da5cf"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exclusive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume9exclusiveEjRK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume9exclusiveEjRK13vector_double"></span><span id="pagmo::hypervolume::exclusive__unsigned.vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1ae34bc56f22bcf1e3593eaf42ad9da5cf"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exclusive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Compute exclusive contribution. </p>
 <p>Computes exclusive hypervolume for given individual. This methods chooses the hv_algorithm dynamically.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p_idx</strong> – index of the individual for whom we compute the exclusive contribution to the hypervolume </p></li>
 <li><p><strong>r_point</strong> – fitness vector describing the reference point</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the exclusive contribution to the hypervolume </p>
 </dd>
 </dl>
@@ -733,17 +835,17 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm">
-<span id="_CPPv3NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::contributions__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1ac2ba84389786a862d170ac19693f628c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">contributions</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::contributions__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1ac2ba84389786a862d170ac19693f628c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">contributions</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Contributions method. </p>
 <p>This method returns the exclusive contribution to the hypervolume by every point. The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor in a loop).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>r_point</strong> – fitness vector describing the reference point </p></li>
 <li><p><strong>hv_algo</strong> – instance of the algorithm object used for the computation</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>vector of exclusive contributions by every point </p>
 </dd>
 </dl>
@@ -751,14 +853,14 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_double">
-<span id="_CPPv3NK5pagmo11hypervolume13contributionsERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_double"></span><span id="pagmo::hypervolume::contributions__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1abff367628a24c7bfe0e66297304342e3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">contributions</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume13contributionsERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume13contributionsERK13vector_double"></span><span id="pagmo::hypervolume::contributions__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1abff367628a24c7bfe0e66297304342e3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">contributions</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Contributions method. </p>
 <p>This method returns the exclusive contribution to the hypervolume by every point. The concrete algorithm can implement this feature optimally (as opposed to calling for the exclusive contributor in a loop). The hv_algorithm itself is chosen dynamically, so the best performing method is employed for given task.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>r_point</strong> – fitness vector describing the reference point </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>vector of exclusive contributions by every point </p>
 </dd>
 </dl>
@@ -766,17 +868,17 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm">
-<span id="_CPPv3NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::least_contributor__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a4effb2a779bc1681c01f9dec9cd68ae0"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">least_contributor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::least_contributor__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a4effb2a779bc1681c01f9dec9cd68ae0"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">least_contributor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Find the least contributing individual. </p>
 <p>Establishes the individual contributing the least to the total hypervolume.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>r_point</strong> – fitness vector describing the reference point </p></li>
 <li><p><strong>hv_algo</strong> – instance of the algorithm object used for the computation</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>index of the least contributing point </p>
 </dd>
 </dl>
@@ -784,14 +886,14 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_double">
-<span id="_CPPv3NK5pagmo11hypervolume17least_contributorERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_double"></span><span id="pagmo::hypervolume::least_contributor__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1ac213c10a83334a17cc437119c5c5e375"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">least_contributor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume17least_contributorERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume17least_contributorERK13vector_double"></span><span id="pagmo::hypervolume::least_contributor__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1ac213c10a83334a17cc437119c5c5e375"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">least_contributor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Find the least contributing individual. </p>
 <p>Establishes the individual contributing the least to the total hypervolume. This method chooses the best performing hv_algorithm dynamically</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>r_point</strong> – fitness vector describing the reference point</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>index of the least contributing point </p>
 </dd>
 </dl>
@@ -799,17 +901,17 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm">
-<span id="_CPPv3NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::greatest_contributor__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a102fe9384c51e5e406aeb5c51faea900"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">greatest_contributor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm"></span><span id="_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm"></span><span id="pagmo::hypervolume::greatest_contributor__vector_doubleCR.hv_algorithmRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a102fe9384c51e5e406aeb5c51faea900"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">greatest_contributor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="n"><span class="pre">hv_algorithm</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm" title="Link to this definition">#</a><br /></dt>
 <dd><p>Find the most contributing individual. </p>
 <p>Establish the individual contributing the most to the total hypervolume.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>r_point</strong> – fitness vector describing the reference point </p></li>
 <li><p><strong>hv_algo</strong> – instance of the algorithm object used for the computation</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>index of the most contributing point </p>
 </dd>
 </dl>
@@ -817,14 +919,14 @@ is considered in that method (also its complexity is thus higher)</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_double">
-<span id="_CPPv3NK5pagmo11hypervolume20greatest_contributorERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_double"></span><span id="pagmo::hypervolume::greatest_contributor__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a8fb8f030eabb2c1f48ecf41b4c99b70b"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">greatest_contributor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11hypervolume20greatest_contributorERK13vector_double"></span><span id="_CPPv2NK5pagmo11hypervolume20greatest_contributorERK13vector_double"></span><span id="pagmo::hypervolume::greatest_contributor__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1hypervolume_1a8fb8f030eabb2c1f48ecf41b4c99b70b"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">greatest_contributor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Find the most contributing individual. </p>
 <p>Establish the individual contributing the most to the total hypervolume. This method chooses the best performing hv_algorithm dynamically</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>r_point</strong> – fitness vector describing the reference point</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>index of the most contributing point </p>
 </dd>
 </dl>
@@ -841,11 +943,10 @@ is considered in that method (also its complexity is thus higher)</p>
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="discrepancy.html"
@@ -865,15 +966,55 @@ is considered in that method (also its complexity is thus higher)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolumeE"><code class="docutils literal notranslate"><span class="pre">pagmo::hypervolume</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume11hypervolumeEv"><code class="docutils literal notranslate"><span class="pre">hypervolume()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERKN5pagmo10populationEb"><code class="docutils literal notranslate"><span class="pre">hypervolume()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERKNSt6vectorI13vector_doubleEEb"><code class="docutils literal notranslate"><span class="pre">hypervolume()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume11hypervolumeERK11hypervolume"><code class="docutils literal notranslate"><span class="pre">hypervolume()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolumeaSERK11hypervolume"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume15set_copy_pointsEb"><code class="docutils literal notranslate"><span class="pre">set_copy_points()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume15get_copy_pointsEv"><code class="docutils literal notranslate"><span class="pre">get_copy_points()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11hypervolume10set_verifyEb"><code class="docutils literal notranslate"><span class="pre">set_verify()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume10get_verifyEv"><code class="docutils literal notranslate"><span class="pre">get_verify()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume8refpointEd"><code class="docutils literal notranslate"><span class="pre">refpoint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume10get_pointsEv"><code class="docutils literal notranslate"><span class="pre">get_points()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume16get_best_computeERK13vector_double"><code class="docutils literal notranslate"><span class="pre">get_best_compute()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume18get_best_exclusiveEKjRK13vector_double"><code class="docutils literal notranslate"><span class="pre">get_best_exclusive()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume22get_best_contributionsERK13vector_double"><code class="docutils literal notranslate"><span class="pre">get_best_contributions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume7computeERK13vector_double"><code class="docutils literal notranslate"><span class="pre">compute()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume7computeERK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">compute()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">exclusive()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume9exclusiveEjRK13vector_double"><code class="docutils literal notranslate"><span class="pre">exclusive()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">contributions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume13contributionsERK13vector_double"><code class="docutils literal notranslate"><span class="pre">contributions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">least_contributor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume17least_contributorERK13vector_double"><code class="docutils literal notranslate"><span class="pre">least_contributor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_doubleR12hv_algorithm"><code class="docutils literal notranslate"><span class="pre">greatest_contributor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11hypervolume20greatest_contributorERK13vector_double"><code class="docutils literal notranslate"><span class="pre">greatest_contributor()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -891,6 +1032,7 @@ By pagmo development team
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2017-2024, pagmo development team.
@@ -917,8 +1059,8 @@ By pagmo development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

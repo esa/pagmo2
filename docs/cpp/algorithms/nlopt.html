@@ -1,77 +1,73 @@
  
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>NLopt solvers &#8212; pagmo 2.19.1 documentation</title>
+    <title>NLopt solvers &#8212; pagmo 2.20.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../../_static/documentation_options.js?v=22086b0a"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/cpp/algorithms/nlopt';</script>
-    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Non dominated sorting genetic algorithm (NSGA-II)" href="nsga2.html" />
     <link rel="prev" title="Self-adaptive constraints handling" href="cstrs_self_adaptive.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
+  <body data-default-mode="">
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
+  <div id="pst-scroll-pixel-helper"></div>
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -79,7 +75,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -87,16 +82,69 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
   
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -109,6 +157,9 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -117,23 +168,31 @@
   
   
   
-    <p class="title logo__title">pagmo 2.19.1 documentation</p>
+  
+    <p class="title logo__title">pagmo 2.20.0 documentation</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">Preliminaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">Writing your first optimisation problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/evolving_a_population.html">Evolving a population</a></li>
 </ul>
-</li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../types.html">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../problem.html">Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm.html">Algorithm</a></li>
@@ -214,7 +273,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../miscellanea/exceptions.html">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../miscellanea/utility_classes.html">Utility classes</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
@@ -225,14 +284,19 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -241,14 +305,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -357,7 +421,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -370,24 +434,27 @@
 </button>
 
 
-<script>
-document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-  </button>
-`);
-</script>
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -403,6 +470,55 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nloptE"><code class="docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt13log_line_typeE"><code class="docutils literal notranslate"><span class="pre">log_line_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt8log_typeE"><code class="docutils literal notranslate"><span class="pre">log_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt5nloptEv"><code class="docutils literal notranslate"><span class="pre">nlopt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt5nloptERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">nlopt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt5nloptERK5nlopt"><code class="docutils literal notranslate"><span class="pre">nlopt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt5nloptERR5nlopt"><code class="docutils literal notranslate"><span class="pre">nlopt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nloptaSERR5nlopt"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt6evolveE10population"><code class="docutils literal notranslate"><span class="pre">evolve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt8get_nameEv"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt13set_verbosityEj"><code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt14get_extra_infoEv"><code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt7get_logEv"><code class="docutils literal notranslate"><span class="pre">get_log()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt15get_solver_nameEv"><code class="docutils literal notranslate"><span class="pre">get_solver_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt19get_last_opt_resultEv"><code class="docutils literal notranslate"><span class="pre">get_last_opt_result()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt11get_stopvalEv"><code class="docutils literal notranslate"><span class="pre">get_stopval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt11set_stopvalEd"><code class="docutils literal notranslate"><span class="pre">set_stopval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt12get_ftol_relEv"><code class="docutils literal notranslate"><span class="pre">get_ftol_rel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt12set_ftol_relEd"><code class="docutils literal notranslate"><span class="pre">set_ftol_rel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt12get_ftol_absEv"><code class="docutils literal notranslate"><span class="pre">get_ftol_abs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt12set_ftol_absEd"><code class="docutils literal notranslate"><span class="pre">set_ftol_abs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt12get_xtol_relEv"><code class="docutils literal notranslate"><span class="pre">get_xtol_rel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt12set_xtol_relEd"><code class="docutils literal notranslate"><span class="pre">set_xtol_rel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt12get_xtol_absEv"><code class="docutils literal notranslate"><span class="pre">get_xtol_abs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt12set_xtol_absEd"><code class="docutils literal notranslate"><span class="pre">set_xtol_abs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt11get_maxevalEv"><code class="docutils literal notranslate"><span class="pre">get_maxeval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt11set_maxevalEi"><code class="docutils literal notranslate"><span class="pre">set_maxeval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt11get_maxtimeEv"><code class="docutils literal notranslate"><span class="pre">get_maxtime()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt11set_maxtimeEi"><code class="docutils literal notranslate"><span class="pre">set_maxtime()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt19set_local_optimizerE5nlopt"><code class="docutils literal notranslate"><span class="pre">set_local_optimizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt19get_local_optimizerEv"><code class="docutils literal notranslate"><span class="pre">get_local_optimizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt19get_local_optimizerEv"><code class="docutils literal notranslate"><span class="pre">get_local_optimizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt21unset_local_optimizerEv"><code class="docutils literal notranslate"><span class="pre">unset_local_optimizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt18set_random_sr_seedEj"><code class="docutils literal notranslate"><span class="pre">set_random_sr_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt13set_selectionERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt13set_selectionEN10population9size_typeE"><code class="docutils literal notranslate"><span class="pre">set_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt13get_selectionEv"><code class="docutils literal notranslate"><span class="pre">get_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt15set_replacementERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_replacement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt15set_replacementEN10population9size_typeE"><code class="docutils literal notranslate"><span class="pre">set_replacement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt15get_replacementEv"><code class="docutils literal notranslate"><span class="pre">get_replacement()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -410,14 +526,14 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="nlopt-solvers">
-<h1>NLopt solvers<a class="headerlink" href="#nlopt-solvers" title="Permalink to this headline">#</a></h1>
+<h1>NLopt solvers<a class="headerlink" href="#nlopt-solvers" title="Link to this heading">#</a></h1>
 <p><em>#include &lt;pagmo/algorithms/nlopt.hpp&gt;</em></p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nloptE">
-<span id="_CPPv3N5pagmo5nloptE"></span><span id="_CPPv2N5pagmo5nloptE"></span><span id="pagmo::nlopt"></span><span class="target" id="classpagmo_1_1nlopt"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv4N5pagmo20not_population_basedE" title="pagmo::not_population_based"><span class="n"><span class="pre">not_population_based</span></span></a><a class="headerlink" href="#_CPPv4N5pagmo5nloptE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nloptE"></span><span id="_CPPv2N5pagmo5nloptE"></span><span id="pagmo::nlopt"></span><span class="target" id="classpagmo_1_1nlopt"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">pagmo</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../miscellanea/utility_classes.html#_CPPv4N5pagmo20not_population_basedE" title="pagmo::not_population_based"><span class="n"><span class="pre">not_population_based</span></span></a><a class="headerlink" href="#_CPPv4N5pagmo5nloptE" title="Link to this definition">#</a><br /></dt>
 <dd><p>NLopt algorithms. </p>
 <p><img alt="../../../_images/nlopt.png" src="../../../_images/nlopt.png" /></p>
 <p>This user-defined algorithm wraps a selection of solvers from the <a class="reference external" href="https://nlopt.readthedocs.io/en/latest/">NLopt</a> library, focusing on local optimisation (both gradient-based and derivative-free). The complete list of supported NLopt algorithms is:<ul class="simple">
@@ -459,7 +575,7 @@ in undefined behaviour.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt13log_line_typeE">
-<span id="_CPPv3N5pagmo5nlopt13log_line_typeE"></span><span id="_CPPv2N5pagmo5nlopt13log_line_typeE"></span><span class="target" id="classpagmo_1_1nlopt_1ac073586cae8175d0de2b389f3fdb509e"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13log_line_typeE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt13log_line_typeE"></span><span id="_CPPv2N5pagmo5nlopt13log_line_typeE"></span><span class="target" id="classpagmo_1_1nlopt_1ac073586cae8175d0de2b389f3fdb509e"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_line_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13log_line_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Single data line for the algorithm’s log. </p>
 <p>A log data line is a tuple consisting of:<ul class="simple">
 <li><p>the number of objective function evaluations made so far,</p></li>
@@ -473,7 +589,7 @@ in undefined behaviour.</p>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt8log_typeE">
-<span id="_CPPv3N5pagmo5nlopt8log_typeE"></span><span id="_CPPv2N5pagmo5nlopt8log_typeE"></span><span class="target" id="classpagmo_1_1nlopt_1a0bbd40bdc7321bd0caab5e010c95daa2"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo5nlopt13log_line_typeE" title="pagmo::nlopt::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt8log_typeE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt8log_typeE"></span><span id="_CPPv2N5pagmo5nlopt8log_typeE"></span><span class="target" id="classpagmo_1_1nlopt_1a0bbd40bdc7321bd0caab5e010c95daa2"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">log_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5pagmo5nlopt13log_line_typeE" title="pagmo::nlopt::log_line_type"><span class="n"><span class="pre">log_line_type</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt8log_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Log type. </p>
 <p>The algorithm log is a collection of <a class="reference internal" href="#classpagmo_1_1nlopt_1ac073586cae8175d0de2b389f3fdb509e"><span class="std std-ref">nlopt::log_line_type</span></a> data lines, stored in chronological order during the optimisation if the verbosity of the algorithm is set to a nonzero value (see <a class="reference internal" href="#classpagmo_1_1nlopt_1a96226e26c0b8174bfa890f8050bb0f4f"><span class="std std-ref">nlopt::set_verbosity()</span></a>). </p>
 </dd></dl>
@@ -483,11 +599,11 @@ in undefined behaviour.</p>
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt5nloptEv">
-<span id="_CPPv3N5pagmo5nlopt5nloptEv"></span><span id="_CPPv2N5pagmo5nlopt5nloptEv"></span><span id="pagmo::nlopt::nlopt"></span><span class="target" id="classpagmo_1_1nlopt_1a50339f55ee0906583a6693fe3456c3a5"></span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt5nloptEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt5nloptEv"></span><span id="_CPPv2N5pagmo5nlopt5nloptEv"></span><span id="pagmo::nlopt::nlopt"></span><span class="target" id="classpagmo_1_1nlopt_1a50339f55ee0906583a6693fe3456c3a5"></span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt5nloptEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The default constructor initialises the <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm with the <code class="docutils literal notranslate"><span class="pre">&quot;cobyla&quot;</span></code> solver. The individual selection/replacement strategies are those specified by <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ab386096795f9df0c72baed08398d87da"><span class="std std-ref">not_population_based::not_population_based()</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws</dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt(const std::string &amp;)</span></a>. </p>
 </dd>
 </dl>
@@ -495,13 +611,9 @@ in undefined behaviour.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt5nloptERKNSt6stringE">
-<span id="_CPPv3N5pagmo5nlopt5nloptERKNSt6stringE"></span><span id="_CPPv2N5pagmo5nlopt5nloptERKNSt6stringE"></span><span id="pagmo::nlopt::nlopt__ssCR"></span><span class="target" id="classpagmo_1_1nlopt_1a665cb671a41b5089fe1ec7f3657a7e72"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt5nloptERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt5nloptERKNSt6stringE"></span><span id="_CPPv2N5pagmo5nlopt5nloptERKNSt6stringE"></span><span id="pagmo::nlopt::nlopt__ssCR"></span><span class="target" id="classpagmo_1_1nlopt_1a665cb671a41b5089fe1ec7f3657a7e72"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt5nloptERKNSt6stringE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Constructor from solver name. </p>
-<p>This constructor will initialise a <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> object which will use the NLopt algorithm specified by the input string <code class="docutils literal notranslate"><span class="pre">algo</span></code>. The individual selection/replacement strategies are those specified by <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ab386096795f9df0c72baed08398d87da"><span class="std std-ref">not_population_based::not_population_based()</span></a>. <code class="docutils literal notranslate"><span class="pre">algo</span></code> is translated to an NLopt algorithm type according to the following table: <p><table class="table">
-<colgroup>
-<col style="width: 47%" />
-<col style="width: 53%" />
-</colgroup>
+<p>This constructor will initialise a <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> object which will use the NLopt algorithm specified by the input string <code class="docutils literal notranslate"><span class="pre">algo</span></code>. The individual selection/replacement strategies are those specified by <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ab386096795f9df0c72baed08398d87da"><span class="std std-ref">not_population_based::not_population_based()</span></a>. <code class="docutils literal notranslate"><span class="pre">algo</span></code> is translated to an NLopt algorithm type according to the following table: <p><div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">algo</span></code> string</p></th>
 <th class="head"><p>NLopt algorithm</p></th>
@@ -567,6 +679,7 @@ in undefined behaviour.</p>
 </tr>
 </tbody>
 </table>
+</div>
 </p>
  The parameters of the selected algorithm can be specified via the methods of this class.</p>
 <p><div class="admonition seealso">
@@ -576,10 +689,10 @@ description of each supported solver.</p>
 </div>
 </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>algo</strong> – the name of the NLopt algorithm that will be used by this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> object.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">runtime_error</span></span></span> – if the NLopt version is not at least 2. </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">algo</span></code> is not one of the allowed algorithm names. </p></li>
@@ -591,14 +704,14 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt5nloptERK5nlopt">
-<span id="_CPPv3N5pagmo5nlopt5nloptERK5nlopt"></span><span id="_CPPv2N5pagmo5nlopt5nloptERK5nlopt"></span><span id="pagmo::nlopt::nlopt__nloptCR"></span><span class="target" id="classpagmo_1_1nlopt_1ad6b9dda8a6ff20ad65339d2ff9d4bfcb"></span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5nlopt5nloptERK5nlopt" title="pagmo::nlopt::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt5nloptERK5nlopt" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt5nloptERK5nlopt"></span><span id="_CPPv2N5pagmo5nlopt5nloptERK5nlopt"></span><span id="pagmo::nlopt::nlopt__nloptCR"></span><span class="target" id="classpagmo_1_1nlopt_1ad6b9dda8a6ff20ad65339d2ff9d4bfcb"></span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5nlopt5nloptERK5nlopt" title="pagmo::nlopt::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt5nloptERK5nlopt" title="Link to this definition">#</a><br /></dt>
 <dd><p>Copy constructor. </p>
 <p>The copy constructor will deep-copy the state of <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> – the construction argument.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by copying the internal state of <code class="docutils literal notranslate"><span class="pre">other</span></code>. </p>
 </dd>
 </dl>
@@ -606,16 +719,16 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt5nloptERR5nlopt">
-<span id="_CPPv3N5pagmo5nlopt5nloptERR5nlopt"></span><span id="_CPPv2N5pagmo5nlopt5nloptERR5nlopt"></span><span id="pagmo::nlopt::nlopt__nloptRR"></span><span class="target" id="classpagmo_1_1nlopt_1adff7b3ec099c9d95fec9e8fab349dbec"></span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo5nlopt5nloptERR5nlopt" title="pagmo::nlopt::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt5nloptERR5nlopt" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt5nloptERR5nlopt"></span><span id="_CPPv2N5pagmo5nlopt5nloptERR5nlopt"></span><span id="pagmo::nlopt::nlopt__nloptRR"></span><span class="target" id="classpagmo_1_1nlopt_1adff7b3ec099c9d95fec9e8fab349dbec"></span><span class="sig-name descname"><span class="n"><span class="pre">nlopt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo5nlopt5nloptERR5nlopt" title="pagmo::nlopt::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt5nloptERR5nlopt" title="Link to this definition">#</a><br /></dt>
 <dd><p>Move constructor. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nloptaSERR5nlopt">
-<span id="_CPPv3N5pagmo5nloptaSERR5nlopt"></span><span id="_CPPv2N5pagmo5nloptaSERR5nlopt"></span><span id="pagmo::nlopt::assign-operator__nloptRR"></span><span class="target" id="classpagmo_1_1nlopt_1af139ee58e333c63d4a2da2b041a832f0"></span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N5pagmo5nloptaSERR5nlopt" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nloptaSERR5nlopt"></span><span id="_CPPv2N5pagmo5nloptaSERR5nlopt"></span><span id="pagmo::nlopt::assign-operator__nloptRR"></span><span class="target" id="classpagmo_1_1nlopt_1af139ee58e333c63d4a2da2b041a832f0"></span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N5pagmo5nloptaSERR5nlopt" title="Link to this definition">#</a><br /></dt>
 <dd><p>Move assignment operator. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a reference to <code class="docutils literal notranslate"><span class="pre">this</span></code>. </p>
 </dd>
 </dl>
@@ -623,14 +736,14 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt6evolveE10population">
-<span id="_CPPv3NK5pagmo5nlopt6evolveE10population"></span><span id="_CPPv2NK5pagmo5nlopt6evolveE10population"></span><span id="pagmo::nlopt::evolve__populationC"></span><span class="target" id="classpagmo_1_1nlopt_1a19fa46d8d7360074232af5f106279b97"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt6evolveE10population" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt6evolveE10population"></span><span id="_CPPv2NK5pagmo5nlopt6evolveE10population"></span><span id="pagmo::nlopt::evolve__populationC"></span><span class="target" id="classpagmo_1_1nlopt_1a19fa46d8d7360074232af5f106279b97"></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evolve</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt6evolveE10population" title="Link to this definition">#</a><br /></dt>
 <dd><p>Evolve population. </p>
 <p>This method will select an individual from <code class="docutils literal notranslate"><span class="pre">pop</span></code>, optimise it with the NLopt algorithm specified upon construction, replace an individual in <code class="docutils literal notranslate"><span class="pre">pop</span></code> with the optimised individual, and finally return <code class="docutils literal notranslate"><span class="pre">pop</span></code>. The individual selection and replacement criteria can be set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"><span class="std std-ref">set_selection(const std::string &amp;)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>, <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>. The NLopt solver will run until one of the stopping criteria is satisfied, and the return status of the NLopt solver will be recorded (it can be fetched with <a class="reference internal" href="#classpagmo_1_1nlopt_1a16f3d305530abde452143f93006ce0ad"><span class="std std-ref">get_last_opt_result()</span></a>).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pop</strong> – the population to be optimised.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – in the following cases:<ul>
 <li><p>the population’s problem is multi-objective,</p></li>
@@ -642,7 +755,7 @@ description of each supported solver.</p>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the public interface of <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> or <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based"><span class="std std-ref">pagmo::not_population_based</span></a>. </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the optimised population.</p>
 </dd>
 </dl>
@@ -650,10 +763,10 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt8get_nameEv">
-<span id="_CPPv3NK5pagmo5nlopt8get_nameEv"></span><span id="_CPPv2NK5pagmo5nlopt8get_nameEv"></span><span id="pagmo::nlopt::get_nameC"></span><span class="target" id="classpagmo_1_1nlopt_1ac7013473ce5b3e1f49fdbe53526c83f3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt8get_nameEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt8get_nameEv"></span><span id="_CPPv2NK5pagmo5nlopt8get_nameEv"></span><span id="pagmo::nlopt::get_nameC"></span><span class="target" id="classpagmo_1_1nlopt_1ac7013473ce5b3e1f49fdbe53526c83f3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt8get_nameEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Algorithm’s name. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a human-readable name for the algorithm. </p>
 </dd>
 </dl>
@@ -661,7 +774,7 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt13set_verbosityEj">
-<span id="_CPPv3N5pagmo5nlopt13set_verbosityEj"></span><span id="_CPPv2N5pagmo5nlopt13set_verbosityEj"></span><span id="pagmo::nlopt::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1nlopt_1a96226e26c0b8174bfa890f8050bb0f4f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13set_verbosityEj" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt13set_verbosityEj"></span><span id="_CPPv2N5pagmo5nlopt13set_verbosityEj"></span><span id="pagmo::nlopt::set_verbosity__unsigned"></span><span class="target" id="classpagmo_1_1nlopt_1a96226e26c0b8174bfa890f8050bb0f4f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13set_verbosityEj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set verbosity. </p>
 <p>This method will set the algorithm’s verbosity. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is zero, no output is produced during the optimisation and no logging is performed. If <code class="docutils literal notranslate"><span class="pre">n</span></code> is nonzero, then every <code class="docutils literal notranslate"><span class="pre">n</span></code> objective function evaluations the status of the optimisation will be both printed to screen and recorded internally. See <a class="reference internal" href="#classpagmo_1_1nlopt_1ac073586cae8175d0de2b389f3fdb509e"><span class="std std-ref">nlopt::log_line_type</span></a> and <a class="reference internal" href="#classpagmo_1_1nlopt_1a0bbd40bdc7321bd0caab5e010c95daa2"><span class="std std-ref">nlopt::log_type</span></a> for information on the logging format. The internal log can be fetched via <a class="reference internal" href="#classpagmo_1_1nlopt_1a751ad57115eb51c516c04f1fa5f8ebd3"><span class="std std-ref">get_log()</span></a>.</p>
 <p>Example (verbosity 5): <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>objevals:       objval:      violated:    viol. norm:
@@ -674,7 +787,7 @@ description of each supported solver.</p>
  The <code class="docutils literal notranslate"><span class="pre">i</span></code> at the end of some rows indicates that the decision vector is infeasible. Feasibility is checked against the problem’s tolerance.</p>
 <p>By default, the verbosity level is zero.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – the desired verbosity level. </p>
 </dd>
 </dl>
@@ -682,10 +795,10 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo5nlopt14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5nlopt14get_extra_infoEv"></span><span id="pagmo::nlopt::get_extra_infoC"></span><span class="target" id="classpagmo_1_1nlopt_1af4fb2674fb1fe56b5305d5bcf49a443b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt14get_extra_infoEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo5nlopt14get_extra_infoEv"></span><span id="pagmo::nlopt::get_extra_infoC"></span><span class="target" id="classpagmo_1_1nlopt_1af4fb2674fb1fe56b5305d5bcf49a443b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt14get_extra_infoEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get extra information about the algorithm. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a human-readable string containing useful information about the algorithm’s properties (e.g., the stopping criteria, the selection/replacement policies, etc.). </p>
 </dd>
 </dl>
@@ -693,11 +806,11 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt7get_logEv">
-<span id="_CPPv3NK5pagmo5nlopt7get_logEv"></span><span id="_CPPv2NK5pagmo5nlopt7get_logEv"></span><span id="pagmo::nlopt::get_logC"></span><span class="target" id="classpagmo_1_1nlopt_1a751ad57115eb51c516c04f1fa5f8ebd3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5nlopt8log_typeE" title="pagmo::nlopt::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt7get_logEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt7get_logEv"></span><span id="_CPPv2NK5pagmo5nlopt7get_logEv"></span><span id="pagmo::nlopt::get_logC"></span><span class="target" id="classpagmo_1_1nlopt_1a751ad57115eb51c516c04f1fa5f8ebd3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5nlopt8log_typeE" title="pagmo::nlopt::log_type"><span class="n"><span class="pre">log_type</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt7get_logEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the optimisation log. </p>
 <p>See <a class="reference internal" href="#classpagmo_1_1nlopt_1a0bbd40bdc7321bd0caab5e010c95daa2"><span class="std std-ref">nlopt::log_type</span></a> for a description of the optimisation log. Logging is turned on/off via <a class="reference internal" href="#classpagmo_1_1nlopt_1a96226e26c0b8174bfa890f8050bb0f4f"><span class="std std-ref">set_verbosity()</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a const reference to the log. </p>
 </dd>
 </dl>
@@ -705,10 +818,10 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt15get_solver_nameEv">
-<span id="_CPPv3NK5pagmo5nlopt15get_solver_nameEv"></span><span id="_CPPv2NK5pagmo5nlopt15get_solver_nameEv"></span><span id="pagmo::nlopt::get_solver_nameC"></span><span class="target" id="classpagmo_1_1nlopt_1ad7ee7a17b023341581b64e8a7110c69d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_solver_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt15get_solver_nameEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt15get_solver_nameEv"></span><span id="_CPPv2NK5pagmo5nlopt15get_solver_nameEv"></span><span id="pagmo::nlopt::get_solver_nameC"></span><span class="target" id="classpagmo_1_1nlopt_1ad7ee7a17b023341581b64e8a7110c69d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_solver_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt15get_solver_nameEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the name of the solver that was used to construct this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the name of the NLopt solver used upon construction. </p>
 </dd>
 </dl>
@@ -716,10 +829,10 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt19get_last_opt_resultEv">
-<span id="_CPPv3NK5pagmo5nlopt19get_last_opt_resultEv"></span><span id="_CPPv2NK5pagmo5nlopt19get_last_opt_resultEv"></span><span id="pagmo::nlopt::get_last_opt_resultC"></span><span class="target" id="classpagmo_1_1nlopt_1a16f3d305530abde452143f93006ce0ad"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">nlopt_result</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_last_opt_result</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt19get_last_opt_resultEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt19get_last_opt_resultEv"></span><span id="_CPPv2NK5pagmo5nlopt19get_last_opt_resultEv"></span><span id="pagmo::nlopt::get_last_opt_resultC"></span><span class="target" id="classpagmo_1_1nlopt_1a16f3d305530abde452143f93006ce0ad"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">nlopt_result</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_last_opt_result</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt19get_last_opt_resultEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the result of the last optimisation. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the result of the last <a class="reference internal" href="#classpagmo_1_1nlopt_1a19fa46d8d7360074232af5f106279b97"><span class="std std-ref">evolve()</span></a> call, or <code class="docutils literal notranslate"><span class="pre">NLOPT_SUCCESS</span></code> if no optimisations have been run yet. </p>
 </dd>
 </dl>
@@ -727,11 +840,11 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt11get_stopvalEv">
-<span id="_CPPv3NK5pagmo5nlopt11get_stopvalEv"></span><span id="_CPPv2NK5pagmo5nlopt11get_stopvalEv"></span><span id="pagmo::nlopt::get_stopvalC"></span><span class="target" id="classpagmo_1_1nlopt_1a6f785fc91ac867a6c9653f286185c077"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_stopval</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt11get_stopvalEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt11get_stopvalEv"></span><span id="_CPPv2NK5pagmo5nlopt11get_stopvalEv"></span><span id="pagmo::nlopt::get_stopvalC"></span><span class="target" id="classpagmo_1_1nlopt_1a6f785fc91ac867a6c9653f286185c077"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_stopval</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt11get_stopvalEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">stopval</span></code> stopping criterion. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">stopval</span></code> stopping criterion instructs the solver to stop when an objective value less than or equal to <code class="docutils literal notranslate"><span class="pre">stopval</span></code> is found. Defaults to the C constant <code class="docutils literal notranslate"><span class="pre">-HUGE_VAL</span></code> (that is, this stopping criterion is disabled by default).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the <code class="docutils literal notranslate"><span class="pre">stopval</span></code> stopping criterion for this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a>. </p>
 </dd>
 </dl>
@@ -739,13 +852,13 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt11set_stopvalEd">
-<span id="_CPPv3N5pagmo5nlopt11set_stopvalEd"></span><span id="_CPPv2N5pagmo5nlopt11set_stopvalEd"></span><span id="pagmo::nlopt::set_stopval__double"></span><span class="target" id="classpagmo_1_1nlopt_1af54f17405cfc7e0ae8f2a4909f1d55de"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_stopval</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt11set_stopvalEd" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt11set_stopvalEd"></span><span id="_CPPv2N5pagmo5nlopt11set_stopvalEd"></span><span id="pagmo::nlopt::set_stopval__double"></span><span class="target" id="classpagmo_1_1nlopt_1af54f17405cfc7e0ae8f2a4909f1d55de"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_stopval</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt11set_stopvalEd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the <code class="docutils literal notranslate"><span class="pre">stopval</span></code> stopping criterion. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>stopval</strong> – the desired value for the <code class="docutils literal notranslate"><span class="pre">stopval</span></code> stopping criterion (see <a class="reference internal" href="#classpagmo_1_1nlopt_1a6f785fc91ac867a6c9653f286185c077"><span class="std std-ref">get_stopval()</span></a>).</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">stopval</span></code> is NaN. </p>
 </dd>
 </dl>
@@ -753,11 +866,11 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt12get_ftol_relEv">
-<span id="_CPPv3NK5pagmo5nlopt12get_ftol_relEv"></span><span id="_CPPv2NK5pagmo5nlopt12get_ftol_relEv"></span><span id="pagmo::nlopt::get_ftol_relC"></span><span class="target" id="classpagmo_1_1nlopt_1aee5e90b962030e692bd7a5afd7e58615"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ftol_rel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt12get_ftol_relEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt12get_ftol_relEv"></span><span id="_CPPv2NK5pagmo5nlopt12get_ftol_relEv"></span><span id="pagmo::nlopt::get_ftol_relC"></span><span class="target" id="classpagmo_1_1nlopt_1aee5e90b962030e692bd7a5afd7e58615"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ftol_rel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt12get_ftol_relEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> stopping criterion. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the optimum) changes the objective function value by less than <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> multiplied by the absolute value of the function value. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> stopping criterion for this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a>. </p>
 </dd>
 </dl>
@@ -765,13 +878,13 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt12set_ftol_relEd">
-<span id="_CPPv3N5pagmo5nlopt12set_ftol_relEd"></span><span id="_CPPv2N5pagmo5nlopt12set_ftol_relEd"></span><span id="pagmo::nlopt::set_ftol_rel__double"></span><span class="target" id="classpagmo_1_1nlopt_1a397aed96754684fd459ed386b1169298"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_ftol_rel</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt12set_ftol_relEd" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt12set_ftol_relEd"></span><span id="_CPPv2N5pagmo5nlopt12set_ftol_relEd"></span><span id="pagmo::nlopt::set_ftol_rel__double"></span><span class="target" id="classpagmo_1_1nlopt_1a397aed96754684fd459ed386b1169298"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_ftol_rel</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt12set_ftol_relEd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> stopping criterion. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ftol_rel</strong> – the desired value for the <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> stopping criterion (see <a class="reference internal" href="#classpagmo_1_1nlopt_1aee5e90b962030e692bd7a5afd7e58615"><span class="std std-ref">get_ftol_rel()</span></a>).</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">ftol_rel</span></code> is NaN. </p>
 </dd>
 </dl>
@@ -779,11 +892,11 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt12get_ftol_absEv">
-<span id="_CPPv3NK5pagmo5nlopt12get_ftol_absEv"></span><span id="_CPPv2NK5pagmo5nlopt12get_ftol_absEv"></span><span id="pagmo::nlopt::get_ftol_absC"></span><span class="target" id="classpagmo_1_1nlopt_1aad1aaf9968e5796f5a9ee0a8b5cc201c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ftol_abs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt12get_ftol_absEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt12get_ftol_absEv"></span><span id="_CPPv2NK5pagmo5nlopt12get_ftol_absEv"></span><span id="pagmo::nlopt::get_ftol_absC"></span><span class="target" id="classpagmo_1_1nlopt_1aad1aaf9968e5796f5a9ee0a8b5cc201c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ftol_abs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt12get_ftol_absEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">ftol_abs</span></code> stopping criterion. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">ftol_abs</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the optimum) changes the function value by less than <code class="docutils literal notranslate"><span class="pre">ftol_abs</span></code>. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the <code class="docutils literal notranslate"><span class="pre">ftol_abs</span></code> stopping criterion for this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a>. </p>
 </dd>
 </dl>
@@ -791,13 +904,13 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt12set_ftol_absEd">
-<span id="_CPPv3N5pagmo5nlopt12set_ftol_absEd"></span><span id="_CPPv2N5pagmo5nlopt12set_ftol_absEd"></span><span id="pagmo::nlopt::set_ftol_abs__double"></span><span class="target" id="classpagmo_1_1nlopt_1a642ced01fafffdb814ca62bd1fa58faf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_ftol_abs</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt12set_ftol_absEd" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt12set_ftol_absEd"></span><span id="_CPPv2N5pagmo5nlopt12set_ftol_absEd"></span><span id="pagmo::nlopt::set_ftol_abs__double"></span><span class="target" id="classpagmo_1_1nlopt_1a642ced01fafffdb814ca62bd1fa58faf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_ftol_abs</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt12set_ftol_absEd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the <code class="docutils literal notranslate"><span class="pre">ftol_abs</span></code> stopping criterion. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ftol_abs</strong> – the desired value for the <code class="docutils literal notranslate"><span class="pre">ftol_abs</span></code> stopping criterion (see <a class="reference internal" href="#classpagmo_1_1nlopt_1aad1aaf9968e5796f5a9ee0a8b5cc201c"><span class="std std-ref">get_ftol_abs()</span></a>).</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">ftol_abs</span></code> is NaN. </p>
 </dd>
 </dl>
@@ -805,11 +918,11 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt12get_xtol_relEv">
-<span id="_CPPv3NK5pagmo5nlopt12get_xtol_relEv"></span><span id="_CPPv2NK5pagmo5nlopt12get_xtol_relEv"></span><span id="pagmo::nlopt::get_xtol_relC"></span><span class="target" id="classpagmo_1_1nlopt_1a9bbe3d1fbaa1dc7fc03590afcea4fd51"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_xtol_rel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt12get_xtol_relEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt12get_xtol_relEv"></span><span id="_CPPv2NK5pagmo5nlopt12get_xtol_relEv"></span><span id="pagmo::nlopt::get_xtol_relC"></span><span class="target" id="classpagmo_1_1nlopt_1a9bbe3d1fbaa1dc7fc03590afcea4fd51"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_xtol_rel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt12get_xtol_relEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> stopping criterion. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the optimum) changes every parameter by less than <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> multiplied by the absolute value of the parameter. Defaults to 1E-8.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> stopping criterion for this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a>. </p>
 </dd>
 </dl>
@@ -817,13 +930,13 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt12set_xtol_relEd">
-<span id="_CPPv3N5pagmo5nlopt12set_xtol_relEd"></span><span id="_CPPv2N5pagmo5nlopt12set_xtol_relEd"></span><span id="pagmo::nlopt::set_xtol_rel__double"></span><span class="target" id="classpagmo_1_1nlopt_1a6e7059724cfaca078a3b48ccce883eca"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_xtol_rel</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt12set_xtol_relEd" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt12set_xtol_relEd"></span><span id="_CPPv2N5pagmo5nlopt12set_xtol_relEd"></span><span id="pagmo::nlopt::set_xtol_rel__double"></span><span class="target" id="classpagmo_1_1nlopt_1a6e7059724cfaca078a3b48ccce883eca"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_xtol_rel</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt12set_xtol_relEd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> stopping criterion. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>xtol_rel</strong> – the desired value for the <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> stopping criterion (see <a class="reference internal" href="#classpagmo_1_1nlopt_1a9bbe3d1fbaa1dc7fc03590afcea4fd51"><span class="std std-ref">get_xtol_rel()</span></a>).</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">xtol_rel</span></code> is NaN. </p>
 </dd>
 </dl>
@@ -831,11 +944,11 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt12get_xtol_absEv">
-<span id="_CPPv3NK5pagmo5nlopt12get_xtol_absEv"></span><span id="_CPPv2NK5pagmo5nlopt12get_xtol_absEv"></span><span id="pagmo::nlopt::get_xtol_absC"></span><span class="target" id="classpagmo_1_1nlopt_1ab3e02681606d4e8c1e7938bcf6ea324d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_xtol_abs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt12get_xtol_absEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt12get_xtol_absEv"></span><span id="_CPPv2NK5pagmo5nlopt12get_xtol_absEv"></span><span id="pagmo::nlopt::get_xtol_absC"></span><span class="target" id="classpagmo_1_1nlopt_1ab3e02681606d4e8c1e7938bcf6ea324d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_xtol_abs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt12get_xtol_absEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">xtol_abs</span></code> stopping criterion. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">xtol_abs</span></code> stopping criterion instructs the solver to stop when an optimization step (or an estimate of the optimum) changes every parameter by less than <code class="docutils literal notranslate"><span class="pre">xtol_abs</span></code>. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the <code class="docutils literal notranslate"><span class="pre">xtol_abs</span></code> stopping criterion for this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a>. </p>
 </dd>
 </dl>
@@ -843,13 +956,13 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt12set_xtol_absEd">
-<span id="_CPPv3N5pagmo5nlopt12set_xtol_absEd"></span><span id="_CPPv2N5pagmo5nlopt12set_xtol_absEd"></span><span id="pagmo::nlopt::set_xtol_abs__double"></span><span class="target" id="classpagmo_1_1nlopt_1a08bd3e34a31cf66c453735b2c58a60e4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_xtol_abs</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt12set_xtol_absEd" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt12set_xtol_absEd"></span><span id="_CPPv2N5pagmo5nlopt12set_xtol_absEd"></span><span id="pagmo::nlopt::set_xtol_abs__double"></span><span class="target" id="classpagmo_1_1nlopt_1a08bd3e34a31cf66c453735b2c58a60e4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_xtol_abs</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt12set_xtol_absEd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the <code class="docutils literal notranslate"><span class="pre">xtol_abs</span></code> stopping criterion. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>xtol_abs</strong> – the desired value for the <code class="docutils literal notranslate"><span class="pre">xtol_abs</span></code> stopping criterion (see <a class="reference internal" href="#classpagmo_1_1nlopt_1ab3e02681606d4e8c1e7938bcf6ea324d"><span class="std std-ref">get_xtol_abs()</span></a>).</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">xtol_abs</span></code> is NaN. </p>
 </dd>
 </dl>
@@ -857,11 +970,11 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt11get_maxevalEv">
-<span id="_CPPv3NK5pagmo5nlopt11get_maxevalEv"></span><span id="_CPPv2NK5pagmo5nlopt11get_maxevalEv"></span><span id="pagmo::nlopt::get_maxevalC"></span><span class="target" id="classpagmo_1_1nlopt_1af16b68ecaded3050574d11a1e94a9e89"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_maxeval</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt11get_maxevalEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt11get_maxevalEv"></span><span id="_CPPv2NK5pagmo5nlopt11get_maxevalEv"></span><span id="pagmo::nlopt::get_maxevalC"></span><span class="target" id="classpagmo_1_1nlopt_1af16b68ecaded3050574d11a1e94a9e89"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_maxeval</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt11get_maxevalEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">maxeval</span></code> stopping criterion. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">maxeval</span></code> stopping criterion instructs the solver to stop when the number of function evaluations exceeds <code class="docutils literal notranslate"><span class="pre">maxeval</span></code>. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the <code class="docutils literal notranslate"><span class="pre">maxeval</span></code> stopping criterion for this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a>. </p>
 </dd>
 </dl>
@@ -869,10 +982,10 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt11set_maxevalEi">
-<span id="_CPPv3N5pagmo5nlopt11set_maxevalEi"></span><span id="_CPPv2N5pagmo5nlopt11set_maxevalEi"></span><span id="pagmo::nlopt::set_maxeval__i"></span><span class="target" id="classpagmo_1_1nlopt_1ae635aefed9892a1d6cc425c7bae97836"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_maxeval</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt11set_maxevalEi" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt11set_maxevalEi"></span><span id="_CPPv2N5pagmo5nlopt11set_maxevalEi"></span><span id="pagmo::nlopt::set_maxeval__i"></span><span class="target" id="classpagmo_1_1nlopt_1ae635aefed9892a1d6cc425c7bae97836"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_maxeval</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt11set_maxevalEi" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the <code class="docutils literal notranslate"><span class="pre">maxeval</span></code> stopping criterion. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – the desired value for the <code class="docutils literal notranslate"><span class="pre">maxeval</span></code> stopping criterion (see <a class="reference internal" href="#classpagmo_1_1nlopt_1af16b68ecaded3050574d11a1e94a9e89"><span class="std std-ref">get_maxeval()</span></a>). </p>
 </dd>
 </dl>
@@ -880,11 +993,11 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt11get_maxtimeEv">
-<span id="_CPPv3NK5pagmo5nlopt11get_maxtimeEv"></span><span id="_CPPv2NK5pagmo5nlopt11get_maxtimeEv"></span><span id="pagmo::nlopt::get_maxtimeC"></span><span class="target" id="classpagmo_1_1nlopt_1a390ad95ad30162b91c79bfc8bf14e28c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_maxtime</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt11get_maxtimeEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt11get_maxtimeEv"></span><span id="_CPPv2NK5pagmo5nlopt11get_maxtimeEv"></span><span id="pagmo::nlopt::get_maxtimeC"></span><span class="target" id="classpagmo_1_1nlopt_1a390ad95ad30162b91c79bfc8bf14e28c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_maxtime</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt11get_maxtimeEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">maxtime</span></code> stopping criterion. </p>
 <p>The <code class="docutils literal notranslate"><span class="pre">maxtime</span></code> stopping criterion instructs the solver to stop when the optimization time (in seconds) exceeds <code class="docutils literal notranslate"><span class="pre">maxtime</span></code>. Defaults to 0 (that is, this stopping criterion is disabled by default).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the <code class="docutils literal notranslate"><span class="pre">maxtime</span></code> stopping criterion for this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a>. </p>
 </dd>
 </dl>
@@ -892,10 +1005,10 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt11set_maxtimeEi">
-<span id="_CPPv3N5pagmo5nlopt11set_maxtimeEi"></span><span id="_CPPv2N5pagmo5nlopt11set_maxtimeEi"></span><span id="pagmo::nlopt::set_maxtime__i"></span><span class="target" id="classpagmo_1_1nlopt_1a436d213f960616870724cbf5cfeaa095"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_maxtime</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt11set_maxtimeEi" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt11set_maxtimeEi"></span><span id="_CPPv2N5pagmo5nlopt11set_maxtimeEi"></span><span id="pagmo::nlopt::set_maxtime__i"></span><span class="target" id="classpagmo_1_1nlopt_1a436d213f960616870724cbf5cfeaa095"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_maxtime</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt11set_maxtimeEi" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the <code class="docutils literal notranslate"><span class="pre">maxtime</span></code> stopping criterion. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – the desired value for the <code class="docutils literal notranslate"><span class="pre">maxtime</span></code> stopping criterion (see <a class="reference internal" href="#classpagmo_1_1nlopt_1a390ad95ad30162b91c79bfc8bf14e28c"><span class="std std-ref">get_maxtime()</span></a>). </p>
 </dd>
 </dl>
@@ -903,7 +1016,7 @@ description of each supported solver.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt19set_local_optimizerE5nlopt">
-<span id="_CPPv3N5pagmo5nlopt19set_local_optimizerE5nlopt"></span><span id="_CPPv2N5pagmo5nlopt19set_local_optimizerE5nlopt"></span><span id="pagmo::nlopt::set_local_optimizer__nlopt"></span><span class="target" id="classpagmo_1_1nlopt_1a3960c1caca35a15f1a827735561cf7b6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_local_optimizer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt19set_local_optimizerE5nlopt" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt19set_local_optimizerE5nlopt"></span><span id="_CPPv2N5pagmo5nlopt19set_local_optimizerE5nlopt"></span><span id="pagmo::nlopt::set_local_optimizer__nlopt"></span><span class="target" id="classpagmo_1_1nlopt_1a3960c1caca35a15f1a827735561cf7b6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_local_optimizer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt19set_local_optimizerE5nlopt" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the local optimizer. </p>
 <p>Some NLopt algorithms rely on other NLopt algorithms as local/subsidiary optimizers. This method allows to set such local optimizer. By default, no local optimizer is specified.</p>
 <div class="admonition note">
@@ -919,7 +1032,7 @@ criteria should be specified in the local optimizer. The verbosity of
 the local optimizer is also forcibly set to zero during the optimisation.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – the local optimizer that will be used by this <a class="reference internal" href="#classpagmo_1_1nlopt"><span class="std std-ref">pagmo::nlopt</span></a> algorithm. </p>
 </dd>
 </dl>
@@ -927,7 +1040,7 @@ the local optimizer is also forcibly set to zero during the optimisation.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt19get_local_optimizerEv">
-<span id="_CPPv3NK5pagmo5nlopt19get_local_optimizerEv"></span><span id="_CPPv2NK5pagmo5nlopt19get_local_optimizerEv"></span><span id="pagmo::nlopt::get_local_optimizerC"></span><span class="target" id="classpagmo_1_1nlopt_1ac6750cadeb52060e0e15fd94fdc19438"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_local_optimizer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt19get_local_optimizerEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt19get_local_optimizerEv"></span><span id="_CPPv2NK5pagmo5nlopt19get_local_optimizerEv"></span><span id="pagmo::nlopt::get_local_optimizerC"></span><span class="target" id="classpagmo_1_1nlopt_1ac6750cadeb52060e0e15fd94fdc19438"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_local_optimizer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt19get_local_optimizerEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the local optimizer. </p>
 <p>This method returns a raw const pointer to the local optimizer, if it has been set via <a class="reference internal" href="#classpagmo_1_1nlopt_1a3960c1caca35a15f1a827735561cf7b6"><span class="std std-ref">set_local_optimizer()</span></a>. Otherwise, <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> will be returned.</p>
 <div class="admonition note">
@@ -936,7 +1049,7 @@ the local optimizer is also forcibly set to zero during the optimisation.</p>
 of <code class="docutils literal notranslate"><span class="pre">this</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete</span></code> must never be called on the pointer.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a const pointer to the local optimizer. </p>
 </dd>
 </dl>
@@ -944,7 +1057,7 @@ of <code class="docutils literal notranslate"><span class="pre">this</span></cod
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt19get_local_optimizerEv">
-<span id="_CPPv3N5pagmo5nlopt19get_local_optimizerEv"></span><span id="_CPPv2N5pagmo5nlopt19get_local_optimizerEv"></span><span id="pagmo::nlopt::get_local_optimizer"></span><span class="target" id="classpagmo_1_1nlopt_1a7c812681598b8784b3e1b26700719c09"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_local_optimizer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt19get_local_optimizerEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt19get_local_optimizerEv"></span><span id="_CPPv2N5pagmo5nlopt19get_local_optimizerEv"></span><span id="pagmo::nlopt::get_local_optimizer"></span><span class="target" id="classpagmo_1_1nlopt_1a7c812681598b8784b3e1b26700719c09"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5pagmo5nloptE" title="pagmo::nlopt"><span class="n"><span class="pre">nlopt</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_local_optimizer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt19get_local_optimizerEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the local optimizer. </p>
 <p>This method returns a raw pointer to the local optimizer, if it has been set via <a class="reference internal" href="#classpagmo_1_1nlopt_1a3960c1caca35a15f1a827735561cf7b6"><span class="std std-ref">set_local_optimizer()</span></a>. Otherwise, <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> will be returned.</p>
 <div class="admonition note">
@@ -958,7 +1071,7 @@ of <code class="docutils literal notranslate"><span class="pre">this</span></cod
 methods on the local optimizer. Assigning a new local optimizer via this pointer is undefined behaviour.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a pointer to the local optimizer. </p>
 </dd>
 </dl>
@@ -966,17 +1079,17 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt21unset_local_optimizerEv">
-<span id="_CPPv3N5pagmo5nlopt21unset_local_optimizerEv"></span><span id="_CPPv2N5pagmo5nlopt21unset_local_optimizerEv"></span><span id="pagmo::nlopt::unset_local_optimizer"></span><span class="target" id="classpagmo_1_1nlopt_1aa15446e239e81b9f6736448ac7f42c56"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unset_local_optimizer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt21unset_local_optimizerEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt21unset_local_optimizerEv"></span><span id="_CPPv2N5pagmo5nlopt21unset_local_optimizerEv"></span><span id="pagmo::nlopt::unset_local_optimizer"></span><span class="target" id="classpagmo_1_1nlopt_1aa15446e239e81b9f6736448ac7f42c56"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unset_local_optimizer</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt21unset_local_optimizerEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Unset the local optimizer. </p>
 <p>After a call to this method, <a class="reference internal" href="#classpagmo_1_1nlopt_1a7c812681598b8784b3e1b26700719c09"><span class="std std-ref">get_local_optimizer()</span></a> and <a class="reference internal" href="#classpagmo_1_1nlopt_1ac6750cadeb52060e0e15fd94fdc19438"><span class="std std-ref">get_local_optimizer() const </span></a>will return <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt18set_random_sr_seedEj">
-<span id="_CPPv3N5pagmo5nlopt18set_random_sr_seedEj"></span><span id="_CPPv2N5pagmo5nlopt18set_random_sr_seedEj"></span><span id="pagmo::nlopt::set_random_sr_seed__unsigned"></span><span class="target" id="classpagmo_1_1not__population__based_1ac8cb01a8cce5a99de6d01dea185567cf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_random_sr_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt18set_random_sr_seedEj" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt18set_random_sr_seedEj"></span><span id="_CPPv2N5pagmo5nlopt18set_random_sr_seedEj"></span><span id="pagmo::nlopt::set_random_sr_seed__unsigned"></span><span class="target" id="classpagmo_1_1not__population__based_1ac8cb01a8cce5a99de6d01dea185567cf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_random_sr_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt18set_random_sr_seedEj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the seed for the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>seed</strong> – the value that will be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> selection/replacement policies. </p>
 </dd>
 </dl>
@@ -984,7 +1097,7 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt13set_selectionERKNSt6stringE">
-<span id="_CPPv3N5pagmo5nlopt13set_selectionERKNSt6stringE"></span><span id="_CPPv2N5pagmo5nlopt13set_selectionERKNSt6stringE"></span><span id="pagmo::nlopt::set_selection__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_selection</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13set_selectionERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt13set_selectionERKNSt6stringE"></span><span id="_CPPv2N5pagmo5nlopt13set_selectionERKNSt6stringE"></span><span id="pagmo::nlopt::set_selection__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_selection</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13set_selectionERKNSt6stringE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the individual selection policy. </p>
 <p>This method will set the policy that is used to select the individual that will be optimised when calling the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <p>The input string must be one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
@@ -996,10 +1109,10 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 <p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac8cb01a8cce5a99de6d01dea185567cf"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>Instead of a selection policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>select</strong> – the selection policy.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">select</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>. </p>
 </dd>
 </dl>
@@ -1007,11 +1120,11 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt13set_selectionEN10population9size_typeE">
-<span id="_CPPv3N5pagmo5nlopt13set_selectionEN10population9size_typeE"></span><span id="_CPPv2N5pagmo5nlopt13set_selectionEN10population9size_typeE"></span><span id="pagmo::nlopt::set_selection__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_selection</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type"><span class="n"><span class="pre">size_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13set_selectionEN10population9size_typeE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt13set_selectionEN10population9size_typeE"></span><span id="_CPPv2N5pagmo5nlopt13set_selectionEN10population9size_typeE"></span><span id="pagmo::nlopt::set_selection__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_selection</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type"><span class="n"><span class="pre">size_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt13set_selectionEN10population9size_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the individual selection index. </p>
 <p>This method will set the index of the individual that is selected for optimisation in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – the index in the population of the individual to be selected for optimisation. </p>
 </dd>
 </dl>
@@ -1019,11 +1132,11 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt13get_selectionEv">
-<span id="_CPPv3NK5pagmo5nlopt13get_selectionEv"></span><span id="_CPPv2NK5pagmo5nlopt13get_selectionEv"></span><span id="pagmo::nlopt::get_selectionC"></span><span class="target" id="classpagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_selection</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt13get_selectionEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt13get_selectionEv"></span><span id="_CPPv2NK5pagmo5nlopt13get_selectionEv"></span><span id="pagmo::nlopt::get_selectionC"></span><span class="target" id="classpagmo_1_1not__population__based_1a15516c323e4c8c093eb076eb0da5b026"></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_selection</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt13get_selectionEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the individual selection policy or index. </p>
-<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a6eb52f7d48a0cfd0ce37956139a3a862"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
+<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual selection policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual selection index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1acd046a0de9bc2a40566496e75e4db1f7"><span class="std std-ref">population::size_type</span></a>). The selection policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a918f089d9cc1a251005b9af0d209f2d4"><span class="std std-ref">set_selection(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a5cb5ec801a147d7bea1a46f511f216e2"><span class="std std-ref">set_selection(population::size_type)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the individual selection policy or index. </p>
 </dd>
 </dl>
@@ -1031,7 +1144,7 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt15set_replacementERKNSt6stringE">
-<span id="_CPPv3N5pagmo5nlopt15set_replacementERKNSt6stringE"></span><span id="_CPPv2N5pagmo5nlopt15set_replacementERKNSt6stringE"></span><span id="pagmo::nlopt::set_replacement__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_replacement</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt15set_replacementERKNSt6stringE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt15set_replacementERKNSt6stringE"></span><span id="_CPPv2N5pagmo5nlopt15set_replacementERKNSt6stringE"></span><span id="pagmo::nlopt::set_replacement__ssCR"></span><span class="target" id="classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_replacement</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt15set_replacementERKNSt6stringE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the individual replacement policy. </p>
 <p>This method will set the policy that is used in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm to select the individual that will be replaced by the optimised individual.</p>
 <p>The input string must be one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>:<ul class="simple">
@@ -1043,10 +1156,10 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 <p><a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac8cb01a8cce5a99de6d01dea185567cf"><span class="std std-ref">set_random_sr_seed()</span></a> can be used to seed the random number generator used by the <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> policy.</p>
 <p>Instead of a replacement policy, a specific individual in the population can be selected via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>replace</strong> – the replacement policy.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if <code class="docutils literal notranslate"><span class="pre">replace</span></code> is not one of <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;worst&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>. </p>
 </dd>
 </dl>
@@ -1054,11 +1167,11 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo5nlopt15set_replacementEN10population9size_typeE">
-<span id="_CPPv3N5pagmo5nlopt15set_replacementEN10population9size_typeE"></span><span id="_CPPv2N5pagmo5nlopt15set_replacementEN10population9size_typeE"></span><span id="pagmo::nlopt::set_replacement__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_replacement</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type"><span class="n"><span class="pre">size_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt15set_replacementEN10population9size_typeE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo5nlopt15set_replacementEN10population9size_typeE"></span><span id="_CPPv2N5pagmo5nlopt15set_replacementEN10population9size_typeE"></span><span id="pagmo::nlopt::set_replacement__population::size_type"></span><span class="target" id="classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_replacement</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10populationE" title="pagmo::population"><span class="n"><span class="pre">population</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../population.html#_CPPv4N5pagmo10population9size_typeE" title="pagmo::population::size_type"><span class="n"><span class="pre">size_type</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo5nlopt15set_replacementEN10population9size_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the individual replacement index. </p>
 <p>This method will set the index of the individual that is replaced after the optimisation in the <code class="docutils literal notranslate"><span class="pre">evolve()</span></code> method of the algorithm.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> – the index in the population of the individual to be replaced after the optimisation. </p>
 </dd>
 </dl>
@@ -1066,11 +1179,11 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo5nlopt15get_replacementEv">
-<span id="_CPPv3NK5pagmo5nlopt15get_replacementEv"></span><span id="_CPPv2NK5pagmo5nlopt15get_replacementEv"></span><span id="pagmo::nlopt::get_replacementC"></span><span class="target" id="classpagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_replacement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt15get_replacementEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo5nlopt15get_replacementEv"></span><span id="_CPPv2NK5pagmo5nlopt15get_replacementEv"></span><span id="pagmo::nlopt::get_replacementC"></span><span class="target" id="classpagmo_1_1not__population__based_1a74c7d941a9b9a317374a9a77a200c255"></span><span class="n"><span class="pre">boost</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">any</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_replacement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo5nlopt15get_replacementEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the individual replacement policy or index. </p>
-<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1a6eb52f7d48a0cfd0ce37956139a3a862"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
+<p>This method will return a <code class="docutils literal notranslate"><span class="pre">boost::any</span></code> containing either the individual replacement policy (as an <code class="docutils literal notranslate"><span class="pre">std::string</span></code>) or the individual replacement index (as a <a class="reference internal" href="../population.html#classpagmo_1_1population_1acd046a0de9bc2a40566496e75e4db1f7"><span class="std std-ref">population::size_type</span></a>). The replacement policy or index is set via <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1ac308e8d059b0f3c3ef901607b49f2a48"><span class="std std-ref">set_replacement(const std::string &amp;)</span></a> and <a class="reference internal" href="../miscellanea/utility_classes.html#classpagmo_1_1not__population__based_1a7e448fdbbcb611723769163afd3da600"><span class="std std-ref">set_replacement(population::size_type)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the individual replacement policy or index. </p>
 </dd>
 </dl>
@@ -1087,11 +1200,10 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="cstrs_self_adaptive.html"
@@ -1111,15 +1223,70 @@ methods on the local optimizer. Assigning a new local optimizer via this pointer
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nloptE"><code class="docutils literal notranslate"><span class="pre">pagmo::nlopt</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt13log_line_typeE"><code class="docutils literal notranslate"><span class="pre">log_line_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt8log_typeE"><code class="docutils literal notranslate"><span class="pre">log_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt5nloptEv"><code class="docutils literal notranslate"><span class="pre">nlopt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt5nloptERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">nlopt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt5nloptERK5nlopt"><code class="docutils literal notranslate"><span class="pre">nlopt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt5nloptERR5nlopt"><code class="docutils literal notranslate"><span class="pre">nlopt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nloptaSERR5nlopt"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt6evolveE10population"><code class="docutils literal notranslate"><span class="pre">evolve()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt8get_nameEv"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt13set_verbosityEj"><code class="docutils literal notranslate"><span class="pre">set_verbosity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt14get_extra_infoEv"><code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt7get_logEv"><code class="docutils literal notranslate"><span class="pre">get_log()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt15get_solver_nameEv"><code class="docutils literal notranslate"><span class="pre">get_solver_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt19get_last_opt_resultEv"><code class="docutils literal notranslate"><span class="pre">get_last_opt_result()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt11get_stopvalEv"><code class="docutils literal notranslate"><span class="pre">get_stopval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt11set_stopvalEd"><code class="docutils literal notranslate"><span class="pre">set_stopval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt12get_ftol_relEv"><code class="docutils literal notranslate"><span class="pre">get_ftol_rel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt12set_ftol_relEd"><code class="docutils literal notranslate"><span class="pre">set_ftol_rel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt12get_ftol_absEv"><code class="docutils literal notranslate"><span class="pre">get_ftol_abs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt12set_ftol_absEd"><code class="docutils literal notranslate"><span class="pre">set_ftol_abs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt12get_xtol_relEv"><code class="docutils literal notranslate"><span class="pre">get_xtol_rel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt12set_xtol_relEd"><code class="docutils literal notranslate"><span class="pre">set_xtol_rel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt12get_xtol_absEv"><code class="docutils literal notranslate"><span class="pre">get_xtol_abs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt12set_xtol_absEd"><code class="docutils literal notranslate"><span class="pre">set_xtol_abs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt11get_maxevalEv"><code class="docutils literal notranslate"><span class="pre">get_maxeval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt11set_maxevalEi"><code class="docutils literal notranslate"><span class="pre">set_maxeval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt11get_maxtimeEv"><code class="docutils literal notranslate"><span class="pre">get_maxtime()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt11set_maxtimeEi"><code class="docutils literal notranslate"><span class="pre">set_maxtime()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt19set_local_optimizerE5nlopt"><code class="docutils literal notranslate"><span class="pre">set_local_optimizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt19get_local_optimizerEv"><code class="docutils literal notranslate"><span class="pre">get_local_optimizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt19get_local_optimizerEv"><code class="docutils literal notranslate"><span class="pre">get_local_optimizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt21unset_local_optimizerEv"><code class="docutils literal notranslate"><span class="pre">unset_local_optimizer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt18set_random_sr_seedEj"><code class="docutils literal notranslate"><span class="pre">set_random_sr_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt13set_selectionERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt13set_selectionEN10population9size_typeE"><code class="docutils literal notranslate"><span class="pre">set_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt13get_selectionEv"><code class="docutils literal notranslate"><span class="pre">get_selection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt15set_replacementERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_replacement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo5nlopt15set_replacementEN10population9size_typeE"><code class="docutils literal notranslate"><span class="pre">set_replacement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo5nlopt15get_replacementEv"><code class="docutils literal notranslate"><span class="pre">get_replacement()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -1137,6 +1304,7 @@ By pagmo development team
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2017-2024, pagmo development team.
@@ -1163,8 +1331,8 @@ By pagmo development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

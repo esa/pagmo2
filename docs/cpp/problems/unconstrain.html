@@ -1,78 +1,74 @@
  
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Unconstrain &#8212; pagmo 2.19.1 documentation</title>
+    <title>Unconstrain &#8212; pagmo 2.20.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../../_static/documentation_options.js?v=22086b0a"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/cpp/problems/unconstrain';</script>
-    <link rel="shortcut icon" href="../../../_static/logo_favico.ico"/>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../../_static/logo_favico.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="WFG problem test suite" href="wfg.html" />
     <link rel="prev" title="CEC 2014 Problem Suite (box-bound, single objective)" href="cec2014.html" />
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto|Comfortaa|Space+Mono"> 
   </head>
+  <body data-default-mode="">
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
+  <div id="pst-scroll-pixel-helper"></div>
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -80,7 +76,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -88,16 +83,69 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
   
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -110,6 +158,9 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -118,23 +169,31 @@
   
   
   
-    <p class="title logo__title">pagmo 2.19.1 documentation</p>
+  
+    <p class="title logo__title">pagmo 2.20.0 documentation</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Capabilities</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cpp_tut.html">C++ tutorial</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut_preliminaries.html">Preliminaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cpp_tut_first_problem.html">Writing your first optimisation problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/evolving_a_population.html">Evolving a population</a></li>
 </ul>
-</li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../cpp_docs.html">C++ API documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../types.html">Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../problem.html">Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algorithm.html">Algorithm</a></li>
@@ -215,7 +274,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../miscellanea/exceptions.html">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../miscellanea/utility_classes.html">Utility classes</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../credits.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
@@ -226,14 +285,19 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -242,14 +306,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -358,7 +422,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -371,24 +435,27 @@
 </button>
 
 
-<script>
-document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-  </button>
-`);
-</script>
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -404,6 +471,31 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11unconstrainE"><code class="docutils literal notranslate"><span class="pre">pagmo::unconstrain</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11unconstrain11unconstrainEv"><code class="docutils literal notranslate"><span class="pre">unconstrain()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double"><code class="docutils literal notranslate"><span class="pre">unconstrain()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain7fitnessERK13vector_double"><code class="docutils literal notranslate"><span class="pre">fitness()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain17has_batch_fitnessEv"><code class="docutils literal notranslate"><span class="pre">has_batch_fitness()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain13batch_fitnessERK13vector_double"><code class="docutils literal notranslate"><span class="pre">batch_fitness()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain8get_nobjEv"><code class="docutils literal notranslate"><span class="pre">get_nobj()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain7get_nixEv"><code class="docutils literal notranslate"><span class="pre">get_nix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain10get_boundsEv"><code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain12has_set_seedEv"><code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11unconstrain8set_seedEj"><code class="docutils literal notranslate"><span class="pre">set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain17get_thread_safetyEv"><code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain17get_inner_problemEv"><code class="docutils literal notranslate"><span class="pre">get_inner_problem()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11unconstrain17get_inner_problemEv"><code class="docutils literal notranslate"><span class="pre">get_inner_problem()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain8get_nameEv"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain14get_extra_infoEv"><code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -411,13 +503,13 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="unconstrain">
-<h1>Unconstrain<a class="headerlink" href="#unconstrain" title="Permalink to this headline">#</a></h1>
+<h1>Unconstrain<a class="headerlink" href="#unconstrain" title="Link to this heading">#</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11unconstrainE">
-<span id="_CPPv3N5pagmo11unconstrainE"></span><span id="_CPPv2N5pagmo11unconstrainE"></span><span id="pagmo::unconstrain"></span><span class="target" id="classpagmo_1_1unconstrain"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unconstrain</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrainE" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11unconstrainE"></span><span id="_CPPv2N5pagmo11unconstrainE"></span><span id="pagmo::unconstrain"></span><span class="target" id="classpagmo_1_1unconstrain"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unconstrain</span></span></span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrainE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The unconstrain meta-problem. </p>
 <p>This meta-problem transforms a constrained problem into an unconstrained problem applying one of the following methods:<ul class="simple">
 <li><p>Death penalty: simply penalizes all objectives by the same high value if the fitness vector is infeasible as checked by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a98358b389c7882d2e1a42023bceb69bf"><span class="std std-ref">pagmo::problem::feasibility_f()</span></a>.</p></li>
@@ -433,14 +525,14 @@ document.write(`
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11unconstrain11unconstrainEv">
-<span id="_CPPv3N5pagmo11unconstrain11unconstrainEv"></span><span id="_CPPv2N5pagmo11unconstrain11unconstrainEv"></span><span id="pagmo::unconstrain::unconstrain"></span><span class="target" id="classpagmo_1_1unconstrain_1a0899bed1fbeb41cb32b3b2ddfb3c351a"></span><span class="sig-name descname"><span class="n"><span class="pre">unconstrain</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain11unconstrainEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11unconstrain11unconstrainEv"></span><span id="_CPPv2N5pagmo11unconstrain11unconstrainEv"></span><span id="pagmo::unconstrain::unconstrain"></span><span class="target" id="classpagmo_1_1unconstrain_1a0899bed1fbeb41cb32b3b2ddfb3c351a"></span><span class="sig-name descname"><span class="n"><span class="pre">unconstrain</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain11unconstrainEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Default constructor. </p>
 <p>The default constructor will initialize a <a class="reference internal" href="null.html#structpagmo_1_1null__problem"><span class="std std-ref">pagmo::null_problem</span></a> unconstrained via the death penalty method. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double">
-<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="pagmo::unconstrain::unconstrain::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1unconstrain_1aa92c13d6d0d4fc93f61600c442e92edc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unconstrain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="pagmo::unconstrain::unconstrain::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">method</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;death</span> <span class="pre">penalty&quot;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">weights</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double"></span><span id="_CPPv2I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">ctor_enabler</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="pagmo::unconstrain::unconstrain::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classpagmo_1_1unconstrain_1aa92c13d6d0d4fc93f61600c442e92edc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unconstrain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="pagmo::unconstrain::unconstrain::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">method</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;death</span> <span class="pre">penalty&quot;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">weights</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Constructor from UDP and unconstrain method. </p>
 <p>Wraps a user-defined problem so that its constraints will be removed</p>
 <div class="admonition note">
@@ -449,14 +541,14 @@ document.write(`
 and if <code class="docutils literal notranslate"><span class="pre">T</span></code>, after the removal of reference and cv qualifiers, is not <a class="reference internal" href="#_CPPv4N5pagmo11unconstrainE" title="pagmo::unconstrain"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::unconstrain</span></code></a>.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p</strong> – a user-defined problem or a <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p></li>
 <li><p><strong>method</strong> – an <code class="docutils literal notranslate"><span class="pre">std::string</span></code> containing the name of the method to be used t remove the constraints: one of “death penalty”, “kuri”, “weighted”, “ignore_c” or “ignore_o”. </p></li>
 <li><p><strong>weights</strong> – an <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> containing the weights in case “weighted” is selected as method.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the length of <code class="docutils literal notranslate"><span class="pre">weights</span></code> is not equal to the problem constraint dimension <span class="math notranslate nohighlight">\( n_{ec} + n_{ic}\)</span> when <code class="docutils literal notranslate"><span class="pre">method</span></code> is “weighted”, if the <code class="docutils literal notranslate"><span class="pre">method</span></code> is not one of “death penalty”, “kuri”, “weighted”, “ignore_c” or “ignore_o”, if the <code class="docutils literal notranslate"><span class="pre">weights</span></code> vector is not empty and the <code class="docutils literal notranslate"><span class="pre">method</span></code> is not “weighted” or if <code class="docutils literal notranslate"><span class="pre">is</span></code> already unconstrained </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a> constructor </p></li>
@@ -467,17 +559,17 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain7fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo11unconstrain7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo11unconstrain7fitnessERK13vector_double"></span><span id="pagmo::unconstrain::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1unconstrain_1a8bb88c00ea5db792cbbb0239ba789576"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain7fitnessERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain7fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo11unconstrain7fitnessERK13vector_double"></span><span id="pagmo::unconstrain::fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1unconstrain_1a8bb88c00ea5db792cbbb0239ba789576"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain7fitnessERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Fitness. </p>
 <p>The unconstrained fitness computation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> – the decision vector.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by memory errors in standard containers, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a5969da5bb800845eda3101ce1cfa053f"><span class="std std-ref">problem::fitness()</span></a>. </p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the fitness of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 </dd>
 </dl>
@@ -485,10 +577,10 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain17has_batch_fitnessEv">
-<span id="_CPPv3NK5pagmo11unconstrain17has_batch_fitnessEv"></span><span id="_CPPv2NK5pagmo11unconstrain17has_batch_fitnessEv"></span><span id="pagmo::unconstrain::has_batch_fitnessC"></span><span class="target" id="classpagmo_1_1unconstrain_1a89d785c83f85180a2d623dd606b1db3e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_batch_fitness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17has_batch_fitnessEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain17has_batch_fitnessEv"></span><span id="_CPPv2NK5pagmo11unconstrain17has_batch_fitnessEv"></span><span id="pagmo::unconstrain::has_batch_fitnessC"></span><span class="target" id="classpagmo_1_1unconstrain_1a89d785c83f85180a2d623dd606b1db3e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_batch_fitness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17has_batch_fitnessEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Check if the inner problem can compute fitnesses in batch mode. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the output of the <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a89d785c83f85180a2d623dd606b1db3e"><span class="std std-ref"><span class="pre">has_batch_fitness()</span></span></a></code> member function invoked by the inner problem. </p>
 </dd>
 </dl>
@@ -496,17 +588,17 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain13batch_fitnessERK13vector_double">
-<span id="_CPPv3NK5pagmo11unconstrain13batch_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo11unconstrain13batch_fitnessERK13vector_double"></span><span id="pagmo::unconstrain::batch_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1unconstrain_1ac663570649c33cee1fa5963a908a7f85"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batch_fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">xs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain13batch_fitnessERK13vector_double" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain13batch_fitnessERK13vector_double"></span><span id="_CPPv2NK5pagmo11unconstrain13batch_fitnessERK13vector_double"></span><span id="pagmo::unconstrain::batch_fitness__vector_doubleCRC"></span><span class="target" id="classpagmo_1_1unconstrain_1ac663570649c33cee1fa5963a908a7f85"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batch_fitness</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">xs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain13batch_fitnessERK13vector_double" title="Link to this definition">#</a><br /></dt>
 <dd><p>Batch fitness. </p>
 <p>The batch fitness computation is forwarded to the inner UDP and then all are penalized.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>xs</strong> – the input decision vectors.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by memory errors in standard containers, threading primitives, or by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1aa73f9fac0a8b273bad8185ddbb738f8f"><span class="std std-ref">problem::batch_fitness()</span></a>. </p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the fitnesses of <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
 </dd>
 </dl>
@@ -514,10 +606,10 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain8get_nobjEv">
-<span id="_CPPv3NK5pagmo11unconstrain8get_nobjEv"></span><span id="_CPPv2NK5pagmo11unconstrain8get_nobjEv"></span><span id="pagmo::unconstrain::get_nobjC"></span><span class="target" id="classpagmo_1_1unconstrain_1a0f3204bcc8926b4abee8293d07bd94ed"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nobj</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain8get_nobjEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain8get_nobjEv"></span><span id="_CPPv2NK5pagmo11unconstrain8get_nobjEv"></span><span id="pagmo::unconstrain::get_nobjC"></span><span class="target" id="classpagmo_1_1unconstrain_1a0f3204bcc8926b4abee8293d07bd94ed"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nobj</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain8get_nobjEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Number of objectives. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the number of objectives of the inner problem. </p>
 </dd>
 </dl>
@@ -525,10 +617,10 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain7get_nixEv">
-<span id="_CPPv3NK5pagmo11unconstrain7get_nixEv"></span><span id="_CPPv2NK5pagmo11unconstrain7get_nixEv"></span><span id="pagmo::unconstrain::get_nixC"></span><span class="target" id="classpagmo_1_1unconstrain_1a720400ac50204c40614e0a0c00171a24"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain7get_nixEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain7get_nixEv"></span><span id="_CPPv2NK5pagmo11unconstrain7get_nixEv"></span><span id="pagmo::unconstrain::get_nixC"></span><span class="target" id="classpagmo_1_1unconstrain_1a720400ac50204c40614e0a0c00171a24"></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_nix</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain7get_nixEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Integer dimension. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the integer dimension of the inner problem. </p>
 </dd>
 </dl>
@@ -536,14 +628,14 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain10get_boundsEv">
-<span id="_CPPv3NK5pagmo11unconstrain10get_boundsEv"></span><span id="_CPPv2NK5pagmo11unconstrain10get_boundsEv"></span><span id="pagmo::unconstrain::get_boundsC"></span><span class="target" id="classpagmo_1_1unconstrain_1af22ef4a676a651074a3acfa0b92cdc0e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_bounds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain10get_boundsEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain10get_boundsEv"></span><span id="_CPPv2NK5pagmo11unconstrain10get_boundsEv"></span><span id="pagmo::unconstrain::get_boundsC"></span><span class="target" id="classpagmo_1_1unconstrain_1af22ef4a676a651074a3acfa0b92cdc0e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../types.html#_CPPv4N5pagmo13vector_doubleE" title="pagmo::vector_double"><span class="n"><span class="pre">vector_double</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_bounds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain10get_boundsEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Box-bounds. </p>
 <p>Forwards the bounds computations to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws</dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <code class="docutils literal notranslate"><a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a63956ae17409319bba96f8683967311b"><span class="std std-ref"><span class="pre">problem::get_bounds()</span></span></a></code>. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the lower and upper bounds for each of the decision vector components.</p>
 </dd>
 </dl>
@@ -551,11 +643,11 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain12has_set_seedEv">
-<span id="_CPPv3NK5pagmo11unconstrain12has_set_seedEv"></span><span id="_CPPv2NK5pagmo11unconstrain12has_set_seedEv"></span><span id="pagmo::unconstrain::has_set_seedC"></span><span class="target" id="classpagmo_1_1unconstrain_1a953933f7923f3f9f9b2bad5ece0e60ea"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain12has_set_seedEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain12has_set_seedEv"></span><span id="_CPPv2NK5pagmo11unconstrain12has_set_seedEv"></span><span id="pagmo::unconstrain::has_set_seedC"></span><span class="target" id="classpagmo_1_1unconstrain_1a953933f7923f3f9f9b2bad5ece0e60ea"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_set_seed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain12has_set_seedEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a953933f7923f3f9f9b2bad5ece0e60ea"><span class="std std-ref"><span class="pre">has_set_seed()</span></span></a></code> of the inner problem. </p>
 <p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a953933f7923f3f9f9b2bad5ece0e60ea"><span class="std std-ref"><span class="pre">has_set_seed()</span></span></a></code> of the inner problem.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a flag signalling whether the inner problem is stochastic. </p>
 </dd>
 </dl>
@@ -563,14 +655,14 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11unconstrain8set_seedEj">
-<span id="_CPPv3N5pagmo11unconstrain8set_seedEj"></span><span id="_CPPv2N5pagmo11unconstrain8set_seedEj"></span><span id="pagmo::unconstrain::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1unconstrain_1a53fe35985cb54669d9198f9b116af26e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain8set_seedEj" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11unconstrain8set_seedEj"></span><span id="_CPPv2N5pagmo11unconstrain8set_seedEj"></span><span id="pagmo::unconstrain::set_seed__unsigned"></span><span class="target" id="classpagmo_1_1unconstrain_1a53fe35985cb54669d9198f9b116af26e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_seed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain8set_seedEj" title="Link to this definition">#</a><br /></dt>
 <dd><p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a53fe35985cb54669d9198f9b116af26e"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem. </p>
 <p>Calls the method <code class="docutils literal notranslate"><a class="reference internal" href="#classpagmo_1_1unconstrain_1a53fe35985cb54669d9198f9b116af26e"><span class="std std-ref"><span class="pre">set_seed()</span></span></a></code> of the inner problem.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>seed</strong> – seed to be set.</p>
 </dd>
-<dt class="field-even">Throws</dt>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">not_implemented_error</span></span></span> – if the inner problem is not stochastic. </p>
 </dd>
 </dl>
@@ -578,11 +670,11 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain17get_thread_safetyEv">
-<span id="_CPPv3NK5pagmo11unconstrain17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo11unconstrain17get_thread_safetyEv"></span><span id="pagmo::unconstrain::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1unconstrain_1ae74c245b4848103ddb2858f57ab06d5e"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17get_thread_safetyEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain17get_thread_safetyEv"></span><span id="_CPPv2NK5pagmo11unconstrain17get_thread_safetyEv"></span><span id="pagmo::unconstrain::get_thread_safetyC"></span><span class="target" id="classpagmo_1_1unconstrain_1ae74c245b4848103ddb2858f57ab06d5e"></span><a class="reference internal" href="../miscellanea/type_traits.html#_CPPv4N5pagmo13thread_safetyE" title="pagmo::thread_safety"><span class="n"><span class="pre">thread_safety</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_thread_safety</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17get_thread_safetyEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Problem’s thread safety level. </p>
 <p>The thread safety of a meta-problem is defined by the thread safety of the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the thread safety level of the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 </dd>
 </dl>
@@ -590,11 +682,11 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain17get_inner_problemEv">
-<span id="_CPPv3NK5pagmo11unconstrain17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo11unconstrain17get_inner_problemEv"></span><span id="pagmo::unconstrain::get_inner_problemC"></span><span class="target" id="classpagmo_1_1unconstrain_1ae85b796a614b3c3a31a2f17974cf984e"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17get_inner_problemEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain17get_inner_problemEv"></span><span id="_CPPv2NK5pagmo11unconstrain17get_inner_problemEv"></span><span id="pagmo::unconstrain::get_inner_problemC"></span><span class="target" id="classpagmo_1_1unconstrain_1ae85b796a614b3c3a31a2f17974cf984e"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain17get_inner_problemEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a const reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a const reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 </dd>
 </dl>
@@ -602,7 +694,7 @@ and if <code class="docutils literal notranslate"><span class="pre">T</span></co
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N5pagmo11unconstrain17get_inner_problemEv">
-<span id="_CPPv3N5pagmo11unconstrain17get_inner_problemEv"></span><span id="_CPPv2N5pagmo11unconstrain17get_inner_problemEv"></span><span id="pagmo::unconstrain::get_inner_problem"></span><span class="target" id="classpagmo_1_1unconstrain_1ae8bd72016376e905097854950657ad6c"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain17get_inner_problemEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3N5pagmo11unconstrain17get_inner_problemEv"></span><span id="_CPPv2N5pagmo11unconstrain17get_inner_problemEv"></span><span id="pagmo::unconstrain::get_inner_problem"></span><span class="target" id="classpagmo_1_1unconstrain_1ae8bd72016376e905097854950657ad6c"></span><a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><span class="n"><span class="pre">problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_inner_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5pagmo11unconstrain17get_inner_problemEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Getter for the inner problem. </p>
 <p>Returns a reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>.</p>
 <div class="admonition note">
@@ -612,7 +704,7 @@ non-const methods on the internal <a class="reference internal" href="../problem
 <a class="reference internal" href="../problem.html#_CPPv4N5pagmo7problemE" title="pagmo::problem"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::problem</span></code></a> via this reference is undefined behaviour.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a reference to the inner <a class="reference internal" href="../problem.html#classpagmo_1_1problem"><span class="std std-ref">pagmo::problem</span></a>. </p>
 </dd>
 </dl>
@@ -620,14 +712,14 @@ non-const methods on the internal <a class="reference internal" href="../problem
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain8get_nameEv">
-<span id="_CPPv3NK5pagmo11unconstrain8get_nameEv"></span><span id="_CPPv2NK5pagmo11unconstrain8get_nameEv"></span><span id="pagmo::unconstrain::get_nameC"></span><span class="target" id="classpagmo_1_1unconstrain_1accaa6db7925c5fe50782c5a078967e07"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain8get_nameEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain8get_nameEv"></span><span id="_CPPv2NK5pagmo11unconstrain8get_nameEv"></span><span id="pagmo::unconstrain::get_nameC"></span><span class="target" id="classpagmo_1_1unconstrain_1accaa6db7925c5fe50782c5a078967e07"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain8get_nameEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Problem name. </p>
 <p>This method will add <code class="docutils literal notranslate"><span class="pre">[unconstrained]</span></code> to the name provided by the inner problem.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws</dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1a2ff5b65d95677c3bf6eb4a37a58dec32"><span class="std std-ref">problem::get_name()</span></a> or memory errors in standard classes. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a string containing the problem name.</p>
 </dd>
 </dl>
@@ -635,14 +727,14 @@ non-const methods on the internal <a class="reference internal" href="../problem
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK5pagmo11unconstrain14get_extra_infoEv">
-<span id="_CPPv3NK5pagmo11unconstrain14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo11unconstrain14get_extra_infoEv"></span><span id="pagmo::unconstrain::get_extra_infoC"></span><span class="target" id="classpagmo_1_1unconstrain_1a00fd5e62dde3d8a5c8828c7a4f2dfee9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain14get_extra_infoEv" title="Permalink to this definition">#</a><br /></dt>
+<span id="_CPPv3NK5pagmo11unconstrain14get_extra_infoEv"></span><span id="_CPPv2NK5pagmo11unconstrain14get_extra_infoEv"></span><span id="pagmo::unconstrain::get_extra_infoC"></span><span class="target" id="classpagmo_1_1unconstrain_1a00fd5e62dde3d8a5c8828c7a4f2dfee9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_extra_info</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5pagmo11unconstrain14get_extra_infoEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Extra info. </p>
 <p>This method will append a description of the unconstrain method to the extra info provided by the inner problem.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Throws</dt>
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by <a class="reference internal" href="../problem.html#classpagmo_1_1problem_1ae38075a0d96d2873d93e25283f461a07"><span class="std std-ref">problem::get_extra_info()</span></a>, the public interface of <code class="docutils literal notranslate"><span class="pre">std::ostringstream</span></code> or memory errors in standard classes. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a string containing extra info on the problem.</p>
 </dd>
 </dl>
@@ -659,11 +751,10 @@ non-const methods on the internal <a class="reference internal" href="../problem
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="cec2014.html"
@@ -683,15 +774,46 @@ non-const methods on the internal <a class="reference internal" href="../problem
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11unconstrainE"><code class="docutils literal notranslate"><span class="pre">pagmo::unconstrain</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11unconstrain11unconstrainEv"><code class="docutils literal notranslate"><span class="pre">unconstrain()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4I0_12ctor_enablerI1TEEN5pagmo11unconstrain11unconstrainERR1TRKNSt6stringERK13vector_double"><code class="docutils literal notranslate"><span class="pre">unconstrain()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain7fitnessERK13vector_double"><code class="docutils literal notranslate"><span class="pre">fitness()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain17has_batch_fitnessEv"><code class="docutils literal notranslate"><span class="pre">has_batch_fitness()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain13batch_fitnessERK13vector_double"><code class="docutils literal notranslate"><span class="pre">batch_fitness()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain8get_nobjEv"><code class="docutils literal notranslate"><span class="pre">get_nobj()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain7get_nixEv"><code class="docutils literal notranslate"><span class="pre">get_nix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain10get_boundsEv"><code class="docutils literal notranslate"><span class="pre">get_bounds()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain12has_set_seedEv"><code class="docutils literal notranslate"><span class="pre">has_set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11unconstrain8set_seedEj"><code class="docutils literal notranslate"><span class="pre">set_seed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain17get_thread_safetyEv"><code class="docutils literal notranslate"><span class="pre">get_thread_safety()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain17get_inner_problemEv"><code class="docutils literal notranslate"><span class="pre">get_inner_problem()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N5pagmo11unconstrain17get_inner_problemEv"><code class="docutils literal notranslate"><span class="pre">get_inner_problem()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain8get_nameEv"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK5pagmo11unconstrain14get_extra_infoEv"><code class="docutils literal notranslate"><span class="pre">get_extra_info()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -709,6 +831,7 @@ By pagmo development team
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2017-2024, pagmo development team.
@@ -735,8 +858,8 @@ By pagmo development team
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>
