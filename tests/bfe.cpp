@@ -455,12 +455,30 @@ BOOST_AUTO_TEST_CASE(s11n)
     BOOST_CHECK(bfe0.extract<udbfe_a>()->state = -42);
 }
 
+template <typename T>
+void test_lambda_udbfe(const T &fun)
+{
+    if constexpr (is_udbfe<T>::value) {
+        bfe bfe0{fun};
+        BOOST_CHECK(bfe0.is<T>());
+        bfe bfe1{bfe0};
+        BOOST_CHECK(bfe1.is<T>());
+        BOOST_CHECK(bfe1(problem{}, vector_double{.5}) == vector_double{1.});
+        BOOST_CHECK(bfe1(problem{null_problem{3}}, vector_double{.5}) == (vector_double{1., 1., 1.}));
+    }
+}
+
 BOOST_AUTO_TEST_CASE(lambda_std_function)
 {
     auto fun = [](const problem &p, const vector_double &dvs) {
         return vector_double(p.get_nf() * (dvs.size() / p.get_nx()), 1.);
     };
-    BOOST_CHECK(!is_udbfe<decltype(fun)>::value);
+    BOOST_CHECK(std::is_copy_constructible<decltype(fun)>::value);
+    BOOST_CHECK(std::is_move_constructible<decltype(fun)>::value);
+    BOOST_CHECK(std::is_destructible<decltype(fun)>::value);
+    BOOST_CHECK(has_bfe_call_operator<decltype(fun)>::value);
+    BOOST_CHECK_EQUAL(is_udbfe<decltype(fun)>::value, std::is_default_constructible<decltype(fun)>::value);
+    test_lambda_udbfe(fun);
 #if !defined(_MSC_VER)
     BOOST_CHECK(is_udbfe<decltype(+fun)>::value);
 #endif
