@@ -564,8 +564,10 @@ a <a class="reference internal" href="types.html#_CPPv4N5pagmo13vector_doubleE" 
 corresponding to the input batch of decision vectors (as evaluated by the input problem and
 stored contiguously).</p>
 <p>Additionally, UDBFEs must also be destructible and default, copy and move constructible.
-Note that pointers to plain C++ functions with an appropriate signature
-are UDBFEs, but lambda functions are not (as they currently are not default-constructible).</p>
+Note that pointers to plain C++ functions with an appropriate signature are UDBFEs.
+Stateless lambdas are also UDBFEs when their closure types are default-constructible
+(e.g., when using C++20 or later), while capturing lambdas are not default-constructible
+and thus are not UDBFEs.</p>
 <p>UDBFEs can also implement the following (optional) member functions:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_name</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_extra_info</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
