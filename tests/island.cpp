@@ -344,7 +344,7 @@ BOOST_AUTO_TEST_CASE(island_evolve)
     isl3.wait_check();
 }
 
-static std::atomic_bool flag = ATOMIC_VAR_INIT(false);
+static std::atomic_bool flag{false};
 
 struct prob_01 {
     vector_double fitness(const vector_double &) const

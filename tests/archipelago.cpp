@@ -629,7 +629,7 @@ BOOST_AUTO_TEST_CASE(archipelago_evolve)
     }
 }
 
-static std::atomic_bool flag = ATOMIC_VAR_INIT(false);
+static std::atomic_bool flag{false};
 
 struct prob_01 {
     vector_double fitness(const vector_double &) const
