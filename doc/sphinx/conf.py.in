@@ -22,8 +22,9 @@
 
 # -- General configuration ------------------------------------------------
 
-# If your documentation needs a minimal Sphinx version, state it here.
-#needs_sphinx = '1.0'
+# Keep this in sync with the documentation environment in
+# tools/gha_conda_coverage_docs.sh.
+needs_sphinx = '8.1'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -41,16 +42,14 @@ breathe_default_members = ('members',)
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+# Map source suffixes to their parsers explicitly.
+source_suffix = {'.rst': 'restructuredtext'}
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
 
-# The master toctree document.
-master_doc = 'index'
+# The root toctree document.
+root_doc = 'index'
 
 # General information about the project.
 project = 'pagmo'
@@ -311,7 +310,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'pagmo.tex', 'pagmo documentation',
+    (root_doc, 'pagmo.tex', 'pagmo documentation',
      'pagmo development team', 'manual'),
 ]
 
@@ -343,7 +342,7 @@ latex_engine = 'xelatex'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pagmo', 'pagmo documentation',
+    (root_doc, 'pagmo', 'pagmo documentation',
      [author], 1)
 ]
 
@@ -357,7 +356,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'pagmo', 'pagmo documentation',
+    (root_doc, 'pagmo', 'pagmo documentation',
      author, 'pagmo', 'One line description of project.',
      'Miscellaneous'),
 ]
