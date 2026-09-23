@@ -89,12 +89,12 @@ namespace pagmo
  *
  * <table>
  * <caption>Deb and Jain, Table I</caption>
- * <tr><th>Objectives<th>divisions<th>divisions_inner<th>Directions<th>Population
- * <tr><td>3 <td>12<td>0<td> 91<td> 92
- * <tr><td>5 <td> 6<td>0<td>210<td>212
- * <tr><td>8 <td> 3<td>2<td>156<td>156
- * <tr><td>10<td> 3<td>2<td>275<td>276
- * <tr><td>15<td> 2<td>1<td>135<td>136
+ * <tr><th>Objectives</th><th>divisions</th><th>divisions_inner</th><th>Directions</th><th>Population</th></tr>
+ * <tr><td>3</td><td>12</td><td>0</td><td>91</td><td>92</td></tr>
+ * <tr><td>5</td><td>6</td><td>0</td><td>210</td><td>212</td></tr>
+ * <tr><td>8</td><td>3</td><td>2</td><td>156</td><td>156</td></tr>
+ * <tr><td>10</td><td>3</td><td>2</td><td>275</td><td>276</td></tr>
+ * <tr><td>15</td><td>2</td><td>1</td><td>135</td><td>136</td></tr>
  * </table>
  *
  * A configuration whose direction count is too large to be built is rejected before
