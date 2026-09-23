@@ -88,7 +88,7 @@ namespace pagmo
  * of the original paper are reproduced by:
  *
  * <table>
- * <caption>Deb and Jain, Table I</caption>
+ * <caption id="nsga3_reference_directions">Deb and Jain, Table I</caption>
  * <tr><th>Objectives</th><th>divisions</th><th>divisions_inner</th><th>Directions</th><th>Population</th></tr>
  * <tr><td>3</td><td>12</td><td>0</td><td>91</td><td>92</td></tr>
  * <tr><td>5</td><td>6</td><td>0</td><td>210</td><td>212</td></tr>
