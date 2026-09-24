@@ -7,8 +7,8 @@ function(ADD_PAGMO_TUTORIAL arg1)
         "$<$<CONFIG:RelWithDebInfo>:${PAGMO_CXX_FLAGS_RELEASE}>"
         "$<$<CONFIG:MinSizeRel>:${PAGMO_CXX_FLAGS_RELEASE}>"
     )
-    # Set the minimum C++ standard to C++17
-    target_compile_features(${arg1} PRIVATE cxx_std_17)
+    # Set the minimum C++ standard to C++20
+    target_compile_features(${arg1} PRIVATE cxx_std_20)
     set_property(TARGET ${arg1} PROPERTY CXX_EXTENSIONS NO)
     target_compile_definitions(${arg1} PRIVATE BOOST_ALLOW_DEPRECATED_HEADERS)
     add_test(${arg1} ${arg1})
