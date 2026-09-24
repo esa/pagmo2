@@ -624,7 +624,7 @@
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the problem is stochastic, constrained, single objective or has equal lower and upper bounds; if the population size is smaller than 5 or is smaller than the number of reference directions; or if a configured batch fitness evaluator returns a fitness vector of unexpected size. </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the problem is stochastic, constrained, single objective or has equal lower and upper bounds; if the population size is smaller than 5 or is smaller than the number of reference directions; if any gene of the initial population is not finite or is outside the problem bounds, as the crossover and mutation operators assume feasible parents; or if a configured batch fitness evaluator returns a fitness vector of unexpected size. </p></li>
 <li><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">unspecified</span></span></span> – any exception thrown by the reference direction construction, in particular if the requested number of directions is too large to be built. </p></li>
 </ul>
 </dd>

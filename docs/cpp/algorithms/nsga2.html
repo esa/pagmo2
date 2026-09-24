@@ -562,7 +562,7 @@
 <dd class="field-odd"><p><strong>pop</strong> – population to be evolved </p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if pop.get_problem() is stochastic, single objective or has non linear constraints. If <code class="docutils literal notranslate"><span class="pre">int_dim</span></code> is larger than the problem dimension. If the population size is smaller than 5. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if pop.get_problem() is stochastic, single objective or has non linear constraints. If <code class="docutils literal notranslate"><span class="pre">int_dim</span></code> is larger than the problem dimension. If the population size is smaller than 5. If any gene of the initial population is not finite or is outside the problem bounds, as the crossover and mutation operators assume feasible parents. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>evolved population </p>
