@@ -201,7 +201,7 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS r_pol_inner final : r_pol_inner_base {
     }
     void *get_ptr() final
     {
-        return &m_value;
+        return const_cast<void *>(static_cast<const void *>(&m_value));
     }
 
 private:
