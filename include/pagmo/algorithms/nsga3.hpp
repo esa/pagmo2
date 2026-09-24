@@ -102,8 +102,8 @@ namespace pagmo
  * \p divisions set to 8, for instance, would already need 5040 directions, which is
  * the situation the inner layer exists to avoid.
  *
- * **Population requirements.** The population size must be at least 5 and a multiple
- * of 4, as for nsga2, and it must be at least as large as the number of reference
+ * **Population requirements.** The population size must be at least 5, as for nsga2,
+ * and it must be at least as large as the number of reference
  * directions. Equality is explicitly permitted: the eight-objective row of Table I
  * above uses a population of exactly 156 for 156 directions.
  *

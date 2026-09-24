@@ -108,7 +108,7 @@ public:
      * @param stop_range stop range
      * @param reduction_coeff range reduction coefficient
      * @throws std::invalid_argument if \p start_range is not in (0,1]
-     * @throws std::invalid_argument if \p stop_range is not in (start_range,1]
+     * @throws std::invalid_argument if \p stop_range is not in [0, start_range)
      * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
      */
     compass_search(unsigned max_fevals = 1, double start_range = .1, double stop_range = .01,

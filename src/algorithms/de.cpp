@@ -38,12 +38,17 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/bfe.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/generic.hpp>
+
+// NOTE: apparently this must be included *after*
+// the other serialization headers.
+#include <boost/serialization/optional.hpp>
 
 namespace pagmo
 {
@@ -115,8 +120,7 @@ population de::evolve(population pop) const
     // No throws, all valid: we clear the logs
     m_log.clear();
 
-    // Some vectors used during evolution are declared.
-    vector_double tmp(dim);                              // contains the mutated candidate
+    // Some distributions used during evolution are declared.
     std::uniform_real_distribution<double> drng(0., 1.); // to generate a number in [0, 1)
     std::uniform_int_distribution<vector_double::size_type> c_idx(
         0u, dim - 1u); // to generate a random index for the chromosome
@@ -133,167 +137,46 @@ population de::evolve(population pop) const
     auto gbfit = fit[best_idx];
     // the best decision vector of a generation
     auto gbIter = gbX;
-    std::vector<vector_double::size_type> r(5); // indexes of 5 selected population members
 
     // Main DE iterations
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
-        // Start of the loop through the population
-        for (decltype(NP) i = 0u; i < NP; ++i) {
-            /*-----We select at random 5 indexes from the population---------------------------------*/
-            std::vector<vector_double::size_type> idxs(NP);
-            std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
-            for (auto j = 0u; j < 5u; ++j) { // Durstenfeld's algorithm to select 5 indexes at random
-                auto idx = std::uniform_int_distribution<vector_double::size_type>(0u, NP - 1u - j)(m_e);
-                r[j] = idxs[idx];
-                std::swap(idxs[idx], idxs[NP - 1u - j]);
+        if (m_bfe) {
+            // bfe is available: all trial vectors of the generation are created first
+            // (sequentially, so the RNG stream is identical to the serial path) and then
+            // evaluated in a single batch call.
+            std::vector<vector_double> trials;
+            trials.reserve(NP);
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                auto trial = mutate(popold, i, gbIter, drng, c_idx);
+                // a) feasibility
+                // detail::force_bounds_reflection(trial, lb, ub); // TODO: check if this choice is better
+                detail::force_bounds_random(trial, lb, ub, m_e);
+                trials.emplace_back(std::move(trial));
             }
-
-            /*-------DE/best/1/exp--------------------------------------------------------------------*/
-            /*-------The oldest DE variant but still not bad. However, we have found several---------*/
-            /*-------optimization problems where misconvergence occurs.-------------------------------*/
-            if (m_variant == 1u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                auto L = 0u;
-                do {
-                    tmp[n] = gbIter[n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
-                    n = (n + 1u) % dim;
-                    ++L;
-                } while ((drng(m_e) < m_CR) && (L < dim));
+            // Flatten for the bfe call.
+            vector_double flat(NP * dim);
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                std::copy(trials[i].begin(), trials[i].end(), flat.data() + i * dim);
             }
-
-            /*-------DE/rand/1/exp-------------------------------------------------------------------*/
-            /*-------This is one of my favourite strategies. It works especially well when the-------*/
-            /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_F=0.7 and m_CR=0.5---------*/
-            /*-------as a first guess.---------------------------------------------------------------*/
-            else if (m_variant == 2u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                decltype(dim) L = 0u;
-                do {
-                    tmp[n] = popold[r[0]][n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
-                    n = (n + 1u) % dim;
-                    ++L;
-                } while ((drng(m_e) < m_CR) && (L < dim));
+            auto fitnesses = (*m_bfe)(prob, flat);
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                // NOTE: de is single-objective, so each fitness is a scalar.
+                vector_double newfitness{fitnesses[i * prob_f_dimension]};
+                update_pop(pop, i, trials[i], newfitness, fit, gbfit, gbX, popnew, popold);
             }
-            /*-------DE/rand-to-best/1/exp-----------------------------------------------------------*/
-            /*-------This variant seems to be one of the best strategies. Try m_F=0.85 and m_CR=1.------*/
-            /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
-            /*-------should play around with all three control variables.----------------------------*/
-            else if (m_variant == 3u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                auto L = 0u;
-                do {
-                    tmp[n] = tmp[n] + m_F * (gbIter[n] - tmp[n]) + m_F * (popold[r[0]][n] - popold[r[1]][n]);
-                    n = (n + 1u) % dim;
-                    ++L;
-                } while ((drng(m_e) < m_CR) && (L < dim));
-            }
-            /*-------DE/best/2/exp is another powerful variant worth trying--------------------------*/
-            else if (m_variant == 4u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                auto L = 0u;
-                do {
-                    tmp[n] = gbIter[n] + (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
-                    n = (n + 1u) % dim;
-                    ++L;
-                } while ((drng(m_e) < m_CR) && (L < dim));
-            }
-            /*-------DE/rand/2/exp seems to be a robust optimizer for many functions-------------------*/
-            else if (m_variant == 5u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                auto L = 0u;
-                do {
-                    tmp[n] = popold[r[4]][n]
-                             + (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
-                    n = (n + 1u) % dim;
-                    ++L;
-                } while ((drng(m_e) < m_CR) && (L < dim));
-            }
-
-            /*=======Essentially same strategies but BINOMIAL CROSSOVER===============================*/
-            /*-------DE/best/1/bin--------------------------------------------------------------------*/
-            else if (m_variant == 6u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
-                    if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
-                        tmp[n] = gbIter[n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
-                    }
-                    n = (n + 1u) % dim;
-                }
-            }
-            /*-------DE/rand/1/bin-------------------------------------------------------------------*/
-            else if (m_variant == 7u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
-                    if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
-                        tmp[n] = popold[r[0]][n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
-                    }
-                    n = (n + 1u) % dim;
-                }
-            }
-            /*-------DE/rand-to-best/1/bin-----------------------------------------------------------*/
-            else if (m_variant == 8u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
-                    if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
-                        tmp[n] = tmp[n] + m_F * (gbIter[n] - tmp[n]) + m_F * (popold[r[0]][n] - popold[r[1]][n]);
-                    }
-                    n = (n + 1u) % dim;
-                }
-            }
-            /*-------DE/best/2/bin--------------------------------------------------------------------*/
-            else if (m_variant == 9u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
-                    if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
-                        tmp[n]
-                            = gbIter[n] + (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
-                    }
-                    n = (n + 1u) % dim;
-                }
-            }
-            /*-------DE/rand/2/bin--------------------------------------------------------------------*/
-            else if (m_variant == 10u) {
-                tmp = popold[i];
-                auto n = c_idx(m_e);
-                for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
-                    if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
-                        tmp[n] = popold[r[4]][n]
-                                 + (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
-                    }
-                    n = (n + 1u) % dim;
-                }
-            }
-
-            // Trial mutation now in tmp. force feasibility and see how good this choice really was.
-            // a) feasibility
-            // detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
-            detail::force_bounds_random(tmp, lb, ub, m_e);
-            // b) how good?
-            auto newfitness = prob.fitness(tmp); /* Evaluates tmp[] */
-            if (newfitness[0] <= fit[i][0]) {    /* improved objective function value ? */
-                fit[i] = newfitness;
-                popnew[i] = tmp;
-                // updates the individual in pop (avoiding to recompute the objective function)
-                pop.set_xf(i, popnew[i], newfitness);
-
-                if (newfitness[0] <= gbfit[0]) {
-                    /* if so...*/
-                    gbfit = newfitness; /* reset gbfit to new low...*/
-                    gbX = popnew[i];
-                }
-            } else {
-                popnew[i] = popold[i];
-            }
-        } // End of one generation
+        } else {
+            // Start of the loop through the population
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                auto tmp = mutate(popold, i, gbIter, drng, c_idx);
+                // Trial mutation now in tmp. force feasibility and see how good this choice really was.
+                // a) feasibility
+                // detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
+                detail::force_bounds_random(tmp, lb, ub, m_e);
+                // b) how good?
+                auto newfitness = prob.fitness(tmp); /* Evaluates tmp[] */
+                update_pop(pop, i, tmp, newfitness, fit, gbfit, gbX, popnew, popold);
+            } // End of one generation
+        }
         /* Save best population member of current iteration */
         gbIter = gbX;
         /* swap population arrays. New generation becomes old one */
@@ -363,6 +246,181 @@ void de::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the batch function evaluation scheme
+/**
+ * @param b batch function evaluation object
+ */
+void de::set_bfe(const bfe &b)
+{
+    m_bfe = b;
+}
+
+vector_double de::mutate(const std::vector<vector_double> &popold, population::size_type i,
+                         const vector_double &gbIter, std::uniform_real_distribution<double> drng,
+                         std::uniform_int_distribution<vector_double::size_type> c_idx) const
+{
+    auto dim = gbIter.size();
+    auto NP = popold.size();
+    std::vector<vector_double::size_type> r(5); // indexes of 5 selected population members
+    vector_double tmp(dim);
+
+    /*-----We select at random 5 indexes from the population---------------------------------*/
+    std::vector<vector_double::size_type> idxs(NP);
+    std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
+    for (auto j = 0u; j < 5u; ++j) { // Durstenfeld's algorithm to select 5 indexes at random
+        auto idx = std::uniform_int_distribution<vector_double::size_type>(0u, NP - 1u - j)(m_e);
+        r[j] = idxs[idx];
+        std::swap(idxs[idx], idxs[NP - 1u - j]);
+    }
+
+    /*-------DE/best/1/exp--------------------------------------------------------------------*/
+    /*-------The oldest DE variant but still not bad. However, we have found several---------*/
+    /*-------optimization problems where misconvergence occurs.-------------------------------*/
+    if (m_variant == 1u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        auto L = 0u;
+        do {
+            tmp[n] = gbIter[n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
+            n = (n + 1u) % dim;
+            ++L;
+        } while ((drng(m_e) < m_CR) && (L < dim));
+    }
+
+    /*-------DE/rand/1/exp-------------------------------------------------------------------*/
+    /*-------This is one of my favourite strategies. It works especially well when the-------*/
+    /*-------"gbIter[]"-schemes experience misconvergence. Try e.g. m_F=0.7 and m_CR=0.5---------*/
+    /*-------as a first guess.---------------------------------------------------------------*/
+    else if (m_variant == 2u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        decltype(dim) L = 0u;
+        do {
+            tmp[n] = popold[r[0]][n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
+            n = (n + 1u) % dim;
+            ++L;
+        } while ((drng(m_e) < m_CR) && (L < dim));
+    }
+    /*-------DE/rand-to-best/1/exp-----------------------------------------------------------*/
+    /*-------This variant seems to be one of the best strategies. Try m_F=0.85 and m_CR=1.------*/
+    /*-------If you get misconvergence try to increase NP. If this doesn't help you----------*/
+    /*-------should play around with all three control variables.----------------------------*/
+    else if (m_variant == 3u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        auto L = 0u;
+        do {
+            tmp[n] = tmp[n] + m_F * (gbIter[n] - tmp[n]) + m_F * (popold[r[0]][n] - popold[r[1]][n]);
+            n = (n + 1u) % dim;
+            ++L;
+        } while ((drng(m_e) < m_CR) && (L < dim));
+    }
+    /*-------DE/best/2/exp is another powerful variant worth trying--------------------------*/
+    else if (m_variant == 4u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        auto L = 0u;
+        do {
+            tmp[n] = gbIter[n] + (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
+            n = (n + 1u) % dim;
+            ++L;
+        } while ((drng(m_e) < m_CR) && (L < dim));
+    }
+    /*-------DE/rand/2/exp seems to be a robust optimizer for many functions-------------------*/
+    else if (m_variant == 5u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        auto L = 0u;
+        do {
+            tmp[n] = popold[r[4]][n]
+                     + (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
+            n = (n + 1u) % dim;
+            ++L;
+        } while ((drng(m_e) < m_CR) && (L < dim));
+    }
+
+    /*=======Essentially same strategies but BINOMIAL CROSSOVER===============================*/
+    /*-------DE/best/1/bin--------------------------------------------------------------------*/
+    else if (m_variant == 6u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
+            if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
+                tmp[n] = gbIter[n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
+            }
+            n = (n + 1u) % dim;
+        }
+    }
+    /*-------DE/rand/1/bin-------------------------------------------------------------------*/
+    else if (m_variant == 7u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
+            if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
+                tmp[n] = popold[r[0]][n] + m_F * (popold[r[1]][n] - popold[r[2]][n]);
+            }
+            n = (n + 1u) % dim;
+        }
+    }
+    /*-------DE/rand-to-best/1/bin-----------------------------------------------------------*/
+    else if (m_variant == 8u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
+            if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
+                tmp[n] = tmp[n] + m_F * (gbIter[n] - tmp[n]) + m_F * (popold[r[0]][n] - popold[r[1]][n]);
+            }
+            n = (n + 1u) % dim;
+        }
+    }
+    /*-------DE/best/2/bin--------------------------------------------------------------------*/
+    else if (m_variant == 9u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
+            if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
+                tmp[n] = gbIter[n] + (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
+            }
+            n = (n + 1u) % dim;
+        }
+    }
+    /*-------DE/rand/2/bin--------------------------------------------------------------------*/
+    else if (m_variant == 10u) {
+        tmp = popold[i];
+        auto n = c_idx(m_e);
+        for (decltype(dim) L = 0u; L < dim; ++L) {     /* perform Dc binomial trials */
+            if ((drng(m_e) < m_CR) || L + 1u == dim) { /* change at least one parameter */
+                tmp[n] = popold[r[4]][n]
+                         + (popold[r[0]][n] + popold[r[1]][n] - popold[r[2]][n] - popold[r[3]][n]) * m_F;
+            }
+            n = (n + 1u) % dim;
+        }
+    }
+
+    return tmp;
+}
+
+void de::update_pop(population &pop, population::size_type i, const vector_double &trial,
+                    const vector_double &newfitness, std::vector<vector_double> &fit, vector_double &gbfit,
+                    vector_double &gbX, std::vector<vector_double> &popnew,
+                    const std::vector<vector_double> &popold) const
+{
+    if (newfitness[0] <= fit[i][0]) { /* improved objective function value ? */
+        fit[i] = newfitness;
+        popnew[i] = trial;
+        // updates the individual in pop (avoiding to recompute the objective function)
+        pop.set_xf(i, popnew[i], newfitness);
+
+        if (newfitness[0] <= gbfit[0]) {
+            /* if so...*/
+            gbfit = newfitness; /* reset gbfit to new low...*/
+            gbX = popnew[i];
+        }
+    } else {
+        popnew[i] = popold[i];
+    }
+}
+
 /// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
@@ -381,7 +439,7 @@ std::string de::get_extra_info() const
 template <typename Archive>
 void de::serialize(Archive &ar, unsigned)
 {
-    detail::archive(ar, m_gen, m_F, m_CR, m_variant, m_Ftol, m_xtol, m_e, m_seed, m_verbosity, m_log);
+    detail::archive(ar, m_gen, m_F, m_CR, m_variant, m_Ftol, m_xtol, m_e, m_seed, m_verbosity, m_log, m_bfe);
 }
 
 } // namespace pagmo

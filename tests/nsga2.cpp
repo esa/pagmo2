@@ -100,9 +100,13 @@ BOOST_AUTO_TEST_CASE(nsga2_evolve_test)
     BOOST_CHECK_THROW((nsga2{}.evolve(population{hock_schittkowski_71{}, 5u, 23u})), std::invalid_argument);
     // single objective prob
     BOOST_CHECK_THROW((nsga2{}.evolve(population{rosenbrock{}, 5u, 23u})), std::invalid_argument);
-    // wrong population size
+    // wrong population size (< 5 still throws)
     BOOST_CHECK_THROW((nsga2{}.evolve(population{zdt{}, 3u, 23u})), std::invalid_argument);
-    BOOST_CHECK_THROW((nsga2{}.evolve(population{zdt{}, 50u, 23u})), std::invalid_argument);
+    // any size >= 5 is now allowed, no longer requires a multiple of 4
+    BOOST_CHECK_NO_THROW((nsga2{}.evolve(population{zdt{}, 50u, 23u})));
+    BOOST_CHECK_NO_THROW((nsga2{}.evolve(population{zdt{}, 5u, 23u})));
+    BOOST_CHECK_NO_THROW((nsga2{}.evolve(population{zdt{}, 6u, 23u})));
+    BOOST_CHECK_NO_THROW((nsga2{}.evolve(population{zdt{}, 7u, 23u})));
 
     // We check for deterministic behaviour if the seed is controlled
     // we treat the last three components of the decision vector as integers
