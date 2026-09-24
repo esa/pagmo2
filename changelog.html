@@ -628,6 +628,10 @@
 <ul class="simple">
 <li><p>Add the NSGA-III many-objective evolutionary algorithm
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/633">#633</a>).</p></li>
+<li><p>Add batch fitness evaluation support to the differential evolution algorithm
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/645">#645</a>).</p></li>
+<li><p>Add <code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::topology::num_vertices()</span></code>
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/626">#626</a>).</p></li>
 </ul>
 </section>
 <section id="changes">
@@ -635,6 +639,10 @@
 <ul class="simple">
 <li><p>Allow the documentation build to use the latest Sphinx and Breathe releases
 without an upper version pin.</p></li>
+<li><p>NSGA-II and NSGA-III no longer require population sizes divisible by four
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/642">#642</a>).</p></li>
+<li><p>CMake package configuration files now respect <code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;_FIND_QUIETLY</span></code>
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/610">#610</a>).</p></li>
 </ul>
 </section>
 <section id="fix">
@@ -642,6 +650,18 @@ without an upper version pin.</p></li>
 <ul class="simple">
 <li><p>Fix BFE tests under C++20, where stateless lambdas are default-constructible
 (<a class="reference external" href="https://github.com/esa/pagmo2/pull/634">#634</a>).</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">extract&lt;const</span> <span class="pre">T&gt;()</span></code> and builds with Clang 17 or later
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/623">#623</a>).</p></li>
+<li><p>Validate that the initial populations of NSGA-II and NSGA-III are within the
+problem bounds
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/630">#630</a>).</p></li>
+<li><p>Fix <a class="reference internal" href="docs/cpp/archipelago.html#_CPPv4N5pagmo11archipelago12set_topologyE8topology" title="pagmo::archipelago::set_topology"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::archipelago::set_topology()</span></code></a> with newly constructed
+and legacy user-defined topologies
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/626">#626</a>).</p></li>
+<li><p>Fix validation of the <code class="docutils literal notranslate"><span class="pre">stop_range</span></code> argument in Compass Search
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/644">#644</a>).</p></li>
+<li><p>Make the hypervolume tests robust to platform floating-point differences
+(<a class="reference external" href="https://github.com/esa/pagmo2/pull/627">#627</a>).</p></li>
 </ul>
 </section>
 </section>
