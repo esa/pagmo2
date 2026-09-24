@@ -62,6 +62,36 @@ Batch fitness evaluator
    See the documentation of the corresponding member functions in this class for details on how the optional
    member functions in the UDBFE are used by :cpp:class:`~pagmo::bfe`.
 
+   .. note::
+
+      A batch fitness evaluator does not necessarily use the UDP's
+      :cpp:func:`pagmo::problem::batch_fitness()` member function. The built-in evaluators have the following
+      behaviour:
+
+      * :cpp:class:`~pagmo::member_bfe` calls the UDP's ``batch_fitness()`` method directly;
+      * :cpp:class:`~pagmo::thread_bfe` calls the UDP's ``fitness()`` method once for each decision vector and
+        evaluates those calls in parallel;
+      * :cpp:class:`~pagmo::default_bfe` uses :cpp:class:`~pagmo::member_bfe` when the UDP provides
+        ``batch_fitness()``, and otherwise falls back to :cpp:class:`~pagmo::thread_bfe` when the problem is
+        sufficiently thread-safe.
+
+      Consequently, use :cpp:class:`~pagmo::member_bfe` when it is important to guarantee that the UDP's
+      ``batch_fitness()`` method is invoked. The default :cpp:class:`~pagmo::bfe` constructor creates a
+      :cpp:class:`~pagmo::default_bfe`, so ``pagmo::bfe{}`` selects this behaviour automatically.
+
+      For example, an algorithm supporting batch evaluation can be configured as follows:
+
+      .. code-block:: c++
+
+         pagmo::pso_gen pso;
+         pso.set_bfe(pagmo::bfe{});  // automatic selection
+
+         // Explicitly invoke the UDP's batch_fitness() method:
+         pso.set_bfe(pagmo::bfe{pagmo::member_bfe{}});
+
+         // Alternatively, parallelise individual fitness() calls:
+         pso.set_bfe(pagmo::bfe{pagmo::thread_bfe{}});
+
    .. warning::
 
       The only operations allowed on a moved-from :cpp:class:`pagmo::bfe` are destruction,

@@ -523,6 +523,13 @@
 <p>This PSO is suitable for stochastic optimization problems. The random seed is changed at the end of each
 generation.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Batch fitness evaluation can be enabled via <a class="reference internal" href="#_CPPv4N5pagmo7pso_gen7set_bfeERK3bfe" title="pagmo::pso_gen::set_bfe"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::pso_gen::set_bfe()</span></code></a>. Without a BFE, evaluations
+are performed through <a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem7fitnessERK13vector_double" title="pagmo::problem::fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::fitness()</span></code></a>. To invoke a UDP’s
+<a class="reference internal" href="../problem.html#_CPPv4NK5pagmo7problem13batch_fitnessERK13vector_double" title="pagmo::problem::batch_fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::batch_fitness()</span></code></a> method, use <code class="docutils literal notranslate"><span class="pre">pagmo::bfe{pagmo::member_bfe{}}</span></code>, or use
+<code class="docutils literal notranslate"><span class="pre">pagmo::bfe{}</span></code> for automatic evaluator selection.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The algorithm is not suitable for multi-objective problems, nor for

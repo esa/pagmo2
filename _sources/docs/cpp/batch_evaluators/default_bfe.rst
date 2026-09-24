@@ -15,6 +15,10 @@ Default BFE
    depending on the properties of the input :cpp:class:`~pagmo::problem`, it will delegate the implementation
    of its call operator to :cpp:class:`~pagmo::member_bfe` or :cpp:class:`~pagmo::thread_bfe`.
 
+    Use :cpp:class:`~pagmo::default_bfe` when the evaluator should be selected automatically. Use
+    :cpp:class:`~pagmo::member_bfe` when it is important to guarantee that the UDP's
+    :cpp:func:`pagmo::problem::batch_fitness()` method is called.
+
    .. cpp:function:: vector_double operator()(const problem &p, const vector_double &dvs) const
 
       Call operator.

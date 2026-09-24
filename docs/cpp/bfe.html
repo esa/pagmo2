@@ -576,6 +576,34 @@ and thus are not UDBFEs.</p>
 </div>
 <p>See the documentation of the corresponding member functions in this class for details on how the optional
 member functions in the UDBFE are used by <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A batch fitness evaluator does not necessarily use the UDP’s
+<a class="reference internal" href="problem.html#_CPPv4NK5pagmo7problem13batch_fitnessERK13vector_double" title="pagmo::problem::batch_fitness"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">pagmo::problem::batch_fitness()</span></code></a> member function. The built-in evaluators have the following
+behaviour:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="batch_evaluators/member_bfe.html#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a> calls the UDP’s <code class="docutils literal notranslate"><span class="pre">batch_fitness()</span></code> method directly;</p></li>
+<li><p><a class="reference internal" href="batch_evaluators/thread_bfe.html#_CPPv4N5pagmo10thread_bfeE" title="pagmo::thread_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_bfe</span></code></a> calls the UDP’s <code class="docutils literal notranslate"><span class="pre">fitness()</span></code> method once for each decision vector and
+evaluates those calls in parallel;</p></li>
+<li><p><a class="reference internal" href="batch_evaluators/default_bfe.html#_CPPv4N5pagmo11default_bfeE" title="pagmo::default_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">default_bfe</span></code></a> uses <a class="reference internal" href="batch_evaluators/member_bfe.html#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a> when the UDP provides
+<code class="docutils literal notranslate"><span class="pre">batch_fitness()</span></code>, and otherwise falls back to <a class="reference internal" href="batch_evaluators/thread_bfe.html#_CPPv4N5pagmo10thread_bfeE" title="pagmo::thread_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">thread_bfe</span></code></a> when the problem is
+sufficiently thread-safe.</p></li>
+</ul>
+<p>Consequently, use <a class="reference internal" href="batch_evaluators/member_bfe.html#_CPPv4N5pagmo10member_bfeE" title="pagmo::member_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">member_bfe</span></code></a> when it is important to guarantee that the UDP’s
+<code class="docutils literal notranslate"><span class="pre">batch_fitness()</span></code> method is invoked. The default <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">bfe</span></code></a> constructor creates a
+<a class="reference internal" href="batch_evaluators/default_bfe.html#_CPPv4N5pagmo11default_bfeE" title="pagmo::default_bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">default_bfe</span></code></a>, so <code class="docutils literal notranslate"><span class="pre">pagmo::bfe{}</span></code> selects this behaviour automatically.</p>
+<p>For example, an algorithm supporting batch evaluation can be configured as follows:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">pagmo</span><span class="o">::</span><span class="n">pso_gen</span><span class="w"> </span><span class="n">pso</span><span class="p">;</span>
+<span class="n">pso</span><span class="p">.</span><span class="n">set_bfe</span><span class="p">(</span><span class="n">pagmo</span><span class="o">::</span><span class="n">bfe</span><span class="p">{});</span><span class="w">  </span><span class="c1">// automatic selection</span>
+
+<span class="c1">// Explicitly invoke the UDP's batch_fitness() method:</span>
+<span class="n">pso</span><span class="p">.</span><span class="n">set_bfe</span><span class="p">(</span><span class="n">pagmo</span><span class="o">::</span><span class="n">bfe</span><span class="p">{</span><span class="n">pagmo</span><span class="o">::</span><span class="n">member_bfe</span><span class="p">{}});</span>
+
+<span class="c1">// Alternatively, parallelise individual fitness() calls:</span>
+<span class="n">pso</span><span class="p">.</span><span class="n">set_bfe</span><span class="p">(</span><span class="n">pagmo</span><span class="o">::</span><span class="n">bfe</span><span class="p">{</span><span class="n">pagmo</span><span class="o">::</span><span class="n">thread_bfe</span><span class="p">{}});</span>
+</pre></div>
+</div>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The only operations allowed on a moved-from <a class="reference internal" href="#_CPPv4N5pagmo3bfeE" title="pagmo::bfe"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">pagmo::bfe</span></code></a> are destruction,
