@@ -874,7 +874,7 @@ private:
     }
 
 public:
-    T m_value;
+    std::remove_const_t<T> m_value;
 };
 
 } // namespace detail
@@ -1107,8 +1107,8 @@ public:
 #if defined(PAGMO_PREFER_TYPEID_NAME_EXTRACT)
         return detail::typeid_name_extract<T>(*this);
 #else
-        auto p = dynamic_cast<const detail::prob_inner<T> *>(ptr());
-        return p == nullptr ? nullptr : &(p->m_value);
+        auto p = dynamic_cast<const detail::prob_inner<uncvref_t<T>> *>(ptr());
+        return p == nullptr ? nullptr : reinterpret_cast<const T *>(&(p->m_value));
 #endif
     }
 
@@ -1141,8 +1141,8 @@ public:
 #if defined(PAGMO_PREFER_TYPEID_NAME_EXTRACT)
         return detail::typeid_name_extract<T>(*this);
 #else
-        auto p = dynamic_cast<detail::prob_inner<T> *>(ptr());
-        return p == nullptr ? nullptr : &(p->m_value);
+        auto p = dynamic_cast<detail::prob_inner<uncvref_t<T>> *>(ptr());
+        return p == nullptr ? nullptr : reinterpret_cast<T *>(&(p->m_value));
 #endif
     }
 
