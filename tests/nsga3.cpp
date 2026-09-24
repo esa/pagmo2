@@ -243,6 +243,46 @@ BOOST_AUTO_TEST_CASE(nsga3_evolve_rejects_unsuitable_problems)
     }
 }
 
+struct mo_bounds_check {
+    vector_double fitness(const vector_double &) const
+    {
+        return {0., 0.};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0., 0.}, {1., 1.}};
+    }
+};
+
+BOOST_AUTO_TEST_CASE(nsga3_out_of_bounds_population_test)
+{
+    // NSGA-III should throw on evolve with out-of-bounds or non-finite genes,
+    // mirroring the NSGA-II contract.
+    problem prob{mo_bounds_check{}};
+    population pop{prob, 32u, 23u};
+    auto x = pop.get_x()[0];
+    auto f = pop.get_f()[0];
+    x[0] = -1.0; // below lower bound
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga3{1u}.evolve(pop), std::invalid_argument);
+    x[0] = 2.0; // above upper bound
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga3{1u}.evolve(pop), std::invalid_argument);
+    x[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga3{1u}.evolve(pop), std::invalid_argument);
+    x[0] = std::numeric_limits<double>::infinity();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga3{1u}.evolve(pop), std::invalid_argument);
+    x[0] = -std::numeric_limits<double>::infinity();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(nsga3{1u}.evolve(pop), std::invalid_argument);
+}
+
 BOOST_AUTO_TEST_CASE(nsga3_population_size_rule)
 {
     /*  Deb & Jain, Table I: the eight-objective case uses a two layer set of 156
