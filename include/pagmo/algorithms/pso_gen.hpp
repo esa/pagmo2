@@ -57,6 +57,13 @@ namespace pagmo
  *    This PSO is suitable for stochastic optimization problems. The random seed is changed at the end of each
  *    generation.
  *
+ * .. note::
+ *
+ *    Batch fitness evaluation can be enabled via :cpp:func:`pagmo::pso_gen::set_bfe`. Without a BFE, evaluations
+ *    are performed through :cpp:func:`pagmo::problem::fitness`. To invoke a UDP's
+ *    :cpp:func:`pagmo::problem::batch_fitness` method, use ``pagmo::bfe{pagmo::member_bfe{}}``, or use
+ *    ``pagmo::bfe{}`` for automatic evaluator selection.
+ *
  * .. warning::
  *
  *    The algorithm is not suitable for multi-objective problems, nor for
