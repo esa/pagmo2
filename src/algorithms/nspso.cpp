@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 This file is part of the PaGMO library.
 The PaGMO library is free software; you can redistribute it and/or modify
 it under the terms of either:

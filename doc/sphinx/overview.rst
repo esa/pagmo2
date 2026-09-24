@@ -84,6 +84,7 @@ Artificial Bee Colony (ABC)                                  :cpp:class:`pagmo::
 Covariance Matrix Adaptation Evo. Strategy (CMA-ES)          :cpp:class:`pagmo::cmaes`                 S-U-sto
 Exponential Evolution Strategies (xNES)                      :cpp:class:`pagmo::xnes`                  S-U-sto
 Non-dominated Sorting GA (NSGA2)                             :cpp:class:`pagmo::nsga2`                 M-U-I
+Non-dominated Sorting GA (NSGA3)                             :cpp:class:`pagmo::nsga3`                 M-U-I
 Multi-objective EA with Decomposition (MOEA/D)               :cpp:class:`pagmo::moead`                 M-U
 Multi-objective EA with Decomposition Generational (GMOEA/D) :cpp:class:`pagmo::moead_gen`             M-U
 Multi-objective Hypervolume-based ACO (MHACO)                :cpp:class:`pagmo::maco`                  M-U-I
