@@ -1,0 +1,21 @@
+name: pagmo2_devel
+channels:
+  - conda-forge
+dependencies:
+  - c-compiler
+  - cxx-compiler
+  - cmake
+  - ninja
+  - boost-cpp
+  - tbb
+  - tbb-devel
+  - eigen
+  - nlopt
+  - ipopt
+  - lcov
+  - python
+  - sphinx
+  - sphinx-book-theme
+  - breathe>=4.36
+  - doxygen
+  - graphviz
