@@ -54,7 +54,38 @@ namespace detail
 template <typename T, bool After = true>
 inline bool less_than_f(T a, T b)
 {
-    static_assert(std::is_floating_point<T>::value, "less_than_f can be used only with floating-point types.");
+    static_assert(std::is_floating_point_v<T>, "less_than_f can be used only with floating-point types.");
+
+#if defined(__cpp_impl_three_way_comparison)
+
+    const auto cmp = a <=> b;
+    // True or false returned immediately, if there's no NaN (std::isnan is very slow)
+    if (cmp == std::partial_ordering::less) {
+        return true;
+    }
+    if (cmp == std::partial_ordering::greater || cmp == std::partial_ordering::equivalent) {
+        return false;
+    }
+
+    // Result was std::partial_ordering::unordered, one of the operands must be NaN
+    const bool a_nan = std::isnan(a);
+    const bool b_nan = std::isnan(b);
+
+    // If only B is NaN, After must be returned
+    if (!a_nan && b_nan) {
+        return After;
+    }
+    // If only A is NaN, !After must be returned
+    if (a_nan && !b_nan) {
+        return !After;
+    }
+
+    // If both are NaN, false must be returned
+    return false;
+
+#else
+
+    // Pre-C++20 implementation
     if (!std::isnan(a)) {
         if (!std::isnan(b))
             return a < b; // a < b
@@ -66,6 +97,8 @@ inline bool less_than_f(T a, T b)
         else
             return false; // nan < nan
     }
+
+#endif
 }
 
 // Greater than compares floating point types placing nans after inf or before -inf
@@ -74,7 +107,33 @@ inline bool less_than_f(T a, T b)
 template <typename T, bool After = true>
 inline bool greater_than_f(T a, T b)
 {
-    static_assert(std::is_floating_point<T>::value, "greater_than_f can be used only with floating-point types.");
+    static_assert(std::is_floating_point_v<T>, "greater_than_f can be used only with floating-point types.");
+
+#if defined(__cpp_impl_three_way_comparison)
+
+    auto cmp = a <=> b;
+    if (cmp == std::partial_ordering::greater) {
+        return true;
+    }
+    if (cmp == std::partial_ordering::less || cmp == std::partial_ordering::equivalent) {
+        return false;
+    }
+
+    const bool a_nan = std::isnan(a);
+    const bool b_nan = std::isnan(b);
+
+    if (!a_nan && b_nan) {
+        return !After;
+    }
+    if (a_nan && !b_nan) {
+        return After;
+    }
+
+    return false;
+
+#else
+
+    // Pre-C++20 implementation
     if (!std::isnan(a)) {
         if (!std::isnan(b))
             return a > b; // a > b
@@ -86,17 +145,38 @@ inline bool greater_than_f(T a, T b)
         else
             return false; // nan > nan
     }
+
+#endif
 }
 
 // equal_to than compares floating point types considering nan==nan
 template <typename T>
 inline bool equal_to_f(T a, T b)
 {
+#if defined(__cpp_impl_three_way_comparison)
+
+    auto cmp = a <=> b;
+    if (cmp == std::partial_ordering::equivalent) {
+        return true;
+    }
+
+    if (cmp != std::partial_ordering::unordered) {
+        return false;
+    }
+
+    return std::isnan(a) && std::isnan(b);
+
+#else
+
+    // Pre-C++20 implementation
     static_assert(std::is_floating_point<T>::value, "equal_to_f can be used only with floating-point types.");
     if (!std::isnan(a) && !std::isnan(b)) {
         return a == b;
     }
     return std::isnan(a) && std::isnan(b);
+
+#endif
+
 }
 
 // equal_to_vf than compares vectors of floating point types considering nan==nan
