@@ -12,17 +12,46 @@ New
 - Add the NSGA-III many-objective evolutionary algorithm
   (`#633 <https://github.com/esa/pagmo2/pull/633>`__).
 
+- Add batch fitness evaluation support to the differential evolution algorithm
+  (`#645 <https://github.com/esa/pagmo2/pull/645>`__).
+
+- Add :cpp:func:`pagmo::topology::num_vertices()`
+  (`#626 <https://github.com/esa/pagmo2/pull/626>`__).
+
 Changes
 ~~~~~~~
 
 - Allow the documentation build to use the latest Sphinx and Breathe releases
   without an upper version pin.
 
+- NSGA-II and NSGA-III no longer require population sizes divisible by four
+  (`#642 <https://github.com/esa/pagmo2/pull/642>`__).
+
+- CMake package configuration files now respect ``<PackageName>_FIND_QUIETLY``
+  (`#610 <https://github.com/esa/pagmo2/pull/610>`__).
+
 Fix
 ~~~
 
 - Fix BFE tests under C++20, where stateless lambdas are default-constructible
   (`#634 <https://github.com/esa/pagmo2/pull/634>`__).
+
+- Fix ``extract<const T>()`` and builds with Clang 17 or later
+  (`#623 <https://github.com/esa/pagmo2/pull/623>`__).
+
+- Validate that the initial populations of NSGA-II and NSGA-III are within the
+  problem bounds
+  (`#630 <https://github.com/esa/pagmo2/pull/630>`__).
+
+- Fix :cpp:func:`pagmo::archipelago::set_topology()` with newly constructed
+  and legacy user-defined topologies
+  (`#626 <https://github.com/esa/pagmo2/pull/626>`__).
+
+- Fix validation of the ``stop_range`` argument in Compass Search
+  (`#644 <https://github.com/esa/pagmo2/pull/644>`__).
+
+- Make the hypervolume tests robust to platform floating-point differences
+  (`#627 <https://github.com/esa/pagmo2/pull/627>`__).
 
 2.19.1 (2024-08-09)
 -------------------
