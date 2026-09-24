@@ -6,8 +6,6 @@ pagmo
 
 [![Anaconda-Server Badge](https://img.shields.io/conda/vn/conda-forge/pagmo.svg?style=for-the-badge)](https://anaconda.org/conda-forge/pagmo)
 
-[![Join the chat at https://gitter.im/pagmo2/Lobby](https://img.shields.io/badge/gitter-join--chat-green.svg?logo=gitter-white&style=for-the-badge)](https://gitter.im/pagmo2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.02338/status.svg)](https://doi.org/10.21105/joss.02338)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1045337.svg)](https://doi.org/10.5281/zenodo.1045336)
 
