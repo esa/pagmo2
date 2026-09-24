@@ -1,0 +1,21 @@
+---
+description: "Use when writing or modifying user-defined problems (UDPs) in this repository. Follow the common patterns for mathematically defined problems, data-rich benchmark wrappers, and meta-problems that delegate to another problem."
+---
+
+- Implement the public UDP API with at least the usual problem methods: `fitness()`, `get_bounds()`, `get_name()`, and any required serialization or metadata accessors.
+- Keep the objective evaluation deterministic and side-effect free. A UDP should compute a fitness value from the decision vector and its internal state, without mutating the problem instance or external global state.
+- When the problem is a direct mathematical definition, keep the implementation compact and explicit: validate dimensions, define bounds in a straightforward way, and compute the objective in a single, readable evaluation path.
+- Use the pattern of simple benchmark problems such as `ackley` or `lennard_jones`: small, focused state, explicit constructor validation, and clear objective logic that maps directly to the mathematical definition.
+- For data-rich benchmark wrappers, keep the data hardcoded in the hpp file and avoid scattering constants across the implementation. The pattern in `cec2014` is to store the metadata or transformed data in member state or dedicated helper data tables and keep the main fitness function focused on dispatch and evaluation.
+- When upstream data is large or tabulated, prefer explicit helper data structures and small transformation routines over deeply nested logic inside the evaluation function.
+- Preserve constructor validation for all problem parameters. Reject invalid dimensions, invalid IDs, or invalid configurations with informative `pagmo_throw(std::invalid_argument, ...)` errors.
+- Keep the box bounds logic consistent with the problem semantics: return a lower/upper bound pair with the correct dimension and clearly document any variable fixing or constrained coordinates.
+- For meta-problems, follow the wrapper pattern of `unconstrain`: delegate to an inner problem, forward relevant API calls, and apply a transformation on top of the inner fitness while preserving the public problem contract.
+- In meta-problems, do not duplicate the inner problem’s logic unless needed for the transformation itself; forward bounds, dimensionality, stochasticity, and thread-safety semantics when appropriate.
+- When a meta-problem transforms another problem, clearly define what is being preserved and what is being changed: the original problem is still the source of constraints, objective count, and bounds unless deliberately rewritten.
+- Keep data wrappers and meta-wrappers distinct in intent: data-rich wrappers are problem definitions with large precomputed tables; meta-problems are adapters that change the semantics or representation of another problem.
+- Prefer small helper methods for transformation steps such as shift/rotate/penalize/normalize rather than mixing all logic into a single monolithic `fitness()` function.
+- Keep serialization consistent with the state that defines the problem. If the problem holds parameters, internal data, or a wrapped inner problem, serialize that state explicitly and in the same style as the rest of the library.
+- Use names that reflect the mathematical role of the object, not incidental implementation details: e.g., problem names and helper functions should be readable and domain-specific, while wrapper internals can remain technical.
+- Keep the evaluation function readable and map directly to the mathematical formulation. Avoid hidden state changes or expensive repeated recomputation when the structure allows precomputed or cached data.
+- When the problem is created from external source data, document the origin and the assumptions, as done in the CEC benchmark problems, while keeping the actual evaluation code focused on the problem math.

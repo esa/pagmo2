@@ -1,0 +1,22 @@
+---
+description: "Use when writing or modifying user-defined algorithms (UDAs) in this repository. Follow the common evolve() validation, problem checks, and logging patterns used across PaGMO algorithms."
+---
+
+- Implement the public algorithm interface with at least `evolve(population) const` and `get_name()`.
+- At the start of `evolve()`, validate the input population and problem before doing any optimization work. Check the population size, objective count, constraint count, and bounds/gradient requirements expected by the algorithm.
+- Reject unsupported cases explicitly with `pagmo_throw(std::invalid_argument, ...)` and include the problem name and the algorithm name when relevant.
+- Prefer early return or fail-fast behavior for obviously invalid inputs, such as empty populations, unsupported multi-objective problems, unconstrained or constrained cases that the algorithm cannot handle, or invalid problem dimensions.
+- Treat the selected individual/decision vector as the core optimization unit when the algorithm is not population-based. Reuse the standard population selection/replacement machinery rather than inventing a separate custom flow.
+- Keep the implementation logic in a clear sequence: validate -> initialize -> iterate -> evaluate -> update state -> return evolved population.
+- Use the problem API directly for checks, e.g. `prob.get_nx()`, `prob.get_nc()`, `prob.get_nf()`, `prob.get_bounds()`, and `prob.has_gradient()` when the solver requires it.
+- Preserve the repository convention of storing log entries in a `log_type` built from a tuple of values such as generation, objective value, violation count, violation norm, and feasibility flag.
+- Keep logging consistent: clear the log at the start of a new optimization run when the algorithm maintains state across calls; append entries only when verbosity is enabled.
+- Follow the common logging pattern of printing optionally to `std::cout` and recording the same information in `m_log` when `m_verbosity > 0`.
+- Keep output concise and deterministic when verbosity is enabled; do not print ad hoc debug data unrelated to the algorithm’s optimization status.
+- When using external solvers, trap exceptions inside callback layers and rethrow them at the outer `evolve()` boundary so errors propagate cleanly.
+- Preserve the semantics of a restartable optimizer: when the algorithm does not intentionally keep memory, calling `evolve()` twice should be equivalent to calling it once with the combined budget (for example, twice the number of generations or iterations). This is the default expectation unless the algorithm explicitly requires memory.
+- If the algorithm intentionally keeps memory across calls, it must provide a clear reset or memory-disabling mechanism so users can recover the restart-equivalent behavior; see the pattern used in memory-aware algorithms such as `cmaes`.
+- When an algorithm exposes a memory/continuation switch, the argument must be named `memory` and default to `false`, following the established convention used in `cmaes` (`bool memory = false`).
+- Preserve optimizer state across repeated calls only when the algorithm intentionally supports memory; otherwise reset the internal state consistently.
+- Return the modified population object after all updates, without mutating unrelated state beyond the algorithm’s own memory and logging.
+- Keep the evolve logic readable by separating preamble checks, loop body logic, and final return/cleanup sections with clear comments when necessary.

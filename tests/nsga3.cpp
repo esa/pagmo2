@@ -1732,6 +1732,34 @@ BOOST_AUTO_TEST_CASE(nsga3_instance_independence)
     BOOST_CHECK(pop_ref.get_f() == pop_reseeded.get_f());
 }
 
+struct bad_bfe {
+    vector_double operator()(const problem &p, const vector_double &dvs) const
+    {
+        return vector_double(p.get_nf() * (dvs.size() / p.get_nx()) - 1u, 1.);
+    }
+};
+
+namespace pagmo
+{
+namespace detail
+{
+template <>
+struct disable_udbfe_checks<bad_bfe> : std::true_type {
+};
+} // namespace detail
+} // namespace pagmo
+
+BOOST_AUTO_TEST_CASE(nsga3_bfe_rejects_wrong_result_size)
+{
+    dtlz udp{2u, 10u, 3u};
+    population pop{udp, 52u, 23u};
+
+    nsga3 algo{5u, 1.00, 30., 0.10, 20., 5u, 0u, true, 42u, false};
+    algo.set_bfe(bfe{bad_bfe{}});
+
+    BOOST_CHECK_THROW(algo.evolve(pop), std::invalid_argument);
+}
+
 BOOST_AUTO_TEST_CASE(nsga3_log_generation_numbers)
 {
     dtlz udp{1u, 10u, 3u};

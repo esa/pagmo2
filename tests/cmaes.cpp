@@ -51,6 +51,25 @@ see https://www.gnu.org/licenses/. */
 
 using namespace pagmo;
 
+struct serial_bfe_cmaes {
+    vector_double operator()(const problem &p, const vector_double &dvs) const
+    {
+        problem prob_copy(p);
+        const auto nx = prob_copy.get_nx();
+        const auto n = dvs.size() / nx;
+        vector_double retval;
+        retval.reserve(n * prob_copy.get_nf());
+        for (decltype(dvs.size()) i = 0u; i < n; ++i) {
+            const auto first = dvs.begin() + static_cast<vector_double::difference_type>(i * nx);
+            const auto last = dvs.begin() + static_cast<vector_double::difference_type>((i + 1u) * nx);
+            const vector_double dv(first, last);
+            const auto f = prob_copy.fitness(dv);
+            retval.insert(retval.end(), f.begin(), f.end());
+        }
+        return retval;
+    }
+};
+
 BOOST_AUTO_TEST_CASE(cmaes_algorithm_construction)
 {
     cmaes user_algo{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, false, 23u};
@@ -206,6 +225,25 @@ BOOST_AUTO_TEST_CASE(cmaes_evolve_test)
 
     // and we call evolve on the stochastic problem
     BOOST_CHECK_NO_THROW(cmaes{10u}.evolve(population{problem{inventory{}}, 15u}));
+}
+
+BOOST_AUTO_TEST_CASE(cmaes_bfe_path)
+{
+    problem prob{rosenbrock{25u}};
+    for (bool force_bounds : {false, true}) {
+        population pop_scalar{prob, 5u, 23u};
+        population pop_bfe{prob, 5u, 23u};
+
+        cmaes alg_scalar{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, force_bounds, 23u};
+        cmaes alg_bfe{10u, -1, -1, -1, -1, 0.5, 1e-6, 1e-6, false, force_bounds, 23u};
+        alg_bfe.set_bfe(bfe{serial_bfe_cmaes{}});
+
+        pop_scalar = alg_scalar.evolve(pop_scalar);
+        pop_bfe = alg_bfe.evolve(pop_bfe);
+
+        BOOST_CHECK(pop_scalar.get_x() == pop_bfe.get_x());
+        BOOST_CHECK(pop_scalar.get_f() == pop_bfe.get_f());
+    }
 }
 
 BOOST_AUTO_TEST_CASE(cmaes_setters_getters_test)
