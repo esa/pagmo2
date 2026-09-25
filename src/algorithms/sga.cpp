@@ -180,6 +180,8 @@ sga::sga(unsigned gen, double cr, double eta_c, double m, double param_m, unsign
  * @throws std::invalid_argument if the problem is multi-objective or constrained, if the population size is smaller
  * than 2, if \p param_s is larger than the population size, if the size of \p pop is odd and a "sbx" crossover has
  * been selected upon construction.
+ * If any gene of the initial population is not finite or is outside the problem bounds, as the crossover
+ * and mutation operators assume feasible parents.
  */
 population sga::evolve(population pop) const
 {
@@ -219,6 +221,9 @@ population sga::evolve(population pop) const
         return pop;
     }
     // ---------------------------------------------------------------------------------------------------------
+
+    // We check that the initial population individuals are within the problem bounds.
+    detail::check_population_bounds(pop.get_x(), bounds, get_name());
 
     // No throws, all valid: we clear the logs
     m_log.clear();

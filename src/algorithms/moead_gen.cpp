@@ -103,6 +103,8 @@ moead_gen::moead_gen(unsigned gen, std::string weight_generation, std::string de
  *
  * @param pop population to be evolved
  * @return evolved population
+ * @throws std::invalid_argument if any gene of the initial population is not finite or is outside the problem
+ * bounds, as the crossover and mutation operators assume feasible parents.
  */
 population moead_gen::evolve(population pop) const
 {
@@ -146,6 +148,8 @@ population moead_gen::evolve(population pop) const
                                                + ": too large for the input population having size "
                                                + std::to_string(NP));
     }
+    // We check that the initial population individuals are within the problem bounds.
+    detail::check_population_bounds(pop.get_x(), bounds, get_name());
     // Get out if there is nothing to do.
     if (m_gen == 0u) {
         return pop;
