@@ -26,6 +26,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <cmath>
 #include <iomanip>
 #include <random>
 #include <sstream>
@@ -174,8 +175,14 @@ population bee_colony::evolve(population pop) const
             }
             sump += p[i];
         }
-        for (decltype(NP) i = 0u; i < NP; ++i) {
-            p[i] /= sump;
+        if (!std::isfinite(sump) || sump == 0.) {
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                p[i] = 1. / static_cast<double>(NP);
+            }
+        } else {
+            for (decltype(NP) i = 0u; i < NP; ++i) {
+                p[i] /= sump;
+            }
         }
         vector_double::size_type s = 0u;
         decltype(NP) t = 0u;
