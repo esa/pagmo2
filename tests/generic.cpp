@@ -345,6 +345,12 @@ BOOST_AUTO_TEST_CASE(force_bounds_test)
         BOOST_CHECK_EQUAL(x_fix[0], 1.);
         BOOST_CHECK_CLOSE(x_fix[1], 1.8, 1e-8);
         BOOST_CHECK_CLOSE(x_fix[2], 0.8, 1e-8);
+        vector_double x_huge{std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(),
+                             1e10};
+        detail::force_bounds_reflection(x_huge, {0., 0., 0.}, {3., 3., 5.});
+        BOOST_CHECK(x_huge[0] >= 0. && x_huge[0] <= 3.);
+        BOOST_CHECK(x_huge[1] >= 0. && x_huge[1] <= 3.);
+        BOOST_CHECK(x_huge[2] >= 0. && x_huge[2] <= 5.);
     }
     // force_bounds_stick
     {

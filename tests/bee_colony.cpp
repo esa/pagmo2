@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -172,4 +173,30 @@ BOOST_AUTO_TEST_CASE(bee_colony_serialization_test)
         BOOST_CHECK_CLOSE(std::get<2>(before_log[i]), std::get<2>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
     }
+}
+
+BOOST_AUTO_TEST_CASE(bee_colony_non_finite_fitness_test)
+{
+    ackley prob{2u};
+    population pop{prob, 10u, 23u};
+    auto x = pop.get_x()[0];
+    x[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_x(0, x);
+    bee_colony uda{5u, 10u, 23u};
+    BOOST_CHECK_NO_THROW(pop = uda.evolve(pop));
+    // All infinite fitness values give a zero probability sum.
+    struct inf_problem {
+        inf_problem(unsigned dim = 2u) : m_dim(dim){};
+        vector_double fitness(const vector_double &) const
+        {
+            return {std::numeric_limits<double>::infinity()};
+        }
+        std::pair<vector_double, vector_double> get_bounds() const
+        {
+            return {vector_double(m_dim, -1.), vector_double(m_dim, 1.)};
+        }
+        unsigned m_dim;
+    };
+    population pop_inf{inf_problem(2u), 10u, 23u};
+    BOOST_CHECK_NO_THROW(pop_inf = uda.evolve(pop_inf));
 }

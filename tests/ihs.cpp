@@ -31,10 +31,12 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
+#include <limits>
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/minlp_rastrigin.hpp>
@@ -200,4 +202,15 @@ BOOST_AUTO_TEST_CASE(ihs_integer_test)
             BOOST_CHECK_EQUAL(static_cast<int>(c), c);
         }
     }
+}
+
+BOOST_AUTO_TEST_CASE(ihs_non_finite_test)
+{
+    dtlz prob{1u, 5u, 2u};
+    population pop{prob, 10u, 42u};
+    auto x = pop.get_x()[0];
+    x[0] = std::numeric_limits<double>::infinity();
+    pop.set_x(0, x);
+    ihs uda{5u};
+    BOOST_CHECK_NO_THROW(pop = uda.evolve(pop));
 }

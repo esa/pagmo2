@@ -156,13 +156,20 @@ void force_bounds_reflection(vector_double &x, const vector_double &lb, const ve
     assert(x.size() == lb.size());
     assert(x.size() == ub.size());
     for (decltype(x.size()) j = 0u; j < x.size(); ++j) {
-        while (x[j] < lb[j] || x[j] > ub[j]) {
+        unsigned iter = 0u;
+        while ((x[j] < lb[j] || x[j] > ub[j]) && iter < 10u) {
             if (x[j] < lb[j]) {
                 x[j] = 2 * lb[j] - x[j];
-            }
-            if (x[j] > ub[j]) {
+            } else if (x[j] > ub[j]) {
                 x[j] = 2 * ub[j] - x[j];
             }
+            ++iter;
+        }
+        if (x[j] < lb[j]) {
+            x[j] = lb[j];
+        }
+        if (x[j] > ub[j]) {
+            x[j] = ub[j];
         }
     }
 }
