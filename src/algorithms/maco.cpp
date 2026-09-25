@@ -71,7 +71,7 @@ maco::maco(unsigned gen, unsigned ker, double q, unsigned threshold, unsigned n_
       m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u), m_sol_archive(),
       m_n_evalstop(0u), m_gen_mark(1u), m_pop()
 {
-    if (focus < 0.) {
+    if (!(focus >= 0.)) {
         pagmo_throw(std::invalid_argument,
                     "The focus parameter must be >=0  while a value of " + std::to_string(focus) + " was detected");
     }

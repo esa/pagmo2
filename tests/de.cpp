@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <iostream>
+#include <limits>
 #include <string>
 
 #include <boost/lexical_cast.hpp>
@@ -64,6 +65,10 @@ BOOST_AUTO_TEST_CASE(de_algorithm_construction)
 
     BOOST_CHECK_THROW((de{1234u, 0.7, 1.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((de{1234u, 0.7, -0.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
+
+    const auto nan = std::numeric_limits<double>::quiet_NaN();
+    BOOST_CHECK_THROW((de{1234u, nan, 0.5, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((de{1234u, 0.7, nan, 2u, 1e-6, 1e-6, 23u}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(de_evolve_test)

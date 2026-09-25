@@ -64,11 +64,11 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
       m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u), m_sol_archive(), m_n_evalstop(1u), m_n_impstop(1u),
       m_gen_mark(1u), m_fevals(0u)
 {
-    if (acc < 0.) {
+    if (!(acc >= 0.)) {
         pagmo_throw(std::invalid_argument,
                     "The accuracy parameter must be >=0, while a value of " + std::to_string(acc) + " was detected");
     }
-    if (focus < 0.) {
+    if (!(focus >= 0.)) {
         pagmo_throw(std::invalid_argument,
                     "The focus parameter must be >=0  while a value of " + std::to_string(focus) + " was detected");
     }
@@ -81,7 +81,7 @@ gaco::gaco(unsigned gen, unsigned ker, double q, double oracle, double acc, unsi
         pagmo_throw(std::invalid_argument, "If memory is active, the threshold parameter must be >=1 while a value of "
                                                + std::to_string(threshold) + " was detected");
     }
-    if (q < 0.) {
+    if (!(q >= 0.)) {
         pagmo_throw(std::invalid_argument, "The convergence speed parameter must be >=0  while a value of "
                                                + std::to_string(q) + " was detected");
     }

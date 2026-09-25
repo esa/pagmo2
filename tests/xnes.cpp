@@ -65,6 +65,11 @@ BOOST_AUTO_TEST_CASE(xnes_algorithm_construction)
     BOOST_CHECK_THROW((xnes{10u, -1, -1, 1.6, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
     BOOST_CHECK_THROW((xnes{10u, -1, -1, -1, -0.6, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
     BOOST_CHECK_THROW((xnes{10u, -1, -1, 1, 1.6, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    const auto nan = std::numeric_limits<double>::quiet_NaN();
+    BOOST_CHECK_THROW((xnes{10u, nan, -1, -1, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, nan, -1, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, -1, nan, -1, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((xnes{10u, -1, -1, -1, nan, 1e-6, 1e-6, false, false, 32u}), std::invalid_argument);
     // We test the defaults are correctly
     xnes user_algo{10u, -1, -1, -1, -1, 1e-6, 1e-6, false, false, 32u};
     BOOST_CHECK(user_algo.get_verbosity() == 0u);

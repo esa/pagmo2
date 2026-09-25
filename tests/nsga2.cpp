@@ -71,6 +71,11 @@ BOOST_AUTO_TEST_CASE(nsga2_algorithm_construction)
     // Wrong eta_m
     BOOST_CHECK_THROW((nsga2{1u, .95, 10., 0.01, 100.1, 32u}), std::invalid_argument);
     BOOST_CHECK_THROW((nsga2{1u, .95, 10., 0.01, .98, 32u}), std::invalid_argument);
+    const auto nan = std::numeric_limits<double>::quiet_NaN();
+    BOOST_CHECK_THROW((nsga2{1u, nan, 10., 0.01, 50., 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga2{1u, .95, nan, 0.01, 50., 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga2{1u, .95, 10., nan, 50., 32u}), std::invalid_argument);
+    BOOST_CHECK_THROW((nsga2{1u, .95, 10., 0.01, nan, 32u}), std::invalid_argument);
 }
 
 struct mo_equal_bounds {

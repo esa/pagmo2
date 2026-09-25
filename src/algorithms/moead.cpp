@@ -65,24 +65,24 @@ moead::moead(unsigned gen, std::string weight_generation, std::string decomposit
         pagmo_throw(std::invalid_argument, "Weight generation method requested is '" + m_decomposition
                                                + "', but only one of 'tchebycheff', 'weighted', 'bi' is allowed");
     }
-    if (CR > 1.0 || CR < 0.) {
+    if (!(CR >= 0.) || !(CR <= 1.)) {
         pagmo_throw(
             std::invalid_argument,
             "The parameter CR (used by the differential evolution operator) needs to be in [0,1], while a value of "
                 + std::to_string(CR) + " was detected");
     }
-    if (F > 1.0 || F < 0.) {
+    if (!(F >= 0.) || !(F <= 1.)) {
         pagmo_throw(
             std::invalid_argument,
             "The parameter F (used by the differential evolution operator) needs to be in [0,1], while a value of "
                 + std::to_string(F) + " was detected");
     }
-    if (eta_m < 0.) {
+    if (!(eta_m >= 0.)) {
         pagmo_throw(std::invalid_argument,
                     "The distribution index for the polynomial mutation (eta_m) needs to be positive, while a value of "
                         + std::to_string(eta_m) + " was detected");
     }
-    if (realb > 1.0 || realb < 0.) {
+    if (!(realb >= 0.) || !(realb <= 1.)) {
         pagmo_throw(std::invalid_argument,
                     "The chance of considering a neighbourhood (realb) needs to be in [0,1], while a value of "
                         + std::to_string(realb) + " was detected");

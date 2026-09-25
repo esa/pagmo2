@@ -60,22 +60,22 @@ cmaes::cmaes(unsigned gen, double cc, double cs, double c1, double cmu, double s
     : m_gen(gen), m_cc(cc), m_cs(cs), m_c1(c1), m_cmu(cmu), m_sigma0(sigma0), m_ftol(ftol), m_xtol(xtol),
       m_memory(memory), m_force_bounds(force_bounds), m_e(seed), m_seed(seed), m_verbosity(0u)
 {
-    if (((cc < 0.) || (cc > 1.)) && !(cc == -1)) {
+    if ((!(cc >= 0.) || !(cc <= 1.)) && !(cc == -1)) {
         pagmo_throw(std::invalid_argument,
                     "cc must be in [0,1] or -1 if its value has to be initialized automatically, a value of "
                         + std::to_string(cc) + " was detected");
     }
-    if (((cs < 0.) || (cs > 1.)) && !(cs == -1)) {
+    if ((!(cs >= 0.) || !(cs <= 1.)) && !(cs == -1)) {
         pagmo_throw(std::invalid_argument,
                     "cs needs to be in [0,1] or -1 if its value has to be initialized automatically, a value of "
                         + std::to_string(cs) + " was detected");
     }
-    if (((c1 < 0.) || (c1 > 1.)) && !(c1 == -1)) {
+    if ((!(c1 >= 0.) || !(c1 <= 1.)) && !(c1 == -1)) {
         pagmo_throw(std::invalid_argument,
                     "c1 needs to be in [0,1] or -1 if its value has to be initialized automatically, a value of "
                         + std::to_string(c1) + " was detected");
     }
-    if (((cmu < 0.) || (cmu > 1.)) && !(cmu == -1)) {
+    if ((!(cmu >= 0.) || !(cmu <= 1.)) && !(cmu == -1)) {
         pagmo_throw(std::invalid_argument,
                     "cmu needs to be in [0,1] or -1 if its value has to be initialized automatically, a value of "
                         + std::to_string(cmu) + " was detected");

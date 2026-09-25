@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -92,6 +93,17 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 1.1, 5u, "exponential", "uniform", "tournament", 32u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 0.9, 0u, "exponential", "uniform", "tournament", 32u}),
+                      std::invalid_argument);
+    const auto nan = std::numeric_limits<double>::quiet_NaN();
+    BOOST_CHECK_THROW((sga{1u, nan, 10., .02, .5, 5u, "exponential", "gaussian", "tournament", 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, nan, .02, .5, 5u, "exponential", "gaussian", "tournament", 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., nan, .5, 5u, "exponential", "gaussian", "tournament", 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, nan, 5u, "exponential", "gaussian", "tournament", 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, .95, 10., .02, nan, 5u, "exponential", "polynomial", "tournament", 32u}),
                       std::invalid_argument);
 }
 BOOST_AUTO_TEST_CASE(sga_evolve_test)
