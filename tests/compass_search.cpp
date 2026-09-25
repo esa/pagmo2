@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
+#include <limits>
 #include <string>
 
 #include <pagmo/algorithm.hpp>
@@ -60,6 +61,7 @@ BOOST_AUTO_TEST_CASE(compass_search_algorithm_construction)
     BOOST_CHECK_THROW((compass_search{1234u, 0.7, 0.8}), std::invalid_argument);
     BOOST_CHECK_THROW((compass_search{1234u, 0.7, 0.1, 1.3}), std::invalid_argument);
     BOOST_CHECK_THROW((compass_search{1234u, 0.7, 0.1, -0.3}), std::invalid_argument);
+    BOOST_CHECK_THROW((compass_search{1234u, std::numeric_limits<double>::quiet_NaN()}), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(compass_search_evolve_test)

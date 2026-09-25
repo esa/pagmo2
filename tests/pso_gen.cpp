@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -137,6 +137,8 @@ BOOST_AUTO_TEST_CASE(construction)
     BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 5u, 0u, 4u, false, 23u}), std::invalid_argument);
 
     BOOST_CHECK_THROW((pso_gen{100, 0.79, 2., 2., 0.1, 5u, 2u, 0u, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((pso_gen{100, std::numeric_limits<double>::quiet_NaN(), 2., 2., 0.1, 5u, 2u, 4u, false, 23u}),
+                      std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(evolve_test)

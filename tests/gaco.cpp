@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <iostream>
+#include <limits>
 #include <string>
 
 #include <boost/lexical_cast.hpp>
@@ -68,6 +69,9 @@ BOOST_AUTO_TEST_CASE(construction_test)
     BOOST_CHECK_THROW((gaco{2u, 13u, 1.0, 0.0, 0.01, 0u, 7u, 1000u, 1000u, 0.0, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((gaco{2u, 13u, 1.0, 0.0, 0.01, 0u, 7u, 1000u, 1000u, 0.0, true, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((gaco{2u, 1u, 1.0, 0.0, 0.01, 1u, 7u, 1000u, 1000u, 0.0, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((gaco{2u, 13u, 1.0, 0.0, std::numeric_limits<double>::quiet_NaN(), 1u, 7u, 1000u,
+                            1000u, 0.0, false, 23u}),
+                      std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(evolve_test)

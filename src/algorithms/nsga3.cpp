@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -74,20 +74,20 @@ nsga3::nsga3(unsigned gen, double cr, double eta_c, double mut, double eta_mut, 
     /*  Validate the ctor args. The tests against NaN are explicit: every comparison
      *  involving a NaN is false, so a range check alone would let one through.
      */
-    if (!std::isfinite(cr) || cr < 0.0 || cr > 1.0) {
+    if ((std::isfinite(cr) == false) || cr < 0.0 || cr > 1.0) {
         pagmo_throw(std::invalid_argument, "The crossover probability must be in the range [0, 1], while a value of "
                                                + std::to_string(cr) + " was detected");
     }
-    if (!std::isfinite(mut) || mut < 0.0 || mut > 1.0) {
+    if ((std::isfinite(mut) == false) || mut < 0.0 || mut > 1.0) {
         pagmo_throw(std::invalid_argument, "The mutation probability must be in the range [0, 1], while a value of "
                                                + std::to_string(mut) + " was detected");
     }
-    if (!std::isfinite(eta_c) || eta_c < 1.0 || eta_c > 100.0) {
+    if ((std::isfinite(eta_c) == false) || eta_c < 1.0 || eta_c > 100.0) {
         pagmo_throw(std::invalid_argument, "The distribution index for crossover must be in the range [1, 100], "
                                            "while a value of "
                                                + std::to_string(eta_c) + " was detected");
     }
-    if (!std::isfinite(eta_mut) || eta_mut < 1.0 || eta_mut > 100.0) {
+    if ((std::isfinite(eta_mut) == false) || eta_mut < 1.0 || eta_mut > 100.0) {
         pagmo_throw(std::invalid_argument, "The distribution index for mutation must be in [1, 100], "
                                            "while a value of "
                                                + std::to_string(eta_mut) + " was detected");

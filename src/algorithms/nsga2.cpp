@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -60,19 +60,19 @@ namespace pagmo
 nsga2::nsga2(unsigned gen, double cr, double eta_c, double m, double eta_m, unsigned seed)
     : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_eta_m(eta_m), m_e(seed), m_seed(seed), m_verbosity(0u)
 {
-    if (cr >= 1. || cr < 0.) {
+    if (cr >= 1. || cr < 0. || (std::isfinite(cr) == false)) {
         pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1[ range, while a value of "
                                                + std::to_string(cr) + " was detected");
     }
-    if (m < 0. || m > 1.) {
+    if (m < 0. || m > 1. || (std::isfinite(m) == false)) {
         pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
                                                + std::to_string(cr) + " was detected");
     }
-    if (eta_c < 1. || eta_c > 100.) {
+    if (eta_c < 1. || eta_c > 100. || (std::isfinite(eta_c) == false)) {
         pagmo_throw(std::invalid_argument, "The distribution index for crossover must be in [1, 100], while a value of "
                                                + std::to_string(eta_c) + " was detected");
     }
-    if (eta_m < 1. || eta_m > 100.) {
+    if (eta_m < 1. || eta_m > 100. || (std::isfinite(eta_m) == false)) {
         pagmo_throw(std::invalid_argument, "The distribution index for mutation must be in [1, 100], while a value of "
                                                + std::to_string(eta_m) + " was detected");
     }

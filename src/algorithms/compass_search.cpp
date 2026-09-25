@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -49,15 +49,15 @@ compass_search::compass_search(unsigned max_fevals, double start_range, double s
     : m_max_fevals(max_fevals), m_start_range(start_range), m_stop_range(stop_range),
       m_reduction_coeff(reduction_coeff), m_verbosity(0u), m_log()
 {
-    if (start_range > 1. || start_range <= 0. || std::isnan(start_range)) {
+    if (start_range > 1. || start_range <= 0. || (std::isfinite(start_range) == false)) {
         pagmo_throw(std::invalid_argument, "The start range must be in (0, 1], while a value of "
                                                + std::to_string(start_range) + " was detected.");
     }
-    if (stop_range < 0. || stop_range >= start_range || std::isnan(stop_range)) {
+    if (stop_range < 0. || stop_range >= start_range || (std::isfinite(stop_range) == false)) {
         pagmo_throw(std::invalid_argument, "the stop range must be in [0, start_range), while a value of "
                                                + std::to_string(stop_range) + " was detected.");
     }
-    if (reduction_coeff >= 1. || reduction_coeff <= 0. || std::isnan(reduction_coeff)) {
+    if (reduction_coeff >= 1. || reduction_coeff <= 0. || (std::isfinite(reduction_coeff) == false)) {
         pagmo_throw(std::invalid_argument, "The reduction coefficient must be in (0,1), while a value of "
                                                + std::to_string(reduction_coeff) + " was detected.");
     }

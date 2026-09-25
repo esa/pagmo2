@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -52,7 +52,9 @@ ihs::ihs(unsigned gen, double phmcr, double ppar_min, double ppar_max, double bw
     : m_gen(gen), m_phmcr(phmcr), m_ppar_min(ppar_min), m_ppar_max(ppar_max), m_bw_min(bw_min), m_bw_max(bw_max),
       m_e(seed), m_seed(seed), m_verbosity(0u)
 {
-    if (phmcr > 1 || phmcr < 0 || ppar_min > 1 || ppar_min < 0 || ppar_max > 1 || ppar_max < 0) {
+    if (phmcr > 1 || phmcr < 0 || ppar_min > 1 || ppar_min < 0 || ppar_max > 1 || ppar_max < 0
+        || (std::isfinite(phmcr) == false) || (std::isfinite(ppar_min) == false)
+        || (std::isfinite(ppar_max) == false)) {
         pagmo_throw(std::invalid_argument, "The probability of choosing from memory (phmcr) and the pitch "
                                            "adjustment rates (ppar_min, ppar_max) must all be in the [0,1] range");
     }
@@ -60,7 +62,7 @@ ihs::ihs(unsigned gen, double phmcr, double ppar_min, double ppar_max, double bw
         pagmo_throw(std::invalid_argument,
                     "The minimum pitch adjustment rate must not be greater than maximum pitch adjustment rate");
     }
-    if (bw_min <= 0 || bw_max < bw_min) {
+    if (bw_min <= 0 || bw_max < bw_min || (std::isfinite(bw_min) == false) || (std::isfinite(bw_max) == false)) {
         pagmo_throw(std::invalid_argument, "The bandwidth values must be positive, and minimum bandwidth must not "
                                            "be greater than maximum bandwidth");
     }

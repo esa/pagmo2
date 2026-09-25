@@ -1,4 +1,4 @@
-/* Copyright 2017-2027 PaGMO development team
+/* Copyright 2017-2026 PaGMO development team
 
 This file is part of the PaGMO library.
 
@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
+#include <limits>
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
@@ -79,6 +80,9 @@ BOOST_AUTO_TEST_CASE(nspso_algorithm_construction)
                       std::invalid_argument);
     // Wrong eta_m
     BOOST_CHECK_THROW((nspso{1u, 0.95, 0.01, 0.5, 0.5, 0.5, 2u, "something else", false, 24u}), std::invalid_argument);
+    BOOST_CHECK_THROW((nspso{1u, std::numeric_limits<double>::quiet_NaN(), 0.01, 0.5, 0.5, 0.5, 2u,
+                             "crowding distance", false, 24u}),
+                      std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(nspso_evolve_test)
