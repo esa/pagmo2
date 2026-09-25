@@ -603,7 +603,7 @@ constrained optimization.</p>
 <dd class="field-odd"><p><strong>pop</strong> – population to be evolved </p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the problem is multi-objective or constrained, if the population size is smaller than 2, if <code class="docutils literal notranslate"><span class="pre">param_s</span></code> is larger than the population size, if the size of <code class="docutils literal notranslate"><span class="pre">pop</span></code> is odd and a “sbx” crossover has been selected upon construction. </p>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span></span></span> – if the problem is multi-objective or constrained, if the population size is smaller than 2, if <code class="docutils literal notranslate"><span class="pre">param_s</span></code> is larger than the population size, if the size of <code class="docutils literal notranslate"><span class="pre">pop</span></code> is odd and a “sbx” crossover has been selected upon construction. If any gene of the initial population is not finite or is outside the problem bounds, as the crossover and mutation operators assume feasible parents. </p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>evolved population </p>
