@@ -54,6 +54,12 @@ namespace detail
 // Checks that all elements of the problem bounds are not equal
 PAGMO_DLL_PUBLIC bool some_bound_is_equal(const problem &);
 
+// Checks that all genes of all individuals in xs are finite and within the bounds.
+// NaN genes are caught by the negated comparisons (any comparison involving NaN is false).
+PAGMO_DLL_PUBLIC void check_population_bounds(const std::vector<vector_double> &,
+                                              const std::pair<vector_double, vector_double> &,
+                                              const std::string &algo_name);
+
 // Check that the lower/upper bounds lb/ub are suitable for the
 // generation of a real number. The boolean flags specify at
 // compile time which checks to run.

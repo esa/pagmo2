@@ -67,6 +67,22 @@ bool some_bound_is_equal(const problem &prob)
     return false;
 }
 
+// Checks that all genes of all individuals in xs are finite and within the bounds
+void check_population_bounds(const std::vector<vector_double> &xs,
+                             const std::pair<vector_double, vector_double> &bounds, const std::string &algo_name)
+{
+    for (decltype(xs.size()) i = 0u; i < xs.size(); ++i) {
+        for (decltype(xs[i].size()) j = 0u; j < xs[i].size(); ++j) {
+            if (!(xs[i][j] >= bounds.first[j]) || !(xs[i][j] <= bounds.second[j])) {
+                pagmo_throw(std::invalid_argument,
+                            "Individual " + std::to_string(i) + " has a gene at position "
+                                + std::to_string(j) + " that is outside the problem bounds. " + algo_name
+                                + " cannot deal with it.");
+            }
+        }
+    }
+}
+
 } // namespace detail
 
 /// Binomial coefficient

@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -213,4 +214,26 @@ BOOST_AUTO_TEST_CASE(sga_serialization_test)
         BOOST_CHECK_CLOSE(std::get<2>(before_log[i]), std::get<2>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<3>(before_log[i]), std::get<3>(after_log[i]), 1e-8);
     }
+}
+
+BOOST_AUTO_TEST_CASE(sga_out_of_bounds_population_test)
+{
+    // Out-of-bounds/non-finite initial individuals must be rejected (see issue #567):
+    // the crossover and mutation operators assume feasible parents.
+    problem prob{rosenbrock{}};
+    population pop{prob, 10u, 23u};
+    auto x = pop.get_x()[0];
+    auto f = pop.get_f()[0];
+    x[0] = -6.0; // below the lower bound (-5)
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(sga{1u}.evolve(pop), std::invalid_argument);
+    x[0] = 11.0; // above the upper bound (10)
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(sga{1u}.evolve(pop), std::invalid_argument);
+    x[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(sga{1u}.evolve(pop), std::invalid_argument);
+    x[0] = std::numeric_limits<double>::infinity();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW(sga{1u}.evolve(pop), std::invalid_argument);
 }

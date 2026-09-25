@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
+#include <limits>
 #include <string>
 
 #include <pagmo/algorithm.hpp>
@@ -284,4 +285,30 @@ BOOST_AUTO_TEST_CASE(bfe_usage_test)
     // 7 - Evolve the population
     pop2 = algo2.evolve(pop);
     BOOST_CHECK(algo1.extract<moead_gen>()->get_log() == algo2.extract<moead_gen>()->get_log());
+}
+
+BOOST_AUTO_TEST_CASE(moead_gen_out_of_bounds_population_test)
+{
+    // Out-of-bounds/non-finite initial individuals must be rejected (see issue #567):
+    // the crossover and mutation operators assume feasible parents.
+    problem prob{zdt{1u, 30u}};
+    population pop{prob, 40u, 23u};
+    auto x = pop.get_x()[0];
+    auto f = pop.get_f()[0];
+    x[0] = -0.5; // below the lower bound (0)
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW((moead_gen{1u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}.evolve(pop)),
+                      std::invalid_argument);
+    x[0] = 1.5; // above the upper bound (1)
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW((moead_gen{1u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}.evolve(pop)),
+                      std::invalid_argument);
+    x[0] = std::numeric_limits<double>::quiet_NaN();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW((moead_gen{1u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}.evolve(pop)),
+                      std::invalid_argument);
+    x[0] = std::numeric_limits<double>::infinity();
+    pop.set_xf(0, x, f);
+    BOOST_CHECK_THROW((moead_gen{1u, "grid", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}.evolve(pop)),
+                      std::invalid_argument);
 }
