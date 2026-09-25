@@ -62,7 +62,7 @@ de::de(unsigned gen, double F, double CR, unsigned variant, double ftol, double 
                     "The Differential Evolution variant must be in [1, .., 10], while a value of "
                         + std::to_string(variant) + " was detected.");
     }
-    if (CR < 0. || F < 0. || CR > 1. || F > 1.) {
+    if (CR < 0. || F < 0. || CR > 1. || F > 1. || (std::isfinite(CR) == false) || (std::isfinite(F) == false)) {
         pagmo_throw(std::invalid_argument, "The F and CR parameters must be in the [0,1] range");
     }
 }

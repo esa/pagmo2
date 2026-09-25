@@ -2,6 +2,7 @@
 description: "Use when writing or modifying user-defined problems (UDPs) in this repository. Follow the common patterns for mathematically defined problems, data-rich benchmark wrappers, and meta-problems that delegate to another problem."
 ---
 
+- UDPs are User Defined Problems and they consists of a my_udp.cpp file placed in the `src/problems` directory and a corresponding my_udp.hpp header file for the class declaration placed in include/problems.
 - Implement the public UDP API with at least the usual problem methods: `fitness()`, `get_bounds()`, `get_name()`, and any required serialization or metadata accessors.
 - Keep the objective evaluation deterministic and side-effect free. A UDP should compute a fitness value from the decision vector and its internal state, without mutating the problem instance or external global state.
 - When the problem is a direct mathematical definition, keep the implementation compact and explicit: validate dimensions, define bounds in a straightforward way, and compute the objective in a single, readable evaluation path.

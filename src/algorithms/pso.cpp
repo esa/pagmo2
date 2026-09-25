@@ -80,18 +80,19 @@ pso::pso(unsigned gen, double omega, double eta1, double eta2, double max_vel, u
       m_neighb_type(neighb_type), m_neighb_param(neighb_param), m_memory(memory), m_e(seed), m_seed(seed),
       m_verbosity(0u), m_log()
 {
-    if (m_omega < 0. || m_omega > 1.) {
+    if (m_omega < 0. || m_omega > 1. || (std::isfinite(m_omega) == false)) {
         // variants using Inertia weight
         pagmo_throw(std::invalid_argument,
                     "The particles' inertia (or the constriction factor) must be in the [0,1] range, while a value of "
                         + std::to_string(m_omega) + " was detected");
     }
-    if (m_eta1 < 0. || m_eta2 < 0. || m_eta1 > 4. || m_eta2 > 4.) {
+    if (m_eta1 < 0. || m_eta2 < 0. || m_eta1 > 4. || m_eta2 > 4. || (std::isfinite(m_eta1) == false)
+        || (std::isfinite(m_eta2) == false)) {
         pagmo_throw(std::invalid_argument,
                     "The eta parameters must be in the [0,4] range, while eta1 = " + std::to_string(m_eta1)
                         + ", eta2 = " + std::to_string(m_eta2) + " was detected");
     }
-    if (m_max_vel <= 0. || m_max_vel > 1.) {
+    if (m_max_vel <= 0. || m_max_vel > 1. || (std::isfinite(m_max_vel) == false)) {
         pagmo_throw(std::invalid_argument, "The maximum particle velocity (as a fraction of the bounds) should be "
                                            "in the (0,1] range, while a value of "
                                                + std::to_string(m_max_vel) + " was detected");

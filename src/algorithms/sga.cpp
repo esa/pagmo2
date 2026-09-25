@@ -118,16 +118,16 @@ sga::sga(unsigned gen, double cr, double eta_c, double m, double param_m, unsign
     : m_gen(gen), m_cr(cr), m_eta_c(eta_c), m_m(m), m_param_m(param_m), m_param_s(param_s), m_e(seed), m_seed(seed),
       m_verbosity(0u), m_log()
 {
-    if (cr > 1. || cr < 0.) {
+    if (cr > 1. || cr < 0. || (std::isfinite(cr) == false)) {
         pagmo_throw(std::invalid_argument, "The crossover probability must be in the [0,1] range, while a value of "
                                                + std::to_string(cr) + " was detected");
     }
-    if (eta_c < 1. || eta_c > 100.) {
+    if (eta_c < 1. || eta_c > 100. || (std::isfinite(eta_c) == false)) {
         pagmo_throw(std::invalid_argument,
                     "The distribution index for SBX crossover must be in [1, 100], while a value of "
                         + std::to_string(eta_c) + " was detected");
     }
-    if (m < 0. || m > 1.) {
+    if (m < 0. || m > 1. || (std::isfinite(m) == false)) {
         pagmo_throw(std::invalid_argument, "The mutation probability must be in the [0,1] range, while a value of "
                                                + std::to_string(cr) + " was detected");
     }
@@ -154,14 +154,16 @@ sga::sga(unsigned gen, double cr, double eta_c, double m, double param_m, unsign
                 + crossover);
     }
     // param_m represents the distribution index if polynomial mutation is selected
-    if (mutation == "polynomial" && (param_m < 1. || param_m > 100.)) {
+    if (mutation == "polynomial"
+        && (param_m < 1. || param_m > 100. || (std::isfinite(param_m) == false))) {
         pagmo_throw(std::invalid_argument, "Polynomial mutation was selected, the mutation parameter (distribution "
                                            "index) must be in [1, 100], while a value of "
                                                + std::to_string(param_m) + " was detected");
     }
 
     // otherwise param_m represents the width of the mutation relative to the box bounds
-    if (mutation != "polynomial" && (param_m < 0 || param_m > 1.)) {
+    if (mutation != "polynomial"
+        && (param_m < 0 || param_m > 1. || (std::isfinite(param_m) == false))) {
         pagmo_throw(std::invalid_argument, "The mutation parameter must be in [0,1], while a value of "
                                                + std::to_string(param_m) + " was detected");
     }

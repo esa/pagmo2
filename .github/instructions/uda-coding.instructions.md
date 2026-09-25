@@ -2,6 +2,7 @@
 description: "Use when writing or modifying user-defined algorithms (UDAs) in this repository. Follow the common evolve() validation, problem checks, and logging patterns used across PaGMO algorithms."
 ---
 
+- UDAs are User Defined Algorithms and they consists of a my_uda.cpp file placed in the `src/algorithms` directory and a corresponding my_uda.hpp header file for the class declaration placed in include/algorithms.
 - Implement the public algorithm interface with at least `evolve(population) const` and `get_name()`.
 - At the start of `evolve()`, validate the input population and problem before doing any optimization work. Check the population size, objective count, constraint count, and bounds/gradient requirements expected by the algorithm.
 - Reject unsupported cases explicitly with `pagmo_throw(std::invalid_argument, ...)` and include the problem name and the algorithm name when relevant.

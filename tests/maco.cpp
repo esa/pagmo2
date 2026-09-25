@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <iostream>
+#include <limits>
 #include <string>
 
 #include <boost/lexical_cast.hpp>
@@ -67,6 +68,8 @@ BOOST_AUTO_TEST_CASE(maco_algorithm_construction)
     // Wrong threshold
     BOOST_CHECK_THROW((maco{1u, 63u, 1.0, 3u, 7u, 10000u, 0., false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((maco{1u, 63u, 1.0, 0, 7u, 10000u, 0., true, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((maco{1u, 63u, 1.0, 1u, 7u, 10000u, std::numeric_limits<double>::quiet_NaN(), false, 23u}),
+                      std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(maco_evolve_test)

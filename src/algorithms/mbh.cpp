@@ -72,7 +72,7 @@ mbh::mbh() : m_algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_ve
 
 void mbh::scalar_ctor_impl(double perturb)
 {
-    if (std::isnan(perturb) || perturb > 1. || perturb <= 0.) {
+    if ((std::isfinite(perturb) == false) || perturb > 1. || perturb <= 0.) {
         pagmo_throw(std::invalid_argument, "The scalar perturbation must be in (0, 1], while a value of "
                                                + std::to_string(perturb) + " was detected.");
     }
@@ -81,7 +81,7 @@ void mbh::scalar_ctor_impl(double perturb)
 void mbh::vector_ctor_impl(const vector_double &perturb)
 {
     if (!std::all_of(perturb.begin(), perturb.end(),
-                     [](double item) { return (!std::isnan(item) && item > 0. && item <= 1.); })) {
+                     [](double item) { return (std::isfinite(item) && item > 0. && item <= 1.); })) {
         pagmo_throw(std::invalid_argument,
                     "The perturbation must have all components in (0, 1], while that is not the case.");
     }
@@ -221,7 +221,7 @@ void mbh::set_seed(unsigned seed)
 void mbh::set_perturb(const vector_double &perturb)
 {
     if (!std::all_of(perturb.begin(), perturb.end(),
-                     [](double item) { return (!std::isnan(item) && item > 0. && item <= 1.); })) {
+                     [](double item) { return (std::isfinite(item) && item > 0. && item <= 1.); })) {
         pagmo_throw(std::invalid_argument,
                     "The perturbation must have all components in (0, 1], while that is not the case.");
     }

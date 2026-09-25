@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
+#include <limits>
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/io.hpp>
@@ -65,6 +66,8 @@ BOOST_AUTO_TEST_CASE(ihs_algorithm_construction)
     BOOST_CHECK_THROW((ihs{1u, 0.85, 0.35, 0.34, 1e-5, 1., 42u}), std::invalid_argument);
     BOOST_CHECK_THROW((ihs{1u, 0.85, 0.35, 0.99, -0.43, 1., 42u}), std::invalid_argument);
     BOOST_CHECK_THROW((ihs{1u, 0.85, 0.35, 0.99, 0.4, 0.3, 42u}), std::invalid_argument);
+    BOOST_CHECK_THROW((ihs{1u, std::numeric_limits<double>::quiet_NaN(), 0.35, 0.99, 1e-5, 1., 42u}),
+                      std::invalid_argument);
 }
 
 struct mo_many {

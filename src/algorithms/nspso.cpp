@@ -56,15 +56,16 @@ nspso::nspso(unsigned gen, double omega, double c1, double c2, double chi, doubl
       m_leader_selection_range(leader_selection_range), m_diversity_mechanism(diversity_mechanism), m_memory(memory),
       m_velocity(), m_e(seed), m_seed(seed), m_verbosity(0u)
 {
-    if (omega < 0. || omega > 1.) {
+    if (omega < 0. || omega > 1. || (std::isfinite(omega) == false)) {
         pagmo_throw(std::invalid_argument, "The particles' inertia weight must be in the [0,1] range, while a value of "
                                                + std::to_string(m_omega) + " was detected");
     }
-    if (c1 <= 0 || c2 <= 0 || chi <= 0) {
+    if (c1 <= 0 || c2 <= 0 || chi <= 0 || (std::isfinite(c1) == false) || (std::isfinite(c2) == false)
+        || (std::isfinite(chi) == false)) {
         pagmo_throw(std::invalid_argument, "first and second magnitude of the force "
                                            "coefficients and velocity scaling factor should be greater than 0");
     }
-    if (v_coeff <= 0 || v_coeff > 1) {
+    if (v_coeff <= 0 || v_coeff > 1 || (std::isfinite(v_coeff) == false)) {
         pagmo_throw(std::invalid_argument, "velocity scaling factor should be in ]0,1] range, while a value of"
                                                + std::to_string(v_coeff) + " was detected");
     }

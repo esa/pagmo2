@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -88,6 +89,9 @@ BOOST_AUTO_TEST_CASE(sga_algorithm_construction)
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 101, 5u, "exponential", "polynomial", "truncated", 32u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, -3, 5u, "exponential", "uniform", "tournament", 32u}),
+                      std::invalid_argument);
+    BOOST_CHECK_THROW((sga{1u, std::numeric_limits<double>::quiet_NaN(), 10., .02, .5, 5u, "exponential", "gaussian",
+                           "tournament", 32u}),
                       std::invalid_argument);
     BOOST_CHECK_THROW((sga{1u, .95, 10., .02, 1.1, 5u, "exponential", "uniform", "tournament", 32u}),
                       std::invalid_argument);

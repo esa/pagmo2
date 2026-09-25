@@ -55,22 +55,22 @@ xnes::xnes(unsigned gen, double eta_mu, double eta_sigma, double eta_b, double s
     : m_gen(gen), m_eta_mu(eta_mu), m_eta_sigma(eta_sigma), m_eta_b(eta_b), m_sigma0(sigma0), m_ftol(ftol),
       m_xtol(xtol), m_memory(memory), m_force_bounds(force_bounds), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
 {
-    if (((eta_mu <= 0.) || (eta_mu > 1.)) && !(eta_mu == -1)) {
+    if (((eta_mu <= 0.) || (eta_mu > 1.)) && !(eta_mu == -1) || (std::isfinite(eta_mu) == false)) {
         pagmo_throw(std::invalid_argument,
                     "eta_mu must be in ]0,1] or -1 if its value has to be initialized automatically, a value of "
                         + std::to_string(eta_mu) + " was detected");
     }
-    if (((eta_sigma <= 0.) || (eta_sigma > 1.)) && !(eta_sigma == -1)) {
+    if (((eta_sigma <= 0.) || (eta_sigma > 1.)) && !(eta_sigma == -1) || (std::isfinite(eta_sigma) == false)) {
         pagmo_throw(std::invalid_argument,
                     "eta_sigma needs to be in ]0,1] or -1 if its value has to be initialized automatically, a value of "
                         + std::to_string(eta_sigma) + " was detected");
     }
-    if (((eta_b <= 0.) || (eta_b > 1.)) && !(eta_b == -1)) {
+    if (((eta_b <= 0.) || (eta_b > 1.)) && !(eta_b == -1) || (std::isfinite(eta_b) == false)) {
         pagmo_throw(std::invalid_argument,
                     "eta_b needs to be in ]0,1] or -1 if its value has to be initialized automatically, a value of "
                         + std::to_string(eta_b) + " was detected");
     }
-    if (((sigma0 <= 0.) || (sigma0 > 1.)) && !(sigma0 == -1)) {
+    if (((sigma0 <= 0.) || (sigma0 > 1.)) && !(sigma0 == -1) || (std::isfinite(sigma0) == false)) {
         pagmo_throw(std::invalid_argument,
                     "sigma0 needs to be in ]0,1] or -1 if its value has to be initialized automatically, a value of "
                         + std::to_string(sigma0) + " was detected");

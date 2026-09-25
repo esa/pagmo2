@@ -76,6 +76,8 @@ BOOST_AUTO_TEST_CASE(construction)
     BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 0.1, 5u, 0u, 4u, false, 23u}), std::invalid_argument);
 
     BOOST_CHECK_THROW((pso{100, 0.79, 2., 2., 0.1, 5u, 2u, 0u, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((pso{100, std::numeric_limits<double>::quiet_NaN(), 2., 2., 0.1, 5u, 2u, 4u, false, 23u}),
+                      std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(evolve_test)

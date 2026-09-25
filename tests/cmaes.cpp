@@ -85,6 +85,9 @@ BOOST_AUTO_TEST_CASE(cmaes_algorithm_construction)
     BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1.2, -1, 0.5, 1e-6, 1e-6, false, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1, -1.2, 0.5, 1e-6, 1e-6, false, false, 23u}), std::invalid_argument);
     BOOST_CHECK_THROW((cmaes{10u, -1, -1, -1, -1.2, 0.5, 1e-6, 1e-6, false, false, 23u}), std::invalid_argument);
+    BOOST_CHECK_THROW((cmaes{10u, std::numeric_limits<double>::quiet_NaN(), -1, -1, -1, 0.5, 1e-6, 1e-6, false,
+                             false, 23u}),
+                      std::invalid_argument);
 }
 
 struct unbounded_lb {

@@ -55,11 +55,11 @@ simulated_annealing::simulated_annealing(double Ts, double Tf, unsigned n_T_adj,
     : m_Ts(Ts), m_Tf(Tf), m_n_T_adj(n_T_adj), m_n_range_adj(n_range_adj), m_bin_size(bin_size),
       m_start_range(start_range), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
 {
-    if (Ts <= 0. || !std::isfinite(Ts)) {
+    if (Ts <= 0. || (std::isfinite(Ts) == false)) {
         pagmo_throw(std::invalid_argument, "The starting temperature must be finite and positive, while a value of "
                                                + std::to_string(Ts) + " was detected.");
     }
-    if (Tf <= 0. || !std::isfinite(Tf)) {
+    if (Tf <= 0. || (std::isfinite(Tf) == false)) {
         pagmo_throw(std::invalid_argument, "The final temperature must be finite and positive, while a value of "
                                                + std::to_string(Tf) + " was detected.");
     }
@@ -68,7 +68,7 @@ simulated_annealing::simulated_annealing(double Ts, double Tf, unsigned n_T_adj,
                     "The final temperature must be smaller than the initial temperature, while a value of "
                         + std::to_string(Tf) + " >= " + std::to_string(Ts) + " was detected.");
     }
-    if (start_range <= 0. || start_range > 1. || !std::isfinite(start_range)) {
+    if (start_range <= 0. || start_range > 1. || (std::isfinite(start_range) == false)) {
         pagmo_throw(std::invalid_argument, "The start range must be in the (0, 1] range, while a value of "
                                                + std::to_string(start_range) + " was detected.");
     }
