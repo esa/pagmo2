@@ -121,8 +121,8 @@ public:
      * @param eta_sigma learning rate for step-size update (if -1 will be automatically selected)
      * @param eta_b  learning rate for the covariance matrix update (if -1 will be automatically selected)
      * @param sigma0 the initial search width will be sigma0 * (ub - lb) (if -1 will be selected to be 0.5)
-     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param ftol stopping criteria on the f tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the x tolerance (default is 1e-6)
      * @param memory when true the distribution parameters are not reset between successive calls to the evolve method
      * @param force_bounds when true the box bounds are enforced. The fitness will never be called outside the
      *        bounds but the covariance matrix adaptation  mechanism will worsen

@@ -137,8 +137,8 @@ public:
      * @param allowed_variants the subset of mutation variants to be considered (default is {2u ,3u ,7u ,10u ,13u
      ,14u ,15u ,16u})
      * @param variant_adptv parameter adaptation scheme to be used (one of 1..2)
-     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param ftol stopping criteria on the f tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the x tolerance (default is 1e-6)
      * @param memory when true the parameters CR anf F are not reset between successive calls to the evolve method
      * @param seed seed used by the internal random number generator (default is random)
 

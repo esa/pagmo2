@@ -114,8 +114,8 @@ public:
      * @param cmu learning rate for the rank-\f$\mu\f$  update of the covariance matrix (by default is automatically
      assigned)
      * @param sigma0 initial step-size
-     * @param ftol stopping criteria on the x tolerance (default is 1e-6)
-     * @param xtol stopping criteria on the f tolerance (default is 1e-6)
+     * @param ftol stopping criteria on the f tolerance (default is 1e-6)
+     * @param xtol stopping criteria on the x tolerance (default is 1e-6)
      * @param memory when true the adapted parameters are not reset between successive calls to the evolve method
      * @param force_bounds when true the box bounds are enforced. The fitness will never be called outside the bounds
      but the covariance matrix adaptation  mechanism will worsen
