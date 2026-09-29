@@ -115,9 +115,9 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_construction)
     {
         problem prob{hock_schittkowski_71{}};
         prob.set_c_tol({1e-3, 1e-3});
-        population pop1{prob, 5u, 23u};
-        population pop2{prob, 5u, 23u};
-        population pop3{prob, 5u, 23u};
+        population pop1{prob, 6u, 23u};
+        population pop2{prob, 6u, 23u};
+        population pop3{prob, 6u, 23u};
 
         cstrs_self_adaptive user_algo1{150u, de{10u, 0.8, 0.9, 2u, 1e-6, 1e-6, 32u}, 32u};
         user_algo1.set_verbosity(1u);
