@@ -11,8 +11,11 @@ New
 
 - Add the ``"barycentric"`` weight generation method to
   :cpp:func:`pagmo::decomposition_weights()`, which generates any number of
-  weights by recursive barycentric subdivision of the simplex. The method is
-  also available in :cpp:class:`pagmo::moead` and :cpp:class:`pagmo::moead_gen`.
+  distinct weights by recursive barycentric subdivision of the canonical simplex
+  and, with three or more objectives, of the complementary simplex whose vertices
+  are the centroids of the facets of the canonical simplex, interleaving the
+  weights of the two subdivisions. The method is also available in
+  :cpp:class:`pagmo::moead` and :cpp:class:`pagmo::moead_gen`.
 
 2.20.0 (2026-09-24)
 --------------------
