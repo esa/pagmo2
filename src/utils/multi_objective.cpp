@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #include <cmath>
 #include <limits>
 #include <numeric>
+#include <queue>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -74,6 +75,53 @@ void reksum(std::vector<std::vector<double>> &retval, const std::vector<pop_size
             eggs.pop_back();
         }
     }
+}
+
+// Generates n_w weights of dimension n_f by recursive barycentric subdivision of the simplex.
+// The canonical weights [1,0,0,...], [0,1,0,...], ... (i.e. the vertices of the simplex) are generated
+// first, followed by the centroid of the simplex. Each simplex visited is then split into n_f
+// sub-simplices, the j-th one being obtained by replacing the j-th vertex with the centroid. The
+// sub-simplices are visited in FIFO order and their centroids are generated until n_w weights are obtained.
+// The caller must ensure that n_w >= n_f >= 2.
+std::vector<vector_double> barycentric_weights(vector_double::size_type n_f, vector_double::size_type n_w)
+{
+    std::vector<vector_double> retval;
+    retval.reserve(n_w);
+    // We first push back the "corners" [1,0,0,...], [0,1,0,...], which are the vertices of the simplex
+    std::vector<vector_double> vertices;
+    for (decltype(n_f) i = 0u; i < n_f; ++i) {
+        vertices.push_back(vector_double(n_f, 0.));
+        vertices[i][i] = 1.;
+        retval.push_back(vertices[i]);
+    }
+    // Each element of the queue is a simplex, described by its centroid and its vertices
+    std::queue<std::pair<vector_double, std::vector<vector_double>>> simplices;
+    simplices.emplace(vector_double(n_f, 1. / static_cast<double>(n_f)), std::move(vertices));
+    while (retval.size() < n_w) {
+        auto centroid = std::move(simplices.front().first);
+        vertices = std::move(simplices.front().second);
+        simplices.pop();
+        retval.push_back(centroid);
+        // We split the simplex into its sub-simplices. Those which would be visited only after
+        // n_w weights have been generated are not added to the queue.
+        for (decltype(vertices.size()) j = 0u; j < vertices.size() && retval.size() + simplices.size() < n_w; ++j) {
+            auto new_centroid = centroid;
+            std::vector<vector_double> new_vertices{centroid};
+            for (decltype(vertices.size()) k = 0u; k < vertices.size(); ++k) {
+                if (j != k) {
+                    for (decltype(n_f) l = 0u; l < n_f; ++l) {
+                        new_centroid[l] += vertices[k][l];
+                    }
+                    new_vertices.push_back(vertices[k]);
+                }
+            }
+            for (decltype(n_f) l = 0u; l < n_f; ++l) {
+                new_centroid[l] /= static_cast<double>(n_f);
+            }
+            simplices.emplace(std::move(new_centroid), std::move(new_vertices));
+        }
+    }
+    return retval;
 }
 
 } // namespace detail

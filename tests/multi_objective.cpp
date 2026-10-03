@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <algorithm>
 #include <numeric>
 #include <random>
 #include <stdexcept>
@@ -332,10 +333,12 @@ BOOST_AUTO_TEST_CASE(decomposition_weights_test)
     // We test some throws
     // At least 2 objectives are needed
     BOOST_CHECK_THROW(decomposition_weights(1u, 5u, "grid", r_engine), std::invalid_argument);
-    // The weight generation method must be one of 'grid', 'random', 'low discrepancy'
+    BOOST_CHECK_THROW(decomposition_weights(1u, 5u, "barycentric", r_engine), std::invalid_argument);
+    // The weight generation method must be one of 'grid', 'random', 'low discrepancy', 'barycentric'
     BOOST_CHECK_THROW(decomposition_weights(2u, 5u, "grod", r_engine), std::invalid_argument);
     // The number of weights are smaller than the number of objectives
     BOOST_CHECK_THROW(decomposition_weights(10u, 5u, "grid", r_engine), std::invalid_argument);
+    BOOST_CHECK_THROW(decomposition_weights(10u, 5u, "barycentric", r_engine), std::invalid_argument);
     // The number of weights is not compatible with 'grid'
     BOOST_CHECK_THROW(decomposition_weights(4u, 31u, "grid", r_engine), std::invalid_argument);
 
@@ -379,6 +382,85 @@ BOOST_AUTO_TEST_CASE(decomposition_weights_test)
     {
         auto ws = decomposition_weights(5u, 25u, "random", r_engine);
         check_weights(ws, 5u);
+    }
+    {
+        auto ws = decomposition_weights(3u, 3u, "barycentric", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(3u, 4u, "barycentric", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(3u, 6u, "barycentric", r_engine);
+        check_weights(ws, 3u);
+    }
+    {
+        auto ws = decomposition_weights(2u, 4u, "barycentric", r_engine);
+        check_weights(ws, 2u);
+    }
+    {
+        auto ws = decomposition_weights(5u, 25u, "barycentric", r_engine);
+        check_weights(ws, 5u);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(decomposition_weights_barycentric_test)
+{
+    std::mt19937 r_engine(23u);
+    // Known cases: canonical weights first, then the centroid, then the centroids of the sub-simplices
+    {
+        std::vector<vector_double> res
+            = {{1., 0.}, {0., 1.}, {0.5, 0.5}, {0.25, 0.75}, {0.75, 0.25}, {0.125, 0.875}, {0.375, 0.625}};
+        BOOST_CHECK(decomposition_weights(2u, 7u, "barycentric", r_engine) == res);
+    }
+    {
+        std::vector<vector_double> res = {{1., 0., 0.},
+                                          {0., 1., 0.},
+                                          {0., 0., 1.},
+                                          {1. / 3., 1. / 3., 1. / 3.},
+                                          {1. / 9., 4. / 9., 4. / 9.},
+                                          {4. / 9., 1. / 9., 4. / 9.},
+                                          {4. / 9., 4. / 9., 1. / 9.},
+                                          {1. / 27., 13. / 27., 13. / 27.},
+                                          {4. / 27., 7. / 27., 16. / 27.},
+                                          {4. / 27., 16. / 27., 7. / 27.}};
+        auto ws = decomposition_weights(3u, 10u, "barycentric", r_engine);
+        BOOST_CHECK_EQUAL(ws.size(), res.size());
+        for (decltype(ws.size()) i = 0u; i < ws.size(); ++i) {
+            BOOST_CHECK_EQUAL(ws[i].size(), res[i].size());
+            for (decltype(ws[i].size()) j = 0u; j < ws[i].size(); ++j) {
+                if (res[i][j] == 0.) {
+                    BOOST_CHECK_EQUAL(ws[i][j], 0.);
+                } else {
+                    BOOST_CHECK_CLOSE(ws[i][j], res[i][j], 1e-8);
+                }
+            }
+        }
+    }
+    // Exactly n_w distinct weights are generated, on the simplex, starting with the canonical weights
+    for (auto n_f : {2u, 3u, 4u, 7u}) {
+        for (auto n_w : {n_f, n_f + 1u, n_f + 2u, 31u, 200u, 1000u}) {
+            auto ws = decomposition_weights(n_f, n_w, "barycentric", r_engine);
+            BOOST_CHECK_EQUAL(ws.size(), n_w);
+            check_weights(ws, n_f);
+            for (decltype(n_f) i = 0u; i < n_f; ++i) {
+                vector_double canonical(n_f, 0.);
+                canonical[i] = 1.;
+                BOOST_CHECK(ws[i] == canonical);
+            }
+            for (const auto &lambda : ws) {
+                BOOST_CHECK(std::all_of(lambda.begin(), lambda.end(), [](double l) { return l >= 0. && l <= 1.; }));
+            }
+            std::sort(ws.begin(), ws.end());
+            BOOST_CHECK(std::adjacent_find(ws.begin(), ws.end()) == ws.end());
+        }
+    }
+    // The generation is deterministic and does not depend on the random engine
+    {
+        std::mt19937 r_engine1(1u), r_engine2(2u);
+        BOOST_CHECK(decomposition_weights(4u, 31u, "barycentric", r_engine1)
+                    == decomposition_weights(4u, 31u, "barycentric", r_engine2));
     }
 }
 

@@ -61,9 +61,11 @@ moead_gen::moead_gen(unsigned gen, std::string weight_generation, std::string de
       m_e(seed), m_seed(seed), m_verbosity(0u)
 {
     // Sanity checks
-    if (m_weight_generation != "random" && m_weight_generation != "grid" && m_weight_generation != "low discrepancy") {
-        pagmo_throw(std::invalid_argument, "Weight generation method requested is '" + m_weight_generation
-                                               + "', but only one of 'random', 'low discrepancy', 'grid' is allowed");
+    if (m_weight_generation != "random" && m_weight_generation != "grid" && m_weight_generation != "low discrepancy"
+        && m_weight_generation != "barycentric") {
+        pagmo_throw(std::invalid_argument,
+                    "Weight generation method requested is '" + m_weight_generation
+                        + "', but only one of 'random', 'low discrepancy', 'grid', 'barycentric' is allowed");
     }
     if (m_decomposition != "tchebycheff" && m_decomposition != "weighted" && m_decomposition != "bi") {
         pagmo_throw(std::invalid_argument, "Weight generation method requested is '" + m_decomposition
