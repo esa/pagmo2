@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #include <cmath>
 #include <limits>
 #include <numeric>
+#include <queue>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -74,6 +75,92 @@ void reksum(std::vector<std::vector<double>> &retval, const std::vector<pop_size
             eggs.pop_back();
         }
     }
+}
+
+// Generates n_w weights of dimension n_f by recursive barycentric subdivision of two simplices sharing the centroid
+// [1/n_f,1/n_f,...]: the canonical simplex, whose vertices are the canonical weights [1,0,0,...], [0,1,0,...], ...,
+// and, if n_f > 2, the complementary simplex, whose vertices [0,1/(n_f-1),...], [1/(n_f-1),0,...], ... are the
+// centroids of the facets of the canonical simplex (for n_f == 2 the two simplices coincide, and only the canonical
+// one is used).
+// The vertices of the canonical simplex are generated first, followed by those of the complementary simplex and by the
+// centroid. Each simplex visited is then split into n_f sub-simplices, the j-th one being obtained by replacing the
+// j-th vertex with the centroid. The sub-simplices of each of the two simplices are visited in FIFO order, and their
+// centroids are generated alternately (first from the canonical simplex, then from the complementary one) until n_w
+// weights are obtained.
+// The subdivision of the canonical simplex is the weight generator of Algorithm 1 in Cid, San Felice and Hokama,
+// "Uma Abordagem Multiobjetivo para o Problema do Escalonamento de Médicos", SBCAS 2023 (see decomposition_weights()
+// for the full reference). The paper leaves open the stopping criterion and the order in which the sub-simplices are
+// queued: here the generation stops after n_w weights, and the sub-simplices are queued in the order given above. The
+// complementary simplex and the interleaving of the two subdivisions are an extension of that method, not proposed in
+// the paper.
+// The weights are all distinct: within a subdivision, each centroid lies in the interior of its own sub-simplex, and
+// these interiors are disjoint. The complementary subdivision is the image of the canonical one under the map
+// x -> (1 - x) / (n_f - 1), and an exhaustive check in exact arithmetic found no weight shared by the two subdivisions
+// other than the centroid.
+// The caller must ensure that n_w >= n_f >= 2.
+std::vector<vector_double> barycentric_weights(vector_double::size_type n_f, vector_double::size_type n_w)
+{
+    std::vector<vector_double> retval;
+    retval.reserve(n_w);
+    // Each element of a queue is a simplex, described by its centroid and its vertices
+    using simplex_queue = std::queue<std::pair<vector_double, std::vector<vector_double>>>;
+    // Splits a simplex into its sub-simplices and adds them to the queue. Those which would be visited only after
+    // n_w weights have been generated are not added to the queue.
+    auto split = [n_f, n_w, &retval](simplex_queue &simplices, const vector_double &centroid,
+                                     const std::vector<vector_double> &vertices) {
+        for (decltype(vertices.size()) j = 0u; j < vertices.size() && retval.size() + simplices.size() < n_w; ++j) {
+            auto new_centroid = centroid;
+            std::vector<vector_double> new_vertices{centroid};
+            for (decltype(vertices.size()) k = 0u; k < vertices.size(); ++k) {
+                if (j != k) {
+                    for (decltype(n_f) l = 0u; l < n_f; ++l) {
+                        new_centroid[l] += vertices[k][l];
+                    }
+                    new_vertices.push_back(vertices[k]);
+                }
+            }
+            for (decltype(n_f) l = 0u; l < n_f; ++l) {
+                new_centroid[l] /= static_cast<double>(n_f);
+            }
+            simplices.emplace(std::move(new_centroid), std::move(new_vertices));
+        }
+    };
+    // The vertices of the canonical simplex, i.e. the "corners" [1,0,0,...], [0,1,0,...], ..., and, if n_f > 2,
+    // those of the complementary simplex, i.e. [0,1/(n_f-1),1/(n_f-1),...], [1/(n_f-1),0,1/(n_f-1),...], ...
+    std::vector<std::vector<vector_double>> vertices(n_f > 2u ? 2u : 1u);
+    for (decltype(n_f) i = 0u; i < n_f; ++i) {
+        vertices[0].push_back(vector_double(n_f, 0.));
+        vertices[0][i][i] = 1.;
+        if (n_f > 2u) {
+            vertices[1].push_back(vector_double(n_f, 1. / static_cast<double>(n_f - 1u)));
+            vertices[1][i][i] = 0.;
+        }
+    }
+    // We first push back the vertices of the simplices, then their common centroid
+    for (const auto &simplex_vertices : vertices) {
+        for (decltype(simplex_vertices.size()) i = 0u; i < simplex_vertices.size() && retval.size() < n_w; ++i) {
+            retval.push_back(simplex_vertices[i]);
+        }
+    }
+    const vector_double centroid(n_f, 1. / static_cast<double>(n_f));
+    if (retval.size() < n_w) {
+        retval.push_back(centroid);
+    }
+    // We split the simplices, then we visit their sub-simplices in FIFO order, taking turns between the simplices
+    std::vector<simplex_queue> queues(vertices.size());
+    for (decltype(vertices.size()) i = 0u; i < vertices.size(); ++i) {
+        split(queues[i], centroid, vertices[i]);
+    }
+    while (retval.size() < n_w) {
+        for (decltype(queues.size()) i = 0u; i < queues.size() && retval.size() < n_w; ++i) {
+            auto sub_centroid = std::move(queues[i].front().first);
+            auto sub_vertices = std::move(queues[i].front().second);
+            queues[i].pop();
+            retval.push_back(sub_centroid);
+            split(queues[i], sub_centroid, sub_vertices);
+        }
+    }
+    return retval;
 }
 
 } // namespace detail

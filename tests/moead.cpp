@@ -39,6 +39,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/moead.hpp>
 #include <pagmo/io.hpp>
+#include <pagmo/problems/dtlz.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
 #include <pagmo/problems/zdt.hpp>
 #include <pagmo/s11n.hpp>
@@ -77,11 +78,15 @@ BOOST_AUTO_TEST_CASE(moead_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., -0.34, 2u, true, 23u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u,
-                             std::numeric_limits<double>::quiet_NaN(), 0.5, 20., 0.9, 2u, true, 23u}),
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, std::numeric_limits<double>::quiet_NaN(), 0.5, 20., 0.9,
+                             2u, true, 23u}),
                       std::invalid_argument);
     // Wrong neighbours
     BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 1u, 1., 0.5, 20., 0.9, 2u, true, 23u}), std::invalid_argument);
+    // All the weight generation methods are accepted
+    for (const auto &weight_generation : {"grid", "random", "low discrepancy", "barycentric"}) {
+        BOOST_CHECK_NO_THROW((moead{10u, weight_generation, "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u}));
+    }
 }
 
 struct mo_con {
@@ -182,6 +187,34 @@ BOOST_AUTO_TEST_CASE(moead_evolve_test)
     pop3 = user_algo2.evolve(pop3);
 
     BOOST_CHECK(user_algo1.get_log() == user_algo2.get_log());
+
+    // Same check with the barycentric weight generation, which supports any population size
+    {
+        population pop4{prob, 37u, 23u};
+        population pop5{prob, 37u, 23u};
+        moead user_algo4{10u, "barycentric", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+        user_algo4.set_verbosity(1u);
+        pop4 = user_algo4.evolve(pop4);
+        BOOST_CHECK(user_algo4.get_log().size() > 0u);
+        moead user_algo5{10u, "barycentric", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+        user_algo5.set_verbosity(1u);
+        pop5 = user_algo5.evolve(pop5);
+        BOOST_CHECK(user_algo4.get_log() == user_algo5.get_log());
+    }
+    // Same check with three objectives, where the complementary simplex is also subdivided
+    {
+        problem prob3{dtlz{1u, 10u, 3u}};
+        population pop4{prob3, 37u, 23u};
+        population pop5{prob3, 37u, 23u};
+        moead user_algo4{10u, "barycentric", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+        user_algo4.set_verbosity(1u);
+        pop4 = user_algo4.evolve(pop4);
+        BOOST_CHECK(user_algo4.get_log().size() > 0u);
+        moead user_algo5{10u, "barycentric", "tchebycheff", 20u, 1., 0.5, 20., 0.9, 2u, true, 23u};
+        user_algo5.set_verbosity(1u);
+        pop5 = user_algo5.evolve(pop5);
+        BOOST_CHECK(user_algo4.get_log() == user_algo5.get_log());
+    }
 
     // We then check that the method evolve fails when called on unsuitable problems (populations)
     // Some bound is equal
