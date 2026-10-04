@@ -54,8 +54,9 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-moead_gen::moead_gen(unsigned gen, std::string weight_generation, std::string decomposition, population::size_type neighbours,
-             double CR, double F, double eta_m, double realb, unsigned limit, bool preserve_diversity, unsigned seed)
+moead_gen::moead_gen(unsigned gen, std::string weight_generation, std::string decomposition,
+                     population::size_type neighbours, double CR, double F, double eta_m, double realb, unsigned limit,
+                     bool preserve_diversity, unsigned seed)
     : m_gen(gen), m_weight_generation(weight_generation), m_decomposition(decomposition), m_neighbours(neighbours),
       m_CR(CR), m_F(F), m_eta_m(eta_m), m_realb(realb), m_limit(limit), m_preserve_diversity(preserve_diversity),
       m_e(seed), m_seed(seed), m_verbosity(0u)
@@ -179,7 +180,8 @@ population moead_gen::evolve(population pop) const
     std::vector<population::size_type> shuffle(NP);
     std::iota(shuffle.begin(), shuffle.end(), std::vector<population::size_type>::size_type(0u));
 
-    // Main Generational MOEA/D loop --------------------------------------------------------------------------------------------
+    // Main Generational MOEA/D loop
+    // --------------------------------------------------------------------------------------------
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
         // 0 - Logs and prints (verbosity modes > 1: a line is added every m_verbosity generations)
 
@@ -219,12 +221,12 @@ population moead_gen::evolve(population pop) const
         // 1 - Shuffle the population indexes
         std::shuffle(shuffle.begin(), shuffle.end(), m_e);
         // 2 - Loop over the shuffled NP decomposed problems
-        
+
         auto n_obj = prob.get_nobj();
 
         // create temporary vectors to collect all the necessary variables for each individual fitness evaluation
         // the structure for evaluating the bfe is copied from the nsga2 implementation
-        vector_double genes(NP*dim);
+        vector_double genes(NP * dim);
         std::vector<vector_double> poptemp;
         std::vector<vector_double> ftemp;
         std::vector<population::size_type> fidtemp;
@@ -248,7 +250,7 @@ population moead_gen::evolve(population pop) const
             // 5 - Crossover using the Differential Evolution operator (binomial crossover)
             for (decltype(dim) kk = 0u; kk < dim; ++kk) {
                 if (drng(m_e) < m_CR) {
-                    //Selected Two Parents//
+                    // Selected Two Parents//
                     candidate[kk] = pop.get_x()[n][kk]
                                     + m_F * (pop.get_x()[parents_idx[0]][kk] - pop.get_x()[parents_idx[1]][kk]);
                     // Fix the bounds
@@ -273,12 +275,12 @@ population moead_gen::evolve(population pop) const
         }
         if (m_bfe) {
             // bfe is available:
-            // while moead runs sequentially such that each change in the population will 
+            // while moead runs sequentially such that each change in the population will
             //   affect all subsequently evolved individuals this is not easily parallelizable
             // instead, the generational moead constructs the new individuals based on the last generation's population
             //   and then batch evolves the entire generation, before collecting all the results and reinserting
-            //   the appropriate individuals into the population     
-            // this approach is probably not helpful for problems where the fitness evaluations are not 
+            //   the appropriate individuals into the population
+            // this approach is probably not helpful for problems where the fitness evaluations are not
             //   sufficiently expensive as to slow the rest of the algorithm
             auto fitnesses = (*m_bfe)(prob, genes);
             // this poptemp for loop can probably be combined with the following fidtemp loop
@@ -298,7 +300,7 @@ population moead_gen::evolve(population pop) const
                 ftemp.push_back(f1);
             }
         }
-        for( unsigned int n_i = 0; n_i<fidtemp.size(); n_i++ ) { 
+        for (unsigned int n_i = 0; n_i < fidtemp.size(); n_i++) {
             // get each individual's values from the temp vectors
             population::size_type n = fidtemp[n_i];
             auto new_f = ftemp[n_i];
@@ -347,7 +349,7 @@ population moead_gen::evolve(population pop) const
                     break;
                 }
             }
-        } 
+        }
     }
     return pop;
 }
@@ -403,7 +405,7 @@ void moead_gen::serialize(Archive &ar, unsigned)
 
 std::vector<population::size_type>
 moead_gen::select_parents(population::size_type n, const std::vector<std::vector<population::size_type>> &neigh_idx,
-                      bool whole_population) const
+                          bool whole_population) const
 {
     std::vector<population::size_type> retval;
     auto ss = neigh_idx[n].size();

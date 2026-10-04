@@ -78,8 +78,8 @@ BOOST_AUTO_TEST_CASE(moead_algorithm_construction)
                       std::invalid_argument);
     BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, 1., 0.5, 20., -0.34, 2u, true, 23u}),
                       std::invalid_argument);
-    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u,
-                             std::numeric_limits<double>::quiet_NaN(), 0.5, 20., 0.9, 2u, true, 23u}),
+    BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 20u, std::numeric_limits<double>::quiet_NaN(), 0.5, 20., 0.9,
+                             2u, true, 23u}),
                       std::invalid_argument);
     // Wrong neighbours
     BOOST_CHECK_THROW((moead{10u, "grid", "tchebycheff", 1u, 1., 0.5, 20., 0.9, 2u, true, 23u}), std::invalid_argument);
