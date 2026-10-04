@@ -14,7 +14,7 @@ Place it into a ``getting_started.cpp`` text file and compile it
 
 .. code-block:: console
 
-   $ g++ -O2 -DNDEBUG -std=c++17 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb
+   $ g++ -O2 -DNDEBUG -std=c++20 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb
 
 If you installed pagmo in a non-standard path, such as the ``.local`` directory
 in your ``$HOME`` on a Unix installation (e.g., ``/home/username/.local``),
@@ -23,7 +23,7 @@ E.g., you may need a command such as:
 
 .. code-block:: console
 
-   $ g++ -O2 -DNDEBUG -std=c++17 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -I /home/username/.local/include -L /home/username/.local/lib -Wl,-R/home/username/.local/lib
+   $ g++ -O2 -DNDEBUG -std=c++20 getting_started.cpp -pthread -lpagmo -lboost_serialization -ltbb -I /home/username/.local/include -L /home/username/.local/lib -Wl,-R/home/username/.local/lib
 
 If you installed pagmo with support for optional 3rd party libraries,
 you might need to add additional switches to the command-line invocation
