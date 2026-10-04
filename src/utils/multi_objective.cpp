@@ -87,6 +87,12 @@ void reksum(std::vector<std::vector<double>> &retval, const std::vector<pop_size
 // j-th vertex with the centroid. The sub-simplices of each of the two simplices are visited in FIFO order, and their
 // centroids are generated alternately (first from the canonical simplex, then from the complementary one) until n_w
 // weights are obtained.
+// The subdivision of the canonical simplex is the weight generator of Algorithm 1 in Cid, San Felice and Hokama,
+// "Uma Abordagem Multiobjetivo para o Problema do Escalonamento de Médicos", SBCAS 2023 (see decomposition_weights()
+// for the full reference). The paper leaves open the stopping criterion and the order in which the sub-simplices are
+// queued: here the generation stops after n_w weights, and the sub-simplices are queued in the order given above. The
+// complementary simplex and the interleaving of the two subdivisions are an extension of that method, not proposed in
+// the paper.
 // The weights are all distinct: within a subdivision, each centroid lies in the interior of its own sub-simplex, and
 // these interiors are disjoint. The complementary subdivision is the image of the canonical one under the map
 // x -> (1 - x) / (n_f - 1), and an exhaustive check in exact arithmetic found no weight shared by the two subdivisions

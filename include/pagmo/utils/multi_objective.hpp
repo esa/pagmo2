@@ -108,14 +108,23 @@ PAGMO_DLL_PUBLIC vector_double nadir(const std::vector<vector_double> &);
  * by the vertices of the complementary simplex and by the centroid. Each simplex is then split into \f$n_f\f$
  * sub-simplices, obtained by replacing in turn each of its vertices with its centroid, and the centroids of the
  * sub-simplices of the two simplices are generated alternately, each in breadth-first order, until \p n_w weights are
- * obtained. In two dimensions the two simplices coincide, and only the canonical one is subdivided. Any number of
- * weights not smaller than \p n_f is supported, the generated weights are all distinct and \p r_engine is not used.
+ * obtained. In two dimensions the two simplices coincide, and only the canonical one is subdivided. The subdivision of
+ * the canonical simplex is the weight generator of Algorithm 1 in Cid et al. (2023), stopped once \p n_w weights are
+ * generated, while the complementary simplex and the interleaving of the two subdivisions are an extension of that
+ * method, not proposed in the paper. Any number of weights not smaller than \p n_f is supported, the generated weights
+ * are all distinct and \p r_engine is not used.
  *
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
  *    All generation methods are guaranteed to generate weights on the simplex (:math:`\sum_i \lambda_i = 1`). All
  *    weight generation methods are guaranteed to generate the canonical weights [1,0,0,...], [0,1,0,..], ... first.
+ *
+ * .. seealso::
+ *
+ *    Lucas Machado Cid, Mário César San Felice, and Pedro H. Del Bianco Hokama. "Uma Abordagem Multiobjetivo para o
+ *    Problema do Escalonamento de Médicos." Anais do XXIII Simpósio Brasileiro de Computação Aplicada à Saúde
+ *    (SBCAS), 2023, pp. 372-383. https://doi.org/10.5753/sbcas.2023.230040
  *
  * \endverbatim
  *
