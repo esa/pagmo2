@@ -62,6 +62,22 @@ BOOST_AUTO_TEST_CASE(compare_fc_test)
     BOOST_CHECK_THROW(compare_fc(empty, empty, 1u, tol), std::invalid_argument);
 }
 
+BOOST_AUTO_TEST_CASE(compare_fc_mixed_constraints_test)
+{
+    vector_double f1 = {0., 3., 4.};
+    vector_double f2 = {0., 4., 4.};
+    vector_double f3 = {0., 1., 6.};
+    vector_double tol = {0., 0.};
+    // All violate two constraints. The squared L2 norms are 25, 32 and 37.
+    BOOST_CHECK(compare_fc(f1, f2, 1u, 0.) == true);
+    BOOST_CHECK(compare_fc(f2, f1, 1u, 0.) == false);
+    BOOST_CHECK(compare_fc(f1, f2, 1u, tol) == true);
+    BOOST_CHECK(compare_fc(f2, f1, 1u, tol) == false);
+    // Equal sums of violations must still be ordered by their L2 norms.
+    BOOST_CHECK(compare_fc(f1, f3, 1u, tol) == true);
+    BOOST_CHECK(compare_fc(f3, f1, 1u, tol) == false);
+}
+
 BOOST_AUTO_TEST_CASE(sort_population_con_test)
 {
     std::vector<vector_double> example;
