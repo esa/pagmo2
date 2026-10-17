@@ -104,7 +104,7 @@ bool compare_fc(const vector_double &f1, const vector_double &f2, vector_double:
     auto c1eq = detail::test_eq_constraints(f1.data() + 1, f1.data() + 1 + neq, tol.data());
     auto c1ineq = detail::test_ineq_constraints(f1.data() + 1 + neq, f1.data() + f1.size(), tol.data() + neq);
     auto n1 = c1eq.first + c1ineq.first;
-    auto l1 = c1eq.second + c1ineq.second;
+    auto l1 = std::sqrt(c1eq.second * c1eq.second + c1ineq.second * c1ineq.second);
 
     auto c2eq = detail::test_eq_constraints(f2.data() + 1, f2.data() + 1 + neq, tol.data());
     auto c2ineq = detail::test_ineq_constraints(f2.data() + 1 + neq, f2.data() + f2.size(), tol.data() + neq);
