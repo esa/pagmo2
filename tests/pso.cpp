@@ -339,4 +339,18 @@ BOOST_AUTO_TEST_CASE(pso_time_limit_test)
         BOOST_CHECK(pop1.get_x() == pop2.get_x());
         BOOST_CHECK(pop1.get_f() == pop2.get_f());
     }
+    // When verbose, the time limit is reported as the only exit condition.
+    {
+        auto uda1 = pso{std::numeric_limits<unsigned>::max(), 0.7298, 2.05, 2.05, 0.5, 5u, 2u, 4u, false, 23u, 1e-9};
+        uda1.set_verbosity(1u);
+        std::ostringstream output;
+        auto *const cout_buf = std::cout.rdbuf(output.rdbuf());
+        uda1.evolve(pop);
+        std::cout.rdbuf(cout_buf);
+        const auto out = output.str();
+        const auto pos = out.find("Exit condition -- max_time = ");
+        BOOST_CHECK(pos != std::string::npos);
+        BOOST_CHECK(out.find("Exit condition") == pos);
+        BOOST_CHECK(out.find("Exit condition", pos + 1u) == std::string::npos);
+    }
 }

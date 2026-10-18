@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <limits>
 #include <limits> //  std::numeric_limits<double>::infinity();
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
@@ -196,5 +197,19 @@ BOOST_AUTO_TEST_CASE(simulated_annealing_time_limit_test)
         auto uda1 = simulated_annealing{10., .1, std::numeric_limits<unsigned>::max(), 1u, 20u, 1., 23u, 1e-9};
         const auto pop1 = uda1.evolve(pop);
         BOOST_CHECK_EQUAL(pop1.get_problem().get_fevals() - pop.get_problem().get_fevals(), 10u);
+    }
+    // When verbose, the time limit is reported as the only exit condition.
+    {
+        auto uda1 = simulated_annealing{10., .1, std::numeric_limits<unsigned>::max(), 1u, 20u, 1., 23u, 1e-9};
+        uda1.set_verbosity(100u);
+        std::ostringstream output;
+        auto *const cout_buf = std::cout.rdbuf(output.rdbuf());
+        uda1.evolve(pop);
+        std::cout.rdbuf(cout_buf);
+        const auto out = output.str();
+        const auto pos = out.find("Exit condition -- max_time = ");
+        BOOST_CHECK(pos != std::string::npos);
+        BOOST_CHECK(out.find("Exit condition") == pos);
+        BOOST_CHECK(out.find("Exit condition", pos + 1u) == std::string::npos);
     }
 }

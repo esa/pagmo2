@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <chrono>
 #include <iostream>
 #include <limits>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
@@ -211,5 +212,19 @@ BOOST_AUTO_TEST_CASE(compass_search_time_limit_test)
         uda1.set_verbosity(1u);
         uda1.evolve(pop);
         BOOST_CHECK_EQUAL(uda1.get_log().size(), 1u);
+    }
+    // When verbose, the time limit is reported as the only exit condition.
+    {
+        auto uda1 = compass_search{std::numeric_limits<unsigned>::max(), 0.5, 0.01, 0.5, 1e-9};
+        uda1.set_verbosity(1u);
+        std::ostringstream output;
+        auto *const cout_buf = std::cout.rdbuf(output.rdbuf());
+        uda1.evolve(pop);
+        std::cout.rdbuf(cout_buf);
+        const auto out = output.str();
+        const auto pos = out.find("Exit condition -- max_time = ");
+        BOOST_CHECK(pos != std::string::npos);
+        BOOST_CHECK(out.find("Exit condition") == pos);
+        BOOST_CHECK(out.find("Exit condition", pos + 1u) == std::string::npos);
     }
 }

@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
@@ -335,5 +336,19 @@ BOOST_AUTO_TEST_CASE(nsga2_time_limit_test)
         const auto pop2 = uda2.evolve(pop);
         BOOST_CHECK(pop1.get_x() == pop2.get_x());
         BOOST_CHECK(pop1.get_f() == pop2.get_f());
+    }
+    // When verbose, the time limit is reported as the only exit condition.
+    {
+        auto uda1 = nsga2{std::numeric_limits<unsigned>::max(), 0.95, 10., 0.01, 50., 23u, 1e-9};
+        uda1.set_verbosity(1u);
+        std::ostringstream output;
+        auto *const cout_buf = std::cout.rdbuf(output.rdbuf());
+        uda1.evolve(pop);
+        std::cout.rdbuf(cout_buf);
+        const auto out = output.str();
+        const auto pos = out.find("Exit condition -- max_time = ");
+        BOOST_CHECK(pos != std::string::npos);
+        BOOST_CHECK(out.find("Exit condition") == pos);
+        BOOST_CHECK(out.find("Exit condition", pos + 1u) == std::string::npos);
     }
 }
