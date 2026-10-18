@@ -21,7 +21,7 @@ Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
 
    This constructor will construct MHACO.
 
-   .. cpp:function:: maco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, unsigned threshold = 1u, unsigned n_gen_mark = 7u, unsigned evalstop = 100000u, double focus = 0., bool memory = false, unsigned seed = pagmo::random_device::next())
+   .. cpp:function:: maco(unsigned gen = 100u, unsigned ker = 63u, double q = 1.0, unsigned threshold = 1u, unsigned n_gen_mark = 7u, unsigned evalstop = 100000u, double focus = 0., bool memory = false, unsigned seed = pagmo::random_device::next(), double max_time = 0.)
 
       :param `gen`: number of generations to evolve.
       :param `ker`: number of solutions stored in the solution archive (which is maintained independently from the population).
@@ -32,13 +32,15 @@ Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
       :param `focus`: this parameter makes the search for the optimum greedier and more focused on local improvements (the higher the greedier). If the value is very high, the search is more focused around the currently found best solutions.
       :param `memory`: memory parameter. If `true`, memory is activated in the algorithm for multiple calls.
       :param `seed`: seed used by the internal random number generator (default is random).
+      :param `max_time`: maximum wall-clock time, in seconds, of each call to ``evolve()`` (default is 0, i.e., no time limit). See ``set_max_time()``.
       :exception `std\:\:invalid_argument`: if  `focus` < 0.
       :exception `std\:\:invalid_argument`: if `threshold` < 1, or `threshold` > `gen`, when `gen`!=0 and `memory` is set to `false`.
       :exception `std\:\:invalid_argument`: if `threshold` < 1, when `gen!=0` and `memory` is set to `true`.
+      :exception `std\:\:invalid_argument`: if `max_time` is negative or not finite.
 
    .. cpp:function:: population evolve(population pop) const
 
-      Algorithm evolve method: evolves the population for the requested number of generations.
+      Algorithm evolve method: evolves the population for the requested number of generations, or until the time limit (see ``set_max_time()``) is reached.
     
       :param pop: population to be evolved.
       :return: evolved population.
@@ -100,6 +102,19 @@ Multi-objective Hypervolume-based Ant Colony Optimizer (MHACO)
       Sets the batch function evaluation scheme.
       
       :param ``b``: batch function evaluation object.
+
+   .. cpp:function:: void set_max_time(double max_time)
+
+      Sets the time limit: the maximum wall-clock time, in seconds, that each call to ``evolve()`` may run for, as measured by ``std::chrono::steady_clock`` from the start of the call. Evolution stops at whichever comes first, the generation limit or the time limit. The time limit is checked before each generation after the first one, so at least one generation is always run and a generation is never interrupted. A value of zero (the default) disables the time limit.
+
+      :param ``max_time``: the time limit, in seconds.
+      :exception `std\:\:invalid_argument`: if `max_time` is negative or not finite.
+
+   .. cpp:function:: double get_max_time() const
+
+      Gets the time limit.
+
+      :return: the maximum wall-clock time, in seconds, of each call to ``evolve()`` (0 means no time limit).
 
    .. cpp:function:: std::string get_extra_info() const
 

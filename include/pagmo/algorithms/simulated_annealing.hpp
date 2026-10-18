@@ -102,13 +102,17 @@ public:
      * @param bin_size number of mutations that are used to compute the acceptance rate
      * @param start_range starting range for mutating the decision vector
      * @param seed seed used by the internal random number generator
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See simulated_annealing::set_max_time().
      *
      * @throws std::invalid_argument if \p Ts or \p Tf are not finite and positive, \p start_range is not in (0,1],
      * \p n_T_adj or n_range_adj \p are not strictly positive
      * @throws std::invalid_argument if \p Tf > \p Ts
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     simulated_annealing(double Ts = 10., double Tf = .1, unsigned n_T_adj = 10u, unsigned n_range_adj = 1u,
-                        unsigned bin_size = 20u, double start_range = 1., unsigned seed = pagmo::random_device::next());
+                        unsigned bin_size = 20u, double start_range = 1., unsigned seed = pagmo::random_device::next(),
+                        double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -159,6 +163,17 @@ public:
 
     // Sets the seed
     void set_seed(unsigned);
+
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Gets the seed
     /**
@@ -219,10 +234,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::simulated_annealing)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::simulated_annealing, 1)
 
 #endif

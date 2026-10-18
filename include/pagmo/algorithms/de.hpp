@@ -106,12 +106,15 @@ public:
      * @param ftol stopping criteria on the f tolerance (default is 1e-6)
      * @param xtol stopping criteria on the x tolerance (default is 1e-6)
      * @param seed seed used by the internal random number generator (default is random)
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See de::set_max_time().
 
      * @throws std::invalid_argument if F, CR are not in [0,1]
      * @throws std::invalid_argument if variant is not one of 1 .. 10
+     * @throws std::invalid_argument if max_time is negative or not finite
      */
     de(unsigned gen = 1u, double F = 0.8, double CR = 0.9, unsigned variant = 2u, double ftol = 1e-6,
-       double xtol = 1e-6, unsigned seed = pagmo::random_device::next());
+       double xtol = 1e-6, unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Evolve.
     population evolve(population) const;
@@ -119,6 +122,16 @@ public:
     void set_seed(unsigned);
     // Sets the bfe
     void set_bfe(const bfe &b);
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
     /// Get the seed
     /**
      * @return the seed controlling the algorithm stochastic behaviour
@@ -221,10 +234,14 @@ private:
     unsigned m_verbosity;
     mutable log_type m_log;
     boost::optional<bfe> m_bfe;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::de)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::de, 1)
 
 #endif

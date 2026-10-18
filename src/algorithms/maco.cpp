@@ -44,6 +44,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/maco.hpp>
 #include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -66,10 +67,10 @@ namespace pagmo
 {
 
 maco::maco(unsigned gen, unsigned ker, double q, unsigned threshold, unsigned n_gen_mark, unsigned evalstop,
-           double focus, bool memory, unsigned seed)
+           double focus, bool memory, unsigned seed, double max_time)
     : m_gen(gen), m_focus(focus), m_ker(ker), m_evalstop(evalstop), m_e(seed), m_seed(seed), m_verbosity(0u), m_log(),
       m_threshold(threshold), m_q(q), m_n_gen_mark(n_gen_mark), m_memory(memory), m_counter(0u), m_sol_archive(),
-      m_n_evalstop(0u), m_gen_mark(1u), m_pop()
+      m_n_evalstop(0u), m_gen_mark(1u), m_pop(), m_max_time(max_time)
 {
     if (focus < 0. || (std::isfinite(focus) == false)) {
         pagmo_throw(std::invalid_argument,
@@ -84,11 +85,14 @@ maco::maco(unsigned gen, unsigned ker, double q, unsigned threshold, unsigned n_
         pagmo_throw(std::invalid_argument, "If memory is active, the threshold parameter must be >=1 while a value of "
                                                + std::to_string(threshold) + " was detected");
     }
+    detail::check_max_time(max_time);
 }
 
 // Algorithm evolve method
 population maco::evolve(population pop) const
 {
+    // The time budget of this call starts now.
+    const detail::time_limit time_budget(m_max_time);
     // If the memory is active, we increase the counter:
     if (m_memory == true) {
         ++m_counter;
@@ -156,6 +160,13 @@ population maco::evolve(population pop) const
 
     // Main ACO loop over generations:
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+        // NOTE: break rather than return, as the solution archive is copied back to the population after the loop.
+        if (gen > 1u && time_budget.is_reached()) {
+            if (m_verbosity > 0u) {
+                std::cout << "Exit condition -- max_time = " << m_max_time << " s" << std::endl;
+            }
+            break;
+        }
         population popold(pop);
         // In case memory is active, we store handle the population in two variables (m_pop and pop):
         if (m_memory == false) {
@@ -611,6 +622,13 @@ void maco::set_bfe(const bfe &b)
     m_bfe = b;
 }
 
+// Sets the time limit
+void maco::set_max_time(double max_time)
+{
+    detail::check_max_time(max_time);
+    m_max_time = max_time;
+}
+
 // Extra info
 std::string maco::get_extra_info() const
 {
@@ -623,6 +641,7 @@ std::string maco::get_extra_info() const
     stream(ss, "\n\tThreshold parameter: ", m_threshold);
     stream(ss, "\n\tStandard deviations convergence speed parameter: ", m_n_gen_mark);
     stream(ss, "\n\tMemory parameter: ", m_memory);
+    stream(ss, "\n\tMax time (s): ", m_max_time);
     stream(ss, "\n\tPseudo-random number generator (Marsenne Twister 19937): ", m_e);
     stream(ss, "\n\tSeed: ", m_seed);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
@@ -632,10 +651,18 @@ std::string maco::get_extra_info() const
 
 // Object serialization
 template <typename Archive>
-void maco::serialize(Archive &ar, unsigned)
+void maco::serialize(Archive &ar, unsigned version)
 {
     detail::archive(ar, m_gen, m_focus, m_ker, m_evalstop, m_e, m_seed, m_verbosity, m_log, m_threshold, m_q,
                     m_n_gen_mark, m_memory, m_counter, m_sol_archive, m_n_evalstop, m_gen_mark, m_bfe);
+    if (version > 0u) {
+        detail::archive(ar, m_max_time);
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: version 0 archives predate the time limit.
+        m_max_time = 0.;
+        // LCOV_EXCL_STOP
+    }
 }
 
 // Function which computes the pheromone values (useful for generating offspring)

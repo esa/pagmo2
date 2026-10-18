@@ -32,8 +32,12 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <chrono>
 #include <cmath>
 #include <iostream>
+#include <limits>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 
 #include <pagmo/algorithm.hpp>
@@ -164,7 +168,7 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_serialization)
     // Make one evolution
     problem prob{hock_schittkowski_71{}};
     population pop{prob, 10u, 23u};
-    algorithm algo{cstrs_self_adaptive{1500u, de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 32u}, 32u}};
+    algorithm algo{cstrs_self_adaptive{1500u, de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 32u}, 32u, 1e6}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 
@@ -363,4 +367,71 @@ BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_all_infeasible_test)
     BOOST_CHECK((udp_p.m_f_hat_down == vector_double{1., 1., 1.}));
     BOOST_CHECK((udp_p.m_f_hat_round == vector_double{7, 22., 10.}));
     BOOST_CHECK_EQUAL(udp_p.m_apply_penalty_1, true);
+}
+
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_time_limit_test)
+{
+    // The time limit defaults to zero (no limit) and must be a non-negative finite number of seconds.
+    BOOST_CHECK_EQUAL(cstrs_self_adaptive{}.get_max_time(), 0.);
+    BOOST_CHECK_EQUAL((cstrs_self_adaptive{10u, de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 23u}, 23u, 1.5}).get_max_time(), 1.5);
+    for (auto max_time : {-1., std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity()}) {
+        BOOST_CHECK_THROW((cstrs_self_adaptive{10u, de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 23u}, 23u, max_time}), std::invalid_argument);
+    }
+    cstrs_self_adaptive uda{};
+    uda.set_max_time(2.5);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK_THROW(uda.set_max_time(-1.), std::invalid_argument);
+    BOOST_CHECK_THROW(uda.set_max_time(std::numeric_limits<double>::infinity()), std::invalid_argument);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK(uda.get_extra_info().find("Max time") != std::string::npos);
+
+    population pop{hock_schittkowski_71{}, 20u, 23u};
+    // A time limit that is not reached leaves the evolution unchanged.
+    {
+        auto uda1 = cstrs_self_adaptive{5u, de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 23u}, 23u, 0.};
+        auto uda2 = cstrs_self_adaptive{5u, de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 23u}, 23u, 1e6};
+        uda1.set_verbosity(1u);
+        uda2.set_verbosity(1u);
+        const auto pop1 = uda1.evolve(pop);
+        const auto pop2 = uda2.evolve(pop);
+        BOOST_CHECK(pop1.get_x() == pop2.get_x());
+        BOOST_CHECK(pop1.get_f() == pop2.get_f());
+        BOOST_CHECK(uda1.get_log() == uda2.get_log());
+    }
+    // The time limit stops the evolution long before the generation limit, and each call to evolve() has
+    // its own time budget.
+    {
+        const double max_time = 0.1;
+        auto uda1 = cstrs_self_adaptive{std::numeric_limits<unsigned>::max(), de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 23u}, 23u, max_time};
+        auto pop1 = pop;
+        for (auto i = 0; i < 2; ++i) {
+            const auto start = std::chrono::steady_clock::now();
+            pop1 = uda1.evolve(pop1);
+            const auto elapsed = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+            BOOST_CHECK_GE(elapsed, max_time);
+            BOOST_CHECK_LT(elapsed, max_time + 5.);
+        }
+    }
+    // However small the time limit, the first iteration is always run.
+    {
+        auto uda1 = cstrs_self_adaptive{std::numeric_limits<unsigned>::max(), de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 23u}, 23u, 1e-9};
+        uda1.set_verbosity(1u);
+        uda1.evolve(pop);
+        BOOST_CHECK_EQUAL(uda1.get_log().size(), 1u);
+    }
+    // When verbose, the time limit is reported as the only exit condition.
+    {
+        auto uda1 = cstrs_self_adaptive{std::numeric_limits<unsigned>::max(), de{1u, 0.8, 0.9, 2u, 1e-6, 1e-6, 23u},
+                                        23u, 1e-9};
+        uda1.set_verbosity(1u);
+        std::ostringstream output;
+        auto *const cout_buf = std::cout.rdbuf(output.rdbuf());
+        uda1.evolve(pop);
+        std::cout.rdbuf(cout_buf);
+        const auto out = output.str();
+        const auto pos = out.find("Exit condition -- max_time = ");
+        BOOST_CHECK(pos != std::string::npos);
+        BOOST_CHECK(out.find("Exit condition") == pos);
+        BOOST_CHECK(out.find("Exit condition", pos + 1u) == std::string::npos);
+    }
 }

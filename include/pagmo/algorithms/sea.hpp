@@ -94,8 +94,12 @@ public:
      *
      * @param gen Number of generations to consider. Each generation will compute the objective function once
      * @param seed seed used by the internal random number generator
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See sea::set_max_time().
+     *
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
-    sea(unsigned gen = 1u, unsigned seed = pagmo::random_device::next());
+    sea(unsigned gen = 1u, unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -139,6 +143,16 @@ public:
 
     // Sets the seed
     void set_seed(unsigned);
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Gets the seed
     /**
@@ -186,10 +200,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::sea)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::sea, 1)
 
 #endif

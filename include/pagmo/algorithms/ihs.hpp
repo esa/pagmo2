@@ -127,12 +127,15 @@ public:
      * @param bw_min minimum distance bandwidth. (similar to a mutation width)
      * @param bw_max maximum distance bandwidth. (similar to a mutation width)
      * @param seed seed used by the internal random number generator
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See ihs::set_max_time().
      *
      * @throws value_error if phmcr is not in the ]0,1[ interval, ppar min/max are not in the ]0,1[
      * interval, min/max quantities are less than/greater than max/min quantities, bw_min is negative.
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     ihs(unsigned gen = 1u, double phmcr = 0.85, double ppar_min = 0.35, double ppar_max = 0.99, double bw_min = 1E-5,
-        double bw_max = 1., unsigned seed = pagmo::random_device::next());
+        double bw_max = 1., unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -178,6 +181,16 @@ public:
     }
     // Sets the seed
     void set_seed(unsigned);
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Gets the seed
     /**
@@ -233,10 +246,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::ihs)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::ihs, 1)
 
 #endif

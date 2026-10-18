@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
 #include <pagmo/algorithms/simulated_annealing.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -51,9 +52,9 @@ namespace pagmo
 {
 
 simulated_annealing::simulated_annealing(double Ts, double Tf, unsigned n_T_adj, unsigned n_range_adj,
-                                         unsigned bin_size, double start_range, unsigned seed)
+                                         unsigned bin_size, double start_range, unsigned seed, double max_time)
     : m_Ts(Ts), m_Tf(Tf), m_n_T_adj(n_T_adj), m_n_range_adj(n_range_adj), m_bin_size(bin_size),
-      m_start_range(start_range), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+      m_start_range(start_range), m_e(seed), m_seed(seed), m_verbosity(0u), m_log(), m_max_time(max_time)
 {
     if (Ts <= 0. || (std::isfinite(Ts) == false)) {
         pagmo_throw(std::invalid_argument, "The starting temperature must be finite and positive, while a value of "
@@ -82,10 +83,14 @@ simulated_annealing::simulated_annealing(double Ts, double Tf, unsigned n_T_adj,
                     "The number of range adjustments must be strictly positive, while a value of "
                         + std::to_string(n_range_adj) + " was detected.");
     }
+    detail::check_max_time(max_time);
 }
 
 /// Algorithm evolve method
 /**
+ * Runs the annealing schedule, or stops it when the time limit (see simulated_annealing::set_max_time())
+ * is reached.
+ *
  * @param pop population to be evolved
  * @return evolved population
  * @throws std::invalid_argument if the problem is multi-objective, constrained or stochastic
@@ -93,6 +98,8 @@ simulated_annealing::simulated_annealing(double Ts, double Tf, unsigned n_T_adj,
  */
 population simulated_annealing::evolve(population pop) const
 {
+    // The time budget of this call starts now.
+    const detail::time_limit time_budget(m_max_time);
     // We store some useful properties
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
@@ -148,10 +155,19 @@ population simulated_annealing::evolve(population pop) const
     double ratio = 0., currentT = m_Ts, probab = 0.;
 
     // Main SA loops
+    // NOTE: the time limit is checked before each bin of mutations but the first one. When it is reached,
+    // all the loops are left without any further adjustment of the step or of the temperature.
+    bool first_bin = true;
+    bool time_limit_reached = false;
     for (decltype(m_n_T_adj) jter = 0u; jter < m_n_T_adj; ++jter) {
         for (decltype(m_n_range_adj) mter = 0u; mter < m_n_range_adj; ++mter) {
             // 1 - Annealing
             for (decltype(m_bin_size) kter = 0u; kter < m_bin_size; ++kter) {
+                if (!first_bin && time_budget.is_reached()) {
+                    time_limit_reached = true;
+                    break;
+                }
+                first_bin = false;
                 auto nter = std::uniform_int_distribution<vector_double::size_type>(0u, dim - 1u)(m_e);
                 for (decltype(dim) numb = 0u; numb < dim; ++numb) {
                     nter = (nter + 1u) % dim;
@@ -207,6 +223,9 @@ population simulated_annealing::evolve(population pop) const
                     }
                 } // end for(nter = 0; ...
             }     // end for(kter = 0; ...
+            if (time_limit_reached) {
+                break;
+            }
             // adjust the step (adaptively)
             for (decltype(dim) iter = 0u; iter < dim; ++iter) {
                 ratio = static_cast<double>(acp[iter]) / static_cast<double>(m_bin_size);
@@ -224,8 +243,14 @@ population simulated_annealing::evolve(population pop) const
                 if (step[iter] > m_start_range) step[iter] = m_start_range;
             }
         }
+        if (time_limit_reached) {
+            break;
+        }
         // Cooling schedule
         currentT *= Tcoeff;
+    }
+    if (time_limit_reached && m_verbosity > 0u) {
+        std::cout << "Exit condition -- max_time = " << m_max_time << " s" << std::endl;
     }
     // We update the decision vector in pop, but only if things have improved
     if (best_f[0] <= fit0[0]) {
@@ -244,6 +269,25 @@ void simulated_annealing::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the time limit
+/**
+ * Sets the maximum wall-clock time, in seconds, that each call to evolve() may run for, as measured by
+ * \p std::chrono::steady_clock from the start of the call. Annealing stops at whichever comes first, the end
+ * of the annealing schedule or the time limit, in which case the schedule is not completed. The time limit
+ * is checked before each bin of mutations (one fitness evaluation per problem dimension) after the first
+ * one, so at least one bin is always run and a bin is never interrupted. A value of zero (the default)
+ * disables the time limit.
+ *
+ * @param max_time the time limit, in seconds
+ *
+ * @throws std::invalid_argument if \p max_time is negative or not finite
+ */
+void simulated_annealing::set_max_time(double max_time)
+{
+    detail::check_max_time(max_time);
+    m_max_time = max_time;
+}
+
 /// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
@@ -259,6 +303,7 @@ std::string simulated_annealing::get_extra_info() const
     stream(ss, "\n\tNumber of range adjustments: ", m_n_range_adj);
     stream(ss, "\n\tBin size: ", m_bin_size);
     stream(ss, "\n\tStarting range: ", m_start_range);
+    stream(ss, "\n\tMax time (s): ", m_max_time);
     stream(ss, "\n\tSeed: ", m_seed);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
     return ss.str();
@@ -266,10 +311,18 @@ std::string simulated_annealing::get_extra_info() const
 
 // Object serialization
 template <typename Archive>
-void simulated_annealing::serialize(Archive &ar, unsigned)
+void simulated_annealing::serialize(Archive &ar, unsigned version)
 {
     detail::archive(ar, boost::serialization::base_object<not_population_based>(*this), m_Ts, m_Tf, m_n_T_adj,
                     m_n_range_adj, m_bin_size, m_start_range, m_e, m_seed, m_verbosity, m_log);
+    if (version > 0u) {
+        detail::archive(ar, m_max_time);
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: version 0 archives predate the time limit.
+        m_max_time = 0.;
+        // LCOV_EXCL_STOP
+    }
 }
 
 } // namespace pagmo

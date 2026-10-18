@@ -107,12 +107,15 @@ public:
      * @param start_range start range
      * @param stop_range stop range
      * @param reduction_coeff range reduction coefficient
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See compass_search::set_max_time().
      * @throws std::invalid_argument if \p start_range is not in (0,1]
      * @throws std::invalid_argument if \p stop_range is not in [0, start_range)
      * @throws std::invalid_argument if \p reduction_coeff is not in (0,1)
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     compass_search(unsigned max_fevals = 1, double start_range = .1, double stop_range = .01,
-                   double reduction_coeff = .5);
+                   double reduction_coeff = .5, double max_time = 0.);
 
     // Algorithm evolve method (juice implementation of the algorithm)
     population evolve(population) const;
@@ -196,6 +199,16 @@ public:
     {
         return m_reduction_coeff;
     }
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
     /// Algorithm name
     /**
      * One of the optional methods of any user-defined algorithm (UDA).
@@ -234,10 +247,14 @@ private:
     double m_reduction_coeff;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::compass_search)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::compass_search, 1)
 
 #endif

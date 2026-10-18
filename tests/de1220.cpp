@@ -30,8 +30,12 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <chrono>
 #include <iostream>
+#include <limits>
 #include <numeric>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 
 #include <boost/lexical_cast.hpp>
@@ -149,7 +153,7 @@ BOOST_AUTO_TEST_CASE(serialization_test)
     population pop{prob, 15u, 23u};
     std::vector<unsigned> mutation_variants(18);
     std::iota(mutation_variants.begin(), mutation_variants.end(), 1u);
-    algorithm algo(de1220{10000u, mutation_variants, 1, 1e-6, 1e-6, false, 41u});
+    algorithm algo(de1220{10000u, mutation_variants, 1, 1e-6, 1e-6, false, 41u, 1e6});
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 
@@ -183,5 +187,80 @@ BOOST_AUTO_TEST_CASE(serialization_test)
         BOOST_CHECK_EQUAL(std::get<5>(before_log[i]), std::get<5>(after_log[i]));
         BOOST_CHECK_CLOSE(std::get<6>(before_log[i]), std::get<6>(after_log[i]), 1e-8);
         BOOST_CHECK_CLOSE(std::get<7>(before_log[i]), std::get<7>(after_log[i]), 1e-8);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(de1220_time_limit_test)
+{
+    // The time limit defaults to zero (no limit) and must be a non-negative finite number of seconds.
+    BOOST_CHECK_EQUAL(de1220{}.get_max_time(), 0.);
+    BOOST_CHECK_EQUAL((de1220{10u, de1220_statics<void>::allowed_variants, 1u, 1e-6, 1e-6, false, 23u, 1.5}).get_max_time(), 1.5);
+    for (auto max_time : {-1., std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity()}) {
+        BOOST_CHECK_THROW((de1220{10u, de1220_statics<void>::allowed_variants, 1u, 1e-6, 1e-6, false, 23u, max_time}), std::invalid_argument);
+    }
+    de1220 uda{};
+    uda.set_max_time(2.5);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK_THROW(uda.set_max_time(-1.), std::invalid_argument);
+    BOOST_CHECK_THROW(uda.set_max_time(std::numeric_limits<double>::infinity()), std::invalid_argument);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK(uda.get_extra_info().find("Max time") != std::string::npos);
+
+    population pop{rosenbrock{10u}, 20u, 23u};
+    // A time limit that is not reached leaves the evolution unchanged.
+    {
+        auto uda1 = de1220{20u, de1220_statics<void>::allowed_variants, 1u, 1e-6, 1e-6, false, 23u, 0.};
+        auto uda2 = de1220{20u, de1220_statics<void>::allowed_variants, 1u, 1e-6, 1e-6, false, 23u, 1e6};
+        uda1.set_verbosity(1u);
+        uda2.set_verbosity(1u);
+        const auto pop1 = uda1.evolve(pop);
+        const auto pop2 = uda2.evolve(pop);
+        BOOST_CHECK(pop1.get_x() == pop2.get_x());
+        BOOST_CHECK(pop1.get_f() == pop2.get_f());
+        BOOST_CHECK(uda1.get_log() == uda2.get_log());
+    }
+    // The time limit stops the evolution long before the generation limit, and each call to evolve() has
+    // its own time budget.
+    {
+        const double max_time = 0.1;
+        auto uda1 = de1220{std::numeric_limits<unsigned>::max(), de1220_statics<void>::allowed_variants, 1u, 0., 0., false, 23u, max_time};
+        auto pop1 = pop;
+        for (auto i = 0; i < 2; ++i) {
+            const auto start = std::chrono::steady_clock::now();
+            pop1 = uda1.evolve(pop1);
+            const auto elapsed = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+            BOOST_CHECK_GE(elapsed, max_time);
+            BOOST_CHECK_LT(elapsed, max_time + 5.);
+        }
+    }
+    // However small the time limit, the first generation is always run.
+    {
+        auto uda1 = de1220{std::numeric_limits<unsigned>::max(), de1220_statics<void>::allowed_variants, 1u, 1e-6, 1e-6, false, 23u, 1e-9};
+        auto uda2 = de1220{1u, de1220_statics<void>::allowed_variants, 1u, 1e-6, 1e-6, false, 23u, 0.};
+        const auto pop1 = uda1.evolve(pop);
+        const auto pop2 = uda2.evolve(pop);
+        BOOST_CHECK(pop1.get_x() == pop2.get_x());
+        BOOST_CHECK(pop1.get_f() == pop2.get_f());
+    }
+    // When verbose, the time limit is reported as the only exit condition.
+    {
+        auto uda1 = de1220{std::numeric_limits<unsigned>::max(),
+                           de1220_statics<void>::allowed_variants,
+                           1u,
+                           1e-6,
+                           1e-6,
+                           false,
+                           23u,
+                           1e-9};
+        uda1.set_verbosity(1u);
+        std::ostringstream output;
+        auto *const cout_buf = std::cout.rdbuf(output.rdbuf());
+        uda1.evolve(pop);
+        std::cout.rdbuf(cout_buf);
+        const auto out = output.str();
+        const auto pos = out.find("Exit condition -- max_time = ");
+        BOOST_CHECK(pos != std::string::npos);
+        BOOST_CHECK(out.find("Exit condition") == pos);
+        BOOST_CHECK(out.find("Exit condition", pos + 1u) == std::string::npos);
     }
 }

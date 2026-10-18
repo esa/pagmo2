@@ -157,21 +157,35 @@ public:
      * @param selection the selection strategy. One of "tournament", "truncated".
      * @param crossover the crossover strategy. One of "exponential", "binomial", "single" or "sbx"
      * @param seed seed used by the internal random number generator
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See sga::set_max_time().
      *
      * @throws std::invalid_argument if \p cr not in [0,1], \p eta_c not in [1, 100], \p m not in [0,1],
      * \p mutation not one of "gaussian", "uniform" or "polynomial", \p selection not one of "roulette" or "truncated"
      * \p crossover not one of "exponential", "binomial", "sbx" or "single", if \p param_m is not in [0,1] and
      * \p mutation is not "polynomial" or \p mutation is not in [1,100] and \p mutation is polynomial.
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     sga(unsigned gen = 1u, double cr = .90, double eta_c = 1., double m = 0.02, double param_m = 1.,
         unsigned param_s = 2u, std::string crossover = "exponential", std::string mutation = "polynomial",
-        std::string selection = "tournament", unsigned seed = pagmo::random_device::next());
+        std::string selection = "tournament", unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
     void set_seed(unsigned);
+
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Gets the seed
     /**
@@ -282,10 +296,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::sga)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::sga, 1)
 
 #endif

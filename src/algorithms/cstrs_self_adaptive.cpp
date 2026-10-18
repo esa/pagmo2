@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/de.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -381,7 +382,8 @@ double penalized_udp::compute_infeasibility(const vector_double &fit) const
 
 } // namespace detail
 
-cstrs_self_adaptive::cstrs_self_adaptive(unsigned iters) : m_algorithm(de{1}), m_iters(iters), m_verbosity(0u), m_log()
+cstrs_self_adaptive::cstrs_self_adaptive(unsigned iters)
+    : m_algorithm(de{1}), m_iters(iters), m_verbosity(0u), m_log(), m_max_time(0.)
 {
     const auto rnd = pagmo::random_device::next();
     m_seed = rnd;
@@ -391,7 +393,7 @@ cstrs_self_adaptive::cstrs_self_adaptive(unsigned iters) : m_algorithm(de{1}), m
 /// Evolve method.
 /**
  * This method will call evolve on the inner algorithm \p iters times updating the penalty to be applied to the
- * objective after each call
+ * objective after each call, or less if the time limit (see cstrs_self_adaptive::set_max_time()) is reached.
  *
  * @param pop population to be evolved.
  *
@@ -402,6 +404,8 @@ cstrs_self_adaptive::cstrs_self_adaptive(unsigned iters) : m_algorithm(de{1}), m
  */
 population cstrs_self_adaptive::evolve(population pop) const
 {
+    // The time budget of this call starts now.
+    const detail::time_limit time_budget(m_max_time);
     // We store some useful variables
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
@@ -448,6 +452,12 @@ population cstrs_self_adaptive::evolve(population pop) const
     // Main iterations
     auto penalized_udp_ptr = new_pop.get_problem().extract<detail::penalized_udp>();
     for (decltype(m_iters) iter = 1u; iter <= m_iters; ++iter) {
+        if (iter > 1u && time_budget.is_reached()) {
+            if (m_verbosity > 0u) {
+                std::cout << "Exit condition -- max_time = " << m_max_time << " s" << std::endl;
+            }
+            return pop;
+        }
         // We record the current best decision vector and fitness as we will
         // reinsert it at each iteration
         auto best_idx = pop.best_idx();
@@ -517,6 +527,25 @@ void cstrs_self_adaptive::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the time limit
+/**
+ * Sets the maximum wall-clock time, in seconds, that each call to evolve() may run for, as measured by
+ * \p std::chrono::steady_clock from the start of the call. Evolution stops at whichever comes first, the
+ * number of iterations or the time limit. The time limit is checked before each iteration (i.e., call to the
+ * inner algorithm) after the first one, so at least one iteration is always run and an iteration is never
+ * interrupted. The time limit of the inner algorithm, if any, is independent and can be used to bound each
+ * of its runs. A value of zero (the default) disables the time limit.
+ *
+ * @param max_time the time limit, in seconds
+ *
+ * @throws std::invalid_argument if \p max_time is negative or not finite
+ */
+void cstrs_self_adaptive::set_max_time(double max_time)
+{
+    detail::check_max_time(max_time);
+    m_max_time = max_time;
+}
+
 /// Extra info
 /**
  * @return a string containing extra info on the algorithm.
@@ -525,6 +554,7 @@ std::string cstrs_self_adaptive::get_extra_info() const
 {
     std::ostringstream ss;
     stream(ss, "\n\tIterations: ", m_iters);
+    stream(ss, "\n\tMax time (s): ", m_max_time);
     stream(ss, "\n\tSeed: ", m_seed);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
     stream(ss, "\n\n\tInner algorithm: ", m_algorithm.get_name());
@@ -548,9 +578,17 @@ thread_safety cstrs_self_adaptive::get_thread_safety() const
 
 // Object serialization
 template <typename Archive>
-void cstrs_self_adaptive::serialize(Archive &ar, unsigned)
+void cstrs_self_adaptive::serialize(Archive &ar, unsigned version)
 {
     detail::archive(ar, m_algorithm, m_iters, m_e, m_seed, m_verbosity, m_log);
+    if (version > 0u) {
+        detail::archive(ar, m_max_time);
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: version 0 archives predate the time limit.
+        m_max_time = 0.;
+        // LCOV_EXCL_STOP
+    }
 }
 
 } // namespace pagmo

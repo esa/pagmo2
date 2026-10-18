@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithms/nspso.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -51,10 +52,11 @@ namespace pagmo
 {
 
 nspso::nspso(unsigned gen, double omega, double c1, double c2, double chi, double v_coeff,
-             unsigned leader_selection_range, std::string diversity_mechanism, bool memory, unsigned seed)
+             unsigned leader_selection_range, std::string diversity_mechanism, bool memory, unsigned seed,
+             double max_time)
     : m_gen(gen), m_omega(omega), m_c1(c1), m_c2(c2), m_chi(chi), m_v_coeff(v_coeff),
       m_leader_selection_range(leader_selection_range), m_diversity_mechanism(diversity_mechanism), m_memory(memory),
-      m_velocity(), m_e(seed), m_seed(seed), m_verbosity(0u)
+      m_velocity(), m_e(seed), m_seed(seed), m_verbosity(0u), m_max_time(max_time)
 {
     if (omega < 0. || omega > 1. || (std::isfinite(omega) == false)) {
         pagmo_throw(std::invalid_argument, "The particles' inertia weight must be in the [0,1] range, while a value of "
@@ -78,11 +80,14 @@ nspso::nspso(unsigned gen, double omega, double c1, double c2, double chi, doubl
         && diversity_mechanism != "max min") {
         pagmo_throw(std::invalid_argument, "Non existing diversity mechanism method.");
     }
+    detail::check_max_time(max_time);
 }
 
 // Algorithm evolve method
 population nspso::evolve(population pop) const
 {
+    // The time budget of this call starts now.
+    const detail::time_limit time_budget(m_max_time);
     // We store some useful variables
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
@@ -155,6 +160,12 @@ population nspso::evolve(population pop) const
 
     // Main NSPSO loop
     for (decltype(m_gen) gen = 1u; gen <= m_gen; gen++) {
+        if (gen > 1u && time_budget.is_reached()) {
+            if (m_verbosity > 0u) {
+                print("Exit condition -- max_time = ", m_max_time, " s\n");
+            }
+            return pop;
+        }
         std::vector<vector_double::size_type> best_non_dom_indices;
         auto fit = pop.get_f();
         auto dvs = pop.get_x();
@@ -421,6 +432,13 @@ void nspso::set_bfe(const bfe &b)
     m_bfe = b;
 }
 
+// Sets the time limit
+void nspso::set_max_time(double max_time)
+{
+    detail::check_max_time(max_time);
+    m_max_time = max_time;
+}
+
 // Extra info
 std::string nspso::get_extra_info() const
 {
@@ -433,6 +451,7 @@ std::string nspso::get_extra_info() const
     stream(ss, "\n\tVelocity coefficient: ", m_v_coeff);
     stream(ss, "\n\tLeader selection range: ", m_leader_selection_range);
     stream(ss, "\n\tDiversity mechanism: ", m_diversity_mechanism);
+    stream(ss, "\n\tMax time (s): ", m_max_time);
     stream(ss, "\n\tSeed: ", m_seed);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
     return ss.str();
@@ -440,10 +459,18 @@ std::string nspso::get_extra_info() const
 
 // Object serialization
 template <typename Archive>
-void nspso::serialize(Archive &ar, unsigned)
+void nspso::serialize(Archive &ar, unsigned version)
 {
     detail::archive(ar, m_gen, m_omega, m_c1, m_c2, m_chi, m_v_coeff, m_leader_selection_range, m_diversity_mechanism,
                     m_e, m_seed, m_verbosity, m_log, m_bfe);
+    if (version > 0u) {
+        detail::archive(ar, m_max_time);
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: version 0 archives predate the time limit.
+        m_max_time = 0.;
+        // LCOV_EXCL_STOP
+    }
 }
 
 double nspso::minfit(vector_double::size_type(i), vector_double::size_type(j),

@@ -40,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
@@ -249,13 +250,19 @@ public:
      * @param iters Number of iterations (calls to the inner algorithm). After each iteration the penalty is adapted
      * @param a a pagmo::algorithm (or UDA) that will be used to construct the inner algorithm.
      * @param seed seed used by the internal random number generator (default is random).
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See cstrs_self_adaptive::set_max_time().
      *
      * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     template <typename T, ctor_enabler<T> = 0>
-    explicit cstrs_self_adaptive(unsigned iters, T &&a, unsigned seed = pagmo::random_device::next())
-        : m_algorithm(std::forward<T>(a)), m_iters(iters), m_e(seed), m_seed(seed), m_verbosity(0u), m_log()
+    explicit cstrs_self_adaptive(unsigned iters, T &&a, unsigned seed = pagmo::random_device::next(),
+                                 double max_time = 0.)
+        : m_algorithm(std::forward<T>(a)), m_iters(iters), m_e(seed), m_seed(seed), m_verbosity(0u), m_log(),
+          m_max_time(max_time)
     {
+        detail::check_max_time(max_time);
     }
 
     // Evolve method.
@@ -263,6 +270,17 @@ public:
 
     // Set the seed.
     void set_seed(unsigned);
+
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Get the seed.
     /**
@@ -396,10 +414,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::cstrs_self_adaptive)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::cstrs_self_adaptive, 1)
 
 #endif

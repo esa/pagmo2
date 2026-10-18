@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/gwo.hpp>
 #include <pagmo/detail/custom_comparisons.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -47,13 +48,17 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-gwo::gwo(unsigned gen, unsigned seed) : m_gen(gen), m_seed(seed), m_e(seed), m_verbosity(0u) {}
+gwo::gwo(unsigned gen, unsigned seed, double max_time)
+    : m_gen(gen), m_seed(seed), m_e(seed), m_verbosity(0u), m_max_time(max_time)
+{
+    detail::check_max_time(max_time);
+}
 
 /// Algorithm evolve method
 /**
  *
  * Evolves the population for a maximum number of generations, until maximum number
- * of generations is reached.
+ * of generations is reached or until the time limit (see gwo::set_max_time()) is reached.
  *
  * @param pop population to be evolved
  * @return alpha agent's position
@@ -62,6 +67,8 @@ gwo::gwo(unsigned gen, unsigned seed) : m_gen(gen), m_seed(seed), m_e(seed), m_v
  */
 population gwo::evolve(population pop) const
 {
+    // The time budget of this call starts now.
+    const detail::time_limit time_budget(m_max_time);
     const auto &prob = pop.get_problem();
     auto dim = prob.get_nx();
     auto prob_f_dimension = prob.get_nf();
@@ -123,6 +130,12 @@ population gwo::evolve(population pop) const
 
     // Main gwo iterations
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+        if (gen > 1u && time_budget.is_reached()) {
+            if (m_verbosity > 0u) {
+                print("Exit condition -- max_time = ", m_max_time, " s\n");
+            }
+            return pop;
+        }
 
         a = 2.0 - static_cast<double>(gen) * (2.0 / static_cast<double>(m_gen));
         // for each agents
@@ -222,6 +235,25 @@ void gwo::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the time limit
+/**
+ * Sets the maximum wall-clock time, in seconds, that each call to evolve() may run for, as measured by
+ * \p std::chrono::steady_clock from the start of the call. Evolution stops at whichever comes first, the
+ * generation limit or the time limit. The time limit is checked before each generation after the first one,
+ * so at least one generation is always run and a generation is never interrupted. Since the coefficient a
+ * decreases linearly over the number of generations, a run stopped by the time limit does not complete this
+ * schedule. A value of zero (the default) disables the time limit.
+ *
+ * @param max_time the time limit, in seconds
+ *
+ * @throws std::invalid_argument if \p max_time is negative or not finite
+ */
+void gwo::set_max_time(double max_time)
+{
+    detail::check_max_time(max_time);
+    m_max_time = max_time;
+}
+
 /// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
@@ -230,15 +262,23 @@ void gwo::set_seed(unsigned seed)
  */
 std::string gwo::get_extra_info() const
 {
-    return "\tGenerations: " + std::to_string(m_gen) + "\n\tVerbosity: " + std::to_string(m_verbosity)
-           + "\n\tSeed: " + std::to_string(m_seed);
+    return "\tGenerations: " + std::to_string(m_gen) + "\n\tMax time (s): " + std::to_string(m_max_time)
+           + "\n\tVerbosity: " + std::to_string(m_verbosity) + "\n\tSeed: " + std::to_string(m_seed);
 }
 
 // Object serialization
 template <typename Archive>
-void gwo::serialize(Archive &ar, unsigned)
+void gwo::serialize(Archive &ar, unsigned version)
 {
     detail::archive(ar, m_gen, m_seed, m_e, m_verbosity, m_log);
+    if (version > 0u) {
+        detail::archive(ar, m_max_time);
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: version 0 archives predate the time limit.
+        m_max_time = 0.;
+        // LCOV_EXCL_STOP
+    }
 }
 
 } // namespace pagmo

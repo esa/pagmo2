@@ -97,19 +97,32 @@ public:
      * @param preserve_diversity when true activates the two diversity preservation mechanisms described in Li, Hui,
      * and Qingfu Zhang paper
      * @param seed seed used by the internal random number generator (default is random)
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See moead::set_max_time().
      * @throws value_error if gen is negative, weight_generation is not one of the allowed types, realb,cr or f are not
      * in [1.0] or m_eta is < 0, if neighbours is <2
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     moead(unsigned gen = 1u, std::string weight_generation = "grid", std::string decomposition = "tchebycheff",
           population::size_type neighbours = 20u, double CR = 1.0, double F = 0.5, double eta_m = 20.,
           double realb = 0.9, unsigned limit = 2u, bool preserve_diversity = true,
-          unsigned seed = pagmo::random_device::next());
+          unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
     void set_seed(unsigned);
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Gets the seed
     /**
@@ -222,10 +235,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::moead)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::moead, 1)
 
 #endif

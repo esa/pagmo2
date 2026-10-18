@@ -18,7 +18,7 @@ Non dominated sorting particle swarm optimization(NSPSO)
 
    This constructor will construct NSPSO.
 
-   .. cpp:function:: nspso(unsigned gen = 1u, double omega = 0.6, double c1 = 2.0, double c2 = 2.0, double chi = 1.0, double v_coeff = 0.5, unsigned leader_selection_range = 60u, std::string diversity_mechanism = "crowding distance", bool memory = false, unsigned seed = pagmo::random_device::next())
+   .. cpp:function:: nspso(unsigned gen = 1u, double omega = 0.6, double c1 = 2.0, double c2 = 2.0, double chi = 1.0, double v_coeff = 0.5, unsigned leader_selection_range = 60u, std::string diversity_mechanism = "crowding distance", bool memory = false, unsigned seed = pagmo::random_device::next(), double max_time = 0.)
 
       :param `gen`: number of generations to evolve.
       :param `omega`: particles' inertia weight.
@@ -30,15 +30,17 @@ Non dominated sorting particle swarm optimization(NSPSO)
       :param `diversity_mechanism`: the diversity mechanism used to maintain diversity on the Pareto front.
       :param `memory`: memory parameter. If `true`, memory is activated in the algorithm for multiple calls.
       :param `seed`: seed used by the internal random number generator (default is random).
+      :param `max_time`: maximum wall-clock time, in seconds, of each call to ``evolve()`` (default is 0, i.e., no time limit). See ``set_max_time()``.
       :exception `std\:\:invalid_argument`: if  `c1` <= 0, or `c2` <= 0, or `chi` <= 0.
       :exception `std\:\:invalid_argument`: if `omega` < 0, or `omega` > 1,.
       :exception `std\:\:invalid_argument`: if `v_coeff` <= 0, or `v_coeff` > 1.
       :exception `std\:\:invalid_argument`: if `leader_selection_range` > 100.
       :exception `std\:\:invalid_argument`: if `diversity_mechanism` is not "*crowding distance*", or "*niche count*", or "*max min*".
+      :exception `std\:\:invalid_argument`: if `max_time` is negative or not finite.
 
    .. cpp:function:: population evolve(population pop) const
 
-      Algorithm evolve method: evolves the population for the requested number of generations.
+      Algorithm evolve method: evolves the population for the requested number of generations, or until the time limit (see ``set_max_time()``) is reached.
     
       :param pop: population to be evolved.
       :return: evolved population.
@@ -108,6 +110,19 @@ Non dominated sorting particle swarm optimization(NSPSO)
       Sets the batch function evaluation scheme.
       
       :param ``b``: batch function evaluation object.
+
+   .. cpp:function:: void set_max_time(double max_time)
+
+      Sets the time limit: the maximum wall-clock time, in seconds, that each call to ``evolve()`` may run for, as measured by ``std::chrono::steady_clock`` from the start of the call. Evolution stops at whichever comes first, the generation limit or the time limit. The time limit is checked before each generation after the first one, so at least one generation is always run and a generation is never interrupted. A value of zero (the default) disables the time limit.
+
+      :param ``max_time``: the time limit, in seconds.
+      :exception `std\:\:invalid_argument`: if `max_time` is negative or not finite.
+
+   .. cpp:function:: double get_max_time() const
+
+      Gets the time limit.
+
+      :return: the maximum wall-clock time, in seconds, of each call to ``evolve()`` (0 means no time limit).
 
    .. cpp:function:: std::string get_extra_info() const
 

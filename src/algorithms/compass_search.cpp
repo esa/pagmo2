@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/not_population_based.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -45,9 +46,10 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-compass_search::compass_search(unsigned max_fevals, double start_range, double stop_range, double reduction_coeff)
+compass_search::compass_search(unsigned max_fevals, double start_range, double stop_range, double reduction_coeff,
+                               double max_time)
     : m_max_fevals(max_fevals), m_start_range(start_range), m_stop_range(stop_range),
-      m_reduction_coeff(reduction_coeff), m_verbosity(0u), m_log()
+      m_reduction_coeff(reduction_coeff), m_verbosity(0u), m_log(), m_max_time(max_time)
 {
     if (start_range > 1. || start_range <= 0. || (std::isfinite(start_range) == false)) {
         pagmo_throw(std::invalid_argument, "The start range must be in (0, 1], while a value of "
@@ -61,12 +63,14 @@ compass_search::compass_search(unsigned max_fevals, double start_range, double s
         pagmo_throw(std::invalid_argument, "The reduction coefficient must be in (0,1), while a value of "
                                                + std::to_string(reduction_coeff) + " was detected.");
     }
+    detail::check_max_time(max_time);
 }
 
 /// Algorithm evolve method (juice implementation of the algorithm)
 /**
  * Evolves the population up to when the search range becomes smaller than
- * the defined stop_range
+ * the defined stop_range, the maximum number of fitness evaluations is exceeded
+ * or the time limit (see compass_search::set_max_time()) is reached.
  *
  * @param pop population to be evolved
  * @return evolved population
@@ -75,6 +79,8 @@ compass_search::compass_search(unsigned max_fevals, double start_range, double s
  */
 population compass_search::evolve(population pop) const
 {
+    // The time budget of this call starts now.
+    const detail::time_limit time_budget(m_max_time);
     // We store some useful variables
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
@@ -120,7 +126,13 @@ population compass_search::evolve(population pop) const
 
     double newrange = m_start_range;
 
+    bool time_limit_reached = false;
     while (newrange > m_stop_range && fevals <= m_max_fevals) {
+        // NOTE: fevals is zero only before the first iteration, which is always run.
+        if (fevals > 0u && time_budget.is_reached()) {
+            time_limit_reached = true;
+            break;
+        }
         flag = false;
         for (decltype(dim) i = 0u; i < dim; i++) {
             auto x_trial = cur_best_x;
@@ -181,7 +193,9 @@ population compass_search::evolve(population pop) const
     } // end while
 
     if (m_verbosity) {
-        if (newrange <= m_stop_range) {
+        if (time_limit_reached) {
+            std::cout << "Exit condition -- max_time = " << m_max_time << " s\n";
+        } else if (newrange <= m_stop_range) {
             std::cout << "Exit condition -- range: " << newrange << " <= " << m_stop_range << "\n";
         } else {
             std::cout << "Exit condition -- fevals: " << fevals << " > " << m_max_fevals << "\n";
@@ -191,6 +205,25 @@ population compass_search::evolve(population pop) const
     // Force the current best into the original population
     replace_individual(pop, cur_best_x, cur_best_f);
     return pop;
+}
+
+/// Sets the time limit
+/**
+ * Sets the maximum wall-clock time, in seconds, that each call to evolve() may run for, as measured by
+ * \p std::chrono::steady_clock from the start of the call. Evolution stops at whichever comes first: the
+ * maximum number of fitness evaluations, the stop range or the time limit. The time limit is checked before
+ * each iteration of the search (at most twice the problem dimension fitness evaluations) after the first
+ * one, so at least one iteration is always run and an iteration is never interrupted. A value of zero (the
+ * default) disables the time limit.
+ *
+ * @param max_time the time limit, in seconds
+ *
+ * @throws std::invalid_argument if \p max_time is negative or not finite
+ */
+void compass_search::set_max_time(double max_time)
+{
+    detail::check_max_time(max_time);
+    m_max_time = max_time;
 }
 
 /// Extra info
@@ -206,16 +239,25 @@ std::string compass_search::get_extra_info() const
     stream(ss, "\n\tStart range: ", m_start_range);
     stream(ss, "\n\tStop range: ", m_stop_range);
     stream(ss, "\n\tReduction coefficient: ", m_reduction_coeff);
+    stream(ss, "\n\tMax time (s): ", m_max_time);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
     return ss.str();
 }
 
 // Object serialization
 template <typename Archive>
-void compass_search::serialize(Archive &ar, unsigned)
+void compass_search::serialize(Archive &ar, unsigned version)
 {
     detail::archive(ar, boost::serialization::base_object<not_population_based>(*this), m_max_fevals, m_start_range,
                     m_stop_range, m_reduction_coeff, m_verbosity, m_log);
+    if (version > 0u) {
+        detail::archive(ar, m_max_time);
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: version 0 archives predate the time limit.
+        m_max_time = 0.;
+        // LCOV_EXCL_STOP
+    }
 }
 
 } // namespace pagmo
