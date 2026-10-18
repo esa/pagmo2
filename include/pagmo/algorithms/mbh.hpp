@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 #include <vector>
 
 #include <pagmo/algorithm.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/detail/visibility.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/rng.hpp>
@@ -115,15 +116,21 @@ public:
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
      * @param seed seed used by the internal random number generator (default is random).
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See mbh::set_max_time().
      *
      * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
      * @throws std::invalid_argument if \p perturb is not in the (0,1] range.
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     template <typename T, ctor_enabler<T> = 0>
-    explicit mbh(T &&a, unsigned stop, double perturb, unsigned seed = pagmo::random_device::next())
-        : m_algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
+    explicit mbh(T &&a, unsigned stop, double perturb, unsigned seed = pagmo::random_device::next(),
+                 double max_time = 0.)
+        : m_algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(1, perturb), m_e(seed), m_seed(seed),
+          m_verbosity(0u), m_max_time(max_time)
     {
         scalar_ctor_impl(perturb);
+        detail::check_max_time(max_time);
     }
     /// Constructor (vector perturbation).
     /**
@@ -144,15 +151,21 @@ public:
      * of the decision vector of the best population found when generating a new starting point.
      * These are defined relative to the corresponding bounds.
      * @param seed seed used by the internal random number generator (default is random).
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See mbh::set_max_time().
      *
      * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
      * @throws std::invalid_argument if not all the elements of \p perturb are in the (0,1] range.
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     template <typename T, ctor_enabler<T> = 0>
-    explicit mbh(T &&a, unsigned stop, vector_double perturb, unsigned seed = pagmo::random_device::next())
-        : m_algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u)
+    explicit mbh(T &&a, unsigned stop, vector_double perturb, unsigned seed = pagmo::random_device::next(),
+                 double max_time = 0.)
+        : m_algorithm(std::forward<T>(a)), m_stop(stop), m_perturb(perturb), m_e(seed), m_seed(seed), m_verbosity(0u),
+          m_max_time(max_time)
     {
         vector_ctor_impl(perturb);
+        detail::check_max_time(max_time);
     }
     // Evolve method.
     population evolve(population) const;
@@ -218,6 +231,16 @@ public:
     }
     // Set the perturbation vector.
     void set_perturb(const vector_double &);
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
     // Algorithm's thread safety level.
     thread_safety get_thread_safety() const;
     /// Getter for the inner algorithm.
@@ -286,10 +309,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::mbh)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::mbh, 1)
 
 #endif

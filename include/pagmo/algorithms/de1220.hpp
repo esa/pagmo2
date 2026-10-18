@@ -141,9 +141,12 @@ public:
      * @param xtol stopping criteria on the x tolerance (default is 1e-6)
      * @param memory when true the parameters CR anf F are not reset between successive calls to the evolve method
      * @param seed seed used by the internal random number generator (default is random)
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See de1220::set_max_time().
 
      * @throws std::invalid_argument if \p variant_adptv is not in [0,1]
      * @throws std::invalid_argument if \p allowed_variants contains a number not in 1..18
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      *
      * See: (jDE) - Brest, J., Greiner, S., Bošković, B., Mernik, M., & Zumer, V. (2006). Self-adapting control
      parameters in differential evolution: a comparative study on numerical benchmark problems. Evolutionary
@@ -154,13 +157,24 @@ public:
      */
     de1220(unsigned gen = 1u, std::vector<unsigned> allowed_variants = de1220_statics<void>::allowed_variants,
            unsigned variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6, bool memory = false,
-           unsigned seed = pagmo::random_device::next());
+           unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
     void set_seed(unsigned);
+
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Gets the seed
     /**
@@ -272,10 +286,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::de1220)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::de1220, 1)
 
 #endif

@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <limits>
@@ -1850,7 +1851,7 @@ BOOST_AUTO_TEST_CASE(nsga3_serialization_test)
     const double close_distance = 1e-8;
     problem prob{zdt{1u, 30u}};
     population pop{prob, 40u, 23u};
-    algorithm algo{nsga3{10u, 1.00, 30., 0.10, 20, 5u, 0u, true, 32u, false}};
+    algorithm algo{nsga3{10u, 1.00, 30., 0.10, 20, 5u, 0u, true, 32u, false, 1e6}};
     algo.set_verbosity(1u);
     algo.set_seed(1234u);
     pop = algo.evolve(pop);
@@ -1912,4 +1913,58 @@ BOOST_AUTO_TEST_CASE(nsga3_zdt5_test)
     // After 100 generations a good share of the population is nondominated
     auto fronts = std::get<0>(fast_non_dominated_sorting(objs));
     BOOST_CHECK(fronts[0].size() * 2u >= pop.size());
+}
+
+BOOST_AUTO_TEST_CASE(nsga3_time_limit_test)
+{
+    // The time limit defaults to zero (no limit) and must be a non-negative finite number of seconds.
+    BOOST_CHECK_EQUAL(nsga3{}.get_max_time(), 0.);
+    BOOST_CHECK_EQUAL((nsga3{10u, 1.0, 30., 0.10, 20., 5u, 0u, true, 23u, false, 1.5}).get_max_time(), 1.5);
+    for (auto max_time : {-1., std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity()}) {
+        BOOST_CHECK_THROW((nsga3{10u, 1.0, 30., 0.10, 20., 5u, 0u, true, 23u, false, max_time}), std::invalid_argument);
+    }
+    nsga3 uda{};
+    uda.set_max_time(2.5);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK_THROW(uda.set_max_time(-1.), std::invalid_argument);
+    BOOST_CHECK_THROW(uda.set_max_time(std::numeric_limits<double>::infinity()), std::invalid_argument);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK(uda.get_extra_info().find("Max time") != std::string::npos);
+
+    population pop{dtlz{1u, 10u, 3u}, 24u, 23u};
+    // A time limit that is not reached leaves the evolution unchanged.
+    {
+        auto uda1 = nsga3{20u, 1.0, 30., 0.10, 20., 5u, 0u, true, 23u, false, 0.};
+        auto uda2 = nsga3{20u, 1.0, 30., 0.10, 20., 5u, 0u, true, 23u, false, 1e6};
+        uda1.set_verbosity(1u);
+        uda2.set_verbosity(1u);
+        const auto pop1 = uda1.evolve(pop);
+        const auto pop2 = uda2.evolve(pop);
+        BOOST_CHECK(pop1.get_x() == pop2.get_x());
+        BOOST_CHECK(pop1.get_f() == pop2.get_f());
+        BOOST_CHECK(uda1.get_log() == uda2.get_log());
+    }
+    // The time limit stops the evolution long before the generation limit, and each call to evolve() has
+    // its own time budget.
+    {
+        const double max_time = 0.1;
+        auto uda1 = nsga3{std::numeric_limits<unsigned>::max(), 1.0, 30., 0.10, 20., 5u, 0u, true, 23u, false, max_time};
+        auto pop1 = pop;
+        for (auto i = 0; i < 2; ++i) {
+            const auto start = std::chrono::steady_clock::now();
+            pop1 = uda1.evolve(pop1);
+            const auto elapsed = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+            BOOST_CHECK_GE(elapsed, max_time);
+            BOOST_CHECK_LT(elapsed, max_time + 5.);
+        }
+    }
+    // However small the time limit, the first generation is always run.
+    {
+        auto uda1 = nsga3{std::numeric_limits<unsigned>::max(), 1.0, 30., 0.10, 20., 5u, 0u, true, 23u, false, 1e-9};
+        auto uda2 = nsga3{1u, 1.0, 30., 0.10, 20., 5u, 0u, true, 23u, false, 0.};
+        const auto pop1 = uda1.evolve(pop);
+        const auto pop2 = uda2.evolve(pop);
+        BOOST_CHECK(pop1.get_x() == pop2.get_x());
+        BOOST_CHECK(pop1.get_f() == pop2.get_f());
+    }
 }

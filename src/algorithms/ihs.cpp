@@ -36,6 +36,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/ihs.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
@@ -48,9 +49,10 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-ihs::ihs(unsigned gen, double phmcr, double ppar_min, double ppar_max, double bw_min, double bw_max, unsigned seed)
+ihs::ihs(unsigned gen, double phmcr, double ppar_min, double ppar_max, double bw_min, double bw_max, unsigned seed,
+         double max_time)
     : m_gen(gen), m_phmcr(phmcr), m_ppar_min(ppar_min), m_ppar_max(ppar_max), m_bw_min(bw_min), m_bw_max(bw_max),
-      m_e(seed), m_seed(seed), m_verbosity(0u)
+      m_e(seed), m_seed(seed), m_verbosity(0u), m_max_time(max_time)
 {
     if (phmcr > 1 || phmcr < 0 || ppar_min > 1 || ppar_min < 0 || ppar_max > 1 || ppar_max < 0
         || (std::isfinite(phmcr) == false) || (std::isfinite(ppar_min) == false)
@@ -66,16 +68,22 @@ ihs::ihs(unsigned gen, double phmcr, double ppar_min, double ppar_max, double bw
         pagmo_throw(std::invalid_argument, "The bandwidth values must be positive, and minimum bandwidth must not "
                                            "be greater than maximum bandwidth");
     }
+    detail::check_max_time(max_time);
 }
 
 /// Algorithm evolve method
 /**
+ * Evolves the population for a maximum number of generations, or until the time limit
+ * (see ihs::set_max_time()) is reached.
+ *
  * @param pop population to be evolved
  * @return evolved population
  * @throws std::invalid_argument if the problem is multi-objective or constrained
  */
 population ihs::evolve(population pop) const
 {
+    // The time budget of this call starts now.
+    const detail::time_limit time_budget(m_max_time);
     // We store some useful properties
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
@@ -126,6 +134,12 @@ population ihs::evolve(population pop) const
 
     // Main loop
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
+        if (gen > 1u && time_budget.is_reached()) {
+            if (m_verbosity > 0u) {
+                print("Exit condition -- max_time = ", m_max_time, " s\n");
+            }
+            return pop;
+        }
         // 1 - We adjust the algorithm parameters (parameter control)
         const double ppar_cur = m_ppar_min + ((m_ppar_max - m_ppar_min) * gen) / m_gen;
         const double bw_cur = m_bw_max * std::exp(c * gen);
@@ -219,6 +233,25 @@ void ihs::set_seed(unsigned seed)
     m_seed = seed;
 }
 
+/// Sets the time limit
+/**
+ * Sets the maximum wall-clock time, in seconds, that each call to evolve() may run for, as measured by
+ * \p std::chrono::steady_clock from the start of the call. Evolution stops at whichever comes first, the
+ * generation limit or the time limit. The time limit is checked before each generation after the first one,
+ * so at least one generation is always run and a generation is never interrupted. Since the pitch adjustment
+ * rate and the distance bandwidth are adapted over the number of generations, a run stopped by the time
+ * limit does not complete this schedule. A value of zero (the default) disables the time limit.
+ *
+ * @param max_time the time limit, in seconds
+ *
+ * @throws std::invalid_argument if \p max_time is negative or not finite
+ */
+void ihs::set_max_time(double max_time)
+{
+    detail::check_max_time(max_time);
+    m_max_time = max_time;
+}
+
 /// Extra info
 /**
  * One of the optional methods of any user-defined algorithm (UDA).
@@ -234,6 +267,7 @@ std::string ihs::get_extra_info() const
     stream(ss, "\n\tMaximum pitch adjustment rate: ", m_ppar_max);
     stream(ss, "\n\tMinimum distance bandwidth: ", m_bw_min);
     stream(ss, "\n\tMaximum distance bandwidth: ", m_bw_max);
+    stream(ss, "\n\tMax time (s): ", m_max_time);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
     stream(ss, "\n\tSeed: ", m_seed);
     return ss.str();
@@ -241,9 +275,17 @@ std::string ihs::get_extra_info() const
 
 // Object serialization
 template <typename Archive>
-void ihs::serialize(Archive &ar, unsigned)
+void ihs::serialize(Archive &ar, unsigned version)
 {
     detail::archive(ar, m_gen, m_phmcr, m_ppar_min, m_ppar_max, m_bw_min, m_bw_max, m_e, m_seed, m_verbosity, m_log);
+    if (version > 0u) {
+        detail::archive(ar, m_max_time);
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: version 0 archives predate the time limit.
+        m_max_time = 0.;
+        // LCOV_EXCL_STOP
+    }
 }
 
 // logging is complex fir ihs as the algorithm is an "any-problem" wannabe

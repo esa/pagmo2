@@ -3,6 +3,40 @@
 Changelog
 =========
 
+2.21.0 (unreleased)
+-------------------
+
+New
+~~~
+
+- Add an optional wall-clock time limit to the iterative algorithms, as an
+  alternative to their generation (or iteration) limit: evolution stops at
+  whichever of the two limits is reached first. The time limit, in seconds,
+  applies to each call to ``evolve()`` and is set via a new trailing
+  ``max_time`` constructor argument or via ``set_max_time()``, and read back
+  via ``get_max_time()``. Its default of zero disables it, so the existing
+  behaviour is unchanged. Supported by
+  :cpp:class:`~pagmo::bee_colony`, :cpp:class:`~pagmo::cmaes`,
+  :cpp:class:`~pagmo::compass_search`,
+  :cpp:class:`~pagmo::cstrs_self_adaptive`, :cpp:class:`~pagmo::de`,
+  :cpp:class:`~pagmo::de1220`, :cpp:class:`~pagmo::gaco`,
+  :cpp:class:`~pagmo::gwo`, :cpp:class:`~pagmo::ihs`,
+  :cpp:class:`~pagmo::maco`, :cpp:class:`~pagmo::mbh`,
+  :cpp:class:`~pagmo::moead`, :cpp:class:`~pagmo::moead_gen`,
+  :cpp:class:`~pagmo::nsga2`, :cpp:class:`~pagmo::nsga3`,
+  :cpp:class:`~pagmo::nspso`, :cpp:class:`~pagmo::pso`,
+  :cpp:class:`~pagmo::pso_gen`, :cpp:class:`~pagmo::sade`,
+  :cpp:class:`~pagmo::sea`, :cpp:class:`~pagmo::sga`,
+  :cpp:class:`~pagmo::simulated_annealing` and :cpp:class:`~pagmo::xnes`.
+
+Changes
+~~~~~~~
+
+- The serialization format of the algorithms listed above now includes the
+  time limit (class version 1). Archives written by previous versions can
+  still be loaded, with no time limit, but archives written by this version
+  cannot be loaded by previous versions.
+
 2.20.0 (2026-09-24)
 --------------------
 

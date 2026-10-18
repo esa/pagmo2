@@ -112,16 +112,19 @@ public:
      * current best solutions.
      * @param[in] memory Memory parameter: if true, memory is activated in the algorithm for multiple calls
      * @param seed seed used by the internal random number generator (default is random).
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See gaco::set_max_time().
      *
      * @throws std::invalid_argument if \p acc is not \f$ >=0 \f$, \p impstop is not a
      * positive integer, \p evalstop is not a positive integer, \p focus is not \f$ >=0 \f$,
      * \p ker is not \f$ >=2 \f$, \p oracle is not positive, \p
      * threshold is not \f$ \in [1,gen] \f$ when \f$memory=false\f$ and  \f$gen!=0\f$, \p threshold is not \f$ >=1 \f$
      * when \f$memory=true\f$ and \f$gen!=0\f$, \p q is not \f$ >=0 \f$
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     gaco(unsigned gen = 1u, unsigned ker = 63u, double q = 1.0, double oracle = 0., double acc = 0.01,
          unsigned threshold = 1u, unsigned n_gen_mark = 7u, unsigned impstop = 100000u, unsigned evalstop = 100000u,
-         double focus = 0., bool memory = false, unsigned seed = pagmo::random_device::next());
+         double focus = 0., bool memory = false, unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -190,6 +193,16 @@ public:
 
     // Sets the bfe
     void set_bfe(const bfe &b);
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Algorithm name
     /**
@@ -262,10 +275,14 @@ private:
     mutable unsigned m_gen_mark;
     mutable vector_double::size_type m_fevals;
     boost::optional<bfe> m_bfe;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::gaco)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::gaco, 1)
 
 #endif

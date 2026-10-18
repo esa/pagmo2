@@ -132,17 +132,31 @@ public:
      * @param memory when true the adapted parameters CR anf F are not reset between successive calls to the evolve
      method
      * @param seed seed used by the internal random number generator (default is random)
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See sade::set_max_time().
      * @throws std::invalid_argument if \p variant_adptv is not one of 0,1
      * @throws std::invalid_argument if variant is not one of 1, .., 18
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     sade(unsigned gen = 1u, unsigned variant = 2u, unsigned variant_adptv = 1u, double ftol = 1e-6, double xtol = 1e-6,
-         bool memory = false, unsigned seed = pagmo::random_device::next());
+         bool memory = false, unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
     void set_seed(unsigned);
+
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Gets the seed
     /**
@@ -248,10 +262,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::sade)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::sade, 1)
 
 #endif

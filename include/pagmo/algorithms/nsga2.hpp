@@ -78,11 +78,14 @@ public:
      * @param[in] m Mutation probability.
      * @param[in] eta_m Distribution index for mutation.
      * @param seed seed used by the internal random number generator (default is random)
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See nsga2::set_max_time().
      * @throws std::invalid_argument if \p cr is not \f$ \in [0,1[\f$, \p m is not \f$ \in [0,1]\f$, \p eta_c is not in
      * [1,100[ or \p eta_m is not in [1,100[.
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
     nsga2(unsigned gen = 1u, double cr = 0.95, double eta_c = 10., double m = 0.01, double eta_m = 50.,
-          unsigned seed = pagmo::random_device::next());
+          unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -140,6 +143,16 @@ public:
 
     // Sets the bfe
     void set_bfe(const bfe &b);
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Algorithm name
     /**
@@ -184,10 +197,14 @@ private:
     unsigned m_verbosity;
     mutable log_type m_log;
     boost::optional<bfe> m_bfe;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::nsga2)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::nsga2, 1)
 
 #endif

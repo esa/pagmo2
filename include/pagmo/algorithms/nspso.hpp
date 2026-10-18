@@ -59,7 +59,7 @@ public:
     nspso(unsigned gen = 1u, double omega = 0.6, double c1 = 2.0, double c2 = 2.0, double chi = 1.0,
           double v_coeff = 0.5, unsigned leader_selection_range = 60u,
           std::string diversity_mechanism = "crowding distance", bool memory = false,
-          unsigned seed = pagmo::random_device::next());
+          unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -93,6 +93,15 @@ public:
 
     // Sets the bfe
     void set_bfe(const bfe &b);
+
+    // Sets the time limit
+    void set_max_time(double);
+
+    // Gets the time limit
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     // Algorithm name
     std::string get_name() const
@@ -140,10 +149,14 @@ private:
     unsigned m_verbosity;
     mutable log_type m_log;
     boost::optional<bfe> m_bfe;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::nspso)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::nspso, 1)
 
 #endif

@@ -172,14 +172,18 @@ public:
      * @param seed seed used by the internal random number generator (default is random).
      * @param use_memory if true, the ideal point and the extreme points are retained
      * across generations, as described in Section IV-C of the original paper.
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve()
+     * (default is 0, i.e., no time limit). See nsga3::set_max_time(). As it follows
+     * \p use_memory, a time limit passed positionally requires an explicit \p use_memory.
      *
      * @throws std::invalid_argument if \p cr or \p mut is not finite or not in
      * \f$[0,1]\f$, if \p eta_c or \p eta_mut is not finite or not in \f$[1,100]\f$,
-     * if \p divisions is zero, or if \p divisions_inner exceeds \p divisions.
+     * if \p divisions is zero, if \p divisions_inner exceeds \p divisions, or if
+     * \p max_time is negative or not finite.
      */
     nsga3(unsigned gen = 1u, double cr = 1.0, double eta_c = 30.0, double mut = 0.10, double eta_mut = 20.0,
           std::size_t divisions = 12u, std::size_t divisions_inner = 0u, bool random_mating = true,
-          unsigned seed = pagmo::random_device::next(), bool use_memory = false);
+          unsigned seed = pagmo::random_device::next(), bool use_memory = false, double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -240,6 +244,16 @@ public:
 
     // Sets the bfe
     void set_bfe(const bfe &b);
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Algorithm name
     /**
@@ -304,10 +318,14 @@ private:
     mutable log_type m_log;
     unsigned m_verbosity;
     boost::optional<bfe> m_bfe;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::nsga3)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::nsga3, 1)
 
 #endif

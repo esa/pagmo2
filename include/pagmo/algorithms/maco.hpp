@@ -57,7 +57,7 @@ public:
     // Constructs the MACO user defined algorithm for multi-objective optimization.
     maco(unsigned gen = 1u, unsigned ker = 63u, double q = 1.0, unsigned threshold = 1u, unsigned n_gen_mark = 7u,
          unsigned evalstop = 100000u, double focus = 0., bool memory = false,
-         unsigned seed = pagmo::random_device::next());
+         unsigned seed = pagmo::random_device::next(), double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
@@ -91,6 +91,15 @@ public:
 
     // Sets the bfe
     void set_bfe(const bfe &b);
+
+    // Sets the time limit
+    void set_max_time(double);
+
+    // Gets the time limit
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     // Algorithm name
     std::string get_name() const
@@ -139,10 +148,14 @@ private:
     mutable unsigned m_gen_mark;
     boost::optional<bfe> m_bfe;
     mutable population m_pop;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::maco)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::maco, 1)
 
 #endif

@@ -35,6 +35,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/mbh.hpp>
+#include <pagmo/detail/time_limit.hpp>
 #include <pagmo/exceptions.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/rng.hpp>
@@ -63,7 +64,7 @@ namespace pagmo
  *
  * @throws unspecified any exception thrown by the constructor of pagmo::algorithm.
  */
-mbh::mbh() : m_algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_verbosity(0u)
+mbh::mbh() : m_algorithm(compass_search{}), m_stop(5u), m_perturb(1, 1e-2), m_verbosity(0u), m_max_time(0.)
 {
     const auto rnd = pagmo::random_device::next();
     m_seed = rnd;
@@ -90,7 +91,7 @@ void mbh::vector_ctor_impl(const vector_double &perturb)
 /// Evolve method.
 /**
  * This method will evolve the input population up to when \p stop consecutive runs of the internal
- * algorithm do not improve the solution.
+ * algorithm do not improve the solution, or until the time limit (see mbh::set_max_time()) is reached.
  *
  * @param pop population to be evolved.
  *
@@ -101,6 +102,8 @@ void mbh::vector_ctor_impl(const vector_double &perturb)
  */
 population mbh::evolve(population pop) const
 {
+    // The time budget of this call starts now.
+    const detail::time_limit time_budget(m_max_time);
     // We store some useful variables
     const auto &prob = pop.get_problem(); // This is a const reference, so using set_seed for example will not be
                                           // allowed
@@ -147,7 +150,15 @@ population mbh::evolve(population pop) const
     m_log.clear();
     // mbh main loop
     unsigned i = 0u;
+    bool first_run = true;
     while (i < m_stop) {
+        if (!first_run && time_budget.is_reached()) {
+            if (m_verbosity > 0u) {
+                std::cout << "Exit condition -- max_time = " << m_max_time << " s" << std::endl;
+            }
+            return pop;
+        }
+        first_run = false;
         // 1 - We make a copy of the current population
         population pop_old(pop);
         // 2 - We perturb the current population (NP funevals are made here)
@@ -228,6 +239,25 @@ void mbh::set_perturb(const vector_double &perturb)
     m_perturb = perturb;
 }
 
+/// Sets the time limit
+/**
+ * Sets the maximum wall-clock time, in seconds, that each call to evolve() may run for, as measured by
+ * \p std::chrono::steady_clock from the start of the call. Evolution stops at whichever comes first:
+ * \p stop consecutive runs of the inner algorithm without improvement or the time limit. The time limit is
+ * checked before each run of the inner algorithm after the first one, so at least one run is always made and
+ * a run is never interrupted. The time limit of the inner algorithm, if any, is independent and can be used
+ * to bound each of its runs. A value of zero (the default) disables the time limit.
+ *
+ * @param max_time the time limit, in seconds
+ *
+ * @throws std::invalid_argument if \p max_time is negative or not finite
+ */
+void mbh::set_max_time(double max_time)
+{
+    detail::check_max_time(max_time);
+    m_max_time = max_time;
+}
+
 /// Algorithm's thread safety level.
 /**
  * The thread safety of this meta-algorithm is the minimum between the thread safety
@@ -250,6 +280,7 @@ std::string mbh::get_extra_info() const
     std::ostringstream ss;
     stream(ss, "\tStop: ", m_stop);
     stream(ss, "\n\tPerturbation vector: ", m_perturb);
+    stream(ss, "\n\tMax time (s): ", m_max_time);
     stream(ss, "\n\tSeed: ", m_seed);
     stream(ss, "\n\tVerbosity: ", m_verbosity);
     stream(ss, "\n\n\tInner algorithm: ", m_algorithm.get_name());
@@ -260,9 +291,17 @@ std::string mbh::get_extra_info() const
 
 // Object serialization.
 template <typename Archive>
-void mbh::serialize(Archive &ar, unsigned)
+void mbh::serialize(Archive &ar, unsigned version)
 {
     detail::archive(ar, m_algorithm, m_stop, m_perturb, m_e, m_seed, m_verbosity, m_log);
+    if (version > 0u) {
+        detail::archive(ar, m_max_time);
+    } else {
+        // LCOV_EXCL_START
+        // NOTE: version 0 archives predate the time limit.
+        m_max_time = 0.;
+        // LCOV_EXCL_STOP
+    }
 }
 
 } // namespace pagmo

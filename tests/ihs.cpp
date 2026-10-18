@@ -31,7 +31,10 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <boost/lexical_cast.hpp>
+#include <chrono>
 #include <limits>
+#include <stdexcept>
+#include <string>
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/ihs.hpp>
 #include <pagmo/io.hpp>
@@ -153,7 +156,7 @@ BOOST_AUTO_TEST_CASE(ihs_serialization_test)
     // Make one evolution
     problem prob{rosenbrock{25u}};
     population pop{prob, 10u, 23u};
-    algorithm algo{ihs{100u, 0.85, 0.35, 0.99, 1e-5, 1., 42u}};
+    algorithm algo{ihs{100u, 0.85, 0.35, 0.99, 1e-5, 1., 42u, 1e6}};
     algo.set_verbosity(1u);
     pop = algo.evolve(pop);
 
@@ -215,4 +218,56 @@ BOOST_AUTO_TEST_CASE(ihs_non_finite_test)
     pop.set_x(0, x);
     ihs uda{5u};
     BOOST_CHECK_NO_THROW(pop = uda.evolve(pop));
+}
+
+BOOST_AUTO_TEST_CASE(ihs_time_limit_test)
+{
+    // The time limit defaults to zero (no limit) and must be a non-negative finite number of seconds.
+    BOOST_CHECK_EQUAL(ihs{}.get_max_time(), 0.);
+    BOOST_CHECK_EQUAL((ihs{10u, 0.85, 0.35, 0.99, 1e-5, 1., 23u, 1.5}).get_max_time(), 1.5);
+    for (auto max_time : {-1., std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity()}) {
+        BOOST_CHECK_THROW((ihs{10u, 0.85, 0.35, 0.99, 1e-5, 1., 23u, max_time}), std::invalid_argument);
+    }
+    ihs uda{};
+    uda.set_max_time(2.5);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK_THROW(uda.set_max_time(-1.), std::invalid_argument);
+    BOOST_CHECK_THROW(uda.set_max_time(std::numeric_limits<double>::infinity()), std::invalid_argument);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK(uda.get_extra_info().find("Max time") != std::string::npos);
+
+    population pop{rosenbrock{10u}, 20u, 23u};
+    // A time limit that is not reached leaves the evolution unchanged.
+    {
+        auto uda1 = ihs{20u, 0.85, 0.35, 0.99, 1e-5, 1., 23u, 0.};
+        auto uda2 = ihs{20u, 0.85, 0.35, 0.99, 1e-5, 1., 23u, 1e6};
+        uda1.set_verbosity(1u);
+        uda2.set_verbosity(1u);
+        const auto pop1 = uda1.evolve(pop);
+        const auto pop2 = uda2.evolve(pop);
+        BOOST_CHECK(pop1.get_x() == pop2.get_x());
+        BOOST_CHECK(pop1.get_f() == pop2.get_f());
+        BOOST_CHECK(uda1.get_log() == uda2.get_log());
+    }
+    // The time limit stops the evolution long before the generation limit, and each call to evolve() has
+    // its own time budget.
+    {
+        const double max_time = 0.1;
+        auto uda1 = ihs{std::numeric_limits<unsigned>::max(), 0.85, 0.35, 0.99, 1e-5, 1., 23u, max_time};
+        auto pop1 = pop;
+        for (auto i = 0; i < 2; ++i) {
+            const auto start = std::chrono::steady_clock::now();
+            pop1 = uda1.evolve(pop1);
+            const auto elapsed = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+            BOOST_CHECK_GE(elapsed, max_time);
+            BOOST_CHECK_LT(elapsed, max_time + 5.);
+        }
+    }
+    // However small the time limit, the first generation is always run.
+    {
+        auto uda1 = ihs{std::numeric_limits<unsigned>::max(), 0.85, 0.35, 0.99, 1e-5, 1., 23u, 1e-9};
+        uda1.set_verbosity(1u);
+        uda1.evolve(pop);
+        BOOST_CHECK_EQUAL(uda1.get_log().size(), 1u);
+    }
 }

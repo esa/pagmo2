@@ -72,16 +72,31 @@ public:
      * @param gen number of generations. Note that the total number of fitness evaluations will be 2*gen
      * @param limit maximum number of trials for abandoning a source
      * @param seed seed used by the internal random number generator (default is random)
+     * @param max_time maximum wall-clock time, in seconds, of each call to evolve() (default is 0, i.e., no time
+     * limit). See bee_colony::set_max_time().
      *
      * @throws std::invalid_argument if limit equals 0
+     * @throws std::invalid_argument if \p max_time is negative or not finite
      */
-    bee_colony(unsigned gen = 1u, unsigned limit = 20u, unsigned seed = pagmo::random_device::next());
+    bee_colony(unsigned gen = 1u, unsigned limit = 20u, unsigned seed = pagmo::random_device::next(),
+               double max_time = 0.);
 
     // Algorithm evolve method
     population evolve(population) const;
 
     // Sets the seed
     void set_seed(unsigned);
+
+    // Sets the time limit
+    void set_max_time(double);
+    /// Gets the time limit
+    /**
+     * @return the maximum wall-clock time, in seconds, of each call to evolve() (0 means no time limit)
+     */
+    double get_max_time() const
+    {
+        return m_max_time;
+    }
 
     /// Gets the seed
     /**
@@ -174,10 +189,14 @@ private:
     unsigned m_seed;
     unsigned m_verbosity;
     mutable log_type m_log;
+    double m_max_time;
 };
 
 } // namespace pagmo
 
 PAGMO_S11N_ALGORITHM_EXPORT_KEY(pagmo::bee_colony)
+
+// NOTE: version 1 added the m_max_time member.
+BOOST_CLASS_VERSION(pagmo::bee_colony, 1)
 
 #endif

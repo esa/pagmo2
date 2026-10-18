@@ -32,6 +32,7 @@ see https://www.gnu.org/licenses/. */
 
 #include <boost/lexical_cast.hpp>
 
+#include <chrono>
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -185,6 +186,7 @@ BOOST_AUTO_TEST_CASE(sga_serialization_test)
     problem prob{schwefel{20u}};
     population pop{prob, 20u, 23u};
     algorithm algo{sga{10u}};
+    algo.extract<sga>()->set_max_time(1e6);
     algo.set_seed(32u);
 
     algo.set_verbosity(1u);
@@ -239,4 +241,58 @@ BOOST_AUTO_TEST_CASE(sga_out_of_bounds_population_test)
     x[0] = std::numeric_limits<double>::infinity();
     pop.set_xf(0, x, f);
     BOOST_CHECK_THROW(sga{1u}.evolve(pop), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(sga_time_limit_test)
+{
+    // The time limit defaults to zero (no limit) and must be a non-negative finite number of seconds.
+    BOOST_CHECK_EQUAL(sga{}.get_max_time(), 0.);
+    BOOST_CHECK_EQUAL((sga{10u, .90, 1., 0.02, 1., 2u, "exponential", "polynomial", "tournament", 23u, 1.5}).get_max_time(), 1.5);
+    for (auto max_time : {-1., std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity()}) {
+        BOOST_CHECK_THROW((sga{10u, .90, 1., 0.02, 1., 2u, "exponential", "polynomial", "tournament", 23u, max_time}), std::invalid_argument);
+    }
+    sga uda{};
+    uda.set_max_time(2.5);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK_THROW(uda.set_max_time(-1.), std::invalid_argument);
+    BOOST_CHECK_THROW(uda.set_max_time(std::numeric_limits<double>::infinity()), std::invalid_argument);
+    BOOST_CHECK_EQUAL(uda.get_max_time(), 2.5);
+    BOOST_CHECK(uda.get_extra_info().find("Max time") != std::string::npos);
+
+    population pop{rosenbrock{10u}, 20u, 23u};
+    // A time limit that is not reached leaves the evolution unchanged.
+    {
+        auto uda1 = sga{20u, .90, 1., 0.02, 1., 2u, "exponential", "polynomial", "tournament", 23u, 0.};
+        auto uda2 = sga{20u, .90, 1., 0.02, 1., 2u, "exponential", "polynomial", "tournament", 23u, 1e6};
+        uda1.set_verbosity(1u);
+        uda2.set_verbosity(1u);
+        const auto pop1 = uda1.evolve(pop);
+        const auto pop2 = uda2.evolve(pop);
+        BOOST_CHECK(pop1.get_x() == pop2.get_x());
+        BOOST_CHECK(pop1.get_f() == pop2.get_f());
+        BOOST_CHECK(uda1.get_log() == uda2.get_log());
+    }
+    // The time limit stops the evolution long before the generation limit, and each call to evolve() has
+    // its own time budget.
+    {
+        const double max_time = 0.1;
+        auto uda1 = sga{std::numeric_limits<unsigned>::max(), .90, 1., 0.02, 1., 2u, "exponential", "polynomial", "tournament", 23u, max_time};
+        auto pop1 = pop;
+        for (auto i = 0; i < 2; ++i) {
+            const auto start = std::chrono::steady_clock::now();
+            pop1 = uda1.evolve(pop1);
+            const auto elapsed = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+            BOOST_CHECK_GE(elapsed, max_time);
+            BOOST_CHECK_LT(elapsed, max_time + 5.);
+        }
+    }
+    // However small the time limit, the first generation is always run.
+    {
+        auto uda1 = sga{std::numeric_limits<unsigned>::max(), .90, 1., 0.02, 1., 2u, "exponential", "polynomial", "tournament", 23u, 1e-9};
+        auto uda2 = sga{1u, .90, 1., 0.02, 1., 2u, "exponential", "polynomial", "tournament", 23u, 0.};
+        const auto pop1 = uda1.evolve(pop);
+        const auto pop2 = uda2.evolve(pop);
+        BOOST_CHECK(pop1.get_x() == pop2.get_x());
+        BOOST_CHECK(pop1.get_f() == pop2.get_f());
+    }
 }
