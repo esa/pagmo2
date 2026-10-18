@@ -835,7 +835,10 @@ population nlopt::evolve(population pop) const
     }
 
     // Compute the new fitness vector.
-    const auto new_f = prob.fitness(initial_guess);
+    // NOTE: initial_guess is rewritten in place if the problem supports it. Only
+    // the final solution is rewritten: the points evaluated by NLopt during the
+    // optimisation are not, as that would disrupt the local optimisation.
+    const auto new_f = prob.fitness_rewrite(initial_guess);
 
     // Store the new individual into the population, but only if better.
     if (compare_fc(new_f, old_f, prob.get_nec(), prob.get_c_tol())) {

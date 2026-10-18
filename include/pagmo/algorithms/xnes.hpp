@@ -82,6 +82,15 @@ namespace pagmo
  *    reinserted into the population, xNES may not preserve the best individual (not elitist).
  *    As a consequence the plot of the population best fitness may not be perfectly monotonically decreasing.
  *
+ * .. note::
+ *
+ *    xNES never rewrites the decision vectors it samples, even if the problem supports
+ *    rewriting (see :cpp:func:`pagmo::problem::fitness_rewrite()`): the fitness is evaluated
+ *    via :cpp:func:`pagmo::problem::fitness()`, as the update of the search distribution assumes that
+ *    the evaluated decision vectors are the sampled ones (which, unless ``force_bounds`` is ``true``, may
+ *    also lie outside the problem bounds). The stored decision vectors are thus the sampled ones, and they
+ *    remain consistent with the stored fitness vectors.
+ *
  * .. seealso::
  *
  *    Glasmachers, T., Schaul, T., Yi, S., Wierstra, D., & Schmidhuber, J. (2010, July). Exponential natural

@@ -126,6 +126,14 @@ PAGMO_DLL_PUBLIC unsigned ipopt_internal_test();
  *    This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_IPOPT`` option
  *    enabled (see the :ref:`installation instructions <install>`).
  *
+ * .. note::
+ *
+ *    If the problem supports rewriting the decision vectors during the fitness evaluation
+ *    (see :cpp:func:`pagmo::problem::fitness_rewrite()`), the final solution found by Ipopt is first
+ *    projected into the problem bounds (which Ipopt may relax during the optimisation) and then rewritten,
+ *    before being compared with (and possibly replacing) the selected individual. The points evaluated
+ *    by Ipopt during the optimisation are never rewritten.
+ *
  * .. seealso::
  *
  *    https://projects.coin-or.org/Ipopt.

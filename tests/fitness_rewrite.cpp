@@ -31,6 +31,7 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
+#include <atomic>
 #include <cmath>
 #include <string>
 #include <utility>
@@ -39,6 +40,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/bee_colony.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
+#include <pagmo/algorithms/cstrs_self_adaptive.hpp>
 #include <pagmo/algorithms/de.hpp>
 #include <pagmo/algorithms/de1220.hpp>
 #include <pagmo/algorithms/gaco.hpp>
@@ -69,6 +71,18 @@ see https://www.gnu.org/licenses/. */
 
 #include <pagmo/algorithms/cmaes.hpp>
 #include <pagmo/algorithms/xnes.hpp>
+
+#endif
+
+#if defined(PAGMO_WITH_NLOPT)
+
+#include <pagmo/algorithms/nlopt.hpp>
+
+#endif
+
+#if defined(PAGMO_WITH_IPOPT)
+
+#include <pagmo/algorithms/ipopt.hpp>
 
 #endif
 
@@ -118,6 +132,76 @@ struct so_plain {
 
 // Single-objective problem with rewriting.
 struct so_rw : so_plain {
+    vector_double fitness_rewrite(vector_double &x) const
+    {
+        x = snap(x);
+        return eval(x);
+    }
+};
+
+// Number of calls to the fitness_rewrite() member function of the counting test problems.
+static std::atomic<unsigned> n_rewrites{0u};
+
+// Single-objective problem with rewriting, counting the calls to fitness_rewrite().
+struct so_rw_count : so_rw {
+    vector_double fitness_rewrite(vector_double &x) const
+    {
+        ++n_rewrites;
+        return so_rw::fitness_rewrite(x);
+    }
+};
+
+// Smooth single-objective problem with rewriting and gradient, counting the calls to fitness_rewrite().
+// Here only the rewriting snaps the decision vector to the grid, so that the optimum (at .3) is rewritten
+// into .25.
+struct so_smooth_rw {
+    vector_double fitness(const vector_double &x) const
+    {
+        return so_plain::eval(x);
+    }
+    vector_double fitness_rewrite(vector_double &x) const
+    {
+        ++n_rewrites;
+        x = snap(x);
+        return fitness(x);
+    }
+    vector_double gradient(const vector_double &x) const
+    {
+        vector_double retval;
+        for (auto xi : x) {
+            retval.push_back(2. * (xi - .3));
+        }
+        return retval;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {vector_double(4u, -1.), vector_double(4u, 1.)};
+    }
+};
+
+// Constrained single-objective problem without rewriting.
+struct so_cstrs_plain {
+    static vector_double eval(const vector_double &x)
+    {
+        // The objective of so_plain, subject to x[0] + x[1] >= .5.
+        return {so_plain::eval(x)[0], .5 - x[0] - x[1]};
+    }
+    vector_double fitness(const vector_double &x) const
+    {
+        return eval(snap(x));
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {vector_double(4u, -1.), vector_double(4u, 1.)};
+    }
+    vector_double::size_type get_nic() const
+    {
+        return 1u;
+    }
+};
+
+// Constrained single-objective problem with rewriting.
+struct so_cstrs_rw : so_cstrs_plain {
     vector_double fitness_rewrite(vector_double &x) const
     {
         x = snap(x);
@@ -306,6 +390,64 @@ BOOST_AUTO_TEST_CASE(no_rewrite_control)
     }
 }
 
+BOOST_AUTO_TEST_CASE(cstrs_self_adaptive_rewrite)
+{
+    // The penalized problem evolved by the inner algorithm of cstrs_self_adaptive forwards
+    // the rewriting to the original problem, and caches the rewritten decision vectors.
+    population pop{so_cstrs_rw{}, 20u, 42u};
+    population new_pop{detail::penalized_udp{pop}};
+    BOOST_CHECK(new_pop.get_problem().has_fitness_rewrite());
+    const auto fevals0 = pop.get_problem().get_fevals();
+    new_pop.push_back(vector_double(4u, .3));
+    BOOST_CHECK(new_pop.get_x()[0] == vector_double(4u, .25));
+    BOOST_CHECK_EQUAL(pop.get_problem().get_fevals(), fevals0 + 1u);
+    BOOST_CHECK_EQUAL(
+        new_pop.get_problem().extract<detail::penalized_udp>()->m_fitness_map.count(vector_double(4u, .25)), 1u);
+    // The rewritten decision vector is cached: evaluating it again does not increase the fevals.
+    new_pop.push_back(vector_double(4u, .25));
+    BOOST_CHECK_EQUAL(pop.get_problem().get_fevals(), fevals0 + 1u);
+    BOOST_CHECK(new_pop.get_f()[1] == new_pop.get_f()[0]);
+    // A problem which does not rewrite results in a penalized problem which does not rewrite.
+    population pop_plain{so_cstrs_plain{}, 20u, 42u};
+    BOOST_CHECK(!problem{detail::penalized_udp{pop_plain}}.has_fitness_rewrite());
+    // The evolved population contains the rewritten decision vectors.
+    run(algorithm{cstrs_self_adaptive{10u, de{1u}}}, problem{so_cstrs_rw{}}, 20u);
+    run(algorithm{cstrs_self_adaptive{10u, de{1u}}}, problem{so_cstrs_plain{}}, 20u, false);
+}
+
+#if defined(PAGMO_WITH_NLOPT) || defined(PAGMO_WITH_IPOPT)
+
+// Check that a local optimiser rewrites only the final solution, which then replaces
+// the best individual of the population.
+static void check_local_optimiser(algorithm algo)
+{
+    population pop{so_smooth_rw{}, 5u, 42u};
+    check_pop(pop, true, algo.get_name() + " (initial population)");
+    n_rewrites.store(0u);
+    pop = algo.evolve(pop);
+    BOOST_TEST_CONTEXT(algo.get_name())
+    {
+        // Only the final solution is rewritten (the points evaluated during the local optimisation are not)...
+        BOOST_CHECK_EQUAL(n_rewrites.load(), 1u);
+        // ...and, being better, it replaces the best individual.
+        BOOST_CHECK(pop.get_x()[pop.best_idx()] == vector_double(4u, .25));
+    }
+    check_pop(pop, true, algo.get_name());
+}
+
+BOOST_AUTO_TEST_CASE(local_optimisers)
+{
+#if defined(PAGMO_WITH_NLOPT)
+    check_local_optimiser(algorithm{nlopt{"slsqp"}});
+    check_local_optimiser(algorithm{nlopt{"cobyla"}});
+#endif
+#if defined(PAGMO_WITH_IPOPT)
+    check_local_optimiser(algorithm{ipopt{}});
+#endif
+}
+
+#endif
+
 BOOST_AUTO_TEST_CASE(unsupported_bfe)
 {
     // A bfe which does not support rewriting raises an error.
@@ -324,13 +466,18 @@ BOOST_AUTO_TEST_CASE(unsupported_bfe)
 
 BOOST_AUTO_TEST_CASE(distribution_based)
 {
-    // CMA-ES and xNES never rewrite the decision vectors they generate,
-    // but the population stays consistent.
-    for (auto pop : {run(algorithm{cmaes{10u}}, problem{so_rw{}}, 20u, false),
-                     run(algorithm{with_bfe(cmaes{10u})}, problem{so_rw{}}, 20u, false),
-                     run(algorithm{xnes{10u}}, problem{so_rw{}}, 20u, false)}) {
-        BOOST_CHECK(
-            std::any_of(pop.get_x().begin(), pop.get_x().end(), [](const vector_double &x) { return !on_grid(x); }));
+    // CMA-ES and xNES never rewrite the decision vectors they sample (both
+    // serially and with a bfe), but the population stays consistent.
+    for (const auto &algo : {algorithm{cmaes{10u}}, algorithm{with_bfe(cmaes{10u})}, algorithm{xnes{10u}}}) {
+        n_rewrites.store(0u);
+        const auto pop = run(algo, problem{so_rw_count{}}, 20u, false);
+        BOOST_TEST_CONTEXT(algo.get_name())
+        {
+            // The only rewrites are those of the initial population.
+            BOOST_CHECK_EQUAL(n_rewrites.load(), 20u);
+            BOOST_CHECK(std::any_of(pop.get_x().begin(), pop.get_x().end(),
+                                    [](const vector_double &x) { return !on_grid(x); }));
+        }
     }
 }
 

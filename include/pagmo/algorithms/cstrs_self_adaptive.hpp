@@ -102,6 +102,12 @@ struct PAGMO_DLL_PUBLIC penalized_udp {
     // The fitness computation
     vector_double fitness(const vector_double &) const;
 
+    // The fitness computation, rewriting the decision vector in place
+    vector_double fitness_rewrite(vector_double &) const;
+
+    // Rewriting is enabled only if the problem of the reference population supports it
+    bool has_fitness_rewrite() const;
+
     // Call to this method updates all the members that are used to penalize the objective function
     // As the penalization algorithm depends heavily on the ref population this method takes care of
     // updating the necessary information. It also builds the hash map used to avoid unnecessary fitness
@@ -211,6 +217,14 @@ PAGMO_DLL_PUBLIC std::ostream &operator<<(std::ostream &, const penalized_udp &)
  *
  *    The performances of :cpp:class:`pagmo::cstrs_self_adaptive` are highly dependent on the particular inner UDA
  *    employed and in particular to its parameters (generations / iterations).
+ *
+ * .. note::
+ *
+ *    If the problem supports rewriting the decision vectors during the fitness evaluation
+ *    (see :cpp:func:`pagmo::problem::fitness_rewrite()`), the penalized problem evolved by the inner UDA
+ *    forwards the rewriting to the original problem, and the internal cache stores the rewritten decision
+ *    vectors. Hence, if the inner UDA supports rewriting, the evolved population contains the rewritten decision
+ *    vectors, consistently with their fitness vectors.
  *
  * .. seealso::
  *

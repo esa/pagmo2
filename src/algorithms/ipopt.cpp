@@ -73,6 +73,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/s11n.hpp>
 #include <pagmo/types.hpp>
 #include <pagmo/utils/constrained.hpp>
+#include <pagmo/utils/generic.hpp>
 
 namespace pagmo
 {
@@ -920,7 +921,15 @@ population ipopt::evolve(population pop) const
     }
 
     // Compute the new fitness vector.
-    const auto new_f = prob.fitness(inlp.m_sol);
+    // NOTE: inlp.m_sol is rewritten in place if the problem supports it. Only
+    // the final solution is rewritten: the points evaluated by Ipopt during the
+    // optimisation are not, as that would disrupt the local optimisation.
+    if (prob.has_fitness_rewrite()) {
+        // Ipopt may relax the bounds during the optimisation (see the "bound_relax_factor"
+        // option), while the rewritten decision vector must lie within the bounds.
+        detail::force_bounds_stick(inlp.m_sol, bounds.first, bounds.second);
+    }
+    const auto new_f = prob.fitness_rewrite(inlp.m_sol);
 
     // Store the new individual into the population, but only if better.
     if (compare_fc(new_f, old_f, prob.get_nec(), prob.get_c_tol())) {

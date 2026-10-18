@@ -14,8 +14,10 @@ New
   of the biased random-key genetic algorithms), by implementing the optional
   ``fitness_rewrite()`` member function. See :cpp:func:`pagmo::problem::fitness_rewrite()`,
   :cpp:func:`pagmo::bfe::fitness_rewrite()` and the
-  :ref:`tutorial <cpp_tutorial_rewriting_decoders>`. Populations and most population-based
-  algorithms store the rewritten decision vectors, and :cpp:class:`~pagmo::thread_bfe` and
+  :ref:`tutorial <cpp_tutorial_rewriting_decoders>`. Populations and most algorithms
+  (including the final solutions of :cpp:class:`~pagmo::nlopt` and :cpp:class:`~pagmo::ipopt`,
+  and the inner algorithm of :cpp:class:`~pagmo::cstrs_self_adaptive`)
+  store the rewritten decision vectors, and :cpp:class:`~pagmo::thread_bfe` and
   :cpp:class:`~pagmo::default_bfe` rewrite them in parallel. Problems which do not implement
   ``fitness_rewrite()`` are not affected.
 

@@ -65,12 +65,17 @@ serially and when using a batch fitness evaluator:
   :cpp:class:`~pagmo::de`, :cpp:class:`~pagmo::de1220`, :cpp:class:`~pagmo::sade`;
 * swarm and other heuristics: :cpp:class:`~pagmo::pso`, :cpp:class:`~pagmo::pso_gen`, :cpp:class:`~pagmo::gwo`,
   :cpp:class:`~pagmo::bee_colony`, :cpp:class:`~pagmo::ihs`, :cpp:class:`~pagmo::gaco`,
-  :cpp:class:`~pagmo::simulated_annealing`, :cpp:class:`~pagmo::compass_search`.
+  :cpp:class:`~pagmo::simulated_annealing`, :cpp:class:`~pagmo::compass_search`;
+* local optimisers: :cpp:class:`~pagmo::nlopt` and :cpp:class:`~pagmo::ipopt` rewrite the final solution
+  they find (but not the points they evaluate during the optimisation), before comparing it with the
+  selected individual;
+* meta-algorithms: :cpp:class:`~pagmo::cstrs_self_adaptive` forwards the rewriting to its inner algorithm
+  (through the penalized problem it evolves), and :cpp:class:`~pagmo::mbh` rewrites the perturbed decision vectors
+  (via :cpp:func:`~pagmo::population::set_x()`) as well as whatever its inner algorithm rewrites.
 
-The other algorithms evaluate the fitness via :cpp:func:`pagmo::problem::fitness()`, and thus never
-rewrite the decision vectors they generate. In particular, :cpp:class:`~pagmo::cmaes` and :cpp:class:`~pagmo::xnes`
-(whose search distribution update assumes that the evaluated decision vectors are the sampled ones) and the
-gradient-based solvers (:cpp:class:`~pagmo::nlopt`, :cpp:class:`~pagmo::ipopt`) do not rewrite. In all cases,
+:cpp:class:`~pagmo::cmaes` and :cpp:class:`~pagmo::xnes`, on the other hand, evaluate the fitness via
+:cpp:func:`pagmo::problem::fitness()`, and thus never rewrite the decision vectors they sample: their search
+distribution update assumes that the evaluated decision vectors are the sampled ones. In all cases,
 the stored decision vectors remain consistent with the stored fitness vectors.
 
 Among the batch fitness evaluators provided by pagmo, :cpp:class:`~pagmo::thread_bfe` and
