@@ -522,3 +522,56 @@ BOOST_AUTO_TEST_CASE(override_has_set_seed_test)
     BOOST_CHECK((!override_has_set_seed<ov_hss_02>::value));
     BOOST_CHECK((!override_has_set_seed<ov_hss_03>::value));
 }
+
+struct fr_00 {
+};
+
+// The good one.
+struct fr_01 {
+    vector_double fitness_rewrite(vector_double &) const;
+};
+
+struct fr_02 {
+    vector_double fitness_rewrite(vector_double &);
+};
+
+struct fr_03 {
+    void fitness_rewrite(vector_double &) const;
+};
+
+struct fr_04 {
+    vector_double fitness_rewrite(vector_double &&) const;
+};
+
+BOOST_AUTO_TEST_CASE(has_fitness_rewrite_test)
+{
+    BOOST_CHECK((!has_fitness_rewrite<fr_00>::value));
+    BOOST_CHECK((has_fitness_rewrite<fr_01>::value));
+    BOOST_CHECK((!has_fitness_rewrite<fr_02>::value));
+    BOOST_CHECK((!has_fitness_rewrite<fr_03>::value));
+    BOOST_CHECK((!has_fitness_rewrite<fr_04>::value));
+}
+
+struct ov_fr_00 {
+};
+
+// The good one.
+struct ov_fr_01 {
+    bool has_fitness_rewrite() const;
+};
+
+struct ov_fr_02 {
+    bool has_fitness_rewrite();
+};
+
+struct ov_fr_03 {
+    void has_fitness_rewrite() const;
+};
+
+BOOST_AUTO_TEST_CASE(override_has_fitness_rewrite_test)
+{
+    BOOST_CHECK((!override_has_fitness_rewrite<ov_fr_00>::value));
+    BOOST_CHECK((override_has_fitness_rewrite<ov_fr_01>::value));
+    BOOST_CHECK((!override_has_fitness_rewrite<ov_fr_02>::value));
+    BOOST_CHECK((!override_has_fitness_rewrite<ov_fr_03>::value));
+}

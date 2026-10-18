@@ -14,6 +14,12 @@ Member function BFE
    :cpp:class:`~pagmo::member_bfe` is a simple wrapper which delegates batch fitness evaluations
    to the input problem's :cpp:func:`pagmo::problem::batch_fitness()` member function.
 
+   .. note::
+
+      :cpp:class:`~pagmo::member_bfe` does not support in-place rewriting of the decision vectors
+      (see :cpp:func:`pagmo::bfe::fitness_rewrite()`), because the UDP's ``batch_fitness()`` member
+      function cannot modify its input.
+
    .. cpp:function:: vector_double operator()(const problem &p, const vector_double &dvs) const
 
       Call operator.

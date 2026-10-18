@@ -336,15 +336,17 @@ population nspso::evolve(population pop) const
                 new_vel[i] = v;
                 new_dvs[i] = x;
             }
+            if (!m_bfe) {
+                // bfe not available
+                // NOTE: new_dvs is rewritten in place if the problem supports it, hence
+                // we evaluate it before adding it to the population.
+                fit[idx] = prob.fitness_rewrite(new_dvs);
+                next_pop_fit[idx] = fit[idx];
+            }
             // Add the moved particle to the population
             dvs[idx] = new_dvs;
             m_velocity[idx] = new_vel;
             next_pop_dvs[idx] = new_dvs;
-            if (!m_bfe) {
-                // bfe not available
-                fit[idx] = prob.fitness(new_dvs);
-                next_pop_fit[idx] = fit[idx];
-            }
         }
         if (m_bfe) {
             // bfe is available:
@@ -357,9 +359,13 @@ population nspso::evolve(population pop) const
                 }
             }
             // run bfe.
-            auto fitnesses = (*m_bfe)(prob, decision_vectors);
+            // NOTE: decision_vectors is rewritten in place if the problem supports it.
+            auto fitnesses = m_bfe->fitness_rewrite(prob, decision_vectors);
             vector_double::size_type pos_fit = 0u;
             for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                std::copy(decision_vectors.data() + i * dvs[i].size(),
+                          decision_vectors.data() + (i + 1u) * dvs[i].size(), dvs[i].begin());
+                next_pop_dvs[i] = dvs[i];
                 for (decltype(fit[0].size()) ii_f = 0u; ii_f < fit[0].size(); ++ii_f) {
                     fit[i][ii_f] = fitnesses[pos_fit];
                     next_pop_fit[i][ii_f] = fitnesses[pos_fit];

@@ -45,6 +45,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/detail/type_name.hpp>
 #include <pagmo/detail/typeid_name_extract.hpp>
 #include <pagmo/detail/visibility.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -79,6 +80,22 @@ public:
 
 template <typename T>
 const bool has_bfe_call_operator<T>::value;
+
+// Check if T has a fitness_rewrite() member function conforming to the UDBFE requirements.
+template <typename T>
+class has_bfe_fitness_rewrite
+{
+    template <typename U>
+    using fitness_rewrite_t = decltype(std::declval<const U &>().fitness_rewrite(std::declval<const problem &>(),
+                                                                                 std::declval<vector_double &>()));
+    static const bool implementation_defined = std::is_same<detected_t<fitness_rewrite_t, T>, vector_double>::value;
+
+public:
+    static const bool value = implementation_defined;
+};
+
+template <typename T>
+const bool has_bfe_fitness_rewrite<T>::value;
 
 namespace detail
 {
@@ -123,6 +140,18 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS bfe_inner_base {
     virtual std::type_index get_type_index() const = 0;
     virtual const void *get_ptr() const = 0;
     virtual void *get_ptr() = 0;
+    // NOTE: these are not pure virtual so that specialisations of bfe_inner
+    // defined outside pagmo (e.g., for Python batch evaluators) keep compiling.
+    virtual vector_double fitness_rewrite(const problem &, vector_double &) const
+    {
+        pagmo_throw(not_implemented_error,
+                    "The fitness_rewrite() method has been invoked, but it is not implemented in the UDBFE '"
+                        + get_name() + "'");
+    }
+    virtual bool has_fitness_rewrite() const
+    {
+        return false;
+    }
 
 private:
     friend class boost::serialization::access;
@@ -154,6 +183,20 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS bfe_inner final : bfe_inner_base {
         return m_value(p, dvs);
     }
     // Optional methods.
+    vector_double fitness_rewrite([[maybe_unused]] const problem &p, [[maybe_unused]] vector_double &dvs) const final
+    {
+        if constexpr (has_bfe_fitness_rewrite<T>::value) {
+            return m_value.fitness_rewrite(p, dvs);
+        } else {
+            pagmo_throw(not_implemented_error,
+                        "The fitness_rewrite() method has been invoked, but it is not implemented in a UDBFE of type '"
+                            + get_name_impl(m_value) + "'");
+        }
+    }
+    bool has_fitness_rewrite() const final
+    {
+        return has_bfe_fitness_rewrite<T>::value;
+    }
     std::string get_name() const final
     {
         return get_name_impl(m_value);
@@ -318,6 +361,12 @@ public:
 
     // Call operator.
     vector_double operator()(const problem &, const vector_double &) const;
+
+    // Batch fitness evaluation with in-place rewriting of the decision vectors.
+    vector_double fitness_rewrite(const problem &, vector_double &) const;
+
+    // Check if the UDBFE supports in-place rewriting of the decision vectors.
+    bool has_fitness_rewrite() const;
 
     // Name.
     std::string get_name() const

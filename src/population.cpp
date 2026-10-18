@@ -65,10 +65,12 @@ void population::prob_ctor_impl(size_type pop_size)
     // and only at the end move them into the population. This ensures
     // that, for a given rng seed, the generated dvs are identical
     // to those generated in the constructor from bfe.
+    // NOTE: if the problem supports it, the dvs are rewritten
+    // during the fitness evaluation.
     std::vector<std::pair<vector_double, vector_double>> tmp(pop_size);
     for (size_type i = 0u; i < pop_size; ++i) {
         tmp[i].first = random_decision_vector();
-        tmp[i].second = m_prob.fitness(tmp[i].first);
+        tmp[i].second = m_prob.fitness_rewrite(tmp[i].first);
     }
     // Move the generated dvs/fvs into the population. push_back()
     // will take care of generating the IDs, updating the champion, etc.
@@ -82,10 +84,12 @@ void population::prob_ctor_impl(size_type pop_size)
 void population::constructor_from_bfe_impl(const bfe &b, size_type pop_size, const std::true_type &)
 {
     // Create a batch of random decision vectors.
-    const auto dvs = batch_random_decision_vector(m_prob, pop_size, m_e);
+    auto dvs = batch_random_decision_vector(m_prob, pop_size, m_e);
 
-    // Evaluate them in batch mode.
-    const auto fvs = b(m_prob, dvs);
+    // Evaluate them in batch mode. If the problem supports it, the dvs
+    // are rewritten during the evaluation, otherwise this is equivalent
+    // to b(m_prob, dvs).
+    const auto fvs = b.fitness_rewrite(m_prob, dvs);
 
     // Sanity checks.
     assert(pop_size == 0u || dvs.size() % pop_size == 0u);
@@ -171,6 +175,12 @@ population::~population()
  * its fitness and creating a new unique identifier for the newly
  * born individual.
  *
+ * \verbatim embed:rst:leading-asterisk
+ * The fitness is evaluated via :cpp:func:`pagmo::problem::fitness_rewrite()`: if the problem
+ * rewrites decision vectors during the fitness evaluation, the rewritten version of ``x``
+ * is added to the population.
+ * \endverbatim
+ *
  * In case of exceptions, the population will not be altered.
  *
  * @param x decision vector to be added to the population.
@@ -181,7 +191,9 @@ population::~population()
  */
 void population::push_back(const vector_double &x)
 {
-    push_back_impl(x, m_prob.fitness(x));
+    auto x_copy(x);
+    auto f = m_prob.fitness_rewrite(x_copy);
+    push_back_impl(std::move(x_copy), std::move(f));
 }
 
 /// Adds one decision vector (chromosome) to the population (move overload).
@@ -195,7 +207,8 @@ void population::push_back(const vector_double &x)
  */
 void population::push_back(vector_double &&x)
 {
-    push_back_impl(std::move(x), m_prob.fitness(x));
+    auto f = m_prob.fitness_rewrite(x);
+    push_back_impl(std::move(x), std::move(f));
 }
 
 /// Adds one decision vector/fitness vector to the population.
@@ -527,7 +540,9 @@ void population::set_xf(size_type i, const vector_double &x, const vector_double
  * \verbatim embed:rst:leading-asterisk
  * .. note::
  *
- *    A call to this method triggers one fitness function evaluation.
+ *    A call to this method triggers one fitness function evaluation, performed via
+ *    :cpp:func:`pagmo::problem::fitness_rewrite()`: if the problem rewrites decision vectors
+ *    during the fitness evaluation, the rewritten version of ``x`` is stored in the population.
  *
  * \endverbatim
  *
@@ -538,7 +553,9 @@ void population::set_xf(size_type i, const vector_double &x, const vector_double
  */
 void population::set_x(size_type i, const vector_double &x)
 {
-    set_xf(i, x, m_prob.fitness(x));
+    auto x_copy(x);
+    const auto f = m_prob.fitness_rewrite(x_copy);
+    set_xf(i, x_copy, f);
 }
 
 /// Streaming operator for pagmo::population.

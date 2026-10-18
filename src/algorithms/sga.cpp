@@ -238,7 +238,9 @@ population sga::evolve(population pop) const
             pop.get_problem().set_seed(urng(m_e));
             // re-evaluate the whole population w.r.t. the new seed
             for (decltype(pop.size()) j = 0u; j < pop.size(); ++j) {
-                pop.set_xf(j, pop.get_x()[j], prob.fitness(pop.get_x()[j]));
+                auto x = pop.get_x()[j];
+                auto f = prob.fitness_rewrite(x);
+                pop.set_xf(j, x, f);
             }
         }
         auto XNEW = pop.get_x();
@@ -254,7 +256,8 @@ population sga::evolve(population pop) const
         perform_mutation(XNEW, prob.get_bounds(), dim_i);
         // 5 - Evaluate the new population
         for (decltype(NP) j = 0u; j < NP; ++j) {
-            FNEW[j] = prob.fitness(XNEW[j]);
+            // NOTE: XNEW[j] is rewritten in place if the problem supports it.
+            FNEW[j] = prob.fitness_rewrite(XNEW[j]);
         }
         // 6 - Logs and prints
         if (m_verbosity > 0u) {

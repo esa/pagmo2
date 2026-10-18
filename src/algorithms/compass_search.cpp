@@ -129,7 +129,8 @@ population compass_search::evolve(population pop) const
             // feasibility correction
             if (x_trial[i] > ub[i]) x_trial[i] = ub[i];
             // objective function evaluation
-            auto f_trial = prob.fitness(x_trial);
+            // NOTE: x_trial is rewritten in place if the problem supports it.
+            auto f_trial = prob.fitness_rewrite(x_trial);
             fevals++;
             if (compare_fc(f_trial, cur_best_f, prob.get_nec(), prob.get_c_tol())) {
                 cur_best_f = f_trial;
@@ -139,11 +140,13 @@ population compass_search::evolve(population pop) const
             }
 
             // move down
+            // NOTE: reset x_trial, as it may have been rewritten by the evaluation above.
+            x_trial = cur_best_x;
             x_trial[i] = cur_best_x[i] - newrange * (ub[i] - lb[i]);
             // feasibility correction
             if (x_trial[i] < lb[i]) x_trial[i] = lb[i];
             // objective function evaluation
-            f_trial = prob.fitness(x_trial);
+            f_trial = prob.fitness_rewrite(x_trial);
             fevals++;
             if (compare_fc(f_trial, cur_best_f, prob.get_nec(), prob.get_c_tol())) {
                 cur_best_f = f_trial;

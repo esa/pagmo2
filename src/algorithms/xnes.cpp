@@ -240,7 +240,10 @@ population xnes::evolve(population pop) const
             for (decltype(dim) j = 0u; j < dim; ++j) {
                 dumb[j] = x[i](_(j));
             }
-            pop.set_x(i, dumb);
+            // NOTE: we do not use set_x() here, as it would rewrite dumb
+            // if the problem supports it, which would disrupt the
+            // xNES update of the search distribution.
+            pop.set_xf(i, dumb, prob.fitness(dumb));
         }
 
         // 2 - Check the exit conditions and logs

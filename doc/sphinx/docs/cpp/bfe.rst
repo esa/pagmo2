@@ -58,6 +58,7 @@ Batch fitness evaluator
       std::string get_name() const;
       std::string get_extra_info() const;
       thread_safety get_thread_safety() const;
+      vector_double fitness_rewrite(const problem &, vector_double &) const;
 
    See the documentation of the corresponding member functions in this class for details on how the optional
    member functions in the UDBFE are used by :cpp:class:`~pagmo::bfe`.
@@ -211,6 +212,52 @@ Batch fitness evaluator
       :exception std\:\:invalid_argument: if *dvs* or the return value produced by the UDBFE are incompatible with the input problem *p*.
       :exception unspecified: any exception raised by the invocation of the UDBFE.
 
+   .. cpp:function:: vector_double fitness_rewrite(const problem &p, vector_double &dvs) const
+
+      Batch fitness evaluation with in-place rewriting of the decision vectors.
+
+      .. versionadded:: 2.21.0
+
+      This member function is the batch counterpart of :cpp:func:`pagmo::problem::fitness_rewrite()`: it evaluates
+      the decision vectors stored in *dvs* using the input problem *p* and, if *p* rewrites decision vectors during
+      the fitness evaluation (see :cpp:func:`pagmo::problem::has_fitness_rewrite()`), it replaces the content of
+      *dvs* with the rewritten decision vectors. The layout of *dvs* and of the return value is the same as in the
+      call operator.
+
+      The behaviour of this member function is the following:
+
+      * if *p* does not rewrite decision vectors, this member function is equivalent to the call operator,
+        and *dvs* is not modified;
+      * otherwise, if the UDBFE provides a ``fitness_rewrite()`` member function (as established by
+        :cpp:func:`~pagmo::bfe::has_fitness_rewrite()`), the UDBFE's ``fitness_rewrite()`` is invoked on a copy
+        of *dvs*. The rewritten decision vectors and the fitness vectors are then checked, the fitness evaluation
+        counter in *p* is increased and *dvs* is replaced with the rewritten decision vectors;
+      * otherwise, an error is raised.
+
+      Among the batch fitness evaluators provided by pagmo, :cpp:class:`~pagmo::thread_bfe` and
+      :cpp:class:`~pagmo::default_bfe` support in-place rewriting, while :cpp:class:`~pagmo::member_bfe` does not.
+
+      In case of exceptions, *dvs* is not modified.
+
+      :param p: the input :cpp:class:`~pagmo::problem`.
+      :param dvs: the input decision vectors that will be evaluated (and possibly rewritten) in batch mode.
+
+      :return: the fitness vectors corresponding to the (rewritten) decision vectors in *dvs*.
+
+      :exception std\:\:invalid_argument: if *dvs*, the rewritten decision vectors or the fitness vectors produced by the UDBFE
+         are incompatible with the input problem *p* (e.g., if a rewritten decision vector lies outside the bounds of *p*).
+      :exception not_implemented_error: if *p* rewrites decision vectors, but the UDBFE does not provide a
+         ``fitness_rewrite()`` member function.
+      :exception unspecified: any exception raised by the invocation of the UDBFE.
+
+   .. cpp:function:: bool has_fitness_rewrite() const
+
+      Check if the UDBFE supports in-place rewriting of the decision vectors.
+
+      .. versionadded:: 2.21.0
+
+      :return: ``true`` if the UDBFE satisfies :cpp:class:`pagmo::has_bfe_fitness_rewrite`, ``false`` otherwise.
+
    .. cpp:function:: std::string get_name() const
 
       Get the name of this batch fitness evaluator.
@@ -321,6 +368,23 @@ Associated type traits
    * ``dvs`` is a const reference to a :cpp:type:`~pagmo::vector_double`,
 
    is well-formed and if it returns a :cpp:type:`~pagmo::vector_double`.
+
+   .. cpp:member:: static const bool value
+
+      The value of the type trait.
+
+.. cpp:class:: template <typename T> has_bfe_fitness_rewrite
+
+   .. versionadded:: 2.21.0
+
+   This type trait detects if ``T`` provides a member function whose signature is compatible with
+
+   .. code-block:: c++
+
+      vector_double fitness_rewrite(const problem &, vector_double &) const;
+
+   The ``fitness_rewrite()`` member function is part of the interface for the definition of a
+   user-defined batch fitness evaluator (see :cpp:func:`pagmo::bfe::fitness_rewrite()` for details).
 
    .. cpp:member:: static const bool value
 

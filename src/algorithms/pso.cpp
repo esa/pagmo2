@@ -379,7 +379,8 @@ population pso::evolve(population pop) const
             }
             // We evaluate here the new individual fitness
             // as to be able to update the global best in real time
-            fit[p] = prob.fitness(X[p]);
+            // NOTE: X[p] is rewritten in place if the problem supports it.
+            fit[p] = prob.fitness_rewrite(X[p]);
 
             if (fit[p] <= lbfit[p]) {
                 // update the particle's previous best position

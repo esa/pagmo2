@@ -26,6 +26,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the PaGMO library.  If not,
 see https://www.gnu.org/licenses/. */
 
+#include <algorithm>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -158,8 +159,10 @@ population de::evolve(population pop) const
             for (decltype(NP) i = 0u; i < NP; ++i) {
                 std::copy(trials[i].begin(), trials[i].end(), flat.data() + i * dim);
             }
-            auto fitnesses = (*m_bfe)(prob, flat);
+            // NOTE: flat is rewritten in place if the problem supports it.
+            auto fitnesses = m_bfe->fitness_rewrite(prob, flat);
             for (decltype(NP) i = 0u; i < NP; ++i) {
+                std::copy(flat.data() + i * dim, flat.data() + (i + 1u) * dim, trials[i].begin());
                 // NOTE: de is single-objective, so each fitness is a scalar.
                 vector_double newfitness{fitnesses[i * prob_f_dimension]};
                 update_pop(pop, i, trials[i], newfitness, fit, gbfit, gbX, popnew, popold);
@@ -173,7 +176,7 @@ population de::evolve(population pop) const
                 // detail::force_bounds_reflection(tmp, lb, ub); // TODO: check if this choice is better
                 detail::force_bounds_random(tmp, lb, ub, m_e);
                 // b) how good?
-                auto newfitness = prob.fitness(tmp); /* Evaluates tmp[] */
+                auto newfitness = prob.fitness_rewrite(tmp); /* Evaluates (and possibly rewrites) tmp[] */
                 update_pop(pop, i, tmp, newfitness, fit, gbfit, gbX, popnew, popold);
             } // End of one generation
         }

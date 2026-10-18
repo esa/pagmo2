@@ -161,7 +161,8 @@ population gwo::evolve(population pop) const
             }
             // clip position value that goes beyond search space
             detail::force_bounds_stick(agents_position[i], lb, ub);
-            auto newfitness = prob.fitness(agents_position[i]);
+            // NOTE: agents_position[i] is rewritten in place if the problem supports it.
+            auto newfitness = prob.fitness_rewrite(agents_position[i]);
             pop.set_xf(i, agents_position[i], newfitness);
             // get updated fitness
             auto fit = pop.get_f()[i];

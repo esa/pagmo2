@@ -396,9 +396,14 @@ population pso_gen::evolve(population pop) const
                     std::copy(lbX[i].begin(), lbX[i].end(), decision_vectors_lb.data() + i * dim);
                 }
 
-                auto fitnesses = (*m_bfe)(prob, decision_vectors);
-                auto fitnesses_lb = (*m_bfe)(prob, decision_vectors_lb);
+                // NOTE: the decision vectors are rewritten in place if the problem supports it.
+                auto fitnesses = m_bfe->fitness_rewrite(prob, decision_vectors);
+                auto fitnesses_lb = m_bfe->fitness_rewrite(prob, decision_vectors_lb);
                 for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    std::copy(decision_vectors.data() + i * dim, decision_vectors.data() + (i + 1u) * dim,
+                              X[i].begin());
+                    std::copy(decision_vectors_lb.data() + i * dim, decision_vectors_lb.data() + (i + 1u) * dim,
+                              lbX[i].begin());
                     for (decltype(fit[i].size()) i_fit = 0; i_fit < fit[i].size(); ++i_fit) {
                         fit[i][i_fit] = fitnesses[i];
                         lbfit[i][i_fit] = fitnesses_lb[i];
@@ -418,9 +423,10 @@ population pso_gen::evolve(population pop) const
                 // bfe not available:
                 for (decltype(swarm_size) p = 0u; p < swarm_size; ++p) {
                     // We evaluate here the new individual fitness
-                    fit[p] = prob.fitness(X[p]);
+                    // NOTE: X[p] and lbX[p] are rewritten in place if the problem supports it.
+                    fit[p] = prob.fitness_rewrite(X[p]);
                     // We re-evaluate the fitness of the particle memory
-                    lbfit[p] = prob.fitness(lbX[p]);
+                    lbfit[p] = prob.fitness_rewrite(lbX[p]);
                 }
 
                 best_fit = fit[0];
@@ -443,8 +449,11 @@ population pso_gen::evolve(population pop) const
                     std::copy(X[i].begin(), X[i].end(), decision_vectors.data() + i * dim);
                 }
 
-                auto fitnesses = (*m_bfe)(prob, decision_vectors);
+                // NOTE: the decision vectors are rewritten in place if the problem supports it.
+                auto fitnesses = m_bfe->fitness_rewrite(prob, decision_vectors);
                 for (decltype(swarm_size) i = 0; i < swarm_size; ++i) {
+                    std::copy(decision_vectors.data() + i * dim, decision_vectors.data() + (i + 1u) * dim,
+                              X[i].begin());
                     for (decltype(fit[i].size()) i_fit = 0; i_fit < fit[i].size(); ++i_fit) {
                         fit[i][i_fit] = fitnesses[i];
                     }
@@ -453,7 +462,8 @@ population pso_gen::evolve(population pop) const
                 // bfe not available:
                 for (decltype(swarm_size) p = 0; p < swarm_size; p++) {
                     // We evaluate here the new individual fitness
-                    fit[p] = prob.fitness(X[p]);
+                    // NOTE: X[p] is rewritten in place if the problem supports it.
+                    fit[p] = prob.fitness_rewrite(X[p]);
                 }
             }
         }

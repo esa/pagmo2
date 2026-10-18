@@ -3,6 +3,22 @@
 Changelog
 =========
 
+2.21.0 (unreleased)
+-------------------
+
+New
+~~~
+
+- User-defined problems can now rewrite in place the decision vectors they evaluate
+  (e.g., to write back into a chromosome the result of a local search, as in the decoders
+  of the biased random-key genetic algorithms), by implementing the optional
+  ``fitness_rewrite()`` member function. See :cpp:func:`pagmo::problem::fitness_rewrite()`,
+  :cpp:func:`pagmo::bfe::fitness_rewrite()` and the
+  :ref:`tutorial <cpp_tutorial_rewriting_decoders>`. Populations and most population-based
+  algorithms store the rewritten decision vectors, and :cpp:class:`~pagmo::thread_bfe` and
+  :cpp:class:`~pagmo::default_bfe` rewrite them in parallel. Problems which do not implement
+  ``fitness_rewrite()`` are not affected.
+
 2.20.0 (2026-09-24)
 --------------------
 

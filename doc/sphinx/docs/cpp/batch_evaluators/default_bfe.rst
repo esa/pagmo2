@@ -44,6 +44,26 @@ Default BFE
       :exception std\:\:invalid_argument: if the input problem *p* does not provide a batch fitness member function and it is does not provide at least the :cpp:enumerator:`~pagmo::thread_safety::basic` thread safety level.
       :exception unspecified: any exception raised by the call operator of :cpp:class:`~pagmo::member_bfe` or :cpp:class:`~pagmo::thread_bfe`.
 
+   .. cpp:function:: vector_double fitness_rewrite(const problem &p, vector_double &dvs) const
+
+      Batch fitness evaluation with in-place rewriting of the decision vectors.
+
+      .. versionadded:: 2.21.0
+
+      Since the UDP's ``batch_fitness()`` member function cannot rewrite decision vectors, this member function
+      always delegates to :cpp:func:`pagmo::thread_bfe::fitness_rewrite()`, provided that *p* offers at least the
+      :cpp:enumerator:`~pagmo::thread_safety::basic` thread safety level.
+
+      This member function is usually invoked via :cpp:func:`pagmo::bfe::fitness_rewrite()`.
+
+      :param p: the input :cpp:class:`~pagmo::problem`.
+      :param dvs: the input decision vectors that will be evaluated and rewritten.
+
+      :return: the fitness vectors corresponding to the rewritten decision vectors in *dvs*.
+
+      :exception std\:\:invalid_argument: if the input problem *p* does not provide at least the :cpp:enumerator:`~pagmo::thread_safety::basic` thread safety level.
+      :exception unspecified: any exception raised by :cpp:func:`pagmo::thread_bfe::fitness_rewrite()`.
+
    .. cpp:function:: std::string get_name() const
 
       :return: a human-readable name for this :cpp:class:`~pagmo::default_bfe`.

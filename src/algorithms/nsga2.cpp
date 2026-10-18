@@ -268,13 +268,16 @@ population nsga2::evolve(population pop) const
             }
             // array - now contains NP new individuals
             // run bfe and populate popnew.
-            auto fitnesses = (*m_bfe)(prob, genes);
+            // NOTE: genes is rewritten in place if the problem supports it.
+            auto fitnesses = m_bfe->fitness_rewrite(prob, genes);
 
             // at this point:
-            // genes     is an ordered list of child inputs (not used again)
+            // genes     is an ordered list of (possibly rewritten) child inputs
             // poptemp   is a structured list of children   (no fitness)
             // fitnesses is an ordered list of fitness
             for (decltype(poptemp.size()) i = 0; i < poptemp.size(); i++) {
+                std::copy(genes.data() + i * poptemp[i].size(), genes.data() + (i + 1u) * poptemp[i].size(),
+                          poptemp[i].begin());
                 // slice up the fitnesses into a chunks of length n_obj
                 auto start_pos = fitnesses.begin() + static_cast<std::vector<double>::difference_type>(i * n_obj);
                 auto end_pos = fitnesses.begin() + static_cast<std::vector<double>::difference_type>((i + 1) * n_obj);
@@ -298,11 +301,14 @@ population nsga2::evolve(population pop) const
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
-                popnew.push_back(children.first, prob.fitness(children.first));
+                // NOTE: the children are rewritten in place if the problem supports it.
+                auto f1 = prob.fitness_rewrite(children.first);
+                popnew.push_back(children.first, f1);
                 if (++n_off >= NP) {
                     break;
                 }
-                popnew.push_back(children.second, prob.fitness(children.second));
+                auto f2 = prob.fitness_rewrite(children.second);
+                popnew.push_back(children.second, f2);
                 if (++n_off >= NP) {
                     break;
                 }
@@ -318,11 +324,14 @@ population nsga2::evolve(population pop) const
                 detail::polynomial_mutation_impl(children.second, bounds, dim_i, m_m, m_eta_m, m_e);
                 // we use prob to evaluate the fitness so
                 // that its feval counter is correctly updated
-                popnew.push_back(children.first, prob.fitness(children.first));
+                // NOTE: the children are rewritten in place if the problem supports it.
+                f1 = prob.fitness_rewrite(children.first);
+                popnew.push_back(children.first, f1);
                 if (++n_off >= NP) {
                     break;
                 }
-                popnew.push_back(children.second, prob.fitness(children.second));
+                f2 = prob.fitness_rewrite(children.second);
+                popnew.push_back(children.second, f2);
                 if (++n_off >= NP) {
                     break;
                 }

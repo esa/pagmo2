@@ -322,7 +322,10 @@ population cmaes::evolve(population pop) const
             }
             if (!m_bfe) {
                 // bfe not available
-                pop.set_x(i, dumb);
+                // NOTE: we do not use set_x() here, as it would rewrite dumb
+                // if the problem supports it, which would disrupt the
+                // CMA-ES update of the search distribution.
+                pop.set_xf(i, dumb, prob.fitness(dumb));
             }
         }
         if (m_bfe) {

@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <cmath>
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -52,8 +53,10 @@ see https://www.gnu.org/licenses/. */
 #include <boost/lexical_cast.hpp>
 
 #include <pagmo/batch_evaluators/default_bfe.hpp>
+#include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/type_name.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -547,4 +550,159 @@ BOOST_AUTO_TEST_CASE(get_ptr)
     p0 = bfe{udbfe1{}};
     BOOST_CHECK(p0.get_ptr() == p0.extract<udbfe1>());
     BOOST_CHECK(static_cast<const bfe &>(p0).get_ptr() == static_cast<const bfe &>(p0).extract<udbfe1>());
+}
+
+// A UDP which rewrites the decision vectors by snapping them to
+// a grid with step 1/8, and evaluates the snapped vectors.
+struct snap_udp {
+    static vector_double snap(vector_double x)
+    {
+        for (auto &xi : x) {
+            xi = std::round(xi * 8.) / 8.;
+        }
+        return x;
+    }
+    static vector_double eval(const vector_double &x)
+    {
+        return {x[0] + 2. * x[1], x[0] - x[1]};
+    }
+    vector_double fitness(const vector_double &x) const
+    {
+        return eval(snap(x));
+    }
+    vector_double fitness_rewrite(vector_double &x) const
+    {
+        x = snap(x);
+        return eval(x);
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{-1., -1.}, {1., 1.}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return m_ts;
+    }
+    thread_safety m_ts = thread_safety::basic;
+};
+
+// A valid UDBFE without support for in-place rewriting.
+struct plain_udbfe {
+    vector_double operator()(const problem &p, const vector_double &dvs) const
+    {
+        return thread_bfe{}(p, dvs);
+    }
+};
+
+// A UDBFE supporting in-place rewriting, which can be told
+// to misbehave via m_mode.
+struct rw_udbfe {
+    vector_double operator()(const problem &p, const vector_double &dvs) const
+    {
+        return thread_bfe{}(p, dvs);
+    }
+    vector_double fitness_rewrite(const problem &p, vector_double &dvs) const
+    {
+        auto retval = thread_bfe{}.fitness_rewrite(p, dvs);
+        switch (m_mode) {
+            case 1:
+                dvs.push_back(0.);
+                break;
+            case 2:
+                dvs[0] = 2.;
+                break;
+            case 3:
+                retval.pop_back();
+                break;
+            default:
+                break;
+        }
+        return retval;
+    }
+    int m_mode = 0;
+};
+
+BOOST_AUTO_TEST_CASE(fitness_rewrite)
+{
+    BOOST_CHECK(!has_bfe_fitness_rewrite<udbfe1>::value);
+    BOOST_CHECK(!has_bfe_fitness_rewrite<udbfe_func_t>::value);
+    BOOST_CHECK(has_bfe_fitness_rewrite<thread_bfe>::value);
+    BOOST_CHECK(has_bfe_fitness_rewrite<default_bfe>::value);
+    BOOST_CHECK(has_bfe_fitness_rewrite<rw_udbfe>::value);
+    BOOST_CHECK(!bfe{udbfe0}.has_fitness_rewrite());
+    BOOST_CHECK(!bfe{udbfe1{}}.has_fitness_rewrite());
+    BOOST_CHECK(!bfe{plain_udbfe{}}.has_fitness_rewrite());
+    BOOST_CHECK(bfe{}.has_fitness_rewrite());
+    BOOST_CHECK(bfe{thread_bfe{}}.has_fitness_rewrite());
+    BOOST_CHECK(bfe{rw_udbfe{}}.has_fitness_rewrite());
+
+    // With a problem that does not rewrite, fitness_rewrite() is
+    // equivalent to the call operator, even for UDBFEs which
+    // do not support rewriting.
+    problem p0{rosenbrock{2u}};
+    const vector_double dvs0{.1, .2, .3, .4};
+    for (const auto &b : {bfe{udbfe0}, bfe{plain_udbfe{}}, bfe{}}) {
+        auto dvs = dvs0;
+        BOOST_CHECK(b.fitness_rewrite(p0, dvs) == b(p0, dvs0));
+        BOOST_CHECK(dvs == dvs0);
+    }
+    BOOST_CHECK_EQUAL(p0.get_fevals(), 12u);
+
+    // A problem that rewrites.
+    problem p1{snap_udp{}};
+    const vector_double dvs1{.1, .2, .3, .4, -.9, .66};
+    const vector_double dvs1_snap{.125, .25, .25, .375, -.875, .625};
+    vector_double fvs1_snap;
+    for (auto i = 0u; i < 3u; ++i) {
+        const auto fv = snap_udp::eval(vector_double(dvs1_snap.data() + 2u * i, dvs1_snap.data() + 2u * i + 2u));
+        fvs1_snap.insert(fvs1_snap.end(), fv.begin(), fv.end());
+    }
+    for (const auto &b : {bfe{}, bfe{thread_bfe{}}, bfe{rw_udbfe{}}}) {
+        auto dvs = dvs1;
+        BOOST_CHECK(b.fitness_rewrite(p1, dvs) == fvs1_snap);
+        BOOST_CHECK(dvs == dvs1_snap);
+        // The plain call operator does not rewrite.
+        dvs = dvs1;
+        BOOST_CHECK(b(p1, dvs) == fvs1_snap);
+        BOOST_CHECK(dvs == dvs1);
+    }
+    BOOST_CHECK_EQUAL(p1.get_fevals(), 18u);
+
+    // UDBFEs which do not support rewriting.
+    for (const auto &b : {bfe{udbfe0}, bfe{plain_udbfe{}}}) {
+        auto dvs = dvs1;
+        BOOST_CHECK_EXCEPTION(b.fitness_rewrite(p1, dvs), not_implemented_error, [](const not_implemented_error &nie) {
+            return boost::contains(nie.what(), "rewrites decision vectors during the fitness evaluation, but the "
+                                               "batch fitness evaluator")
+                   && boost::contains(nie.what(), "does not support in-place rewriting");
+        });
+        BOOST_CHECK(dvs == dvs1);
+    }
+    BOOST_CHECK_EQUAL(p1.get_fevals(), 18u);
+
+    // Invalid input.
+    auto dvs = vector_double{.1, .2, .3};
+    BOOST_CHECK_EXCEPTION(bfe{}.fitness_rewrite(p1, dvs), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(ia.what(), "is not an exact multiple of the dimension of the problem");
+    });
+    BOOST_CHECK((dvs == vector_double{.1, .2, .3}));
+
+    // Misbehaving UDBFE: dvs and the fevals counter must not be altered.
+    const std::vector<std::pair<int, std::string>> bad_modes
+        = {{1, "the length of the vector representing the rewritten decision vectors, 7, differs"},
+           {2, "which is outside the problem bounds"},
+           {3, "is not an exact multiple of the fitness dimension of the problem"}};
+    for (const auto &bm : bad_modes) {
+        rw_udbfe bad;
+        bad.m_mode = bm.first;
+        dvs = dvs1;
+        BOOST_CHECK_EXCEPTION(bfe{bad}.fitness_rewrite(p1, dvs), std::invalid_argument,
+                              [&bm](const std::invalid_argument &ia) { return boost::contains(ia.what(), bm.second); });
+        BOOST_CHECK(dvs == dvs1);
+    }
+    BOOST_CHECK_EQUAL(p1.get_fevals(), 18u);
 }

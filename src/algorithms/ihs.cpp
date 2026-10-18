@@ -168,7 +168,8 @@ population ihs::evolve(population pop) const
 
         // 4 - We fix the new decision vector within the bounds and evaluate
         detail::force_bounds_reflection(new_x, lb, ub);
-        auto new_f = prob.fitness(new_x);
+        // NOTE: new_x is rewritten in place if the problem supports it.
+        auto new_f = prob.fitness_rewrite(new_x);
 
         // 5 - We insert the new decision vector in the population
         if (prob.get_nobj() == 1u) {      // Single objective case

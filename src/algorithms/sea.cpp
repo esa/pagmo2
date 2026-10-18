@@ -97,7 +97,9 @@ population sea::evolve(population pop) const
             pop.get_problem().set_seed(std::uniform_int_distribution<unsigned>()(m_e));
             // re-evaluate the whole population w.r.t. the new seed
             for (decltype(pop.size()) j = 0u; j < pop.size(); ++j) {
-                pop.set_xf(j, pop.get_x()[j], prob.fitness(pop.get_x()[j]));
+                auto x = pop.get_x()[j];
+                auto f = prob.fitness_rewrite(x);
+                pop.set_xf(j, x, f);
             }
         }
 
@@ -113,7 +115,8 @@ population sea::evolve(population pop) const
             }
         }
         // 3 - Insert the offspring into the population if better
-        auto offspring_f = prob.fitness(offspring);
+        // NOTE: offspring is rewritten in place if the problem supports it.
+        auto offspring_f = prob.fitness_rewrite(offspring);
         auto improvement = pop.get_f()[worst_idx][0] - offspring_f[0];
         if (improvement >= 0.) {
             pop.set_xf(worst_idx, offspring, offspring_f);

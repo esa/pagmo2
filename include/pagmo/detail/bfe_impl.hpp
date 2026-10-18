@@ -45,6 +45,8 @@ PAGMO_DLL_PUBLIC void bfe_check_input_dvs(const problem &, const vector_double &
 
 PAGMO_DLL_PUBLIC void bfe_check_output_fvs(const problem &, const vector_double &, const vector_double &);
 
+PAGMO_DLL_PUBLIC void bfe_check_rewritten_dvs(const problem &, const vector_double &, const vector_double &);
+
 } // namespace detail
 
 } // namespace pagmo

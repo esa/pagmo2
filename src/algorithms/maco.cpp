@@ -545,7 +545,8 @@ population maco::evolve(population pop) const
             }
             // I compute the fitness for each new individual which was generated in the generated_new_ants(..)
             // function
-            auto fitnesses = (*m_bfe)(prob, ants);
+            // NOTE: ants is rewritten in place if the problem supports it.
+            auto fitnesses = m_bfe->fitness_rewrite(prob, ants);
             decltype(ant.size()) pos_dim = 0u;
             decltype(fitness.size()) pos_fit = 0u;
 
@@ -573,7 +574,8 @@ population maco::evolve(population pop) const
                     ant[ii] = new_ants[i][ii];
                 }
 
-                auto ftns = prob.fitness(ant);
+                // NOTE: ant is rewritten in place if the problem supports it.
+                auto ftns = prob.fitness_rewrite(ant);
                 // I set the individuals for the next generation
                 pop.set_xf(i, ant, ftns);
                 // I set the individuals for the next generation

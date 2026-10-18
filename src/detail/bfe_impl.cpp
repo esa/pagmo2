@@ -128,6 +128,33 @@ void bfe_check_output_fvs(const problem &p, const vector_double &dvs, const vect
     });
 }
 
+// Check the decision vectors new_dvs produced by rewriting in place the
+// decision vectors dvs during a batch fitness evaluation.
+void bfe_check_rewritten_dvs(const problem &p, const vector_double &dvs, const vector_double &new_dvs)
+{
+    // NOTE: assume dvs has been checked already.
+    if (new_dvs.size() != dvs.size()) {
+        pagmo_throw(std::invalid_argument,
+                    "An invalid result was produced by a batch fitness evaluation with rewriting: the length of "
+                    "the vector representing the rewritten decision vectors, "
+                        + std::to_string(new_dvs.size())
+                        + ", differs from the length of the vector representing the input decision vectors, "
+                        + std::to_string(dvs.size()));
+    }
+    const auto n_dim = p.get_nx();
+    const auto n_dvs = dvs.size() / n_dim;
+    // Check all the rewritten decision vectors, using the same function employed
+    // in pagmo::problem for rewritten dv checking.
+    using range_t = tbb::blocked_range<decltype(new_dvs.size())>;
+    tbb::parallel_for(range_t(0, n_dvs), [&p, &new_dvs, n_dim](const range_t &range) {
+        for (auto i = range.begin(); i != range.end(); ++i) {
+            // NOTE: prob_check_rewritten_dv only fetches cached data from p,
+            // and it is thus thread-safe.
+            prob_check_rewritten_dv(p, new_dvs.data() + i * n_dim, n_dim);
+        }
+    });
+}
+
 } // namespace detail
 
 } // namespace pagmo
