@@ -165,6 +165,9 @@ population bee_colony::evolve(population pop) const
             // NOTE: X[mi] is rewritten in place if the problem supports it.
             const auto f_mi = prob.fitness_rewrite(X[mi]);
             pop.set_xf(mi, X[mi], f_mi);
+            // NOTE: keep the fitness of the new food source in sync, as it is used
+            // in the comparisons and in the onlooker probabilities below.
+            fit[mi] = f_mi;
             trial[mi] = 0;
         }
         // 3 - Onlooker bee phase

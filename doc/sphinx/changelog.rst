@@ -21,6 +21,14 @@ New
   :cpp:class:`~pagmo::default_bfe` rewrite them in parallel. Problems which do not implement
   ``fitness_rewrite()`` are not affected.
 
+Fix
+~~~
+
+- Fix the scout bee phase of :cpp:class:`~pagmo::bee_colony`, which did not update
+  the fitness of the new food source used internally by the algorithm (so that the
+  subsequent comparisons and onlooker probabilities used the fitness of the abandoned
+  food source).
+
 2.20.0 (2026-09-24)
 --------------------
 
