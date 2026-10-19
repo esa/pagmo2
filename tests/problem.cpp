@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <cmath>
 #include <initializer_list>
 #include <limits>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -45,8 +46,10 @@ see https://www.gnu.org/licenses/. */
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <pagmo/bfe.hpp>
 #include <pagmo/detail/type_name.hpp>
 #include <pagmo/exceptions.hpp>
+#include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/null_problem.hpp>
 #include <pagmo/s11n.hpp>
@@ -1859,4 +1862,194 @@ BOOST_AUTO_TEST_CASE(fitness_rewrite_serialization)
     }
     BOOST_CHECK(p.is<null_problem>());
     BOOST_CHECK(!p.has_fitness_rewrite());
+}
+
+// The UDPs below are exposed to pagmo via custom specialisations of prob_inner,
+// as done by the language bindings (e.g., pygmo for Python problems).
+struct binding_p {
+    vector_double fitness(const vector_double &x) const
+    {
+        return {x[0] + 2. * x[1]};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0., 0.}, {1., 1.}};
+    }
+};
+
+struct binding_p_rw : binding_p {
+};
+
+// Common base of the specialisations of prob_inner below. Like the specialisations
+// written outside pagmo before the introduction of fitness_rewrite(), it implements
+// only the pure virtual methods of prob_inner_base.
+template <typename T>
+struct binding_prob_inner : detail::prob_inner_base {
+    explicit binding_prob_inner(const T &x) : m_value(x) {}
+    vector_double fitness(const vector_double &dv) const override
+    {
+        return m_value.fitness(dv);
+    }
+    vector_double batch_fitness(const vector_double &) const override
+    {
+        throw not_implemented_error("batch_fitness() is not implemented");
+    }
+    bool has_batch_fitness() const override
+    {
+        return false;
+    }
+    vector_double gradient(const vector_double &) const override
+    {
+        throw not_implemented_error("gradient() is not implemented");
+    }
+    bool has_gradient() const override
+    {
+        return false;
+    }
+    sparsity_pattern gradient_sparsity() const override
+    {
+        throw not_implemented_error("gradient_sparsity() is not implemented");
+    }
+    bool has_gradient_sparsity() const override
+    {
+        return false;
+    }
+    std::vector<vector_double> hessians(const vector_double &) const override
+    {
+        throw not_implemented_error("hessians() is not implemented");
+    }
+    bool has_hessians() const override
+    {
+        return false;
+    }
+    std::vector<sparsity_pattern> hessians_sparsity() const override
+    {
+        throw not_implemented_error("hessians_sparsity() is not implemented");
+    }
+    bool has_hessians_sparsity() const override
+    {
+        return false;
+    }
+    vector_double::size_type get_nobj() const override
+    {
+        return 1u;
+    }
+    std::pair<vector_double, vector_double> get_bounds() const override
+    {
+        return m_value.get_bounds();
+    }
+    vector_double::size_type get_nec() const override
+    {
+        return 0u;
+    }
+    vector_double::size_type get_nic() const override
+    {
+        return 0u;
+    }
+    vector_double::size_type get_nix() const override
+    {
+        return 0u;
+    }
+    void set_seed(unsigned) override
+    {
+        throw not_implemented_error("set_seed() is not implemented");
+    }
+    bool has_set_seed() const override
+    {
+        return false;
+    }
+    std::string get_name() const override
+    {
+        return "binding problem";
+    }
+    std::string get_extra_info() const override
+    {
+        return "";
+    }
+    thread_safety get_thread_safety() const override
+    {
+        return thread_safety::basic;
+    }
+    std::type_index get_type_index() const override
+    {
+        return std::type_index(typeid(T));
+    }
+    const void *get_ptr() const override
+    {
+        return &m_value;
+    }
+    void *get_ptr() override
+    {
+        return &m_value;
+    }
+    T m_value;
+};
+
+namespace pagmo
+{
+namespace detail
+{
+// A binding which relies on the default implementations of
+// has_fitness_rewrite() and fitness_rewrite().
+template <>
+struct prob_inner<binding_p> final : binding_prob_inner<binding_p> {
+    using binding_prob_inner::binding_prob_inner;
+    std::unique_ptr<prob_inner_base> clone() const override
+    {
+        return std::make_unique<prob_inner>(m_value);
+    }
+};
+
+// A binding which advertises the rewriting capability, but relies
+// on the default implementation of fitness_rewrite().
+template <>
+struct prob_inner<binding_p_rw> final : binding_prob_inner<binding_p_rw> {
+    using binding_prob_inner::binding_prob_inner;
+    std::unique_ptr<prob_inner_base> clone() const override
+    {
+        return std::make_unique<prob_inner>(m_value);
+    }
+    bool has_fitness_rewrite() const override
+    {
+        return true;
+    }
+};
+} // namespace detail
+} // namespace pagmo
+
+BOOST_AUTO_TEST_CASE(fitness_rewrite_external_inner)
+{
+    // A binding written before the introduction of fitness_rewrite():
+    // the problem does not rewrite, and it behaves as before.
+    problem p{binding_p{}};
+    BOOST_CHECK(p.is<binding_p>());
+    BOOST_CHECK(!p.has_fitness_rewrite());
+    BOOST_CHECK(!problem(p).has_fitness_rewrite());
+    vector_double dv{0.25, 0.75};
+    BOOST_CHECK(p.fitness_rewrite(dv) == vector_double{1.75});
+    BOOST_CHECK((dv == vector_double{0.25, 0.75}));
+    BOOST_CHECK(p.fitness_rewrite(dv) == p.fitness(dv));
+    BOOST_CHECK_EQUAL(p.get_fevals(), 3u);
+    // Populations and batch evaluators keep the decision vectors unchanged as well.
+    population pop{p};
+    pop.push_back(dv);
+    BOOST_CHECK(pop.get_x()[0] == dv);
+    BOOST_CHECK(pop.get_f()[0] == vector_double{1.75});
+    auto dvs = vector_double{0.25, 0.75, 0.5, 0.125};
+    BOOST_CHECK((bfe{}.fitness_rewrite(p, dvs) == vector_double{1.75, 0.75}));
+    BOOST_CHECK((dvs == vector_double{0.25, 0.75, 0.5, 0.125}));
+
+    // A binding which advertises the rewriting capability without implementing
+    // fitness_rewrite(): the default implementation throws, and neither dv
+    // nor the fevals counter are altered.
+    p = problem{binding_p_rw{}};
+    BOOST_CHECK(p.has_fitness_rewrite());
+    BOOST_CHECK(problem(p).has_fitness_rewrite());
+    BOOST_CHECK_EXCEPTION(p.fitness_rewrite(dv), not_implemented_error, [](const not_implemented_error &nie) {
+        return boost::contains(nie.what(), "The fitness_rewrite() method has been invoked, but it is not "
+                                           "implemented in the UDP 'binding problem'");
+    });
+    BOOST_CHECK((dv == vector_double{0.25, 0.75}));
+    BOOST_CHECK_EQUAL(p.get_fevals(), 0u);
+    BOOST_CHECK(p.fitness(dv) == vector_double{1.75});
 }

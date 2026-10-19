@@ -706,3 +706,127 @@ BOOST_AUTO_TEST_CASE(fitness_rewrite)
     }
     BOOST_CHECK_EQUAL(p1.get_fevals(), 18u);
 }
+
+// The UDBFEs below are exposed to pagmo via custom specialisations of bfe_inner,
+// as done by the language bindings (e.g., pygmo for Python batch evaluators).
+struct binding_bfe {
+    vector_double operator()(const problem &p, const vector_double &dvs) const
+    {
+        return thread_bfe{}(p, dvs);
+    }
+};
+
+struct binding_bfe_rw : binding_bfe {
+};
+
+// Common base of the specialisations of bfe_inner below. Like the specialisations
+// written outside pagmo before the introduction of fitness_rewrite(), it implements
+// only the pure virtual methods of bfe_inner_base.
+template <typename T>
+struct binding_bfe_inner : detail::bfe_inner_base {
+    explicit binding_bfe_inner(const T &x) : m_value(x) {}
+    vector_double operator()(const problem &p, const vector_double &dvs) const override
+    {
+        return m_value(p, dvs);
+    }
+    std::string get_name() const override
+    {
+        return "binding bfe";
+    }
+    std::string get_extra_info() const override
+    {
+        return "";
+    }
+    thread_safety get_thread_safety() const override
+    {
+        return thread_safety::basic;
+    }
+    std::type_index get_type_index() const override
+    {
+        return std::type_index(typeid(T));
+    }
+    const void *get_ptr() const override
+    {
+        return &m_value;
+    }
+    void *get_ptr() override
+    {
+        return &m_value;
+    }
+    T m_value;
+};
+
+namespace pagmo
+{
+namespace detail
+{
+// A binding which relies on the default implementations of
+// has_fitness_rewrite() and fitness_rewrite().
+template <>
+struct bfe_inner<binding_bfe> final : binding_bfe_inner<binding_bfe> {
+    using binding_bfe_inner::binding_bfe_inner;
+    std::unique_ptr<bfe_inner_base> clone() const override
+    {
+        return std::make_unique<bfe_inner>(m_value);
+    }
+};
+
+// A binding which advertises the rewriting capability, but relies
+// on the default implementation of fitness_rewrite().
+template <>
+struct bfe_inner<binding_bfe_rw> final : binding_bfe_inner<binding_bfe_rw> {
+    using binding_bfe_inner::binding_bfe_inner;
+    std::unique_ptr<bfe_inner_base> clone() const override
+    {
+        return std::make_unique<bfe_inner>(m_value);
+    }
+    bool has_fitness_rewrite() const override
+    {
+        return true;
+    }
+};
+} // namespace detail
+} // namespace pagmo
+
+BOOST_AUTO_TEST_CASE(fitness_rewrite_external_inner)
+{
+    problem p0{rosenbrock{2u}};
+    const vector_double dvs0{.1, .2, .3, .4};
+    problem p1{snap_udp{}};
+    const vector_double dvs1{.1, .2, .3, .4, -.9, .66};
+
+    // A binding written before the introduction of fitness_rewrite():
+    // the batch evaluator does not rewrite, and it behaves as before.
+    bfe b{binding_bfe{}};
+    BOOST_CHECK(b.is<binding_bfe>());
+    BOOST_CHECK(!b.has_fitness_rewrite());
+    BOOST_CHECK(!bfe(b).has_fitness_rewrite());
+    auto dvs = dvs0;
+    BOOST_CHECK(b.fitness_rewrite(p0, dvs) == b(p0, dvs0));
+    BOOST_CHECK(dvs == dvs0);
+    BOOST_CHECK_EQUAL(p0.get_fevals(), 4u);
+    // It cannot be used for the in-place rewriting of the decision
+    // vectors of a problem which rewrites them.
+    dvs = dvs1;
+    BOOST_CHECK_EXCEPTION(b.fitness_rewrite(p1, dvs), not_implemented_error, [](const not_implemented_error &nie) {
+        return boost::contains(nie.what(),
+                               "the batch fitness evaluator 'binding bfe' does not support in-place rewriting");
+    });
+    BOOST_CHECK(dvs == dvs1);
+    BOOST_CHECK_EQUAL(p1.get_fevals(), 0u);
+    BOOST_CHECK(b(p1, dvs1) == bfe{thread_bfe{}}(p1, dvs1));
+    BOOST_CHECK_EQUAL(p1.get_fevals(), 6u);
+
+    // A binding which advertises the rewriting capability without implementing
+    // fitness_rewrite(): the default implementation throws, and neither dvs
+    // nor the fevals counter are altered.
+    b = bfe{binding_bfe_rw{}};
+    BOOST_CHECK(b.has_fitness_rewrite());
+    BOOST_CHECK(bfe(b).has_fitness_rewrite());
+    BOOST_CHECK_EXCEPTION(b.fitness_rewrite(p1, dvs), not_implemented_error, [](const not_implemented_error &nie) {
+        return boost::contains(nie.what(), "The fitness_rewrite() method has been invoked, but it is not "
+                                           "implemented in the UDBFE 'binding bfe'");
+    });
+    BOOST_CHECK(dvs == dvs1);
+    BOOST_CHECK_EQUAL(p1.get_fevals(), 6u);
+}
