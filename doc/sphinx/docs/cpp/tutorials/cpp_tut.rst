@@ -16,3 +16,11 @@ Basics
   :maxdepth: 2
 
   evolving_a_population
+
+Advanced topics
+^^^^^^^^^^^^^^^
+
+.. toctree::
+  :maxdepth: 2
+
+  rewriting_decoders

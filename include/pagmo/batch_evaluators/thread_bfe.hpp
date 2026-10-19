@@ -49,6 +49,8 @@ public:
     // fitness() of the original problem is never called in order
     // to avoid altering the fevals counter.
     vector_double operator()(problem, const vector_double &) const;
+    // Batch fitness evaluation with in-place rewriting of the decision vectors.
+    vector_double fitness_rewrite(problem, vector_double &) const;
     // Name.
     std::string get_name() const
     {

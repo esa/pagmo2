@@ -43,4 +43,40 @@ Associated type traits
 
       The value of the type trait.
 
+.. cpp:class:: template <typename T> has_fitness_rewrite
+
+   .. versionadded:: 2.21.0
+
+   This type trait detects if ``T`` provides a member function whose signature
+   is compatible with
+
+   .. code-block:: c++
+
+      vector_double fitness_rewrite(vector_double &) const;
+
+   The ``fitness_rewrite()`` member function is part of the interface for the definition of a
+   user-defined problem (see :cpp:func:`pagmo::problem::fitness_rewrite()` for details).
+
+   .. cpp:member:: static const bool value
+
+      The value of the type trait.
+
+.. cpp:class:: template <typename T> override_has_fitness_rewrite
+
+   .. versionadded:: 2.21.0
+
+   This type trait detects if ``T`` provides a member function whose signature
+   is compatible with
+
+   .. code-block:: c++
+
+      bool has_fitness_rewrite() const;
+
+   The ``has_fitness_rewrite()`` member function is part of the interface for the definition of a
+   user-defined problem (see :cpp:func:`pagmo::problem::has_fitness_rewrite()` for details).
+
+   .. cpp:member:: static const bool value
+
+      The value of the type trait.
+
 .. cpp:namespace-pop::

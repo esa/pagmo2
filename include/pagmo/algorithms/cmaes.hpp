@@ -72,6 +72,15 @@ namespace pagmo
  *    reinserted into the population, CMA-ES may not preserve the best individual (not elitist). As a consequence the
  *    plot of the population best fitness may not be perfectly monotonically decreasing.
  *
+ * .. note::
+ *
+ *    CMA-ES never rewrites the decision vectors it samples, even if the problem supports
+ *    rewriting (see :cpp:func:`pagmo::problem::fitness_rewrite()`): the fitness is evaluated
+ *    via :cpp:func:`pagmo::problem::fitness()` (or the call operator of :cpp:class:`pagmo::bfe`),
+ *    as the update of the search distribution assumes that the evaluated decision vectors are
+ *    the sampled ones (which, unless ``force_bounds`` is ``true``, may also lie outside the problem bounds).
+ *    The stored decision vectors are thus the sampled ones, and they remain consistent with the stored fitness vectors.
+ *
  * .. seealso::
  *
  *    Hansen, Nikolaus. "The CMA evolution strategy: a comparing review." Towards a new evolutionary computation.

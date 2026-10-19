@@ -3,6 +3,32 @@
 Changelog
 =========
 
+2.21.0 (unreleased)
+-------------------
+
+New
+~~~
+
+- User-defined problems can now rewrite in place the decision vectors they evaluate
+  (e.g., to write back into a chromosome the result of a local search, as in the decoders
+  of the biased random-key genetic algorithms), by implementing the optional
+  ``fitness_rewrite()`` member function. See :cpp:func:`pagmo::problem::fitness_rewrite()`,
+  :cpp:func:`pagmo::bfe::fitness_rewrite()` and the
+  :ref:`tutorial <cpp_tutorial_rewriting_decoders>`. Populations and most algorithms
+  (including the final solutions of :cpp:class:`~pagmo::nlopt` and :cpp:class:`~pagmo::ipopt`,
+  and the inner algorithm of :cpp:class:`~pagmo::cstrs_self_adaptive`)
+  store the rewritten decision vectors, and :cpp:class:`~pagmo::thread_bfe` and
+  :cpp:class:`~pagmo::default_bfe` rewrite them in parallel. Problems which do not implement
+  ``fitness_rewrite()`` are not affected.
+
+Fix
+~~~
+
+- Fix the scout bee phase of :cpp:class:`~pagmo::bee_colony`, which did not update
+  the fitness of the new food source used internally by the algorithm (so that the
+  subsequent comparisons and onlooker probabilities used the fitness of the abandoned
+  food source).
+
 2.20.0 (2026-09-24)
 --------------------
 

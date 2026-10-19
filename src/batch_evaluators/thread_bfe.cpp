@@ -60,8 +60,18 @@ see https://www.gnu.org/licenses/. */
 namespace pagmo
 {
 
-// Call operator.
-vector_double thread_bfe::operator()(problem p, const vector_double &dvs) const
+namespace detail
+{
+
+namespace
+{
+
+// Implementation of the call operator and of fitness_rewrite(). If Rewrite
+// is true, DVs is a mutable vector_double and the decision vectors in dvs
+// are rewritten in place via problem::fitness_rewrite(). Otherwise, DVs is
+// a const vector_double and problem::fitness() is used.
+template <bool Rewrite, typename DVs>
+vector_double thread_bfe_impl(problem &p, DVs &dvs)
 {
     // Fetch a few quantities from the problem.
     // Problem dimension.
@@ -103,9 +113,19 @@ vector_double thread_bfe::operator()(problem p, const vector_double &dvs) const
             auto in_ptr = dvs.data() + begin * n_dim;
             auto out_ptr = retval.data() + begin * f_dim;
             std::copy(in_ptr, in_ptr + n_dim, tmp_dv.begin());
-            const auto fv = prob.fitness(tmp_dv);
-            assert(fv.size() == f_dim);
-            std::copy(fv.begin(), fv.end(), out_ptr);
+            if constexpr (Rewrite) {
+                const auto fv = prob.fitness_rewrite(tmp_dv);
+                assert(fv.size() == f_dim);
+                assert(tmp_dv.size() == n_dim);
+                std::copy(fv.begin(), fv.end(), out_ptr);
+                // NOTE: each range writes into its own portion of dvs,
+                // hence this is free of data races.
+                std::copy(tmp_dv.begin(), tmp_dv.end(), in_ptr);
+            } else {
+                const auto fv = prob.fitness(tmp_dv);
+                assert(fv.size() == f_dim);
+                std::copy(fv.begin(), fv.end(), out_ptr);
+            }
         }
     };
 
@@ -128,6 +148,22 @@ vector_double thread_bfe::operator()(problem p, const vector_double &dvs) const
     }
 
     return retval;
+}
+
+} // namespace
+
+} // namespace detail
+
+// Call operator.
+vector_double thread_bfe::operator()(problem p, const vector_double &dvs) const
+{
+    return detail::thread_bfe_impl<false>(p, dvs);
+}
+
+// Batch fitness evaluation with in-place rewriting of the decision vectors.
+vector_double thread_bfe::fitness_rewrite(problem p, vector_double &dvs) const
+{
+    return detail::thread_bfe_impl<true>(p, dvs);
 }
 
 // Serialization support.

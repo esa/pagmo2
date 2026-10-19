@@ -124,6 +124,27 @@ vector_double penalized_udp::fitness(const vector_double &x) const
     return f;
 }
 
+// The fitness computation, rewriting the decision vector in place
+vector_double penalized_udp::fitness_rewrite(vector_double &x) const
+{
+    // If the decision vector is not in the cache, we evaluate and rewrite it with the problem of
+    // the reference population (this will increase the feval counter in the ref pop problem), and
+    // we cache the rewritten decision vector. A cached decision vector is not rewritten, as it is
+    // already consistent with its cached fitness.
+    if (m_fitness_map.find(x) == m_fitness_map.end()) {
+        auto fit = m_pop_ptr->get_problem().fitness_rewrite(x);
+        m_fitness_map[x] = std::move(fit);
+    }
+    // The cache is now hit, and the penalty is applied.
+    return fitness(x);
+}
+
+// Rewriting is enabled only if the problem of the reference population supports it
+bool penalized_udp::has_fitness_rewrite() const
+{
+    return m_pop_ptr->get_problem().has_fitness_rewrite();
+}
+
 // Call to this method updates all the members that are used to penalize the objective function
 // As the penalization algorithm depends heavily on the ref population this method takes care of
 // updating the necessary information. It also builds the hash map used to avoid unnecessary fitness

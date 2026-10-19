@@ -278,9 +278,12 @@ population moead_gen::evolve(population pop) const
             //   the appropriate individuals into the population     
             // this approach is probably not helpful for problems where the fitness evaluations are not 
             //   sufficiently expensive as to slow the rest of the algorithm
-            auto fitnesses = (*m_bfe)(prob, genes);
+            // NOTE: genes is rewritten in place if the problem supports it.
+            auto fitnesses = m_bfe->fitness_rewrite(prob, genes);
             // this poptemp for loop can probably be combined with the following fidtemp loop
             for (decltype(poptemp.size()) i = 0; i < poptemp.size(); i++) {
+                std::copy(genes.data() + i * poptemp[i].size(), genes.data() + (i + 1u) * poptemp[i].size(),
+                          poptemp[i].begin());
                 // slice up the fitnesses into a chunks of length n_obj
                 auto start_pos = fitnesses.begin() + static_cast<std::vector<double>::difference_type>(i * n_obj);
                 auto end_pos = fitnesses.begin() + static_cast<std::vector<double>::difference_type>((i + 1) * n_obj);
@@ -292,7 +295,8 @@ population moead_gen::evolve(population pop) const
             // note that this still only evolves the population generationally
             //   hence "generational" moead
             for (decltype(poptemp.size()) i = 0; i < poptemp.size(); i++) {
-                auto f1 = prob.fitness(poptemp[i]);
+                // NOTE: poptemp[i] is rewritten in place if the problem supports it.
+                auto f1 = prob.fitness_rewrite(poptemp[i]);
                 ftemp.push_back(f1);
             }
         }

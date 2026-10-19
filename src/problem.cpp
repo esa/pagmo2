@@ -186,6 +186,8 @@ void problem::generic_ctor_impl()
     // 4 - Presence of batch_fitness().
     // NOTE: all these m_has_* attributes refer to the presence of the features in the UDP.
     m_has_batch_fitness = ptr()->has_batch_fitness();
+    // 4b - Presence of fitness_rewrite().
+    m_has_fitness_rewrite = ptr()->has_fitness_rewrite();
     // 5 - Presence of gradient and its sparsity.
     m_has_gradient = ptr()->has_gradient();
     m_has_gradient_sparsity = ptr()->has_gradient_sparsity();
@@ -254,10 +256,11 @@ problem::problem(const problem &other)
       m_gevals(other.m_gevals.load(std::memory_order_relaxed)),
       m_hevals(other.m_hevals.load(std::memory_order_relaxed)), m_lb(other.m_lb), m_ub(other.m_ub),
       m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_nix(other.m_nix), m_c_tol(other.m_c_tol),
-      m_has_batch_fitness(other.m_has_batch_fitness), m_has_gradient(other.m_has_gradient),
-      m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
-      m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
-      m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim), m_thread_safety(other.m_thread_safety)
+      m_has_batch_fitness(other.m_has_batch_fitness), m_has_fitness_rewrite(other.m_has_fitness_rewrite),
+      m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
+      m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
+      m_has_set_seed(other.m_has_set_seed), m_name(other.m_name), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
+      m_thread_safety(other.m_thread_safety)
 {
 }
 
@@ -271,10 +274,11 @@ problem::problem(problem &&other) noexcept
       m_hevals(other.m_hevals.load(std::memory_order_relaxed)), m_lb(std::move(other.m_lb)),
       m_ub(std::move(other.m_ub)), m_nobj(other.m_nobj), m_nec(other.m_nec), m_nic(other.m_nic), m_nix(other.m_nix),
       m_c_tol(std::move(other.m_c_tol)), m_has_batch_fitness(other.m_has_batch_fitness),
-      m_has_gradient(other.m_has_gradient), m_has_gradient_sparsity(other.m_has_gradient_sparsity),
-      m_has_hessians(other.m_has_hessians), m_has_hessians_sparsity(other.m_has_hessians_sparsity),
-      m_has_set_seed(other.m_has_set_seed), m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim),
-      m_hs_dim(other.m_hs_dim), m_thread_safety(std::move(other.m_thread_safety))
+      m_has_fitness_rewrite(other.m_has_fitness_rewrite), m_has_gradient(other.m_has_gradient),
+      m_has_gradient_sparsity(other.m_has_gradient_sparsity), m_has_hessians(other.m_has_hessians),
+      m_has_hessians_sparsity(other.m_has_hessians_sparsity), m_has_set_seed(other.m_has_set_seed),
+      m_name(std::move(other.m_name)), m_gs_dim(other.m_gs_dim), m_hs_dim(other.m_hs_dim),
+      m_thread_safety(std::move(other.m_thread_safety))
 {
 }
 
@@ -299,6 +303,7 @@ problem &problem::operator=(problem &&other) noexcept
         m_nix = other.m_nix;
         m_c_tol = std::move(other.m_c_tol);
         m_has_batch_fitness = other.m_has_batch_fitness;
+        m_has_fitness_rewrite = other.m_has_fitness_rewrite;
         m_has_gradient = other.m_has_gradient;
         m_has_gradient_sparsity = other.m_has_gradient_sparsity;
         m_has_hessians = other.m_has_hessians;
@@ -421,6 +426,76 @@ vector_double problem::batch_fitness(const vector_double &dvs) const
 
     // Check the produced vector of fitnesses.
     detail::bfe_check_output_fvs(*this, dvs, retval);
+
+    return retval;
+}
+
+/// Fitness with in-place rewriting of the decision vector.
+/**
+ * \verbatim embed:rst:leading-asterisk
+ * This method computes the fitness of the decision vector ``dv`` and, if the UDP supports it
+ * (see :cpp:func:`~pagmo::problem::has_fitness_rewrite()`), replaces ``dv`` with the decision vector
+ * rewritten by the UDP. This is the pagmo counterpart of the chromosome rewriting performed by the
+ * decoders of the biased random-key genetic algorithms (BRKGA): a decoder may improve the solution
+ * encoded by ``dv`` (e.g., via a local search) and write the improved solution back into ``dv``, so that
+ * the decision vector stored in a :cpp:class:`~pagmo::population` stays consistent with its fitness.
+ *
+ * If the UDP satisfies :cpp:class:`pagmo::has_fitness_rewrite` (and its optional ``has_fitness_rewrite()``
+ * method, if present, returns ``true``), this method will invoke the ``fitness_rewrite()`` method of the UDP
+ * on a copy of ``dv``. The returned fitness vector and the rewritten decision vector are then checked, and
+ * ``dv`` is replaced with the rewritten decision vector. Otherwise, this method is equivalent to
+ * :cpp:func:`~pagmo::problem::fitness()` and ``dv`` is not modified.
+ *
+ * The ``fitness_rewrite()`` method of the UDP must return the fitness of the *rewritten* decision vector,
+ * the rewritten decision vector must have the same size as the original one, it must lie within the
+ * problem bounds and its integer part must contain integral values. Ideally, rewriting should be idempotent
+ * (i.e., rewriting an already rewritten decision vector should leave it unchanged). The UDP must still
+ * implement the mandatory ``fitness()`` method, which must not modify its argument.
+ *
+ * In case of exceptions, ``dv`` is not modified and the fitness evaluation counter is not increased.
+ * A successful call of this method will increase the internal fitness evaluation counter (see
+ * :cpp:func:`~pagmo::problem::get_fevals()`).
+ *
+ * The thread safety requirements of this method are the same as those of :cpp:func:`~pagmo::problem::fitness()`.
+ * \endverbatim
+ *
+ * @param dv the decision vector, which will be replaced by its rewritten version.
+ *
+ * @return the fitness of the (rewritten) decision vector.
+ *
+ * @throws std::invalid_argument if either
+ * - the length of \p dv differs from the value returned by get_nx(),
+ * - the length of the returned fitness vector differs from the value returned by get_nf(), or
+ * - the rewritten decision vector has a length different from get_nx(), lies outside the problem bounds or
+ *   has non-integral values in its integer part.
+ * @throws unspecified any exception thrown by the <tt>%fitness()</tt> or <tt>%fitness_rewrite()</tt> methods
+ * of the UDP, or by memory errors in standard containers.
+ */
+vector_double problem::fitness_rewrite(vector_double &dv) const
+{
+    // NOTE: like fitness(), this method must be callable on the same
+    // object from multiple threads (see the thread_bfe implementation).
+    if (!m_has_fitness_rewrite) {
+        return fitness(dv);
+    }
+
+    // 1 - checks the decision vector
+    detail::prob_check_dv(*this, dv.data(), dv.size());
+
+    // 2 - computes the fitness, rewriting a copy of dv so that dv
+    // is left untouched in case of errors
+    auto new_dv(dv);
+    vector_double retval(ptr()->fitness_rewrite(new_dv));
+
+    // 3 - checks the fitness vector and the rewritten decision vector
+    detail::prob_check_fv(*this, retval.data(), retval.size());
+    detail::prob_check_rewritten_dv(*this, new_dv.data(), new_dv.size());
+
+    // 4 - increments fitness evaluation counter
+    increment_fevals(1);
+
+    // 5 - commits the rewritten decision vector
+    dv.swap(new_dv);
 
     return retval;
 }
@@ -803,6 +878,7 @@ std::ostream &operator<<(std::ostream &os, const problem &p)
     os << "\tUpper bounds: ";
     stream(os, p.get_bounds().second, '\n');
     stream(os, "\tHas batch fitness evaluation: ", p.has_batch_fitness(), '\n');
+    stream(os, "\tHas fitness rewrite: ", p.has_fitness_rewrite(), '\n');
     stream(os, "\n\tHas gradient: ", p.has_gradient(), '\n');
     stream(os, "\tUser implemented gradient sparsity: ", p.has_gradient_sparsity(), '\n');
     if (p.has_gradient()) {
@@ -961,6 +1037,40 @@ void prob_check_fv(const problem &p, const double *fv, vector_double::size_type 
                                                + std::to_string(p.get_nf())
                                                + ", while the fitness vector has a size of " + std::to_string(s)
                                                + " (the two values should be equal)");
+    }
+}
+
+// Check that the decision vector starting at dv and with size s, as rewritten
+// by a fitness_rewrite() implementation, is compatible with the input problem p:
+// it must have the problem's dimension, lie within the bounds and have
+// integral values in the integer part.
+void prob_check_rewritten_dv(const problem &p, const double *dv, vector_double::size_type s)
+{
+    const auto nx = p.get_nx();
+    if (s != nx) {
+        pagmo_throw(std::invalid_argument, "A rewritten decision vector is incompatible with a problem of type '"
+                                               + p.get_name() + "': the number of dimensions of the problem is "
+                                               + std::to_string(nx)
+                                               + ", while the rewritten decision vector has a size of "
+                                               + std::to_string(s) + " (the two values should be equal)");
+    }
+    const auto &lb = p.get_lb();
+    const auto &ub = p.get_ub();
+    const auto ncx = p.get_ncx();
+    for (vector_double::size_type i = 0; i < nx; ++i) {
+        // NOTE: this formulation also catches NaNs.
+        if (!(dv[i] >= lb[i] && dv[i] <= ub[i])) {
+            pagmo_throw(std::invalid_argument, "The rewritten decision vector of a problem of type '" + p.get_name()
+                                                   + "' has the value " + std::to_string(dv[i]) + " at position "
+                                                   + std::to_string(i) + ", which is outside the problem bounds ["
+                                                   + std::to_string(lb[i]) + ", " + std::to_string(ub[i]) + "]");
+        }
+        if (i >= ncx && std::trunc(dv[i]) != dv[i]) {
+            pagmo_throw(std::invalid_argument, "The rewritten decision vector of a problem of type '" + p.get_name()
+                                                   + "' has the non-integral value " + std::to_string(dv[i])
+                                                   + " at position " + std::to_string(i)
+                                                   + ", which belongs to the integer part of the problem");
+        }
     }
 }
 

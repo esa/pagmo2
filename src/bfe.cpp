@@ -37,6 +37,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/bfe.hpp>
 #include <pagmo/detail/bfe_impl.hpp>
 #include <pagmo/detail/type_name.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/types.hpp>
 
@@ -107,6 +108,52 @@ vector_double bfe::operator()(const problem &p, const vector_double &dvs) const
     p.increment_fevals(boost::numeric_cast<unsigned long long>(n_dvs));
 
     return retval;
+}
+
+// Batch fitness evaluation with in-place rewriting of the decision vectors.
+vector_double bfe::fitness_rewrite(const problem &p, vector_double &dvs) const
+{
+    // If the problem does not rewrite decision vectors, this
+    // is equivalent to the call operator.
+    if (!p.has_fitness_rewrite()) {
+        return (*this)(p, dvs);
+    }
+
+    if (!has_fitness_rewrite()) {
+        pagmo_throw(not_implemented_error,
+                    "The problem '" + p.get_name()
+                        + "' rewrites decision vectors during the fitness evaluation, but the batch fitness evaluator '"
+                        + get_name()
+                        + "' does not support in-place rewriting. Use a batch fitness evaluator that supports it "
+                          "(e.g., thread_bfe or default_bfe), or evaluate the decision vectors serially");
+    }
+
+    // Check the input dvs.
+    detail::bfe_check_input_dvs(p, dvs);
+
+    // Invoke the fitness_rewrite() member function from the UDBFE on a
+    // copy of dvs, so that dvs is left untouched in case of errors.
+    auto new_dvs(dvs);
+    auto retval(ptr()->fitness_rewrite(p, new_dvs));
+
+    // Check the rewritten dvs and the produced vector of fitnesses.
+    detail::bfe_check_rewritten_dvs(p, dvs, new_dvs);
+    detail::bfe_check_output_fvs(p, dvs, retval);
+
+    // Update the fevals counter in p.
+    const auto n_dvs = dvs.size() / p.get_nx();
+    p.increment_fevals(boost::numeric_cast<unsigned long long>(n_dvs));
+
+    // Commit the rewritten dvs.
+    dvs.swap(new_dvs);
+
+    return retval;
+}
+
+// Check if the UDBFE supports in-place rewriting of the decision vectors.
+bool bfe::has_fitness_rewrite() const
+{
+    return ptr()->has_fitness_rewrite();
 }
 
 // Extra info.

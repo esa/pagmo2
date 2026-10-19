@@ -413,6 +413,30 @@ public:
     static constexpr bool value = implementation_defined;
 };
 
+// Detect the fitness_rewrite() member function.
+template <typename T>
+class has_fitness_rewrite
+{
+    template <typename U>
+    using fitness_rewrite_t = decltype(std::declval<const U &>().fitness_rewrite(std::declval<vector_double &>()));
+    static const bool implementation_defined = std::is_same<vector_double, detected_t<fitness_rewrite_t, T>>::value;
+
+public:
+    static constexpr bool value = implementation_defined;
+};
+
+// Detect the has_fitness_rewrite() member function.
+template <typename T>
+class override_has_fitness_rewrite
+{
+    template <typename U>
+    using has_fitness_rewrite_t = decltype(std::declval<const U &>().has_fitness_rewrite());
+    static const bool implementation_defined = std::is_same<bool, detected_t<has_fitness_rewrite_t, T>>::value;
+
+public:
+    static constexpr bool value = implementation_defined;
+};
+
 namespace detail
 {
 
@@ -494,6 +518,18 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner_base {
     virtual std::type_index get_type_index() const = 0;
     virtual const void *get_ptr() const = 0;
     virtual void *get_ptr() = 0;
+    // NOTE: these are not pure virtual so that specialisations of prob_inner
+    // defined outside pagmo (e.g., for Python problems) keep compiling.
+    virtual vector_double fitness_rewrite(vector_double &) const
+    {
+        pagmo_throw(not_implemented_error,
+                    "The fitness_rewrite() method has been invoked, but it is not implemented in the UDP '" + get_name()
+                        + "'");
+    }
+    virtual bool has_fitness_rewrite() const
+    {
+        return false;
+    }
 
 private:
     friend class boost::serialization::access;
@@ -549,6 +585,26 @@ struct PAGMO_DLL_PUBLIC_INLINE_CLASS prob_inner final : prob_inner_base {
             // - no batch fitness, no override (returns false),
             // - no batch fitness, override (returns false).
             return pagmo::has_batch_fitness<T>::value;
+        }
+    }
+    vector_double fitness_rewrite([[maybe_unused]] vector_double &dv) const final
+    {
+        if constexpr (pagmo::has_fitness_rewrite<T>::value) {
+            return m_value.fitness_rewrite(dv);
+        } else {
+            pagmo_throw(not_implemented_error,
+                        "The fitness_rewrite() method has been invoked, but it is not implemented in a UDP of type '"
+                            + get_name_impl(m_value) + "'");
+        }
+    }
+    bool has_fitness_rewrite() const final
+    {
+        if constexpr (detail::conjunction<pagmo::has_fitness_rewrite<T>,
+                                          pagmo::override_has_fitness_rewrite<T>>::value) {
+            return m_value.has_fitness_rewrite();
+        } else {
+            // Same logic as in has_batch_fitness().
+            return pagmo::has_fitness_rewrite<T>::value;
         }
     }
     vector_double::size_type get_nobj() const final
@@ -902,6 +958,7 @@ namespace detail
 // them as free functions.
 PAGMO_DLL_PUBLIC void prob_check_dv(const problem &, const double *, vector_double::size_type);
 PAGMO_DLL_PUBLIC void prob_check_fv(const problem &, const double *, vector_double::size_type);
+PAGMO_DLL_PUBLIC void prob_check_rewritten_dv(const problem &, const double *, vector_double::size_type);
 PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, const vector_double &, bool);
 
 } // namespace detail
@@ -963,6 +1020,8 @@ PAGMO_DLL_PUBLIC vector_double prob_invoke_mem_batch_fitness(const problem &, co
  * vector_double::size_type get_nix() const;
  * vector_double batch_fitness(const vector_double &) const;
  * bool has_batch_fitness() const;
+ * vector_double fitness_rewrite(vector_double &) const;
+ * bool has_fitness_rewrite() const;
  * bool has_gradient() const;
  * vector_double gradient(const vector_double &) const;
  * bool has_gradient_sparsity() const;
@@ -1192,6 +1251,35 @@ public:
     bool has_batch_fitness() const
     {
         return m_has_batch_fitness;
+    }
+
+    // Fitness with in-place rewriting of the decision vector.
+    vector_double fitness_rewrite(vector_double &) const;
+
+    /// Check if the UDP can rewrite decision vectors during fitness evaluation.
+    /**
+     * This method will return \p true if the UDP is capable of rewriting in place the decision vectors
+     * it evaluates (see problem::fitness_rewrite()), \p false otherwise.
+     *
+     * \verbatim embed:rst:leading-asterisk
+     * The rewriting capability of the UDP is determined as follows:
+     *
+     * * if the UDP does not satisfy :cpp:class:`pagmo::has_fitness_rewrite`, then this method will always return
+     *   ``false``;
+     * * if the UDP satisfies :cpp:class:`pagmo::has_fitness_rewrite` but it does not satisfy
+     *   :cpp:class:`pagmo::override_has_fitness_rewrite`, then this method will always return ``true``;
+     * * if the UDP satisfies both :cpp:class:`pagmo::has_fitness_rewrite` and
+     *   :cpp:class:`pagmo::override_has_fitness_rewrite`, then this method will return the output of the
+     *   ``has_fitness_rewrite()`` method of the UDP.
+     *
+     * The capability is determined when the problem is constructed (or deserialised).
+     * \endverbatim
+     *
+     * @return a flag signalling the availability of in-place rewriting in the UDP.
+     */
+    bool has_fitness_rewrite() const
+    {
+        return m_has_fitness_rewrite;
     }
 
     // Gradient.
@@ -1622,6 +1710,10 @@ private:
             m_fevals.store(fevals, std::memory_order_relaxed);
             m_gevals.store(gevals, std::memory_order_relaxed);
             m_hevals.store(hevals, std::memory_order_relaxed);
+            // NOTE: this flag is not part of the archive (so that archives
+            // created before its introduction can still be loaded), we
+            // recompute it from the deserialised UDP instead.
+            m_has_fitness_rewrite = ptr()->has_fitness_rewrite();
         } catch (...) {
             *this = problem{};
             throw;
@@ -1668,6 +1760,7 @@ private:
     vector_double::size_type m_nix;
     vector_double m_c_tol;
     bool m_has_batch_fitness;
+    bool m_has_fitness_rewrite;
     bool m_has_gradient;
     bool m_has_gradient_sparsity;
     bool m_has_hessians;

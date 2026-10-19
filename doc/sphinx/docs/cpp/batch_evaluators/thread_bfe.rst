@@ -38,6 +38,26 @@ Multithreaded BFE
       :exception std\:\:overflow_error: in case of (unlikely) internal overflow conditions.
       :exception unspecified: any exception raised by memory allocation failures or by the public API of :cpp:class:`~pagmo::problem`.
 
+   .. cpp:function:: vector_double fitness_rewrite(problem p, vector_double &dvs) const
+
+      Batch fitness evaluation with in-place rewriting of the decision vectors.
+
+      .. versionadded:: 2.21.0
+
+      This member function behaves like the call operator, the only difference being that
+      the fitnesses are computed via :cpp:func:`pagmo::problem::fitness_rewrite()`, and that the
+      decision vectors in *dvs* are replaced with their rewritten versions. Each thread of execution
+      writes only into the portion of *dvs* containing the decision vectors it evaluates.
+
+      This member function is usually invoked via :cpp:func:`pagmo::bfe::fitness_rewrite()`.
+
+      :param p: the input :cpp:class:`~pagmo::problem`.
+      :param dvs: the input decision vectors that will be evaluated and rewritten.
+
+      :return: the fitness vectors corresponding to the rewritten decision vectors in *dvs*.
+
+      :exception unspecified: any exception raised by the call operator.
+
    .. cpp:function:: std::string get_name() const
 
       :return: a human-readable name for this :cpp:class:`~pagmo::thread_bfe`.

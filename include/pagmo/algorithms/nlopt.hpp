@@ -102,6 +102,13 @@ namespace pagmo
  *    This user-defined algorithm is available only if pagmo was compiled with the ``PAGMO_WITH_NLOPT`` option
  *    enabled (see the :ref:`installation instructions <install>`).
  *
+ * .. note::
+ *
+ *    If the problem supports rewriting the decision vectors during the fitness evaluation
+ *    (see :cpp:func:`pagmo::problem::fitness_rewrite()`), the final solution found by NLopt is rewritten
+ *    before being compared with (and possibly replacing) the selected individual. The points evaluated
+ *    by NLopt during the optimisation are never rewritten.
+ *
  * .. seealso::
  *
  *    The `NLopt website <https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/>`__ contains a detailed description

@@ -39,10 +39,14 @@ see https://www.gnu.org/licenses/. */
 #include <string>
 #include <type_traits>
 
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include <pagmo/batch_evaluators/default_bfe.hpp>
+#include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <pagmo/batch_evaluators/thread_bfe.hpp>
 #include <pagmo/bfe.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/population.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowski_71.hpp>
@@ -461,4 +465,108 @@ BOOST_AUTO_TEST_CASE(population_nan_champion)
     BOOST_CHECK(!std::isnan(pop0.champion_f()[0]));
     pop0.push_back({std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()});
     BOOST_CHECK(!std::isnan(pop0.champion_f()[0]));
+}
+
+// A UDP which rewrites the decision vectors by snapping them to
+// a grid with step 1/8, and evaluates the snapped vectors.
+struct snap_udp {
+    static vector_double snap(vector_double x)
+    {
+        for (auto &xi : x) {
+            xi = std::round(xi * 8.) / 8.;
+        }
+        return x;
+    }
+    static bool on_grid(const vector_double &x)
+    {
+        return snap(x) == x;
+    }
+    static vector_double eval(const vector_double &x)
+    {
+        return {x[0] * x[0] + x[1] * x[1] + x[2] * x[2]};
+    }
+    vector_double fitness(const vector_double &x) const
+    {
+        return eval(snap(x));
+    }
+    vector_double fitness_rewrite(vector_double &x) const
+    {
+        x = snap(x);
+        return eval(x);
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{-1., -1., -1.}, {1., 1., 1.}};
+    }
+};
+
+// Same as above, with a batch_fitness() member function (which cannot rewrite).
+struct snap_udp_batch : snap_udp {
+    vector_double batch_fitness(const vector_double &dvs) const
+    {
+        vector_double retval;
+        for (decltype(dvs.size()) i = 0; i < dvs.size(); i += 3u) {
+            retval.push_back(fitness(vector_double(dvs.data() + i, dvs.data() + i + 3u))[0]);
+        }
+        return retval;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(population_fitness_rewrite_test)
+{
+    // The constructor from problem stores the rewritten decision vectors.
+    population pop{snap_udp{}, 50u, 42u};
+    const auto &prob = pop.get_problem();
+    BOOST_CHECK(prob.has_fitness_rewrite());
+    BOOST_CHECK_EQUAL(prob.get_fevals(), 50u);
+    for (decltype(pop.size()) i = 0; i < pop.size(); ++i) {
+        BOOST_CHECK(snap_udp::on_grid(pop.get_x()[i]));
+        BOOST_CHECK(pop.get_f()[i] == prob.fitness(pop.get_x()[i]));
+    }
+    BOOST_CHECK(snap_udp::on_grid(pop.champion_x()));
+    BOOST_CHECK(pop.champion_f() == prob.fitness(pop.champion_x()));
+
+    // The constructors from bfe produce the same population.
+    for (const auto &b : {bfe{}, bfe{thread_bfe{}}, bfe{default_bfe{}}}) {
+        population pop_b{snap_udp{}, b, 50u, 42u};
+        BOOST_CHECK_EQUAL(pop_b.get_problem().get_fevals(), 50u);
+        BOOST_CHECK(pop_b.get_x() == pop.get_x());
+        BOOST_CHECK(pop_b.get_f() == pop.get_f());
+        BOOST_CHECK(pop_b.get_ID() == pop.get_ID());
+        BOOST_CHECK(pop_b.champion_x() == pop.champion_x());
+    }
+    // The default bfe picks the thread-based evaluation even
+    // if the problem has a batch_fitness() member function.
+    population pop_bb{snap_udp_batch{}, bfe{}, 50u, 42u};
+    BOOST_CHECK(pop_bb.get_x() == pop.get_x());
+    BOOST_CHECK(pop_bb.get_f() == pop.get_f());
+    // member_bfe cannot rewrite.
+    BOOST_CHECK_EXCEPTION((population{snap_udp_batch{}, member_bfe{}, 50u, 42u}), not_implemented_error,
+                          [](const not_implemented_error &nie) {
+                              return boost::contains(nie.what(), "does not support in-place rewriting");
+                          });
+
+    // push_back(x) and set_x() rewrite, push_back(x, f) and set_xf() do not.
+    population pop2{snap_udp{}};
+    const vector_double x{0.1, -0.33, 0.9};
+    const vector_double x_snap{0.125, -0.375, 0.875};
+    pop2.push_back(x);
+    BOOST_CHECK(pop2.get_x()[0] == x_snap);
+    BOOST_CHECK(pop2.get_f()[0] == snap_udp::eval(x_snap));
+    pop2.push_back(vector_double(x));
+    BOOST_CHECK(pop2.get_x()[1] == x_snap);
+    BOOST_CHECK(pop2.get_f()[1] == snap_udp::eval(x_snap));
+    pop2.push_back(x, {1.});
+    BOOST_CHECK(pop2.get_x()[2] == x);
+    BOOST_CHECK(pop2.get_f()[2] == vector_double{1.});
+    pop2.set_x(2u, x);
+    BOOST_CHECK(pop2.get_x()[2] == x_snap);
+    BOOST_CHECK(pop2.get_f()[2] == snap_udp::eval(x_snap));
+    pop2.set_xf(2u, x, {1.});
+    BOOST_CHECK(pop2.get_x()[2] == x);
+    BOOST_CHECK(pop2.champion_x() == x_snap);
+    BOOST_CHECK_EQUAL(pop2.get_problem().get_fevals(), 3u);
+    // Errors from the rewriting leave the population untouched.
+    BOOST_CHECK_THROW(pop2.push_back({0.1, 0.2}), std::invalid_argument);
+    BOOST_CHECK_EQUAL(pop2.size(), 3u);
 }

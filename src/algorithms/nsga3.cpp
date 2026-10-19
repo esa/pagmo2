@@ -352,7 +352,8 @@ population nsga3::evolve(population pop) const
                     ++pos;
                 }
             }
-            auto fitnesses = (*m_bfe)(prob, genes);
+            // NOTE: genes is rewritten in place if the problem supports it.
+            auto fitnesses = m_bfe->fitness_rewrite(prob, genes);
             if (fitnesses.size() != offspring.size() * n_obj) {
                 pagmo_throw(std::invalid_argument, "The batch fitness evaluator of " + get_name()
                                                        + " returned a vector of " + std::to_string(fitnesses.size())
@@ -362,15 +363,18 @@ population nsga3::evolve(population pop) const
                                                        + " objectives each");
             }
             for (decltype(offspring.size()) i = 0u; i < offspring.size(); ++i) {
+                std::copy(genes.data() + i * dim, genes.data() + (i + 1u) * dim, offspring[i].begin());
                 // Slice the flat fitness vector into chunks of length n_obj
                 const auto start_pos = fitnesses.begin() + static_cast<vector_double::difference_type>(i * n_obj);
                 const auto end_pos = fitnesses.begin() + static_cast<vector_double::difference_type>((i + 1u) * n_obj);
                 popnew.push_back(offspring[i], vector_double(start_pos, end_pos));
             }
         } else {
-            for (const auto &child : offspring) {
+            for (auto &child : offspring) {
                 // Evaluation via prob ensures the feval counter is correctly updated
-                popnew.push_back(child, prob.fitness(child));
+                // NOTE: child is rewritten in place if the problem supports it.
+                auto f = prob.fitness_rewrite(child);
+                popnew.push_back(child, f);
             }
         } // popnew now contains |P_t| + |Q_t| = 2NP individuals
 

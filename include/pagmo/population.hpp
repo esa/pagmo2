@@ -69,6 +69,12 @@ namespace pagmo
  * currently contained in the pagmo::population is single objective.
  *
  * \verbatim embed:rst:leading-asterisk
+ * If the problem rewrites decision vectors during the fitness evaluation
+ * (see :cpp:func:`pagmo::problem::fitness_rewrite()`), the methods of this class that evaluate
+ * the fitness (the constructors, :cpp:func:`~pagmo::population::push_back()` with a single argument and
+ * :cpp:func:`~pagmo::population::set_x()`) store the rewritten decision vectors, so that each stored
+ * decision vector is consistent with its stored fitness.
+ *
  * .. warning::
  *
  *    A moved-from :cpp:class:`pagmo::population` is destructible and assignable. Any other operation will result
@@ -113,7 +119,8 @@ public:
      * Constructs a population with \p pop_size individuals associated
      * to the problem \p x and setting the population random seed
      * to \p seed. The input problem \p x can be either a pagmo::problem or a user-defined problem
-     * (UDP).
+     * (UDP). If the problem rewrites decision vectors during the fitness evaluation, the
+     * rewritten random decision vectors are stored.
      *
      * @param x the problem the population refers to.
      * @param pop_size population size (i.e. number of individuals therein).
@@ -153,7 +160,9 @@ public:
      * to the problem *x* and setting the population random seed
      * to *seed*. The input problem *x* can be either a :cpp:class:`pagmo::problem` or a user-defined problem
      * (UDP). The fitnesses of the individuals will be evaluated with the input
-     * :cpp:class:`pagmo::bfe` or UDBFE *b*.
+     * :cpp:class:`pagmo::bfe` or UDBFE *b*, via :cpp:func:`pagmo::bfe::fitness_rewrite()`: if
+     * the problem rewrites decision vectors during the fitness evaluation, the rewritten random
+     * decision vectors are stored (in this case, *b* must support in-place rewriting).
      *
      * \endverbatim
      *

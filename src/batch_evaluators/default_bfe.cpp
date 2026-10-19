@@ -81,6 +81,21 @@ vector_double default_bfe::operator()(const problem &p, const vector_double &dvs
     return detail::default_bfe_impl(p, dvs);
 }
 
+// Batch fitness evaluation with in-place rewriting of the decision vectors.
+vector_double default_bfe::fitness_rewrite(const problem &p, vector_double &dvs) const
+{
+    // NOTE: the batch_fitness() member function of p cannot rewrite
+    // the decision vectors, hence we always go for the generic thread-based
+    // bfe, if the problem is thread-safe enough.
+    if (p.get_thread_safety() >= thread_safety::basic) {
+        return thread_bfe{}.fitness_rewrite(p, dvs);
+    }
+    pagmo_throw(std::invalid_argument,
+                "Cannot execute fitness evaluations with rewriting in batch mode for a problem of type '" + p.get_name()
+                    + "': the thread safety level of the problem is not sufficient to run a thread-based batch fitness "
+                      "evaluation implementation");
+}
+
 // Serialization support.
 template <typename Archive>
 void default_bfe::serialize(Archive &, unsigned)

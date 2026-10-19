@@ -501,7 +501,7 @@ population sade::evolve(population pop) const
                 }
             }
             // b) how good?
-            auto newfitness = prob.fitness(tmp); /* Evaluates tmp[] */
+            auto newfitness = prob.fitness_rewrite(tmp); /* Evaluates (and possibly rewrites) tmp[] */
             if (newfitness[0] <= fit[i][0]) {    /* improved objective function value ? */
                 fit[i] = newfitness;
                 popnew[i] = tmp;

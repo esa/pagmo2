@@ -30,6 +30,7 @@ see https://www.gnu.org/licenses/. */
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <cmath>
 #include <initializer_list>
 #include <sstream>
 #include <stdexcept>
@@ -42,6 +43,7 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/batch_evaluators/default_bfe.hpp>
 #include <pagmo/batch_evaluators/member_bfe.hpp>
 #include <pagmo/bfe.hpp>
+#include <pagmo/exceptions.hpp>
 #include <pagmo/problem.hpp>
 #include <pagmo/s11n.hpp>
 #include <pagmo/threading.hpp>
@@ -159,4 +161,84 @@ BOOST_AUTO_TEST_CASE(s11n)
     auto after = boost::lexical_cast<std::string>(bfe0);
     BOOST_CHECK_EQUAL(before, after);
     BOOST_CHECK(bfe0.is<default_bfe>());
+}
+
+// A UDP which rewrites the decision vectors by snapping them to
+// a grid with step 1/8, and evaluates the snapped vectors.
+struct snap_udp {
+    static vector_double snap(vector_double x)
+    {
+        for (auto &xi : x) {
+            xi = std::round(xi * 8.) / 8.;
+        }
+        return x;
+    }
+    static vector_double eval(const vector_double &x)
+    {
+        return {x[0] + 2. * x[1], x[0] - x[1]};
+    }
+    vector_double fitness(const vector_double &x) const
+    {
+        return eval(snap(x));
+    }
+    vector_double fitness_rewrite(vector_double &x) const
+    {
+        x = snap(x);
+        return eval(x);
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{-1., -1.}, {1., 1.}};
+    }
+    vector_double::size_type get_nobj() const
+    {
+        return 2u;
+    }
+    thread_safety get_thread_safety() const
+    {
+        return m_ts;
+    }
+    thread_safety m_ts = thread_safety::basic;
+};
+
+// Same as above, with a batch_fitness() member function (which cannot rewrite).
+struct snap_udp_batch : snap_udp {
+    vector_double batch_fitness(const vector_double &dvs) const
+    {
+        ++s_counter;
+        vector_double retval;
+        for (decltype(dvs.size()) i = 0; i < dvs.size(); i += 2u) {
+            const auto fv = fitness(vector_double(dvs.data() + i, dvs.data() + i + 2u));
+            retval.insert(retval.end(), fv.begin(), fv.end());
+        }
+        return retval;
+    }
+    static unsigned s_counter;
+};
+
+unsigned snap_udp_batch::s_counter = 0;
+
+BOOST_AUTO_TEST_CASE(fitness_rewrite)
+{
+    BOOST_CHECK(has_bfe_fitness_rewrite<default_bfe>::value);
+    const vector_double dvs0{.1, .2, .3, .4};
+    const vector_double dvs0_snap{.125, .25, .25, .375};
+    // The member batch_fitness() is used by the call operator, but not by fitness_rewrite().
+    problem p{snap_udp_batch{}};
+    auto dvs = dvs0;
+    const auto fvs = default_bfe{}(p, dvs0);
+    BOOST_CHECK_EQUAL(snap_udp_batch::s_counter, 1u);
+    BOOST_CHECK(default_bfe{}.fitness_rewrite(p, dvs) == fvs);
+    BOOST_CHECK_EQUAL(snap_udp_batch::s_counter, 1u);
+    BOOST_CHECK(dvs == dvs0_snap);
+    // Not thread-safe problem.
+    snap_udp udp;
+    udp.m_ts = thread_safety::none;
+    p = problem{udp};
+    dvs = dvs0;
+    BOOST_CHECK_EXCEPTION(bfe{}.fitness_rewrite(p, dvs), std::invalid_argument, [](const std::invalid_argument &ia) {
+        return boost::contains(ia.what(), "Cannot execute fitness evaluations with rewriting in batch mode for a "
+                                          "problem of type");
+    });
+    BOOST_CHECK(dvs == dvs0);
 }

@@ -55,6 +55,8 @@ class PAGMO_DLL_PUBLIC default_bfe
 public:
     // Call operator.
     vector_double operator()(const problem &, const vector_double &) const;
+    // Batch fitness evaluation with in-place rewriting of the decision vectors.
+    vector_double fitness_rewrite(const problem &, vector_double &) const;
     // Name.
     std::string get_name() const
     {

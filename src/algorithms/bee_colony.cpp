@@ -144,10 +144,12 @@ population bee_colony::evolve(population pop) const
                     newsol[comp2change] = ub[comp2change];
                 }
                 // if the new solution is better than the old one replace it and reset its trial counter
-                auto newfitness = prob.fitness(newsol);
+                // NOTE: newsol is rewritten in place if the problem supports it, hence
+                // we copy it as a whole into X[i].
+                auto newfitness = prob.fitness_rewrite(newsol);
                 if (newfitness[0] < fit[i][0]) {
                     fit[i][0] = newfitness[0];
-                    X[i][comp2change] = newsol[comp2change];
+                    X[i] = newsol;
                     pop.set_xf(i, newsol, newfitness);
                     trial[i] = 0;
                 } else {
@@ -160,7 +162,12 @@ population bee_colony::evolve(population pop) const
             for (auto j = 0u; j < dim; ++j) {
                 X[mi][j] = uniform_real_from_range(lb[j], ub[j], m_e);
             }
-            pop.set_x(mi, X[mi]); // this causes a fitness evaluation
+            // NOTE: X[mi] is rewritten in place if the problem supports it.
+            const auto f_mi = prob.fitness_rewrite(X[mi]);
+            pop.set_xf(mi, X[mi], f_mi);
+            // NOTE: keep the fitness of the new food source in sync, as it is used
+            // in the comparisons and in the onlooker probabilities below.
+            fit[mi] = f_mi;
             trial[mi] = 0;
         }
         // 3 - Onlooker bee phase
@@ -210,10 +217,12 @@ population bee_colony::evolve(population pop) const
                     newsol[comp2change] = ub[comp2change];
                 }
                 // if the new solution is better than the old one replace it and reset its trial counter
-                auto newfitness = prob.fitness(newsol);
+                // NOTE: newsol is rewritten in place if the problem supports it, hence
+                // we copy it as a whole into X[s].
+                auto newfitness = prob.fitness_rewrite(newsol);
                 if (newfitness[0] < fit[s][0]) {
                     fit[s][0] = newfitness[0];
-                    X[s][comp2change] = newsol[comp2change];
+                    X[s] = newsol;
                     pop.set_xf(s, newsol, newfitness);
                     trial[s] = 0;
                 } else {

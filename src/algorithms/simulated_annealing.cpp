@@ -160,11 +160,13 @@ population simulated_annealing::evolve(population pop) const
                     xNEW[nter] = uniform_real_from_range(std::max(xOLD[nter] - width, lb[nter]),
                                                          std::min(xOLD[nter] + width, ub[nter]), m_e);
                     // And we valuate the objective function for the new point
-                    fNEW = prob.fitness(xNEW);
+                    // NOTE: xNEW is rewritten in place if the problem supports it, hence
+                    // below we copy whole vectors rather than just the nter component.
+                    fNEW = prob.fitness_rewrite(xNEW);
                     // We decide whether to accept or discard the point
                     if (fNEW[0] <= fOLD[0]) {
                         // accept
-                        xOLD[nter] = xNEW[nter];
+                        xOLD = xNEW;
                         fOLD = fNEW;
                         acp[nter]++; // Increase the number of accepted values
                         // We update the best
@@ -177,11 +179,11 @@ population simulated_annealing::evolve(population pop) const
                         probab = std::exp(-std::abs(fOLD[0] - fNEW[0]) / currentT);
                         // we compare prob with a random probability.
                         if (probab > drng(m_e)) {
-                            xOLD[nter] = xNEW[nter];
+                            xOLD = xNEW;
                             fOLD = fNEW;
                             acp[nter]++; // Increase the number of accepted values
                         } else {
-                            xNEW[nter] = xOLD[nter];
+                            xNEW = xOLD;
                         }
                     }
                     // 2 - We log to screen

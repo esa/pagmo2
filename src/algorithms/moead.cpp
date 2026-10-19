@@ -245,7 +245,8 @@ population moead::evolve(population pop) const
             // 6 - We apply a further mutation using polynomial mutation
             detail::polynomial_mutation_impl(candidate, bounds, 0u, 1.0 / static_cast<double>(dim), m_eta_m, m_e);
             // 7- We evaluate the fitness function.
-            auto new_f = prob.fitness(candidate);
+            // NOTE: candidate is rewritten in place if the problem supports it.
+            auto new_f = prob.fitness_rewrite(candidate);
             // 8 - We update the ideal point
             for (decltype(prob.get_nf()) j = 0u; j < prob.get_nf(); ++j) {
                 ideal_point[j] = std::min(new_f[j], ideal_point[j]);
