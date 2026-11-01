@@ -3,6 +3,15 @@
 Changelog
 =========
 
+2.21.0 (unreleased)
+-------------------
+
+New
+~~~
+
+- Add the :cpp:func:`pagmo::hypervolume_ratio()`, :cpp:func:`pagmo::igd_plus()`
+  and :cpp:func:`pagmo::normalized_igd_plus()` multi-objective performance metrics.
+
 2.20.0 (2026-09-24)
 --------------------
 

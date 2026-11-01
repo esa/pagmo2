@@ -283,6 +283,7 @@ set(PAGMO_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/genetic_operators.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/multi_objective.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hypervolume.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/performance_metrics.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_algorithm.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_bf_approx.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/hv_algos/hv_bf_fpras.cpp"
