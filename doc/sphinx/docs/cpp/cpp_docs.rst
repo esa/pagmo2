@@ -140,6 +140,7 @@ Utilities
   utils/constrained
   utils/discrepancy
   utils/hypervolume
+  utils/performance_metrics
   utils/gradient_and_hessians
   utils/genetic_operators
 
