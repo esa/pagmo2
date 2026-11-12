@@ -154,9 +154,11 @@ population mbh::evolve(population pop) const
         for (decltype(NP) j = 0u; j < NP; ++j) {
             vector_double tmp_x(dim);
             for (decltype(dim) k = 0u; k < dim; ++k) {
-                tmp_x[k]
-                    = uniform_real_from_range(std::max(pop.get_x()[j][k] - perturb[k] * (ub[k] - lb[k]), lb[k]),
-                                              std::min(pop.get_x()[j][k] + perturb[k] * (ub[k] - lb[k]), ub[k]), m_e);
+                // The inner algorithm may return points outside the bounds (unconstrained local optimizers do),
+                // so we perturb around the nearest point inside the bounds to keep the range valid.
+                const auto x_k = std::clamp(pop.get_x()[j][k], lb[k], ub[k]);
+                tmp_x[k] = uniform_real_from_range(std::max(x_k - perturb[k] * (ub[k] - lb[k]), lb[k]),
+                                                   std::min(x_k + perturb[k] * (ub[k] - lb[k]), ub[k]), m_e);
             }
             pop.set_x(j, tmp_x); // fitness is evaluated here
         }
