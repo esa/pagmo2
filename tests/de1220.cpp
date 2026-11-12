@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <numeric>
 #include <string>
+#include <utility>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -49,6 +50,23 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
+
+namespace
+{
+
+// A one-dimensional problem whose fitness is its decision variable.
+struct line {
+    vector_double fitness(const vector_double &x) const
+    {
+        return {x[0]};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+};
+
+} // namespace
 
 BOOST_AUTO_TEST_CASE(construction_test)
 {
@@ -118,13 +136,33 @@ BOOST_AUTO_TEST_CASE(evolve_test)
     }
 
     // We then check that the evolve throws if called on unsuitable problems
-    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{rosenbrock{}}, 6u}), std::invalid_argument);
+    BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{rosenbrock{}}, 7u}), std::invalid_argument);
     BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
     BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{hock_schittkowski_71{}}, 15u}), std::invalid_argument);
     BOOST_CHECK_THROW(de1220{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};
     BOOST_CHECK(de1220{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
+}
+
+BOOST_AUTO_TEST_CASE(target_not_selected_test)
+{
+    // All the individuals but the last are at 0.25, the last one is at 0.5. The random indexes are
+    // different from the target, so for the rand variants the mutant of the last individual is built
+    // from the other 7 only: it is 0.25 and replaces 0.5.
+    for (auto variant : {2u, 5u, 7u, 10u}) {
+        for (auto variant_adptv : {1u, 2u}) {
+            for (auto seed = 0u; seed < 20u; ++seed) {
+                population pop{line{}};
+                for (auto j = 0u; j < 7u; ++j) {
+                    pop.push_back({0.25});
+                }
+                pop.push_back({0.5});
+                pop = de1220{1u, {variant}, variant_adptv, 1e-6, 1e-6, false, seed}.evolve(pop);
+                BOOST_CHECK_EQUAL(pop.get_x()[7][0], 0.25);
+            }
+        }
+    }
 }
 
 BOOST_AUTO_TEST_CASE(setters_getters_test)

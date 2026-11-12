@@ -73,7 +73,7 @@ sade::sade(unsigned gen, unsigned variant, unsigned variant_adptv, double ftol, 
  * @param pop population to be evolved
  * @return evolved population
  * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
- * @throws std::invalid_argument if the population size is not at least 7
+ * @throws std::invalid_argument if the population size is not at least 8
  */
 population sade::evolve(population pop) const
 {
@@ -108,8 +108,8 @@ population sade::evolve(population pop) const
     if (m_gen == 0u) {
         return pop;
     }
-    if (pop.size() < 7u) {
-        pagmo_throw(std::invalid_argument, get_name() + " needs at least 7 individuals in the population, "
+    if (pop.size() < 8u) {
+        pagmo_throw(std::invalid_argument, get_name() + " needs at least 8 individuals in the population, "
                                                + std::to_string(pop.size()) + " detected");
     }
     // ---------------------------------------------------------------------------------------------------------
@@ -166,13 +166,15 @@ population sade::evolve(population pop) const
     for (decltype(m_gen) gen = 1u; gen <= m_gen; ++gen) {
         // Start of the loop through the population
         for (decltype(NP) i = 0u; i < NP; ++i) {
-            /*-----We select at random 5 indexes from the population---------------------------------*/
+            /*-----We select at random 7 indexes from the population, all different from i-----------*/
             std::vector<vector_double::size_type> idxs(NP);
             std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
+            // i is moved to the end, where it is never selected
+            std::swap(idxs[i], idxs[NP - 1u]);
             for (auto j = 0u; j < 7u; ++j) { // Durstenfeld's algorithm to select 7 indexes at random
-                auto idx = std::uniform_int_distribution<vector_double::size_type>(0u, NP - 1u - j)(m_e);
+                auto idx = std::uniform_int_distribution<vector_double::size_type>(0u, NP - 2u - j)(m_e);
                 r[j] = idxs[idx];
-                std::swap(idxs[idx], idxs[NP - 1u - j]);
+                std::swap(idxs[idx], idxs[NP - 2u - j]);
             }
 
             // Adapt amplification factor and crossover probability for jDE

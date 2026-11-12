@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_CASE(fork_island_basic)
         BOOST_CHECK(boost::contains(fi_0.get_extra_info(), "No active child"));
         fi_0.evolve();
         BOOST_CHECK_EXCEPTION(fi_0.wait_check(), std::runtime_error, [](const std::runtime_error &re) {
-            return boost::contains(re.what(), "needs at least 5 individuals in the population");
+            return boost::contains(re.what(), "needs at least 6 individuals in the population");
         });
     }
 #endif
@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(fork_island_recurse)
         island fi_0(fork_island{}, recursive_algo2{}, rosenbrock{}, 1, 0);
         fi_0.evolve();
         BOOST_CHECK_EXCEPTION(fi_0.wait_check(), std::runtime_error, [](const std::runtime_error &re) {
-            return boost::contains(re.what(), "needs at least 5 individuals in the population");
+            return boost::contains(re.what(), "needs at least 6 individuals in the population");
         });
     }
 #endif

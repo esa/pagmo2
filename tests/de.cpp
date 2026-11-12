@@ -33,6 +33,7 @@ see https://www.gnu.org/licenses/. */
 #include <iostream>
 #include <limits>
 #include <string>
+#include <utility>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -49,6 +50,23 @@ see https://www.gnu.org/licenses/. */
 #include <pagmo/types.hpp>
 
 using namespace pagmo;
+
+namespace
+{
+
+// A one-dimensional problem whose fitness is its decision variable.
+struct line {
+    vector_double fitness(const vector_double &x) const
+    {
+        return {x[0]};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0.}, {1.}};
+    }
+};
+
+} // namespace
 
 BOOST_AUTO_TEST_CASE(de_algorithm_construction)
 {
@@ -75,9 +93,9 @@ BOOST_AUTO_TEST_CASE(de_evolve_test)
     // seed is controlled for all variants
     {
         problem prob{rosenbrock{25u}};
-        population pop1{prob, 5u, 23u};
-        population pop2{prob, 5u, 23u};
-        population pop3{prob, 5u, 23u};
+        population pop1{prob, 6u, 23u};
+        population pop2{prob, 6u, 23u};
+        population pop3{prob, 6u, 23u};
 
         for (unsigned i = 1u; i <= 10u; ++i) {
             de user_algo1{10u, 0.7, 0.5, i, 1e-6, 1e-6, 23u};
@@ -118,13 +136,37 @@ BOOST_AUTO_TEST_CASE(de_evolve_test)
     }
 
     // We then check that the evolve throws if called on unsuitable problems
-    BOOST_CHECK_THROW(de{10u}.evolve(population{problem{rosenbrock{}}, 4u}), std::invalid_argument);
+    BOOST_CHECK_THROW(de{10u}.evolve(population{problem{rosenbrock{}}, 5u}), std::invalid_argument);
     BOOST_CHECK_THROW(de{10u}.evolve(population{problem{zdt{}}, 15u}), std::invalid_argument);
     BOOST_CHECK_THROW(de{10u}.evolve(population{problem{hock_schittkowski_71{}}, 15u}), std::invalid_argument);
     BOOST_CHECK_THROW(de{10u}.evolve(population{problem{inventory{}}, 15u}), std::invalid_argument);
     // And a clean exit for 0 generations
     population pop{rosenbrock{25u}, 10u};
     BOOST_CHECK(de{0u}.evolve(pop).get_x()[0] == pop.get_x()[0]);
+}
+
+BOOST_AUTO_TEST_CASE(de_target_not_selected_test)
+{
+    // All the individuals but the last are at 0.25, the last one is at 0.5. The random indexes are
+    // different from the target, so for the rand variants the mutant of the last individual is built
+    // from the other 5 only: it is 0.25 and replaces 0.5.
+    for (auto variant : {2u, 5u, 7u, 10u}) {
+        for (auto seed = 0u; seed < 20u; ++seed) {
+            for (auto use_bfe : {false, true}) {
+                population pop{line{}};
+                for (auto j = 0u; j < 5u; ++j) {
+                    pop.push_back({0.25});
+                }
+                pop.push_back({0.5});
+                de uda{1u, 0.8, 0.9, variant, 1e-6, 1e-6, seed};
+                if (use_bfe) {
+                    uda.set_bfe(bfe{});
+                }
+                pop = uda.evolve(pop);
+                BOOST_CHECK_EQUAL(pop.get_x()[5][0], 0.25);
+            }
+        }
+    }
 }
 
 BOOST_AUTO_TEST_CASE(de_setters_getters_test)

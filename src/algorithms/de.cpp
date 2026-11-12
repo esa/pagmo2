@@ -76,7 +76,7 @@ de::de(unsigned gen, double F, double CR, unsigned variant, double ftol, double 
  * @param pop population to be evolved
  * @return evolved population
  * @throws std::invalid_argument if the problem is multi-objective or constrained or stochastic
- * @throws std::invalid_argument if the population size is not at least 5
+ * @throws std::invalid_argument if the population size is not at least 6
  */
 population de::evolve(population pop) const
 {
@@ -111,8 +111,8 @@ population de::evolve(population pop) const
     if (m_gen == 0u) {
         return pop;
     }
-    if (pop.size() < 5u) {
-        pagmo_throw(std::invalid_argument, get_name() + " needs at least 5 individuals in the population, "
+    if (pop.size() < 6u) {
+        pagmo_throw(std::invalid_argument, get_name() + " needs at least 6 individuals in the population, "
                                                + std::to_string(pop.size()) + " detected");
     }
     // ---------------------------------------------------------------------------------------------------------
@@ -264,13 +264,15 @@ vector_double de::mutate(const std::vector<vector_double> &popold, population::s
     std::vector<vector_double::size_type> r(5); // indexes of 5 selected population members
     vector_double tmp(dim);
 
-    /*-----We select at random 5 indexes from the population---------------------------------*/
+    /*-----We select at random 5 indexes from the population, all different from i-----------*/
     std::vector<vector_double::size_type> idxs(NP);
     std::iota(idxs.begin(), idxs.end(), vector_double::size_type(0u));
+    // i is moved to the end, where it is never selected
+    std::swap(idxs[i], idxs[NP - 1u]);
     for (auto j = 0u; j < 5u; ++j) { // Durstenfeld's algorithm to select 5 indexes at random
-        auto idx = std::uniform_int_distribution<vector_double::size_type>(0u, NP - 1u - j)(m_e);
+        auto idx = std::uniform_int_distribution<vector_double::size_type>(0u, NP - 2u - j)(m_e);
         r[j] = idxs[idx];
-        std::swap(idxs[idx], idxs[NP - 1u - j]);
+        std::swap(idxs[idx], idxs[NP - 2u - j]);
     }
 
     /*-------DE/best/1/exp--------------------------------------------------------------------*/
