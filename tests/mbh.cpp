@@ -34,13 +34,16 @@ see https://www.gnu.org/licenses/. */
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <cmath>
 #include <iostream>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
 #include <pagmo/algorithm.hpp>
 #include <pagmo/algorithms/compass_search.hpp>
 #include <pagmo/algorithms/mbh.hpp>
 #include <pagmo/io.hpp>
 #include <pagmo/population.hpp>
+#include <pagmo/problem.hpp>
 #include <pagmo/problems/hock_schittkowski_71.hpp>
 #include <pagmo/problems/inventory.hpp>
 #include <pagmo/problems/rosenbrock.hpp>
@@ -254,4 +257,46 @@ BOOST_AUTO_TEST_CASE(mbh_inner_algo_get_test)
         BOOST_CHECK(!std::is_const<decltype(uda)>::value);
         BOOST_CHECK(!std::is_const<std::remove_reference<decltype(uda.get_inner_algorithm())>::type>::value);
     }
+}
+
+// A problem whose best point lies outside its bounds, as can happen when the bounds cut off the unconstrained optimum.
+struct optimum_outside_bounds {
+    vector_double fitness(const vector_double &x) const
+    {
+        return {-(x[0] + x[1])};
+    }
+    std::pair<vector_double, vector_double> get_bounds() const
+    {
+        return {{0., 0.}, {1., 1.}};
+    }
+};
+
+// An inner algorithm that, like an unconstrained local optimizer, returns points outside the bounds. It checks that
+// the points MBH gives it are inside the bounds.
+struct leaves_bounds {
+    population evolve(population pop) const
+    {
+        const auto bounds = pop.get_problem().get_bounds();
+        for (decltype(pop.size()) i = 0u; i < pop.size(); ++i) {
+            auto x = pop.get_x()[i];
+            for (decltype(x.size()) k = 0u; k < x.size(); ++k) {
+                if (x[k] < bounds.first[k] || x[k] > bounds.second[k]) {
+                    throw std::logic_error("MBH passed a point outside the bounds to the inner algorithm");
+                }
+                x[k] = bounds.second[k] + 1.;
+            }
+            pop.set_x(i, x);
+        }
+        return pop;
+    }
+};
+
+BOOST_AUTO_TEST_CASE(mbh_inner_algo_out_of_bounds_test)
+{
+    // MBH keeps the out-of-bounds points because they are better, and must then still perturb them within the
+    // bounds instead of throwing (https://github.com/esa/pygmo2/issues/163).
+    population pop{problem{optimum_outside_bounds{}}, 5u, 23u};
+    mbh uda{leaves_bounds{}, 3u, 1e-2, 23u};
+    BOOST_CHECK_NO_THROW(pop = uda.evolve(pop));
+    BOOST_CHECK_EQUAL(pop.get_f()[pop.best_idx()][0], -4.);
 }
