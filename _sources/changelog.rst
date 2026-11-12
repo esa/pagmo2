@@ -3,6 +3,16 @@
 Changelog
 =========
 
+2.20.1 (unreleased)
+-------------------
+
+Fix
+~~~
+
+- Fix monotonic basin hopping throwing "Cannot generate a random real if the lower bound is larger than the upper
+  bound" when the inner algorithm returns points outside the bounds
+  (`#163 <https://github.com/esa/pygmo2/issues/163>`__).
+
 2.20.0 (2026-09-24)
 --------------------
 
